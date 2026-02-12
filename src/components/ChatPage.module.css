@@ -1,0 +1,56 @@
+.container { max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+.heading { color: #0d47a1; margin: 0; }
+.loading { text-align: center; padding: 3rem; color: #888; }
+.empty { text-align: center; padding: 3rem; color: #888; }
+.empty a { color: #1a73e8; }
+.createLink { color: #1a73e8; font-weight: 600; text-decoration: none; }
+.createLink:hover { text-decoration: underline; }
+
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+
+.newBtn {
+  padding: 0.5rem 1rem;
+  background: #1a73e8;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.newBtn:hover { background: #0d47a1; }
+
+.groupList { display: flex; flex-direction: column; gap: 0.5rem; }
+
+.groupItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.15s;
+}
+.groupItem:hover { box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1); }
+
+.groupIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a73e8, #4caf50);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.groupInfo { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.groupName { font-weight: 600; color: #222; font-size: 0.95rem; }
+.groupPreview { font-size: 0.8rem; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.groupMembers { font-size: 0.75rem; color: #999; flex-shrink: 0; }

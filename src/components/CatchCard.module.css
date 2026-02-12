@@ -82,6 +82,15 @@
   font-weight: 500;
 }
 
+.lureTag {
+  background: #fff8e1;
+  color: #e65100;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
 .waterTag {
   background: #e0f2f1;
   color: #00796b;
@@ -104,4 +113,16 @@
   margin-top: 0.75rem;
   font-size: 0.8rem;
   color: #888;
+  align-items: center;
+}
+
+.visibilityBadge {
+  margin-left: auto;
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  background: #f3e5f5;
+  color: #7b1fa2;
 }

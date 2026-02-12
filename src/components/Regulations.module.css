@@ -1,0 +1,298 @@
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.heading {
+  margin: 0 0 0.25rem;
+  font-size: 1.4rem;
+  color: #222;
+}
+
+.subtitle {
+  color: #888;
+  font-size: 0.85rem;
+  margin: 0 0 1.25rem;
+}
+
+.modeToggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.modeBtn {
+  flex: 1;
+  padding: 0.6rem;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  background: #fafafa;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.modeBtn:hover {
+  border-color: #1a73e8;
+  color: #1a73e8;
+}
+
+.modeBtnActive {
+  border-color: #1a73e8;
+  background: #e8f0fe;
+  color: #1a73e8;
+}
+
+.gpsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.gpsBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem;
+  border: 1.5px dashed #1a73e8;
+  border-radius: 8px;
+  background: #f8fbff;
+  color: #1a73e8;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.gpsBtn:hover {
+  background: #e8f0fe;
+}
+
+.gpsBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.gpsSpinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #1a73e8;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.gpsInfo {
+  font-size: 0.8rem;
+  color: #888;
+  text-align: center;
+}
+
+.gpsError {
+  font-size: 0.8rem;
+  color: #d32f2f;
+  text-align: center;
+}
+
+.selectSection {
+  margin-bottom: 1.25rem;
+}
+
+.stateSelect {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #333;
+  background: #fff;
+}
+
+.stateHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.stateName {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #222;
+}
+
+.agencyLink {
+  font-size: 0.75rem;
+  color: #1a73e8;
+  text-decoration: none;
+}
+
+.agencyLink:hover {
+  text-decoration: underline;
+}
+
+.licenseNote {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  background: #fff8e1;
+  font-size: 0.8rem;
+  color: #e65100;
+}
+
+.licenseLink {
+  color: #e65100;
+  font-weight: 600;
+}
+
+.speciesList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.aiSection {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.aiBtn {
+  width: 100%;
+  padding: 0.7rem;
+  border: none;
+  border-radius: 8px;
+  background: #1a73e8;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.aiBtn:hover {
+  background: #1558b0;
+}
+
+.aiBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.aiResult {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background: #f8fbff;
+  border: 1px solid #e0e0e0;
+}
+
+.aiSummary {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #333;
+  margin: 0 0 0.75rem;
+}
+
+.aiRules {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.aiRuleItem {
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 0.8rem;
+  color: #444;
+  border-left: 3px solid #1a73e8;
+}
+
+.aiRuleItem[data-type="limit"] { border-left-color: #4caf50; }
+.aiRuleItem[data-type="season"] { border-left-color: #ff9800; }
+.aiRuleItem[data-type="gear"] { border-left-color: #9c27b0; }
+.aiRuleItem[data-type="license"] { border-left-color: #1a73e8; }
+
+.aiSource {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: #1a73e8;
+  text-decoration: none;
+}
+
+.aiSource:hover {
+  text-decoration: underline;
+}
+
+.aiDisclaimer {
+  margin-top: 0.5rem;
+  font-size: 0.7rem;
+  color: #aaa;
+  font-style: italic;
+}
+
+.aiError {
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  background: #fdecea;
+  font-size: 0.8rem;
+  color: #d32f2f;
+}
+
+.disclaimer {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background: #fafafa;
+  border: 1px solid #eee;
+  font-size: 0.75rem;
+  color: #999;
+  font-style: italic;
+  text-align: center;
+}
+
+.empty {
+  text-align: center;
+  padding: 2rem;
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+.filterField {
+  margin-bottom: 1rem;
+}
+
+.filterInput {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  box-sizing: border-box;
+}
+
+.filterInput::placeholder {
+  color: #bbb;
+}

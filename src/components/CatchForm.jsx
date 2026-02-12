@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ImageUpload from './ImageUpload';
+import QuickLureId from './QuickLureId';
+import RegulationBadge from './RegulationBadge';
 import { getGPSLocation, reverseGeocode, fetchWeather, fetchWaterData } from '../utils/weather';
 import styles from './CatchForm.module.css';
 
@@ -17,6 +19,12 @@ const EMPTY = {
   flowRate: '',
   waterStation: '',
   bait: '',
+  lureImage: '',
+  lureType: '',
+  lureName: '',
+  lureCategory: '',
+  lureColor: '',
+  visibility: 'public',
   notes: '',
   image: '',
 };
@@ -25,6 +33,7 @@ export default function CatchForm({ existing, onSubmit }) {
   const [form, setForm] = useState(EMPTY);
   const [gpsLoading, setGpsLoading] = useState(false);
   const [gpsError, setGpsError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,8 +51,14 @@ export default function CatchForm({ existing, onSubmit }) {
         flowRate: existing.flowRate || '',
         waterStation: existing.waterStation || '',
         bait: existing.bait || '',
+        lureImage: existing.lureImage || existing.lureImageUrl || '',
+        lureType: existing.lureType || '',
+        lureName: existing.lureName || '',
+        lureCategory: existing.lureCategory || '',
+        lureColor: existing.lureColor || '',
+        visibility: existing.visibility || 'public',
         notes: existing.notes || '',
-        image: existing.image || '',
+        image: existing.image || existing.imageUrl || '',
       });
     }
   }, [existing]);
@@ -51,6 +66,18 @@ export default function CatchForm({ existing, onSubmit }) {
   function handleChange(e) {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+  }
+
+  function handleLureIdentified(data) {
+    setForm((prev) => ({
+      ...prev,
+      bait: data.bait || prev.bait,
+      lureType: data.lureType || prev.lureType,
+      lureName: data.lureName || prev.lureName,
+      lureCategory: data.lureCategory || prev.lureCategory,
+      lureColor: data.lureColor || prev.lureColor,
+      lureImage: data.lureImage || prev.lureImage,
+    }));
   }
 
   async function handleGetLocation() {
@@ -61,7 +88,6 @@ export default function CatchForm({ existing, onSubmit }) {
       const { lat, lng } = await getGPSLocation();
       setForm((prev) => ({ ...prev, lat, lng }));
 
-      // Fetch location name, weather, and water data in parallel
       const [placeName, weatherData, waterData] = await Promise.all([
         reverseGeocode(lat, lng).catch(() => null),
         fetchWeather(lat, lng).catch(() => null),
@@ -83,16 +109,22 @@ export default function CatchForm({ existing, onSubmit }) {
     }
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    onSubmit({
-      ...form,
-      weight: form.weight ? Number(form.weight) : '',
-      length: form.length ? Number(form.length) : '',
-      waterTemp: form.waterTemp ? Number(form.waterTemp) : '',
-      flowRate: form.flowRate ? Number(form.flowRate) : '',
-    });
-    navigate('/');
+    setSubmitting(true);
+    try {
+      await onSubmit({
+        ...form,
+        weight: form.weight ? Number(form.weight) : '',
+        length: form.length ? Number(form.length) : '',
+        waterTemp: form.waterTemp ? Number(form.waterTemp) : '',
+        flowRate: form.flowRate ? Number(form.flowRate) : '',
+      });
+      navigate('/');
+    } catch (err) {
+      console.error('Failed to save catch:', err);
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -118,6 +150,8 @@ export default function CatchForm({ existing, onSubmit }) {
         )}
         {gpsError && <span className={styles.gpsError}>{gpsError}</span>}
       </div>
+
+      <RegulationBadge lat={form.lat} lng={form.lng} species={form.species} />
 
       <div className={styles.grid}>
         <label className={styles.field}>
@@ -165,6 +199,21 @@ export default function CatchForm({ existing, onSubmit }) {
           <input name="bait" value={form.bait} onChange={handleChange} placeholder="e.g. Plastic worm" />
         </label>
 
+        <div className={styles.lureIdField}>
+          <QuickLureId onIdentified={handleLureIdentified} />
+        </div>
+
+        {form.lureName && (
+          <div className={styles.lureInfo}>
+            <span className={styles.lureInfoLabel}>AI-identified lure:</span>
+            <div className={styles.lureTags}>
+              <span className={styles.lureTag}>{form.lureName}</span>
+              {form.lureType && <span className={styles.lureTag}>{form.lureType}</span>}
+              {form.lureColor && <span className={styles.lureTag}>{form.lureColor}</span>}
+            </div>
+          </div>
+        )}
+
         <ImageUpload image={form.image} onChange={(img) => setForm((prev) => ({ ...prev, image: img }))} />
       </div>
 
@@ -174,14 +223,25 @@ export default function CatchForm({ existing, onSubmit }) {
         </div>
       )}
 
+      <div className={styles.visibilityRow}>
+        <label className={styles.field}>
+          <span>Visibility</span>
+          <select name="visibility" value={form.visibility} onChange={handleChange}>
+            <option value="public">Public</option>
+            <option value="friends">Friends Only</option>
+            <option value="private">Private</option>
+          </select>
+        </label>
+      </div>
+
       <label className={styles.field}>
         <span>Notes</span>
         <textarea name="notes" rows={3} value={form.notes} onChange={handleChange} placeholder="Any extra details..." />
       </label>
 
       <div className={styles.actions}>
-        <button type="submit" className={styles.submitBtn}>
-          {existing ? 'Save Changes' : 'Add Catch'}
+        <button type="submit" className={styles.submitBtn} disabled={submitting}>
+          {submitting ? 'Saving...' : existing ? 'Save Changes' : 'Add Catch'}
         </button>
         <button type="button" className={styles.cancelBtn} onClick={() => navigate('/')}>
           Cancel

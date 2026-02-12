@@ -152,6 +152,51 @@
   background: #f5f5f5;
 }
 
+.visibilityRow {
+  margin-top: 0.75rem;
+  max-width: 200px;
+}
+
+.visibilityRow select {
+  padding: 0.55rem 0.75rem;
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  width: 100%;
+}
+
+.lureIdField {
+  grid-column: 1 / -1;
+}
+
+.lureInfo {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.lureInfoLabel {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.lureTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.lureTag {
+  background: #fff8e1;
+  color: #e65100;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
 @media (max-width: 600px) {
   .form {
     margin: 1rem;

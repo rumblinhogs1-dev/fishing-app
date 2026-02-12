@@ -1,0 +1,36 @@
+.bar {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+
+.reaction {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.3rem 0.5rem;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 20px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.reaction:hover:not(:disabled) {
+  border-color: #1a73e8;
+  background: #e8f0fe;
+}
+
+.reaction:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+.active {
+  border-color: #1a73e8 !important;
+  background: #e8f0fe !important;
+}
+
+.emoji { font-size: 1rem; line-height: 1; }
+.count { font-size: 0.75rem; font-weight: 600; color: #555; }

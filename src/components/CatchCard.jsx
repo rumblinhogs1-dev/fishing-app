@@ -44,6 +44,15 @@ export default function CatchCard({ entry, onDelete }) {
         {entry.bait && (
           <span className={styles.tag}>{entry.bait}</span>
         )}
+        {entry.lureName && (
+          <span className={styles.lureTag}>{entry.lureName}</span>
+        )}
+        {entry.lureType && entry.lureType !== entry.lureName && (
+          <span className={styles.lureTag}>{entry.lureType}</span>
+        )}
+        {entry.lureColor && (
+          <span className={styles.lureTag}>{entry.lureColor}</span>
+        )}
         {entry.waterTemp && (
           <span className={styles.waterTag}>Water: {entry.waterTemp}°F</span>
         )}
@@ -57,6 +66,9 @@ export default function CatchCard({ entry, onDelete }) {
       <div className={styles.footer}>
         {dateStr && <span>{dateStr}</span>}
         {timeStr && <span>{timeStr}</span>}
+        {entry.visibility && entry.visibility !== 'public' && (
+          <span className={styles.visibilityBadge}>{entry.visibility}</span>
+        )}
       </div>
     </div>
   );

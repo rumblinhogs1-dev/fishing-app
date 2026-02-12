@@ -1,0 +1,28 @@
+.container { margin-top: 1.5rem; }
+.heading { margin: 0 0 0.75rem; font-size: 0.95rem; color: #333; }
+.loading { color: #888; font-size: 0.85rem; }
+
+.list { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+
+.comment { padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0; }
+.comment:last-child { border-bottom: none; }
+
+.commentHeader { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.2rem; }
+.author { font-weight: 600; font-size: 0.85rem; color: #1a73e8; text-decoration: none; }
+.author:hover { text-decoration: underline; }
+.time { font-size: 0.7rem; color: #999; }
+.deleteBtn { margin-left: auto; background: none; border: none; color: #d32f2f; font-size: 1.1rem; cursor: pointer; line-height: 1; padding: 0 0.2rem; }
+.deleteBtn:hover { opacity: 0.7; }
+
+.text { margin: 0; font-size: 0.9rem; color: #444; line-height: 1.4; }
+
+.form { display: flex; gap: 0.5rem; }
+.input { flex: 1; padding: 0.5rem 0.75rem; border: 1.5px solid #ccc; border-radius: 8px; font-size: 0.9rem; font-family: inherit; }
+.input:focus { outline: none; border-color: #1a73e8; }
+
+.sendBtn { padding: 0.5rem 1rem; background: #1a73e8; color: #fff; border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+.sendBtn:hover:not(:disabled) { background: #0d47a1; }
+.sendBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.signInHint { font-size: 0.85rem; color: #888; }
+.signInHint a { color: #1a73e8; }

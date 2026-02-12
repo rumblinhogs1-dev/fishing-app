@@ -28,9 +28,29 @@
   letter-spacing: 0.5px;
 }
 
+/* Hamburger */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #fff;
+  border-radius: 1px;
+}
+
 .links {
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
+  align-items: center;
 }
 
 .links a {
@@ -50,4 +70,104 @@
 .active {
   background: rgba(255, 255, 255, 0.2) !important;
   color: #fff !important;
+}
+
+/* AI Tools Dropdown */
+.dropdown {
+  position: relative;
+}
+
+.dropdownTrigger {
+  display: flex;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.8);
+  background: none;
+  border: none;
+  font-weight: 500;
+  font-size: inherit;
+  font-family: inherit;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.dropdownTrigger:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 160px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  z-index: 200;
+  overflow: hidden;
+}
+
+.dropdownItem {
+  display: block;
+  padding: 0.6rem 1rem;
+  color: #333 !important;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+
+.dropdownItem:hover {
+  background: #f0f4f8 !important;
+  color: #1a73e8 !important;
+}
+
+@media (max-width: 600px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: linear-gradient(135deg, #0d47a1, #1a73e8);
+    padding: 0.5rem 1rem 1rem;
+    gap: 0.25rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    align-items: stretch;
+  }
+
+  .linksOpen {
+    display: flex;
+  }
+
+  .links a {
+    padding: 0.6rem 0.75rem;
+  }
+
+  .dropdownMenu {
+    position: static;
+    transform: none;
+    box-shadow: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    margin-top: 0.25rem;
+  }
+
+  .dropdownItem {
+    color: rgba(255, 255, 255, 0.9) !important;
+    padding: 0.5rem 1rem;
+  }
+
+  .dropdownItem:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #fff !important;
+  }
 }
