@@ -1,0 +1,24 @@
+.app {
+  min-height: 100vh;
+  background: #f0f4f8;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #222;
+}
+
+.main {
+  padding-bottom: 2rem;
+}
+
+/* Global resets */
+:global(*) {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:global(body) {
+  margin: 0;
+  background: #f0f4f8;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}

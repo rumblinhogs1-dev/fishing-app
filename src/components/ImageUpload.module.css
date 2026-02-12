@@ -1,0 +1,91 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  grid-column: 1 / -1;
+}
+
+.label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.buttons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.cameraBtn,
+.uploadBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  border: 1.5px dashed #bbb;
+  background: #fafafa;
+  color: #444;
+}
+
+.cameraBtn:hover,
+.uploadBtn:hover {
+  background: #e8f0fe;
+  border-color: #1a73e8;
+  color: #1a73e8;
+}
+
+.cameraBtn svg,
+.uploadBtn svg {
+  flex-shrink: 0;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.preview {
+  position: relative;
+  display: inline-block;
+  max-width: 280px;
+}
+
+.img {
+  width: 100%;
+  border-radius: 8px;
+  display: block;
+  border: 1.5px solid #ddd;
+}
+
+.removeBtn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.removeBtn:hover {
+  background: rgba(211, 47, 47, 0.85);
+}
+
+@media (max-width: 600px) {
+  .preview {
+    max-width: 100%;
+  }
+}
