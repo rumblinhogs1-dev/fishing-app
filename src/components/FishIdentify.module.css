@@ -286,6 +286,81 @@
   padding: 1.25rem;
 }
 
+.estimateRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.estimateCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+}
+
+.estimateIcon {
+  font-size: 1.4rem;
+  color: #1a73e8;
+  line-height: 1;
+}
+
+.estimateLabel {
+  font-size: 0.7rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.estimateValue {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.contextRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.contextItem {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.65rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+}
+
+.contextIcon {
+  font-size: 1.3rem;
+  color: #1a73e8;
+  flex-shrink: 0;
+  line-height: 1.2;
+}
+
+.contextItem h4 {
+  margin: 0 0 0.15rem;
+  font-size: 0.7rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.contextItem p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #333;
+  line-height: 1.3;
+}
+
 .resultSection {
   margin-bottom: 1rem;
 }
@@ -327,5 +402,10 @@
   .resultHeader {
     flex-direction: column;
     gap: 0.75rem;
+  }
+
+  .estimateRow,
+  .contextRow {
+    grid-template-columns: 1fr;
   }
 }

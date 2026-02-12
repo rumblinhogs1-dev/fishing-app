@@ -196,6 +196,48 @@ export default function FishIdentify() {
 
           {result.confidence > 0 && (
             <div className={styles.resultBody}>
+              {(result.estimatedLength || result.estimatedWeight) && (
+                <div className={styles.estimateRow}>
+                  {result.estimatedLength && (
+                    <div className={styles.estimateCard}>
+                      <span className={styles.estimateIcon}>&#8596;</span>
+                      <span className={styles.estimateLabel}>Est. Length</span>
+                      <span className={styles.estimateValue}>{result.estimatedLength}</span>
+                    </div>
+                  )}
+                  {result.estimatedWeight && (
+                    <div className={styles.estimateCard}>
+                      <span className={styles.estimateIcon}>&#9878;</span>
+                      <span className={styles.estimateLabel}>Est. Weight</span>
+                      <span className={styles.estimateValue}>{result.estimatedWeight}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {(result.weather || result.location) && (
+                <div className={styles.contextRow}>
+                  {result.weather && (
+                    <div className={styles.contextItem}>
+                      <span className={styles.contextIcon}>&#9788;</span>
+                      <div>
+                        <h4>Weather</h4>
+                        <p>{result.weather}</p>
+                      </div>
+                    </div>
+                  )}
+                  {result.location && (
+                    <div className={styles.contextItem}>
+                      <span className={styles.contextIcon}>&#9906;</span>
+                      <div>
+                        <h4>Location</h4>
+                        <p>{result.location}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
               {result.description && (
                 <div className={styles.resultSection}>
                   <h4>Identifying Features</h4>

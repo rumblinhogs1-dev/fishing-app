@@ -105,13 +105,21 @@ export default function QuickIdentify() {
 
       {result && result.confidence > 0 && (
         <div className={styles.result}>
-          <div className={styles.resultMain}>
-            <span className={styles.species}>{result.species}</span>
-            {result.scientificName && <span className={styles.sciName}>{result.scientificName}</span>}
+          <div className={styles.resultTop}>
+            <div className={styles.resultMain}>
+              <span className={styles.species}>{result.species}</span>
+              {result.scientificName && <span className={styles.sciName}>{result.scientificName}</span>}
+            </div>
+            <span className={styles.confidence} style={{ color: confidenceColor, borderColor: confidenceColor }}>
+              {result.confidence}%
+            </span>
           </div>
-          <span className={styles.confidence} style={{ color: confidenceColor, borderColor: confidenceColor }}>
-            {result.confidence}%
-          </span>
+          <div className={styles.resultDetails}>
+            {result.estimatedLength && <span className={styles.detailTag}>&#8596; {result.estimatedLength}</span>}
+            {result.estimatedWeight && <span className={styles.detailTag}>&#9878; {result.estimatedWeight}</span>}
+            {result.weather && <span className={styles.detailTag}>&#9788; {result.weather}</span>}
+            {result.location && <span className={styles.detailTag}>&#9906; {result.location}</span>}
+          </div>
         </div>
       )}
 

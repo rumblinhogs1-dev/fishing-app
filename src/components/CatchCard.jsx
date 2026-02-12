@@ -44,6 +44,12 @@ export default function CatchCard({ entry, onDelete }) {
         {entry.bait && (
           <span className={styles.tag}>{entry.bait}</span>
         )}
+        {entry.waterTemp && (
+          <span className={styles.waterTag}>Water: {entry.waterTemp}°F</span>
+        )}
+        {entry.flowRate && (
+          <span className={styles.waterTag}>Flow: {entry.flowRate} ft³/s</span>
+        )}
       </div>
 
       {entry.notes && <p className={styles.notes}>{entry.notes}</p>}

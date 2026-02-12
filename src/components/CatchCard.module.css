@@ -82,6 +82,15 @@
   font-weight: 500;
 }
 
+.waterTag {
+  background: #e0f2f1;
+  color: #00796b;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
 .notes {
   margin: 0.75rem 0 0;
   color: #555;

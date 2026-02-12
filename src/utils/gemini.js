@@ -87,15 +87,15 @@ export async function identifyFish(imageDataUrl, apiKey) {
       {
         parts: [
           {
-            text: `You are a fish species identification expert. Analyze this image and identify the fish species.
+            text: `You are a fish species identification expert and experienced angler. Analyze this image and identify the fish species. Also estimate the fish's size and weight based on visual cues in the photo (hands, lures, boat features, etc. for scale). Infer the most likely weather conditions and geographic location where this fish was caught based on the species, surroundings, lighting, vegetation, water color, and any other contextual clues in the image.
 
 Respond ONLY with valid JSON in this exact format (no markdown, no code fences):
-{"species": "Common Name", "scientificName": "Latin name", "confidence": 85, "description": "Brief 1-2 sentence description of key identifying features you see.", "habitat": "Brief typical habitat info.", "funFact": "One interesting fact about this species."}
+{"species": "Common Name", "scientificName": "Latin name", "confidence": 85, "estimatedLength": "18-20 inches", "estimatedWeight": "3-4 lbs", "weather": "Partly cloudy, approx 72°F, light breeze", "location": "Freshwater lake, likely southeastern United States", "description": "Brief 1-2 sentence description of key identifying features you see.", "habitat": "Brief typical habitat info.", "funFact": "One interesting fact about this species."}
 
 If no fish is visible, respond with:
-{"species": "No fish detected", "scientificName": "", "confidence": 0, "description": "No fish could be identified in this image.", "habitat": "", "funFact": ""}
+{"species": "No fish detected", "scientificName": "", "confidence": 0, "estimatedLength": "", "estimatedWeight": "", "weather": "", "location": "", "description": "No fish could be identified in this image.", "habitat": "", "funFact": ""}
 
-The confidence should be 0-100 representing how certain you are of the identification.`,
+The confidence should be 0-100 representing how certain you are of the identification. For estimatedLength and estimatedWeight, give a range if exact estimation is difficult. For weather, describe conditions you can infer from lighting, sky, clothing, etc. For location, be as specific as possible based on species range, terrain, water type, and any visible landmarks or vegetation.`,
           },
           {
             inlineData: {
