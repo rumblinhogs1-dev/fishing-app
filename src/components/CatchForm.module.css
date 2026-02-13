@@ -197,6 +197,58 @@
   font-weight: 500;
 }
 
+.fishIdStatus {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #1a73e8;
+  font-weight: 500;
+}
+
+.fishIdError {
+  grid-column: 1 / -1;
+  font-size: 0.8rem;
+  color: #d32f2f;
+}
+
+.fishIdInfo {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.fishIdLabel {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.fishIdTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.fishIdTag {
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.fishIdConfidence {
+  background: #e3f2fd;
+  color: #1565c0;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
 @media (max-width: 600px) {
   .form {
     margin: 1rem;

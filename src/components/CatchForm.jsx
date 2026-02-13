@@ -4,6 +4,7 @@ import ImageUpload from './ImageUpload';
 import QuickLureId from './QuickLureId';
 import RegulationBadge from './RegulationBadge';
 import { getGPSLocation, reverseGeocode, fetchWeather, fetchWaterData } from '../utils/weather';
+import { identifyFish, getApiKey } from '../utils/gemini';
 import styles from './CatchForm.module.css';
 
 const EMPTY = {
@@ -34,6 +35,9 @@ export default function CatchForm({ existing, onSubmit }) {
   const [gpsLoading, setGpsLoading] = useState(false);
   const [gpsError, setGpsError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [fishIdLoading, setFishIdLoading] = useState(false);
+  const [fishIdResult, setFishIdResult] = useState(null);
+  const [fishIdError, setFishIdError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -66,6 +70,45 @@ export default function CatchForm({ existing, onSubmit }) {
   function handleChange(e) {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+  }
+
+  function parseNumber(str) {
+    if (!str) return '';
+    const match = str.match(/([\d.]+)/);
+    return match ? parseFloat(match[1]) : '';
+  }
+
+  async function handleImageChange(img) {
+    setForm((prev) => ({ ...prev, image: img }));
+    if (!img) {
+      setFishIdResult(null);
+      setFishIdError('');
+      return;
+    }
+
+    const apiKey = getApiKey();
+    if (!apiKey) return;
+
+    setFishIdLoading(true);
+    setFishIdError('');
+    setFishIdResult(null);
+
+    try {
+      const result = await identifyFish(img, apiKey);
+      setFishIdResult(result);
+      if (result.confidence >= 50) {
+        setForm((prev) => ({
+          ...prev,
+          species: result.species || prev.species,
+          weight: parseNumber(result.estimatedWeight) || prev.weight,
+          length: parseNumber(result.estimatedLength) || prev.length,
+        }));
+      }
+    } catch (err) {
+      setFishIdError(err.message);
+    } finally {
+      setFishIdLoading(false);
+    }
   }
 
   function handleLureIdentified(data) {
@@ -214,7 +257,27 @@ export default function CatchForm({ existing, onSubmit }) {
           </div>
         )}
 
-        <ImageUpload image={form.image} onChange={(img) => setForm((prev) => ({ ...prev, image: img }))} />
+        <ImageUpload image={form.image} onChange={handleImageChange} />
+
+        {fishIdLoading && (
+          <div className={styles.fishIdStatus}>
+            <span className={styles.gpsSpinner} /> Identifying fish...
+          </div>
+        )}
+        {fishIdError && (
+          <div className={styles.fishIdError}>{fishIdError}</div>
+        )}
+        {fishIdResult && fishIdResult.confidence > 0 && !fishIdLoading && (
+          <div className={styles.fishIdInfo}>
+            <span className={styles.fishIdLabel}>AI-identified fish:</span>
+            <div className={styles.fishIdTags}>
+              <span className={styles.fishIdTag}>{fishIdResult.species}</span>
+              <span className={styles.fishIdConfidence}>{fishIdResult.confidence}% confident</span>
+              {fishIdResult.estimatedWeight && <span className={styles.fishIdTag}>{fishIdResult.estimatedWeight}</span>}
+              {fishIdResult.estimatedLength && <span className={styles.fishIdTag}>{fishIdResult.estimatedLength}</span>}
+            </div>
+          </div>
+        )}
       </div>
 
       {form.waterStation && (
