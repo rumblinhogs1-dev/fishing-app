@@ -2,15 +2,21 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import { useAuth } from '../contexts/AuthContext';
+import { useSpots } from '../hooks/useSpots';
 import CommentsSection from './CommentsSection';
 import ReactionsBar from './ReactionsBar';
 import RegulationBadge from './RegulationBadge';
+import SaveSpotModal from './SaveSpotModal';
 import styles from './CatchDetail.module.css';
 
 export default function CatchDetail() {
   const { id } = useParams();
+  const { user } = useAuth();
+  const { addSpot } = useSpots();
   const [entry, setEntry] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showSpotModal, setShowSpotModal] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -150,10 +156,29 @@ export default function CatchDetail() {
             <RegulationBadge lat={entry.lat} lng={entry.lng} species={entry.species} />
           )}
 
+          {entry.lat && entry.lng && user && (
+            <button className={styles.saveSpotBtn} onClick={() => setShowSpotModal(true)}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              Save This Spot
+            </button>
+          )}
+
           <ReactionsBar catchId={id} reactionCounts={entry.reactionCounts || {}} />
           <CommentsSection catchId={id} />
         </div>
       </div>
+
+      {showSpotModal && entry.lat && entry.lng && (
+        <SaveSpotModal
+          lat={entry.lat}
+          lng={entry.lng}
+          defaultName={entry.species ? `${entry.species} Spot` : ''}
+          onSave={async (data) => { await addSpot(data); }}
+          onClose={() => setShowSpotModal(false)}
+        />
+      )}
     </div>
   );
 }

@@ -19,6 +19,8 @@ import ChatRoom from './components/ChatRoom';
 import CreateGroup from './components/CreateGroup';
 import GroupSettings from './components/GroupSettings';
 import Regulations from './components/Regulations';
+import MapView from './components/MapView';
+import SpotsList from './components/SpotsList';
 import { useCatchesProvider } from './hooks/useCatchesProvider';
 import { useAuth } from './contexts/AuthContext';
 import styles from './App.module.css';
@@ -76,6 +78,8 @@ export default function App() {
             <Route path="/chat/new" element={<CreateGroup />} />
             <Route path="/chat/:groupId" element={<ChatRoom />} />
             <Route path="/chat/:groupId/settings" element={<GroupSettings />} />
+            <Route path="/map" element={<MapView catches={catches} />} />
+            <Route path="/spots" element={<SpotsList />} />
             <Route path="/regulations" element={<Regulations />} />
           </Routes>
         )}

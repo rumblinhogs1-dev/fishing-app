@@ -1,0 +1,208 @@
+.container {
+  max-width: 640px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  color: #888;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  margin: 0;
+  color: #0d47a1;
+  font-size: 1.4rem;
+}
+
+.mapLink {
+  color: #1a73e8;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.mapLink:hover {
+  text-decoration: underline;
+}
+
+/* Sign-in prompt */
+.signIn {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.signIn h2 {
+  color: #0d47a1;
+  margin-bottom: 0.5rem;
+}
+
+.signIn p {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.signInBtn {
+  display: inline-block;
+  padding: 0.6rem 2rem;
+  background: #1a73e8;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* Empty state */
+.empty {
+  text-align: center;
+  padding: 2rem;
+  color: #888;
+}
+
+.emptyHint {
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.emptyHint a {
+  color: #1a73e8;
+}
+
+/* Spot cards */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cardIcon {
+  flex-shrink: 0;
+}
+
+.cardInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.cardName {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #222;
+}
+
+.cardCoords {
+  font-size: 0.75rem;
+  color: #999;
+  font-family: monospace;
+}
+
+.deleteBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #fff0f0;
+  color: #d32f2f;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.deleteBtn:hover {
+  background: #ffcdd2;
+}
+
+.deleteBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.notes {
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  color: #555;
+  padding-left: 2.75rem;
+}
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+.statValue {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.statLabel {
+  font-size: 0.65rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.viewMapBtn {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: #1a73e8;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.viewMapBtn:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .container {
+    margin: 1rem auto;
+  }
+
+  .stats {
+    gap: 0.5rem;
+  }
+
+  .statValue {
+    font-size: 0.8rem;
+  }
+}

@@ -90,6 +90,26 @@
 .notes h4 { margin: 0 0 0.3rem; color: #0d47a1; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.3px; }
 .notes p { margin: 0; color: #444; font-size: 0.9rem; line-height: 1.5; }
 
+.saveSpotBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.75rem 0;
+  padding: 0.5rem 1rem;
+  background: #d4a017;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.saveSpotBtn:hover {
+  background: #b8860b;
+}
+
 @media (max-width: 600px) {
   .details { grid-template-columns: 1fr; }
 }
