@@ -36,6 +36,7 @@ const SpotsList = lazy(() => import('./components/SpotsList'));
 const Leaderboard = lazy(() => import('./components/Leaderboard'));
 const TackleBox = lazy(() => import('./components/TackleBox'));
 const TripPlanner = lazy(() => import('./components/TripPlanner'));
+const ConservationGuide = lazy(() => import('./components/ConservationGuide'));
 
 function EditPage({ getCatch, updateCatch }) {
   const { id } = useParams();
@@ -117,6 +118,7 @@ export default function App() {
               <Route path="/leaderboard" element={<Leaderboard />} />
               <Route path="/tackle" element={<TackleBox />} />
               <Route path="/trips" element={<TripPlanner />} />
+              <Route path="/conservation" element={<ConservationGuide />} />
             </Routes>
           </Suspense>
         )}

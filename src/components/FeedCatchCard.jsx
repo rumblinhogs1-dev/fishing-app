@@ -54,6 +54,7 @@ export default function FeedCatchCard({ entry }) {
           {entry.location && <span className={styles.tag}>{entry.location}</span>}
           {entry.bait && <span className={styles.tag}>{entry.bait}</span>}
           {entry.lureName && <span className={styles.lureTag}>{entry.lureName}</span>}
+          {entry.released && <span className={styles.releasedTag}>Released</span>}
         </div>
         {entry.notes && <p className={styles.notes}>{entry.notes}</p>}
         <Link to={`/catch/${entry.id}`} className={styles.viewLink}>View details</Link>

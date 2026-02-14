@@ -5,6 +5,7 @@ import { db } from '../firebase';
 import { getUserProfile, sendFriendRequest } from '../utils/friends';
 import { useAuth } from '../contexts/AuthContext';
 import FeedCatchCard from './FeedCatchCard';
+import ConservationBadges from './ConservationBadges';
 import styles from './UserProfile.module.css';
 
 export default function UserProfile() {
@@ -85,6 +86,10 @@ export default function UserProfile() {
             <span className={styles.statLabel}>Catches</span>
           </div>
           <div className={styles.stat}>
+            <span className={styles.statValue}>{catches.filter((c) => c.released).length}</span>
+            <span className={styles.statLabel}>Released</span>
+          </div>
+          <div className={styles.stat}>
             <span className={styles.statValue}>{profile.friendCount || 0}</span>
             <span className={styles.statLabel}>Friends</span>
           </div>
@@ -97,6 +102,13 @@ export default function UserProfile() {
         )}
         {isFriend && <span className={styles.friendBadge}>Friends</span>}
       </div>
+
+      <ConservationBadges
+        catches={catches}
+        earnedBadges={profile?.earnedBadges || {}}
+        userId={userId}
+        isOwn={isOwn}
+      />
 
       <div className={styles.catches}>
         {catches.length === 0 ? (
