@@ -38,6 +38,8 @@ const TackleBox = lazy(() => import('./components/TackleBox'));
 const TripPlanner = lazy(() => import('./components/TripPlanner'));
 const ConservationGuide = lazy(() => import('./components/ConservationGuide'));
 const Notifications = lazy(() => import('./components/Notifications'));
+const Challenges = lazy(() => import('./components/Challenges'));
+const ChallengeDetail = lazy(() => import('./components/ChallengeDetail'));
 
 function EditPage({ getCatch, updateCatch }) {
   const { id } = useParams();
@@ -121,6 +123,8 @@ export default function App() {
               <Route path="/trips" element={<TripPlanner />} />
               <Route path="/conservation" element={<ConservationGuide />} />
               <Route path="/notifications" element={<Notifications />} />
+              <Route path="/challenges" element={<Challenges />} />
+              <Route path="/challenge/:id" element={<ChallengeDetail />} />
             </Routes>
           </Suspense>
         )}
