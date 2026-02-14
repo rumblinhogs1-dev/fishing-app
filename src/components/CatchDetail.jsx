@@ -121,6 +121,24 @@ export default function CatchDetail() {
             )}
           </div>
 
+          {entry.aiSpecies && (
+            <div className={styles.aiSection}>
+              <div className={styles.detailItem}>
+                <span className={styles.detailLabel}>AI Identified</span>
+                <span className={styles.detailValue}>
+                  {entry.aiSpecies}
+                  {entry.aiConfidence != null && ` (${entry.aiConfidence}%)`}
+                </span>
+              </div>
+              {entry.correctedSpecies && (
+                <div className={styles.detailItem}>
+                  <span className={styles.detailLabel}>Corrected To</span>
+                  <span className={styles.detailValue}>{entry.correctedSpecies}</span>
+                </div>
+              )}
+            </div>
+          )}
+
           {entry.notes && (
             <div className={styles.notes}>
               <h4>Notes</h4>

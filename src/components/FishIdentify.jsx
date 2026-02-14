@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { getApiKey, hasEnvKey, saveApiKey, resizeImage, identifyFish } from '../utils/gemini';
+import SpeciesInfoCard from './SpeciesInfoCard';
 import styles from './FishIdentify.module.css';
 
 export default function FishIdentify() {
@@ -9,6 +10,7 @@ export default function FishIdentify() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
+  const [selectedSpecies, setSelectedSpecies] = useState('');
   const fileRef = useRef(null);
 
   const envKeySet = hasEnvKey();
@@ -50,10 +52,12 @@ export default function FishIdentify() {
     setLoading(true);
     setError('');
     setResult(null);
+    setSelectedSpecies('');
 
     try {
       const parsed = await identifyFish(image, key);
       setResult(parsed);
+      setSelectedSpecies(parsed.species || '');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -181,7 +185,7 @@ export default function FishIdentify() {
         <div className={styles.resultCard}>
           <div className={styles.resultHeader}>
             <div>
-              <h3 className={styles.speciesName}>{result.species}</h3>
+              <h3 className={styles.speciesName}>{selectedSpecies || result.species}</h3>
               {result.scientificName && (
                 <p className={styles.sciName}>{result.scientificName}</p>
               )}
@@ -193,6 +197,51 @@ export default function FishIdentify() {
               <span className={styles.confidenceLabel}>confidence</span>
             </div>
           </div>
+
+          {/* Confidence bar */}
+          {result.confidence > 0 && (
+            <div className={styles.confidenceBarWrap}>
+              <div className={styles.confidenceBarTrack}>
+                <div
+                  className={`${styles.confidenceBarFill} ${
+                    result.confidence >= 80 ? styles.confidenceHigh :
+                    result.confidence >= 50 ? styles.confidenceMed :
+                    styles.confidenceLow
+                  }`}
+                  style={{ width: `${result.confidence}%` }}
+                />
+              </div>
+              <span className={styles.confidenceBarText}>{result.confidence}% confidence</span>
+            </div>
+          )}
+
+          {/* Suggestion cards when confidence < 80 */}
+          {result.confidence > 0 && result.confidence < 80 && result.alternatives?.length > 0 && (
+            <div className={styles.suggestionsWrap}>
+              <span className={styles.suggestionsLabel}>Could also be:</span>
+              <div className={styles.suggestionCards}>
+                <button
+                  type="button"
+                  className={`${styles.suggestionCard} ${selectedSpecies === result.species ? styles.suggestionActive : ''}`}
+                  onClick={() => setSelectedSpecies(result.species)}
+                >
+                  <span className={styles.suggestionSpecies}>{result.species}</span>
+                  <span className={styles.suggestionConf}>{result.confidence}%</span>
+                </button>
+                {result.alternatives.map((alt, i) => (
+                  <button
+                    type="button"
+                    key={i}
+                    className={`${styles.suggestionCard} ${selectedSpecies === alt.species ? styles.suggestionActive : ''}`}
+                    onClick={() => setSelectedSpecies(alt.species)}
+                  >
+                    <span className={styles.suggestionSpecies}>{alt.species}</span>
+                    <span className={styles.suggestionConf}>{alt.confidence}%</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           {result.confidence > 0 && (
             <div className={styles.resultBody}>
@@ -256,6 +305,9 @@ export default function FishIdentify() {
                   <p>{result.funFact}</p>
                 </div>
               )}
+
+              {/* Species Info Card */}
+              <SpeciesInfoCard speciesName={selectedSpecies || result.species} />
             </div>
           )}
         </div>

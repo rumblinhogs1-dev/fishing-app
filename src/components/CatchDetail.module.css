@@ -75,6 +75,17 @@
 .detailLabel { font-size: 0.7rem; color: #888; text-transform: uppercase; letter-spacing: 0.3px; }
 .detailValue { font-size: 0.95rem; font-weight: 600; color: #333; }
 
+.aiSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: #e8f0fe;
+  border-radius: 8px;
+  border: 1px solid #c5d8f8;
+}
+
 .notes { margin-top: 1rem; }
 .notes h4 { margin: 0 0 0.3rem; color: #0d47a1; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.3px; }
 .notes p { margin: 0; color: #444; font-size: 0.9rem; line-height: 1.5; }

@@ -384,6 +384,96 @@
   line-height: 1.5;
 }
 
+/* Phase 2: Confidence bar */
+.confidenceBarWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 1.25rem;
+  margin-top: -0.25rem;
+}
+
+.confidenceBarTrack {
+  flex: 1;
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.confidenceBarFill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.confidenceHigh { background: #4caf50; }
+.confidenceMed { background: #ff9800; }
+.confidenceLow { background: #d32f2f; }
+
+.confidenceBarText {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #555;
+  white-space: nowrap;
+}
+
+/* Phase 2: Suggestion cards */
+.suggestionsWrap {
+  padding: 0 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.suggestionsLabel {
+  font-size: 0.8rem;
+  color: #888;
+  font-weight: 500;
+}
+
+.suggestionCards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.suggestionCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.5rem 1rem;
+  background: #f8f9fa;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  font-family: inherit;
+}
+
+.suggestionCard:hover {
+  border-color: #1a73e8;
+  background: #e8f0fe;
+}
+
+.suggestionActive {
+  border-color: #1a73e8;
+  background: #e8f0fe;
+}
+
+.suggestionSpecies {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.suggestionConf {
+  font-size: 0.7rem;
+  color: #888;
+}
+
 @media (max-width: 600px) {
   .container {
     margin: 1rem auto;
@@ -407,5 +497,9 @@
   .estimateRow,
   .contextRow {
     grid-template-columns: 1fr;
+  }
+
+  .suggestionCards {
+    flex-direction: column;
   }
 }

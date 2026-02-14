@@ -1,0 +1,105 @@
+.card {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.7rem 1rem;
+  background: #f8f9fa;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1a73e8;
+  font-family: inherit;
+  text-align: left;
+  transition: background 0.2s;
+}
+
+.toggle:hover {
+  background: #e8f0fe;
+}
+
+.toggleIcon {
+  font-size: 0.7rem;
+  color: #888;
+}
+
+.content {
+  padding: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #1a73e8;
+  font-weight: 500;
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(26, 115, 232, 0.3);
+  border-top-color: #1a73e8;
+  border-radius: 50%;
+  animation: speciesSpin 0.7s linear infinite;
+}
+
+@keyframes speciesSpin {
+  to { transform: rotate(360deg); }
+}
+
+.error {
+  font-size: 0.8rem;
+  color: #d32f2f;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.label {
+  font-size: 0.7rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-weight: 600;
+}
+
+.value {
+  font-size: 0.9rem;
+  color: #333;
+  line-height: 1.4;
+}
+
+.italic {
+  font-style: italic;
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

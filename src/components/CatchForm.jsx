@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ImageUpload from './ImageUpload';
 import QuickLureId from './QuickLureId';
 import RegulationBadge from './RegulationBadge';
+import SpeciesInfoCard from './SpeciesInfoCard';
 import { getGPSLocation, reverseGeocode, fetchWeather, fetchWaterData } from '../utils/weather';
 import { identifyFish, getApiKey } from '../utils/gemini';
 import styles from './CatchForm.module.css';
@@ -44,6 +45,8 @@ export default function CatchForm({ existing, onSubmit }) {
   const [fishIdLoading, setFishIdLoading] = useState(false);
   const [fishIdResult, setFishIdResult] = useState(null);
   const [fishIdError, setFishIdError] = useState('');
+  const [fishIdConfirmed, setFishIdConfirmed] = useState(null);
+  const [correctedSpecies, setCorrectedSpecies] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -91,6 +94,8 @@ export default function CatchForm({ existing, onSubmit }) {
 
   async function handleImageChange(img) {
     setForm((prev) => ({ ...prev, image: img }));
+    setFishIdConfirmed(null);
+    setCorrectedSpecies('');
     if (img) setPhotoError('');
     if (!img) {
       setFishIdResult(null);
@@ -120,6 +125,26 @@ export default function CatchForm({ existing, onSubmit }) {
       setFishIdError(err.message);
     } finally {
       setFishIdLoading(false);
+    }
+  }
+
+  function handleSuggestionSelect(species) {
+    setForm((prev) => ({ ...prev, species }));
+    setFishIdConfirmed(true);
+  }
+
+  function handleConfirmYes() {
+    setFishIdConfirmed(true);
+  }
+
+  function handleConfirmNo() {
+    setFishIdConfirmed(false);
+    setCorrectedSpecies('');
+  }
+
+  function handleCorrectionSubmit() {
+    if (correctedSpecies.trim()) {
+      setForm((prev) => ({ ...prev, species: correctedSpecies.trim() }));
     }
   }
 
@@ -209,6 +234,10 @@ export default function CatchForm({ existing, onSubmit }) {
         weatherCloudCover: form.weatherCloudCover !== '' ? Number(form.weatherCloudCover) : '',
         waterTemp: form.waterTemp ? Number(form.waterTemp) : '',
         flowRate: form.flowRate ? Number(form.flowRate) : '',
+        aiSpecies: fishIdResult?.species || '',
+        aiConfidence: fishIdResult?.confidence ?? null,
+        correctedSpecies: fishIdConfirmed === false && correctedSpecies.trim() ? correctedSpecies.trim() : '',
+        speciesConfirmed: fishIdConfirmed,
       });
       navigate('/');
     } catch (err) {
@@ -346,14 +375,98 @@ export default function CatchForm({ existing, onSubmit }) {
           <div className={styles.fishIdError}>{fishIdError}</div>
         )}
         {fishIdResult && fishIdResult.confidence > 0 && !fishIdLoading && (
-          <div className={styles.fishIdInfo}>
-            <span className={styles.fishIdLabel}>AI-identified fish:</span>
-            <div className={styles.fishIdTags}>
-              <span className={styles.fishIdTag}>{fishIdResult.species}</span>
-              <span className={styles.fishIdConfidence}>{fishIdResult.confidence}% confident</span>
-              {fishIdResult.estimatedWeight && <span className={styles.fishIdTag}>{fishIdResult.estimatedWeight}</span>}
-              {fishIdResult.estimatedLength && <span className={styles.fishIdTag}>{fishIdResult.estimatedLength}</span>}
+          <div className={styles.fishIdSection}>
+            <div className={styles.fishIdInfo}>
+              <span className={styles.fishIdLabel}>AI-identified fish:</span>
+              <div className={styles.fishIdTags}>
+                <span className={styles.fishIdTag}>{fishIdResult.species}</span>
+                {fishIdResult.estimatedWeight && <span className={styles.fishIdTag}>{fishIdResult.estimatedWeight}</span>}
+                {fishIdResult.estimatedLength && <span className={styles.fishIdTag}>{fishIdResult.estimatedLength}</span>}
+              </div>
             </div>
+
+            {/* Confidence bar */}
+            <div className={styles.confidenceBarWrap}>
+              <div className={styles.confidenceBarTrack}>
+                <div
+                  className={`${styles.confidenceBarFill} ${
+                    fishIdResult.confidence >= 80 ? styles.confidenceHigh :
+                    fishIdResult.confidence >= 50 ? styles.confidenceMed :
+                    styles.confidenceLow
+                  }`}
+                  style={{ width: `${fishIdResult.confidence}%` }}
+                />
+              </div>
+              <span className={styles.confidenceBarLabel}>{fishIdResult.confidence}% confidence</span>
+            </div>
+
+            {/* Suggestion cards when confidence < 80 and not confirmed */}
+            {fishIdResult.confidence < 80 && fishIdConfirmed === null && fishIdResult.alternatives?.length > 0 && (
+              <div className={styles.suggestions}>
+                <span className={styles.suggestionsLabel}>Could also be:</span>
+                <div className={styles.suggestionCards}>
+                  <button
+                    type="button"
+                    className={styles.suggestionCard}
+                    onClick={() => handleSuggestionSelect(fishIdResult.species)}
+                  >
+                    <span className={styles.suggestionSpecies}>{fishIdResult.species}</span>
+                    <span className={styles.suggestionConf}>{fishIdResult.confidence}%</span>
+                  </button>
+                  {fishIdResult.alternatives.map((alt, i) => (
+                    <button
+                      type="button"
+                      key={i}
+                      className={styles.suggestionCard}
+                      onClick={() => handleSuggestionSelect(alt.species)}
+                    >
+                      <span className={styles.suggestionSpecies}>{alt.species}</span>
+                      <span className={styles.suggestionConf}>{alt.confidence}%</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Confirm / Correct prompt */}
+            {fishIdConfirmed === null && fishIdResult.confidence >= 80 && (
+              <div className={styles.confirmRow}>
+                <span className={styles.confirmLabel}>Is this correct?</span>
+                <div className={styles.confirmBtns}>
+                  <button type="button" className={styles.confirmYes} onClick={handleConfirmYes}>Yes</button>
+                  <button type="button" className={styles.confirmNo} onClick={handleConfirmNo}>No</button>
+                </div>
+              </div>
+            )}
+
+            {/* Correction input */}
+            {fishIdConfirmed === false && (
+              <div className={styles.correctionRow}>
+                <label className={styles.correctionLabel}>What species is it?</label>
+                <div className={styles.correctionInputRow}>
+                  <input
+                    type="text"
+                    className={styles.correctionInput}
+                    value={correctedSpecies}
+                    onChange={(e) => setCorrectedSpecies(e.target.value)}
+                    placeholder="Enter correct species..."
+                  />
+                  <button
+                    type="button"
+                    className={styles.correctionBtn}
+                    onClick={handleCorrectionSubmit}
+                    disabled={!correctedSpecies.trim()}
+                  >
+                    Update
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Species info card after confirmation */}
+            {fishIdConfirmed !== null && (
+              <SpeciesInfoCard speciesName={form.species} />
+            )}
           </div>
         )}
       </div>
