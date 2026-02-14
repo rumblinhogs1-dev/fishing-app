@@ -23,6 +23,9 @@ import MapView from './components/MapView';
 import Forecast from './components/Forecast';
 import SpotsList from './components/SpotsList';
 import Leaderboard from './components/Leaderboard';
+import TackleBox from './components/TackleBox';
+import TripPlanner from './components/TripPlanner';
+import OfflineBanner from './components/OfflineBanner';
 import { useCatchesProvider } from './hooks/useCatchesProvider';
 import { useAuth } from './contexts/AuthContext';
 import styles from './App.module.css';
@@ -55,6 +58,7 @@ export default function App() {
   return (
     <div className={styles.app}>
       <Navbar />
+      <OfflineBanner />
       {isAuthenticated && showMigration && (
         <DataMigration userId={user.uid} onComplete={() => setShowMigration(false)} />
       )}
@@ -85,6 +89,8 @@ export default function App() {
             <Route path="/forecast" element={<Forecast />} />
             <Route path="/regulations" element={<Regulations />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/tackle" element={<TackleBox />} />
+            <Route path="/trips" element={<TripPlanner />} />
           </Routes>
         )}
       </main>

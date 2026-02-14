@@ -2,8 +2,17 @@
   grid-column: 1 / -1;
   border: 1.5px solid;
   border-radius: 8px;
-  padding: 0.5rem 0.75rem;
   background: #fafafa;
+  overflow: hidden;
+}
+
+.keepBanner {
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 0.35rem 0.75rem;
+  letter-spacing: 0.3px;
 }
 
 .state {
@@ -12,6 +21,7 @@
   text-transform: uppercase;
   letter-spacing: 0.3px;
   display: block;
+  padding: 0.5rem 0.75rem 0 0.75rem;
 }
 
 .species {
@@ -19,20 +29,32 @@
   font-size: 0.9rem;
   color: #222;
   display: block;
+  padding: 0 0.75rem;
   margin-bottom: 0.25rem;
 }
 
-.rules {
+.quickRules {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  padding: 0 0.75rem;
+}
+
+.quickRule {
   font-size: 0.8rem;
   color: #555;
+  background: #f0f0f0;
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+}
+
+.quickRule strong {
+  color: #222;
 }
 
 .disclaimer {
   display: block;
-  margin-top: 0.25rem;
+  padding: 0.35rem 0.75rem;
   font-size: 0.65rem;
   color: #aaa;
   font-style: italic;
