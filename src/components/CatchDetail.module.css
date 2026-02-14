@@ -110,6 +110,26 @@
   background: #b8860b;
 }
 
+.shareBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.75rem 0 0.75rem 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #1a73e8;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.shareBtn:hover {
+  background: #1557b0;
+}
+
 @media (max-width: 600px) {
   .details { grid-template-columns: 1fr; }
 }

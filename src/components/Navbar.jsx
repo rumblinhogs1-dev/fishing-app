@@ -41,6 +41,9 @@ export default function Navbar() {
         <NavLink to="/feed" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
           Feed
         </NavLink>
+        <NavLink to="/leaderboard" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
+          Ranks
+        </NavLink>
         <NavLink to="/map" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
           Map
         </NavLink>

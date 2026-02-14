@@ -72,3 +72,45 @@ export async function getFriendsFeed(friendIds, lastDoc = null, pageSize = 20) {
     hasMore: snapshot.docs.length === pageSize,
   };
 }
+
+export async function getPublicFeedFiltered(lastDoc = null, pageSize = 20, speciesFilter = '') {
+  const constraints = [
+    where('visibility', '==', 'public'),
+  ];
+  if (speciesFilter) {
+    constraints.push(where('species', '==', speciesFilter));
+  }
+  constraints.push(orderBy('createdAt', 'desc'));
+  if (lastDoc) constraints.push(startAfter(lastDoc));
+  constraints.push(limit(pageSize));
+
+  const q = query(collection(db, 'catches'), ...constraints);
+  const snapshot = await getDocs(q);
+  return {
+    catches: snapshot.docs.map((d) => ({
+      id: d.id,
+      ...d.data(),
+      createdAt: d.data().createdAt?.toDate?.()?.toISOString() || null,
+    })),
+    lastDoc: snapshot.docs[snapshot.docs.length - 1] || null,
+    hasMore: snapshot.docs.length === pageSize,
+  };
+}
+
+export async function getPopularSpecies() {
+  const q = query(
+    collection(db, 'catches'),
+    where('visibility', '==', 'public'),
+    orderBy('createdAt', 'desc'),
+    limit(500)
+  );
+  const snapshot = await getDocs(q);
+  const counts = {};
+  snapshot.docs.forEach((d) => {
+    const sp = d.data().species;
+    if (sp) counts[sp] = (counts[sp] || 0) + 1;
+  });
+  return Object.entries(counts)
+    .sort((a, b) => b[1] - a[1])
+    .map(([species]) => species);
+}

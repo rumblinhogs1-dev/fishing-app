@@ -65,3 +65,9 @@
 .notes { margin: 0.5rem 0; color: #555; font-size: 0.85rem; line-height: 1.4; }
 .viewLink { color: #1a73e8; font-size: 0.85rem; font-weight: 500; text-decoration: none; }
 .viewLink:hover { text-decoration: underline; }
+
+.reactionsRow {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f0f0f0;
+}

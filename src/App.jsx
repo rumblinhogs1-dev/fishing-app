@@ -22,6 +22,7 @@ import Regulations from './components/Regulations';
 import MapView from './components/MapView';
 import Forecast from './components/Forecast';
 import SpotsList from './components/SpotsList';
+import Leaderboard from './components/Leaderboard';
 import { useCatchesProvider } from './hooks/useCatchesProvider';
 import { useAuth } from './contexts/AuthContext';
 import styles from './App.module.css';
@@ -83,6 +84,7 @@ export default function App() {
             <Route path="/spots" element={<SpotsList />} />
             <Route path="/forecast" element={<Forecast />} />
             <Route path="/regulations" element={<Regulations />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
           </Routes>
         )}
       </main>

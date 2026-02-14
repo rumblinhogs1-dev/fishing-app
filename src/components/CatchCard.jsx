@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { updateCatch } from '../utils/firestore';
 import styles from './CatchCard.module.css';
 
 export default function CatchCard({ entry, onDelete }) {
@@ -10,6 +11,16 @@ export default function CatchCard({ entry, onDelete }) {
   const timeStr = d
     ? d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
     : '';
+
+  const isPublic = entry.visibility === 'public';
+
+  async function handleToggleVisibility() {
+    try {
+      await updateCatch(entry.id, { visibility: isPublic ? 'private' : 'public' });
+    } catch (err) {
+      console.error('Failed to update visibility:', err);
+    }
+  }
 
   return (
     <div className={styles.card}>
@@ -67,8 +78,23 @@ export default function CatchCard({ entry, onDelete }) {
         {dateStr && <span>{dateStr}</span>}
         {timeStr && <span>{timeStr}</span>}
         {entry.visibility && entry.visibility !== 'public' && (
-          <span className={styles.visibilityBadge}>{entry.visibility}</span>
+          <span className={styles.visibilityBadge}>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" style={{ marginRight: 3, verticalAlign: -1 }}>
+              <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM12 17c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+            </svg>
+            {entry.visibility}
+          </span>
         )}
+        <label className={styles.visibilityToggle} onClick={(e) => e.stopPropagation()}>
+          <input
+            type="checkbox"
+            className={styles.toggleInput}
+            checked={isPublic}
+            onChange={handleToggleVisibility}
+          />
+          <span className={styles.toggleSlider} />
+          <span className={styles.toggleLabel}>{isPublic ? 'Public' : 'Private'}</span>
+        </label>
       </div>
     </div>
   );

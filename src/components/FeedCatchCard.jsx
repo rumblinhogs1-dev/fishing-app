@@ -1,13 +1,27 @@
 import { Link } from 'react-router-dom';
+import ReactionsBar from './ReactionsBar';
 import styles from './FeedCatchCard.module.css';
 
-export default function FeedCatchCard({ entry }) {
-  const d = entry.date ? new Date(entry.date) : null;
-  const dateStr = d
-    ? d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-    : '';
+function timeAgo(dateStr) {
+  if (!dateStr) return '';
+  const now = Date.now();
+  const then = new Date(dateStr).getTime();
+  const diff = now - then;
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  if (days < 30) return `${days}d ago`;
+  const months = Math.floor(days / 30);
+  if (months < 12) return `${months}mo ago`;
+  return `${Math.floor(months / 12)}y ago`;
+}
 
+export default function FeedCatchCard({ entry }) {
   const img = entry.imageUrl || entry.image;
+  const relTime = timeAgo(entry.createdAt || entry.date);
 
   return (
     <div className={styles.card}>
@@ -23,7 +37,7 @@ export default function FeedCatchCard({ entry }) {
           <Link to={`/user/${entry.userId}`} className={styles.authorName}>
             {entry.authorDisplayName || 'Angler'}
           </Link>
-          <span className={styles.authorDate}>{dateStr}</span>
+          <span className={styles.authorDate}>{relTime}</span>
         </div>
         {entry.visibility && (
           <span className={styles.visibilityBadge}>{entry.visibility}</span>
@@ -43,6 +57,9 @@ export default function FeedCatchCard({ entry }) {
         </div>
         {entry.notes && <p className={styles.notes}>{entry.notes}</p>}
         <Link to={`/catch/${entry.id}`} className={styles.viewLink}>View details</Link>
+        <div className={styles.reactionsRow}>
+          <ReactionsBar catchId={entry.id} reactionCounts={entry.reactionCounts || {}} />
+        </div>
       </div>
     </div>
   );
