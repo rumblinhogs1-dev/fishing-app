@@ -97,6 +97,9 @@ export default function Navbar({ onSearchOpen }) {
             <NavLink to="/trips" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
               Trips
             </NavLink>
+            <NavLink to="/challenges" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
+              Challenges
+            </NavLink>
             <NavLink to="/friends" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
               Friends
             </NavLink>
