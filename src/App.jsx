@@ -20,6 +20,7 @@ import CreateGroup from './components/CreateGroup';
 import GroupSettings from './components/GroupSettings';
 import Regulations from './components/Regulations';
 import MapView from './components/MapView';
+import Forecast from './components/Forecast';
 import SpotsList from './components/SpotsList';
 import { useCatchesProvider } from './hooks/useCatchesProvider';
 import { useAuth } from './contexts/AuthContext';
@@ -80,6 +81,7 @@ export default function App() {
             <Route path="/chat/:groupId/settings" element={<GroupSettings />} />
             <Route path="/map" element={<MapView catches={catches} />} />
             <Route path="/spots" element={<SpotsList />} />
+            <Route path="/forecast" element={<Forecast />} />
             <Route path="/regulations" element={<Regulations />} />
           </Routes>
         )}

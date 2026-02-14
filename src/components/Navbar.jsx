@@ -44,6 +44,9 @@ export default function Navbar() {
         <NavLink to="/map" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
           Map
         </NavLink>
+        <NavLink to="/forecast" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
+          Forecast
+        </NavLink>
         <div className={styles.dropdown} ref={aiRef}>
           <button className={styles.dropdownTrigger} onClick={() => setAiOpen(!aiOpen)}>
             AI Tools

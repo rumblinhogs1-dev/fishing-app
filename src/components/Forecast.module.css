@@ -1,0 +1,649 @@
+.container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.heading {
+  color: #0d47a1;
+  margin: 0 0 1.5rem;
+}
+
+/* GPS Button */
+.gpsButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #1a73e8, #0d47a1);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+  transition: opacity 0.2s;
+}
+
+.gpsButton:hover {
+  opacity: 0.9;
+}
+
+.gpsButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #666;
+}
+
+.spinner {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e0e0e0;
+  border-top-color: #1a73e8;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error {
+  background: #fbe9e7;
+  color: #c62828;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.location {
+  text-align: center;
+  color: #666;
+  margin: -0.5rem 0 1.5rem;
+  font-size: 0.9rem;
+}
+
+/* Hero Card */
+.heroCard {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+  margin-bottom: 1.5rem;
+  border-left: 5px solid;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.heroScore {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.heroNumber {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.heroMeta {
+  flex: 1;
+}
+
+.heroLabel {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.heroRec {
+  color: #555;
+  margin: 0.25rem 0 0;
+  font-size: 0.95rem;
+}
+
+.heroReasons {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.heroReason {
+  background: #e8f0fe;
+  color: #1a73e8;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+}
+
+.heroBestWindow {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* Conditions Grid */
+.conditionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.condCard {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.25rem;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.condValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a73e8;
+}
+
+.condLabel {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.condDetail {
+  font-size: 0.75rem;
+  color: #aaa;
+}
+
+/* Section Card */
+.section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+  margin-bottom: 1.5rem;
+}
+
+.sectionTitle {
+  margin: 0 0 1rem;
+  color: #333;
+  font-size: 1rem;
+}
+
+/* Bite Score Gauge */
+.gauge {
+  position: relative;
+  height: 12px;
+  background: #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.gaugeFill {
+  height: 100%;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #c62828, #ef6c00, #f9a825, #2e7d32);
+  transition: width 0.5s ease;
+}
+
+.gaugeLabel {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #888;
+  margin-bottom: 0.75rem;
+}
+
+.factorRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0.85rem;
+}
+
+.factorRow:last-child {
+  border-bottom: none;
+}
+
+.factorDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.factorName {
+  font-weight: 600;
+  min-width: 100px;
+}
+
+.factorBar {
+  flex: 1;
+  height: 6px;
+  background: #e8e8e8;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.factorBarFill {
+  height: 100%;
+  border-radius: 3px;
+  background: #1a73e8;
+  transition: width 0.3s;
+}
+
+.factorDetail {
+  color: #888;
+  font-size: 0.8rem;
+  min-width: 80px;
+  text-align: right;
+}
+
+/* Moon & Solunar */
+.moonHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.moonEmoji {
+  font-size: 2.5rem;
+}
+
+.moonInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.moonPhase {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.moonIllum {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+/* Timeline */
+.timeline {
+  position: relative;
+  height: 40px;
+  background: #f0f4f8;
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+}
+
+.timelinePeriod {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  color: #fff;
+  font-weight: 600;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.timelineLabels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: #aaa;
+  margin-bottom: 1rem;
+}
+
+.windowsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.windowItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0;
+  font-size: 0.85rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.windowItem:last-child {
+  border-bottom: none;
+}
+
+.windowDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.windowTime {
+  font-weight: 600;
+  min-width: 120px;
+}
+
+.windowReason {
+  color: #666;
+}
+
+/* Water Temp */
+.waterTempDisplay {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.waterTempValue {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1a73e8;
+}
+
+.waterTempMeta {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.manualInput {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.manualInput input {
+  width: 80px;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.manualInput button {
+  padding: 0.4rem 0.8rem;
+  background: #1a73e8;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.speciesBar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  font-size: 0.85rem;
+}
+
+.speciesName {
+  min-width: 120px;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.speciesRange {
+  flex: 1;
+  position: relative;
+  height: 10px;
+  background: #e8e8e8;
+  border-radius: 5px;
+  overflow: visible;
+}
+
+.speciesIdeal {
+  position: absolute;
+  height: 100%;
+  background: #4caf50;
+  border-radius: 5px;
+  opacity: 0.7;
+}
+
+.speciesGood {
+  position: absolute;
+  height: 100%;
+  background: #c8e6c9;
+  border-radius: 5px;
+}
+
+.speciesMarker {
+  position: absolute;
+  top: -3px;
+  width: 3px;
+  height: 16px;
+  background: #c62828;
+  border-radius: 2px;
+  transform: translateX(-1px);
+}
+
+.speciesStatus {
+  min-width: 60px;
+  text-align: right;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Wind */
+.windDisplay {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.windArrow {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+}
+
+.windValues {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.windSpeed {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a73e8;
+}
+
+.windGust {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.windDir {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* Tide Chart */
+.tideChart {
+  width: 100%;
+  height: 120px;
+}
+
+.tideLabel {
+  font-size: 0.8rem;
+  fill: #666;
+}
+
+/* Flow */
+.flowDisplay {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.flowValue {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1a73e8;
+}
+
+.flowUnit {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+/* 5-Day Forecast */
+.dayRow {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.dayCard {
+  min-width: 120px;
+  flex-shrink: 0;
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 0.75rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  border: 2px solid transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.dayCard:hover {
+  background: #e8f0fe;
+}
+
+.dayCardActive {
+  border-color: #1a73e8;
+  background: #e8f0fe;
+  box-shadow: 0 2px 8px rgba(26, 115, 232, 0.2);
+}
+
+.dayName {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #333;
+}
+
+.dayWeather {
+  font-size: 1.4rem;
+}
+
+.dayTemps {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.dayMoon {
+  font-size: 1rem;
+}
+
+.dayBiteDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+/* Day Detail Overlay */
+.dayDetail {
+  background: #f0f4f8;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-top: 0.75rem;
+}
+
+.dayDetailGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.dayDetailItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3rem 0;
+}
+
+.dayDetailLabel {
+  color: #888;
+}
+
+.dayDetailValue {
+  font-weight: 600;
+}
+
+/* Attribution */
+.attribution {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #aaa;
+  padding: 1rem 0 2rem;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .conditionsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dayCard {
+    min-width: 100px;
+  }
+
+  .heroNumber {
+    font-size: 2.5rem;
+  }
+
+  .heroLabel {
+    font-size: 1.1rem;
+  }
+
+  .speciesName {
+    min-width: 80px;
+    font-size: 0.7rem;
+  }
+
+  .factorName {
+    min-width: 70px;
+    font-size: 0.8rem;
+  }
+
+  .dayDetailGrid {
+    grid-template-columns: 1fr;
+  }
+}

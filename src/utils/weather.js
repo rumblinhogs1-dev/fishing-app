@@ -1,4 +1,4 @@
-const WEATHER_CODES = {
+export const WEATHER_CODES = {
   0: 'Clear sky', 1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Overcast',
   45: 'Foggy', 48: 'Rime fog', 51: 'Light drizzle', 53: 'Moderate drizzle',
   55: 'Dense drizzle', 61: 'Slight rain', 63: 'Moderate rain', 65: 'Heavy rain',
@@ -148,7 +148,7 @@ function buildBBox(lat, lng, delta) {
 }
 
 /** Haversine distance in miles */
-function haversine(lat1, lng1, lat2, lng2) {
+export function haversine(lat1, lng1, lat2, lng2) {
   const R = 3959;
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLng = (lng2 - lng1) * Math.PI / 180;
