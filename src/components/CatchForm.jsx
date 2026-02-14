@@ -6,6 +6,7 @@ import RegulationBadge from './RegulationBadge';
 import SpeciesInfoCard from './SpeciesInfoCard';
 import { getGPSLocation, reverseGeocode, fetchWeather, fetchWaterData } from '../utils/weather';
 import { identifyFish, getApiKey } from '../utils/gemini';
+import { getRandomTip } from '../utils/conservationTips';
 import { useToast } from '../contexts/ToastContext';
 import styles from './CatchForm.module.css';
 
@@ -32,6 +33,7 @@ const EMPTY = {
   lureName: '',
   lureCategory: '',
   lureColor: '',
+  released: true,
   visibility: 'private',
   notes: '',
   image: '',
@@ -76,6 +78,7 @@ export default function CatchForm({ existing, onSubmit }) {
         lureName: existing.lureName || '',
         lureCategory: existing.lureCategory || '',
         lureColor: existing.lureColor || '',
+        released: existing.released !== undefined ? existing.released : true,
         visibility: existing.visibility || 'public',
         notes: existing.notes || '',
         image: existing.image || existing.imageUrl || '',
@@ -242,6 +245,9 @@ export default function CatchForm({ existing, onSubmit }) {
         speciesConfirmed: fishIdConfirmed,
       });
       toast.success('Catch logged!');
+      if (form.released) {
+        setTimeout(() => toast.info(getRandomTip()), 500);
+      }
       navigate('/');
     } catch (err) {
       console.error('Failed to save catch:', err);
@@ -303,6 +309,26 @@ export default function CatchForm({ existing, onSubmit }) {
       </div>
 
       <RegulationBadge lat={form.lat} lng={form.lng} species={form.species} />
+
+      <div className={styles.releaseToggle}>
+        <div className={styles.releaseHeader}>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="#2e7d32">
+            <path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20c2.21 0 4-1.79 4-4h-2a2 2 0 0 1-2 2 2.13 2.13 0 0 1-1.53-.67L12 4h2l-1 4h4l-1 4h4L17 8z" />
+          </svg>
+          <span className={styles.releaseLabel}>Catch &amp; Release</span>
+          <button
+            type="button"
+            className={`${styles.toggleSwitch} ${form.released ? styles.toggleOn : ''}`}
+            onClick={() => setForm((prev) => ({ ...prev, released: !prev.released }))}
+            aria-label="Toggle catch and release"
+          >
+            <span className={styles.toggleKnob} />
+          </button>
+        </div>
+        {form.released && (
+          <span className={styles.releaseHint}>This fish will be released back into the water</span>
+        )}
+      </div>
 
       <div className={styles.grid}>
         <label className={styles.field}>

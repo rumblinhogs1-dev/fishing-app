@@ -130,6 +130,12 @@ export default function CatchDetail() {
                 <span className={styles.detailValue}>{entry.lureName}</span>
               </div>
             )}
+            {entry.released !== undefined && (
+              <div className={styles.detailItem}>
+                <span className={styles.detailLabel}>Status</span>
+                <span className={styles.detailValue}>{entry.released ? 'Released' : 'Kept'}</span>
+              </div>
+            )}
           </div>
 
           {entry.aiSpecies && (

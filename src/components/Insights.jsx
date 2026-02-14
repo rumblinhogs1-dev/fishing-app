@@ -1,8 +1,9 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
+import { getConservationStats } from '../utils/conservation';
 import { SkeletonStats } from './Skeleton';
 import styles from './Insights.module.css';
 
-const TABS = ['Records', 'Best Conditions', 'Species', 'Trends', 'Lures', 'Locations', 'Time of Day'];
+const TABS = ['Records', 'Best Conditions', 'Species', 'Trends', 'Lures', 'Locations', 'Time of Day', 'Conservation'];
 const COLORS = ['#1a73e8', '#4caf50', '#ff9800', '#e91e63', '#9c27b0', '#00bcd4', '#ff5722', '#607d8b', '#795548', '#3f51b5'];
 
 function drawBar(ctx, data, width, height) {
@@ -262,6 +263,36 @@ export default function Insights({ catches }) {
       }
     });
 
+    // Conservation
+    const conservationStats = getConservationStats(catches);
+
+    // Monthly release rate
+    const monthRelease = {};
+    catches.forEach((c) => {
+      if (c.date && c.released !== undefined) {
+        const key = c.date.slice(0, 7);
+        if (!monthRelease[key]) monthRelease[key] = { released: 0, total: 0 };
+        monthRelease[key].total++;
+        if (c.released) monthRelease[key].released++;
+      }
+    });
+    const monthlyReleaseRate = Object.entries(monthRelease)
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([m, d]) => ({ label: m.slice(5), value: d.total > 0 ? Math.round((d.released / d.total) * 100) : 0 }));
+
+    // Released species for donut
+    const releasedSpeciesDonut = conservationStats.topReleasedSpecies
+      .slice(0, 10)
+      .map((s) => ({ label: s.species, value: s.count }));
+
+    // Last 30 catches for streak dots
+    const last30 = catches
+      .filter((c) => c.date)
+      .sort((a, b) => (b.date || '').localeCompare(a.date || ''))
+      .slice(0, 30)
+      .reverse()
+      .map((c) => c.released === true);
+
     return {
       total: catches.length,
       heaviest,
@@ -280,6 +311,10 @@ export default function Insights({ catches }) {
       topLocations,
       locationSpecies,
       hourCounts,
+      conservationStats,
+      monthlyReleaseRate,
+      releasedSpeciesDonut,
+      last30,
     };
   }, [catches]);
 
@@ -321,6 +356,7 @@ export default function Insights({ catches }) {
       {tab === 'Lures' && <LuresTab data={data} />}
       {tab === 'Locations' && <LocationsTab data={data} />}
       {tab === 'Time of Day' && <TimeTab data={data} />}
+      {tab === 'Conservation' && <ConservationTab data={data} />}
     </div>
   );
 }
@@ -571,6 +607,81 @@ function TimeTab({ data }) {
 
       <h4 className={styles.subHeading}>Best Time Slots</h4>
       <CanvasChart drawFn={(ctx, d, w, h) => drawBar(ctx, d, w, h)} data={slotCounts} h={200} />
+    </div>
+  );
+}
+
+function ConservationTab({ data }) {
+  const cs = data.conservationStats;
+
+  return (
+    <div className={styles.section}>
+      <h3 className={styles.sectionTitle}>Conservation Stats</h3>
+      <div className={styles.recordsGrid}>
+        <div className={styles.recordCard} style={{ borderLeft: '3px solid #4caf50' }}>
+          <span className={styles.recordValue} style={{ color: '#2e7d32' }}>{cs.totalReleased}</span>
+          <span className={styles.recordLabel}>Total Released</span>
+        </div>
+        <div className={styles.recordCard} style={{ borderLeft: '3px solid #4caf50' }}>
+          <span className={styles.recordValue} style={{ color: '#2e7d32' }}>{cs.yearReleased}</span>
+          <span className={styles.recordLabel}>Released This Year</span>
+        </div>
+        <div className={styles.recordCard} style={{ borderLeft: '3px solid #4caf50' }}>
+          <span className={styles.recordValue} style={{ color: '#2e7d32' }}>{cs.releaseRate}%</span>
+          <span className={styles.recordLabel}>Release Rate</span>
+        </div>
+        <div className={styles.recordCard} style={{ borderLeft: '3px solid #4caf50' }}>
+          <span className={styles.recordValue} style={{ color: '#2e7d32' }}>{cs.currentStreak}</span>
+          <span className={styles.recordLabel}>Current Streak</span>
+        </div>
+      </div>
+
+      {data.monthlyReleaseRate.length > 0 && (
+        <>
+          <h4 className={styles.subHeading}>Monthly Release Rate (%)</h4>
+          <CanvasChart drawFn={(ctx, d, w, h) => drawBar(ctx, d, w, h)} data={data.monthlyReleaseRate} />
+        </>
+      )}
+
+      {data.releasedSpeciesDonut.length > 0 && (
+        <>
+          <h4 className={styles.subHeading}>Released Species</h4>
+          <div className={styles.donutWrap}>
+            <CanvasChart drawFn={(ctx, d, w, h) => drawDonut(ctx, d, w, h)} data={data.releasedSpeciesDonut} w={360} h={300} />
+          </div>
+        </>
+      )}
+
+      {data.last30.length > 0 && (
+        <>
+          <h4 className={styles.subHeading}>Recent Catches (last 30)</h4>
+          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '0.5rem' }}>
+            {data.last30.map((released, i) => (
+              <span
+                key={i}
+                title={released ? 'Released' : 'Kept / Unknown'}
+                style={{
+                  width: 14,
+                  height: 14,
+                  borderRadius: '50%',
+                  background: released ? '#4caf50' : '#ccc',
+                  display: 'inline-block',
+                  border: '2px solid #fff',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
+                }}
+              />
+            ))}
+          </div>
+          <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem', fontSize: '0.75rem', color: '#888' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#4caf50', display: 'inline-block' }} /> Released
+            </span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#ccc', display: 'inline-block' }} /> Kept / Unknown
+            </span>
+          </div>
+        </>
+      )}
     </div>
   );
 }

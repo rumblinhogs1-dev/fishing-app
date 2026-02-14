@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useFriends } from '../hooks/useFriends';
 import { getPublicFeed, getFriendsFeed, getPublicFeedFiltered, getPopularSpecies } from '../utils/activityFeed';
 import FeedCatchCard from './FeedCatchCard';
+import CommunityImpact from './CommunityImpact';
 import { SkeletonList } from './Skeleton';
 import styles from './ActivityFeed.module.css';
 
@@ -82,6 +83,8 @@ export default function ActivityFeed() {
   return (
     <div className={styles.container}>
       <h2 className={styles.heading}>Activity Feed</h2>
+
+      <CommunityImpact />
 
       {user && (
         <div className={styles.tabs}>

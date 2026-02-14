@@ -1,0 +1,116 @@
+.container {
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: 1rem;
+  color: #333;
+  margin: 0 0 0.75rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem 0.5rem;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s;
+}
+
+.badge:hover {
+  transform: translateY(-2px);
+}
+
+.badgeEarned {
+  border: 2px solid #4caf50;
+}
+
+.badgeLocked {
+  border: 2px solid #e0e0e0;
+  opacity: 0.7;
+}
+
+.badgeCelebrate {
+  animation: celebrate 0.8s ease;
+  border-color: #ffd600;
+  box-shadow: 0 0 16px rgba(255, 214, 0, 0.5);
+}
+
+@keyframes celebrate {
+  0% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 214, 0, 0); }
+  30% { transform: scale(1.08); box-shadow: 0 0 20px rgba(255, 214, 0, 0.6); }
+  60% { transform: scale(0.97); }
+  100% { transform: scale(1); box-shadow: 0 0 16px rgba(255, 214, 0, 0.5); }
+}
+
+.iconWrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.badgeName {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.badgeDesc {
+  font-size: 0.7rem;
+  color: #888;
+  margin-top: 0.15rem;
+  line-height: 1.3;
+}
+
+.earnedDate {
+  font-size: 0.68rem;
+  color: #4caf50;
+  margin-top: 0.35rem;
+  font-weight: 500;
+}
+
+.progressWrap {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0 0.25rem;
+}
+
+.progressTrack {
+  width: 100%;
+  height: 6px;
+  background: #e0e0e0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.progressLabel {
+  font-size: 0.68rem;
+  color: #888;
+  display: block;
+  margin-top: 0.2rem;
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
