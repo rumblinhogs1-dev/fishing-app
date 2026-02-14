@@ -29,7 +29,7 @@ class ErrorBoundary extends Component {
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ErrorBoundary>
-      <BrowserRouter>
+      <BrowserRouter basename="/fishing-app">
         <AuthProvider>
           <App />
         </AuthProvider>
