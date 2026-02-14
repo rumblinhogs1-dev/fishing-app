@@ -1,0 +1,1 @@
+{"name":"Fishing Log","short_name":"Fishing Log","description":"Log catches, plan trips, and track your fishing adventures","start_url":"/fishing-app/","display":"standalone","background_color":"#ffffff","theme_color":"#0d47a1","lang":"en","scope":"/fishing-app/","icons":[{"src":"/fish-icon.svg","sizes":"any","type":"image/svg+xml"}]}
