@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
@@ -8,14 +8,30 @@ import 'leaflet.markercluster';
 import 'leaflet.heat';
 import { Link } from 'react-router-dom';
 import { useSpots } from '../hooks/useSpots';
+import { useMapLayers } from '../hooks/useMapLayers';
 import { useAuth } from '../contexts/AuthContext';
 import { getGPSLocation } from '../utils/weather';
+import { fetchUSGSStations } from '../utils/usgs';
 import SaveSpotModal from './SaveSpotModal';
+import LayerControlPanel from './LayerControlPanel';
+import StructureHintsPanel from './StructureHintsPanel';
 import styles from './MapView.module.css';
 
 const US_CENTER = [39.8283, -98.5795];
 const DEFAULT_ZOOM = 5;
 const LOCATED_ZOOM = 12;
+
+const BASEMAP_URLS = {
+  osm: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  satellite: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  ocean: 'https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}',
+};
+
+const BASEMAP_ATTR = {
+  osm: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  satellite: '&copy; Esri',
+  ocean: '&copy; Esri',
+};
 
 const SPECIES_COLORS = {
   bass: '#2e7d32',
@@ -71,6 +87,23 @@ const spotIcon = L.divIcon({
   popupAnchor: [0, -20],
 });
 
+function createGaugeIcon() {
+  return L.divIcon({
+    className: '',
+    html: `<div style="
+      width:28px;height:28px;border-radius:50%;
+      background:#0097a7;border:2px solid #fff;
+      box-shadow:0 2px 6px rgba(0,0,0,0.3);
+      display:flex;align-items:center;justify-content:center;
+    "><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+    </svg></div>`,
+    iconSize: [28, 28],
+    iconAnchor: [14, 14],
+    popupAnchor: [0, -16],
+  });
+}
+
 function CatchClusterLayer({ catches, onSaveSpot }) {
   const map = useMap();
   const clusterRef = useRef(null);
@@ -100,6 +133,7 @@ function CatchClusterLayer({ catches, onSaveSpot }) {
           <div class="${styles.popupMeta}">
             ${c.weight ? `<span>${c.weight} lbs</span>` : ''}
             ${c.length ? `<span>${c.length} in</span>` : ''}
+            ${c.depth ? `<span>${c.depth} ft deep</span>` : ''}
           </div>
           ${dateStr ? `<div class="${styles.popupDate}">${dateStr}</div>` : ''}
           ${c.weather ? `<div class="${styles.popupWeather}">${c.weather}</div>` : ''}
@@ -161,6 +195,78 @@ function HeatLayer({ catches }) {
   return null;
 }
 
+function DepthContourLayer() {
+  return (
+    <>
+      <TileLayer
+        url="https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}"
+        attribution="&copy; Esri"
+        opacity={0.6}
+        zIndex={2}
+      />
+      <TileLayer
+        url="https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png"
+        attribution="&copy; OpenSeaMap"
+        opacity={0.7}
+        zIndex={3}
+      />
+    </>
+  );
+}
+
+function USGSGaugeLayer() {
+  const map = useMap();
+  const [stations, setStations] = useState([]);
+  const timerRef = useRef(null);
+  const gaugeIcon = useMemo(() => createGaugeIcon(), []);
+
+  const loadStations = useCallback(() => {
+    const zoom = map.getZoom();
+    if (zoom < 8) {
+      setStations([]);
+      return;
+    }
+    const bounds = map.getBounds();
+    fetchUSGSStations({
+      north: bounds.getNorth(),
+      south: bounds.getSouth(),
+      east: bounds.getEast(),
+      west: bounds.getWest(),
+    })
+      .then(setStations)
+      .catch(() => setStations([]));
+  }, [map]);
+
+  useMapEvents({
+    moveend() {
+      clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(loadStations, 500);
+    },
+  });
+
+  useEffect(() => {
+    loadStations();
+    return () => clearTimeout(timerRef.current);
+  }, [loadStations]);
+
+  return (
+    <>
+      {stations.map((s) => (
+        <Marker key={s.siteId} position={[s.lat, s.lng]} icon={gaugeIcon}>
+          <Popup>
+            <div className={styles.gaugePopup}>
+              <strong>{s.siteName}</strong>
+              {s.gaugeHeight != null && <div>Gauge Height: {s.gaugeHeight} ft</div>}
+              {s.waterTemp != null && <div>Water Temp: {s.waterTemp}°F</div>}
+              {s.flowRate != null && <div>Flow Rate: {s.flowRate} ft³/s</div>}
+            </div>
+          </Popup>
+        </Marker>
+      ))}
+    </>
+  );
+}
+
 function RecenterButton({ userLocation }) {
   const map = useMap();
 
@@ -179,14 +285,27 @@ function RecenterButton({ userLocation }) {
   );
 }
 
+function MapCenterTracker({ onCenterChange }) {
+  useMapEvents({
+    moveend(e) {
+      const c = e.target.getCenter();
+      onCenterChange({ lat: c.lat, lng: c.lng });
+    },
+  });
+  return null;
+}
+
 export default function MapView({ catches }) {
   const { user } = useAuth();
   const { spots, addSpot } = useSpots();
-  const [view, setView] = useState('pins');
+  const { layers, toggleLayer, setBasemap } = useMapLayers();
   const [userLocation, setUserLocation] = useState(null);
   const [center, setCenter] = useState(US_CENTER);
   const [zoom, setZoom] = useState(DEFAULT_ZOOM);
   const [spotModal, setSpotModal] = useState(null);
+  const [showLayerPanel, setShowLayerPanel] = useState(false);
+  const [showStructure, setShowStructure] = useState(false);
+  const [mapCenter, setMapCenter] = useState({ lat: US_CENTER[0], lng: US_CENTER[1] });
 
   const catchesWithCoords = useMemo(
     () => catches.filter((c) => c.lat && c.lng),
@@ -199,12 +318,14 @@ export default function MapView({ catches }) {
         setUserLocation([loc.lat, loc.lng]);
         setCenter([loc.lat, loc.lng]);
         setZoom(LOCATED_ZOOM);
+        setMapCenter({ lat: loc.lat, lng: loc.lng });
       })
       .catch(() => {
         if (catchesWithCoords.length > 0) {
           const first = catchesWithCoords[0];
           setCenter([first.lat, first.lng]);
           setZoom(LOCATED_ZOOM);
+          setMapCenter({ lat: first.lat, lng: first.lng });
         }
       });
   }, [catchesWithCoords]);
@@ -220,20 +341,6 @@ export default function MapView({ catches }) {
   return (
     <div className={styles.container}>
       <div className={styles.controls}>
-        <div className={styles.toggleGroup}>
-          <button
-            className={`${styles.toggleBtn} ${view === 'pins' ? styles.toggleActive : ''}`}
-            onClick={() => setView('pins')}
-          >
-            Pins
-          </button>
-          <button
-            className={`${styles.toggleBtn} ${view === 'heat' ? styles.toggleActive : ''}`}
-            onClick={() => setView('heat')}
-          >
-            Heatmap
-          </button>
-        </div>
         <span className={styles.badge}>
           {catchesWithCoords.length} catch{catchesWithCoords.length !== 1 ? 'es' : ''}
         </span>
@@ -241,16 +348,19 @@ export default function MapView({ catches }) {
 
       <MapContainer center={center} zoom={zoom} className={styles.map} zoomControl={false}>
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          key={layers.basemap}
+          attribution={BASEMAP_ATTR[layers.basemap]}
+          url={BASEMAP_URLS[layers.basemap]}
         />
 
-        {view === 'pins' && (
+        {layers.depthContours && <DepthContourLayer />}
+
+        {layers.catchPins && (
           <CatchClusterLayer catches={catchesWithCoords} onSaveSpot={handleSaveSpot} />
         )}
-        {view === 'heat' && <HeatLayer catches={catchesWithCoords} />}
+        {layers.heatmap && <HeatLayer catches={catchesWithCoords} />}
 
-        {spots.map((spot) => (
+        {layers.favoriteSpots && spots.map((spot) => (
           <Marker key={spot.id} position={[spot.lat, spot.lng]} icon={spotIcon}>
             <Popup>
               <div className={styles.spotPopup}>
@@ -262,8 +372,49 @@ export default function MapView({ catches }) {
           </Marker>
         ))}
 
+        {layers.usgsGauges && <USGSGaugeLayer />}
+
+        <MapCenterTracker onCenterChange={setMapCenter} />
         <RecenterButton userLocation={userLocation} />
       </MapContainer>
+
+      {/* Floating buttons */}
+      <button
+        className={styles.structureBtn}
+        onClick={() => setShowStructure(true)}
+        title="Find Structure & Hotspots"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M14 6l-3.75 5 2.85 3.8-1.6 1.2C9.81 13.75 7 10 7 10l-6 8h22L14 6z"/>
+        </svg>
+      </button>
+
+      <button
+        className={styles.layerBtn}
+        onClick={() => setShowLayerPanel(true)}
+        title="Map Layers"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16z"/>
+        </svg>
+      </button>
+
+      {showLayerPanel && (
+        <LayerControlPanel
+          layers={layers}
+          onToggle={toggleLayer}
+          onBasemap={setBasemap}
+          onClose={() => setShowLayerPanel(false)}
+        />
+      )}
+
+      {showStructure && (
+        <StructureHintsPanel
+          lat={mapCenter.lat}
+          lng={mapCenter.lng}
+          onClose={() => setShowStructure(false)}
+        />
+      )}
 
       {spotModal && user && (
         <SaveSpotModal

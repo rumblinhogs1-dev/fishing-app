@@ -26,6 +26,7 @@ const EMPTY = {
   weatherCloudCover: '',
   waterTemp: '',
   flowRate: '',
+  depth: '',
   waterStation: '',
   bait: '',
   lureImage: '',
@@ -71,6 +72,7 @@ export default function CatchForm({ existing, onSubmit }) {
         weatherCloudCover: existing.weatherCloudCover || '',
         waterTemp: existing.waterTemp || '',
         flowRate: existing.flowRate || '',
+        depth: existing.depth || '',
         waterStation: existing.waterStation || '',
         bait: existing.bait || '',
         lureImage: existing.lureImage || existing.lureImageUrl || '',
@@ -185,6 +187,7 @@ export default function CatchForm({ existing, onSubmit }) {
       weatherCloudCover: weatherData?.cloudCover ?? prev.weatherCloudCover,
       waterTemp: waterData?.waterTemp ?? prev.waterTemp,
       flowRate: waterData?.flowRate ?? prev.flowRate,
+      depth: waterData?.gaugeHeight ?? prev.depth,
       waterStation: waterData?.stationName ?? prev.waterStation,
     }));
   }
@@ -239,6 +242,7 @@ export default function CatchForm({ existing, onSubmit }) {
         weatherCloudCover: form.weatherCloudCover !== '' ? Number(form.weatherCloudCover) : '',
         waterTemp: form.waterTemp ? Number(form.waterTemp) : '',
         flowRate: form.flowRate ? Number(form.flowRate) : '',
+        depth: form.depth ? Number(form.depth) : '',
         aiSpecies: fishIdResult?.species || '',
         aiConfidence: fishIdResult?.confidence ?? null,
         correctedSpecies: fishIdConfirmed === false && correctedSpecies.trim() ? correctedSpecies.trim() : '',
@@ -369,6 +373,11 @@ export default function CatchForm({ existing, onSubmit }) {
         <label className={styles.field}>
           <span>Flow Rate (ft³/s)</span>
           <input name="flowRate" type="number" step="1" value={form.flowRate} onChange={handleChange} placeholder="Auto-filled via GPS" />
+        </label>
+
+        <label className={styles.field}>
+          <span>Depth (ft)</span>
+          <input name="depth" type="number" step="0.1" min="0" value={form.depth} onChange={handleChange} placeholder="Depth at catch location" />
         </label>
 
         <label className={styles.field}>

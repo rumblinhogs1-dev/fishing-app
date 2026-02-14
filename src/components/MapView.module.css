@@ -8,39 +8,11 @@
 .controls {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 0.5rem 1rem;
   background: #fff;
   border-bottom: 1px solid #e0e0e0;
   z-index: 500;
-}
-
-.toggleGroup {
-  display: flex;
-  gap: 0;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid #ddd;
-}
-
-.toggleBtn {
-  padding: 0.4rem 1rem;
-  border: none;
-  background: #fff;
-  color: #666;
-  font-weight: 500;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-
-.toggleBtn:first-child {
-  border-right: 1px solid #ddd;
-}
-
-.toggleActive {
-  background: #1a73e8;
-  color: #fff;
 }
 
 .badge {
@@ -82,6 +54,74 @@
   transform: scale(1.05);
 }
 
+/* Floating layer button */
+.layerBtn {
+  position: absolute;
+  bottom: 24px;
+  left: 16px;
+  z-index: 500;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #1a73e8;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.layerBtn:hover {
+  background: #f0f4f8;
+  transform: scale(1.05);
+}
+
+/* Floating structure button */
+.structureBtn {
+  position: absolute;
+  bottom: 80px;
+  left: 16px;
+  z-index: 500;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #2e7d32;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.structureBtn:hover {
+  background: #f0f4f8;
+  transform: scale(1.05);
+}
+
+/* USGS gauge popup */
+.gaugePopup {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.gaugePopup strong {
+  display: block;
+  color: #0097a7;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.gaugePopup div {
+  color: #444;
+}
+
 /* Popup styles */
 .popup {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -112,6 +152,7 @@
   font-size: 0.8rem;
   color: #555;
   margin-bottom: 0.25rem;
+  flex-wrap: wrap;
 }
 
 .popupDate {
@@ -228,13 +269,18 @@
     padding: 0.4rem 0.75rem;
   }
 
-  .toggleBtn {
-    padding: 0.35rem 0.75rem;
-    font-size: 0.8rem;
-  }
-
   .recenterBtn {
     bottom: 16px;
     right: 12px;
+  }
+
+  .layerBtn {
+    bottom: 16px;
+    left: 12px;
+  }
+
+  .structureBtn {
+    bottom: 68px;
+    left: 12px;
   }
 }

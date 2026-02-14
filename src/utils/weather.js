@@ -83,12 +83,12 @@ export async function fetchWeather(lat, lng) {
 /**
  * Fetch nearest USGS water station data (water temp & flow rate).
  * Uses USGS Water Services API (free, no key).
- * Parameter codes: 00010 = water temp (°C), 00060 = discharge/flow (ft³/s)
+ * Parameter codes: 00010 = water temp (°C), 00060 = discharge/flow (ft³/s), 00065 = gauge height (ft)
  */
 export async function fetchWaterData(lat, lng) {
   // USGS site search: find nearest sites within ~30 miles that have recent data
   const bbox = buildBBox(lat, lng, 0.5); // ~30 mile radius
-  const url = `https://waterservices.usgs.gov/nwis/iv/?format=json&bBox=${bbox}&parameterCd=00010,00060&siteStatus=active`;
+  const url = `https://waterservices.usgs.gov/nwis/iv/?format=json&bBox=${bbox}&parameterCd=00010,00060,00065&siteStatus=active`;
 
   const res = await fetch(url);
   if (!res.ok) return null;
@@ -99,6 +99,7 @@ export async function fetchWaterData(lat, lng) {
 
   let waterTemp = null;
   let flowRate = null;
+  let gaugeHeight = null;
   let stationName = null;
 
   // Find the closest station with data
@@ -131,19 +132,25 @@ export async function fetchWaterData(lat, lng) {
       const flow = parseFloat(val);
       if (!isNaN(flow)) flowRate = Math.round(flow);
     }
+
+    if (paramCode === '00065') {
+      const gh = parseFloat(val);
+      if (!isNaN(gh)) gaugeHeight = Math.round(gh * 100) / 100;
+    }
   }
 
-  if (waterTemp === null && flowRate === null) return null;
+  if (waterTemp === null && flowRate === null && gaugeHeight === null) return null;
 
   return {
     waterTemp,
     flowRate,
+    gaugeHeight,
     stationName: stationName || 'Nearby USGS station',
   };
 }
 
 /** Build a bounding box string for USGS: west,south,east,north */
-function buildBBox(lat, lng, delta) {
+export function buildBBox(lat, lng, delta) {
   return `${(lng - delta).toFixed(4)},${(lat - delta).toFixed(4)},${(lng + delta).toFixed(4)},${(lat + delta).toFixed(4)}`;
 }
 

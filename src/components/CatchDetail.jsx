@@ -118,6 +118,12 @@ export default function CatchDetail() {
                 <span className={styles.detailValue}>{entry.flowRate} ft³/s</span>
               </div>
             )}
+            {entry.depth && (
+              <div className={styles.detailItem}>
+                <span className={styles.detailLabel}>Depth</span>
+                <span className={styles.detailValue}>{entry.depth} ft</span>
+              </div>
+            )}
             {entry.bait && (
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Bait / Lure</span>
