@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect, useMemo } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { getUserProfile, sendFriendRequest } from '../utils/friends';
@@ -50,6 +50,28 @@ export default function UserProfile() {
     load();
   }, [userId]);
 
+  const extraStats = useMemo(() => {
+    if (!catches.length) return { releaseRate: 0, topSpecies: null, biggest: null };
+    const withField = catches.filter((c) => c.released !== undefined);
+    const released = catches.filter((c) => c.released === true);
+    const releaseRate = withField.length > 0 ? Math.round((released.length / withField.length) * 100) : 0;
+
+    const speciesCount = {};
+    catches.forEach((c) => {
+      if (c.species) {
+        const s = c.species.trim().toLowerCase();
+        speciesCount[s] = (speciesCount[s] || 0) + 1;
+      }
+    });
+    const topEntry = Object.entries(speciesCount).sort((a, b) => b[1] - a[1])[0];
+    const topSpecies = topEntry ? topEntry[0] : null;
+
+    const withWeight = catches.filter((c) => c.weight);
+    const biggest = withWeight.length ? withWeight.reduce((a, b) => (a.weight > b.weight ? a : b)) : null;
+
+    return { releaseRate, topSpecies, biggest };
+  }, [catches]);
+
   async function handleAddFriend() {
     if (!user) return;
     try {
@@ -62,6 +84,12 @@ export default function UserProfile() {
 
   if (loading) return <p className={styles.loading}>Loading...</p>;
   if (!profile) return <p className={styles.loading}>User not found.</p>;
+
+  const memberSince = profile.createdAt?.toDate
+    ? profile.createdAt.toDate().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+    : profile.createdAt
+      ? new Date(profile.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+      : null;
 
   return (
     <div className={styles.container}>
@@ -77,6 +105,10 @@ export default function UserProfile() {
           <div className={styles.info}>
             <h2 className={styles.name}>{profile.displayName || 'Angler'}</h2>
             {profile.bio && <p className={styles.bio}>{profile.bio}</p>}
+            <div className={styles.meta}>
+              {profile.region && <span className={styles.metaItem}>{profile.region}</span>}
+              {memberSince && <span className={styles.metaItem}>Member since {memberSince}</span>}
+            </div>
           </div>
         </div>
 
@@ -90,10 +122,25 @@ export default function UserProfile() {
             <span className={styles.statLabel}>Released</span>
           </div>
           <div className={styles.stat}>
+            <span className={styles.statValue}>{extraStats.releaseRate}%</span>
+            <span className={styles.statLabel}>Release Rate</span>
+          </div>
+          <div className={styles.stat}>
             <span className={styles.statValue}>{profile.friendCount || 0}</span>
             <span className={styles.statLabel}>Friends</span>
           </div>
         </div>
+
+        {(extraStats.topSpecies || extraStats.biggest) && (
+          <div className={styles.highlights}>
+            {extraStats.topSpecies && (
+              <span className={styles.highlight}>Top: {extraStats.topSpecies}</span>
+            )}
+            {extraStats.biggest && (
+              <span className={styles.highlight}>PB: {extraStats.biggest.weight} lbs {extraStats.biggest.species || ''}</span>
+            )}
+          </div>
+        )}
 
         {user && !isOwn && !isFriend && (
           <button className={styles.friendBtn} onClick={handleAddFriend} disabled={requestSent}>
@@ -101,6 +148,9 @@ export default function UserProfile() {
           </button>
         )}
         {isFriend && <span className={styles.friendBadge}>Friends</span>}
+        {isOwn && (
+          <Link to="/settings" className={styles.editBtn}>Edit Profile</Link>
+        )}
       </div>
 
       <ConservationBadges

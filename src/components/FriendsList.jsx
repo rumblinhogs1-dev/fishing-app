@@ -6,6 +6,20 @@ import { searchUsers, sendFriendRequest, acceptFriendRequest, rejectFriendReques
 import { useToast } from '../contexts/ToastContext';
 import styles from './FriendsList.module.css';
 
+function timeAgo(dateVal) {
+  if (!dateVal) return '';
+  const date = dateVal.toDate ? dateVal.toDate() : new Date(dateVal);
+  const diff = Date.now() - date.getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'Active now';
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  if (days < 30) return `${days}d ago`;
+  return `${Math.floor(days / 30)}mo ago`;
+}
+
 export default function FriendsList() {
   const { user } = useAuth();
   const { requests, friendProfiles, loading } = useFriends();
@@ -40,6 +54,7 @@ export default function FriendsList() {
   async function handleRemove(friendId) {
     if (confirm('Remove this friend?')) {
       await removeFriend(user.uid, friendId);
+      toast.info('Friend removed');
     }
   }
 
@@ -93,6 +108,7 @@ export default function FriendsList() {
                 )}
                 <div className={styles.userInfo}>
                   <Link to={`/user/${u.id}`} className={styles.userName}>{u.displayName || u.email}</Link>
+                  {u.region && <span className={styles.userSub}>{u.region}</span>}
                 </div>
                 <button className={styles.addBtn} onClick={() => handleSendRequest(u.id)}>Add</button>
               </div>
@@ -108,9 +124,17 @@ export default function FriendsList() {
           <div className={styles.list}>
             {requests.map((req) => (
               <div key={req.id} className={styles.userRow}>
-                <span className={styles.userInitial}>?</span>
+                {req.fromPhotoURL ? (
+                  <img src={req.fromPhotoURL} alt="" className={styles.userAvatar} referrerPolicy="no-referrer" />
+                ) : (
+                  <span className={styles.userInitial}>
+                    {(req.fromDisplayName || '?')[0].toUpperCase()}
+                  </span>
+                )}
                 <div className={styles.userInfo}>
-                  <span className={styles.userName}>User {req.fromUserId.slice(0, 8)}...</span>
+                  <Link to={`/user/${req.fromUserId}`} className={styles.userName}>
+                    {req.fromDisplayName || `User ${req.fromUserId.slice(0, 8)}...`}
+                  </Link>
                 </div>
                 <div className={styles.requestActions}>
                   <button className={styles.acceptBtn} onClick={() => handleAccept(req)}>Accept</button>
@@ -138,6 +162,7 @@ export default function FriendsList() {
                 )}
                 <div className={styles.userInfo}>
                   <Link to={`/user/${f.id}`} className={styles.userName}>{f.displayName || 'Angler'}</Link>
+                  <span className={styles.userSub}>{timeAgo(f.lastActive)}</span>
                 </div>
                 <button className={styles.removeBtn} onClick={() => handleRemove(f.id)}>Remove</button>
               </div>

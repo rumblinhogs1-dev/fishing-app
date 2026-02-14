@@ -16,6 +16,7 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../firebase';
+import { notifyFriendRequest, notifyFriendAccepted } from './notifications';
 
 export async function sendFriendRequest(fromUserId, toUserId) {
   const existing = await getDocs(
@@ -28,12 +29,18 @@ export async function sendFriendRequest(fromUserId, toUserId) {
   );
   if (!existing.empty) throw new Error('Friend request already sent.');
 
-  return addDoc(collection(db, 'friendRequests'), {
+  const fromProfile = await getUserProfile(fromUserId);
+  const result = await addDoc(collection(db, 'friendRequests'), {
     fromUserId,
     toUserId,
+    fromDisplayName: fromProfile?.displayName || '',
+    fromPhotoURL: fromProfile?.photoURL || '',
     status: 'pending',
     createdAt: serverTimestamp(),
   });
+
+  notifyFriendRequest(fromUserId, fromProfile?.displayName, toUserId).catch(() => {});
+  return result;
 }
 
 export async function acceptFriendRequest(requestId, fromUserId, toUserId) {
@@ -46,6 +53,9 @@ export async function acceptFriendRequest(requestId, fromUserId, toUserId) {
     friendIds: arrayUnion(fromUserId),
     friendCount: increment(1),
   });
+
+  const toProfile = await getUserProfile(toUserId);
+  notifyFriendAccepted(toUserId, toProfile?.displayName, fromUserId).catch(() => {});
 }
 
 export async function rejectFriendRequest(requestId) {
@@ -108,7 +118,16 @@ export async function ensureUserDoc(user) {
       catchCount: 0,
       defaultVisibility: 'public',
       bio: '',
+      region: '',
       createdAt: serverTimestamp(),
+      lastActive: serverTimestamp(),
     });
+  } else {
+    await updateDoc(ref, { lastActive: serverTimestamp() });
   }
+}
+
+export async function updateLastActive(userId) {
+  if (!userId) return;
+  await updateDoc(doc(db, 'users', userId), { lastActive: serverTimestamp() });
 }
