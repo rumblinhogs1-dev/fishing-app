@@ -11,6 +11,7 @@ import {
   increment,
 } from 'firebase/firestore';
 import { db } from '../firebase';
+import { notifyCatchLiked } from './notifications';
 
 export const REACTION_EMOJIS = {
   fish: '\u{1F41F}',
@@ -51,6 +52,16 @@ export async function toggleReaction(catchId, userId, emoji) {
         [`reactionCounts.${emoji}`]: increment(1),
       });
     }
+
+    // Notify catch owner
+    const catchDoc = await getDoc(doc(db, 'catches', catchId));
+    if (catchDoc.exists()) {
+      const catchData = catchDoc.data();
+      if (catchData.userId && catchData.userId !== userId) {
+        notifyCatchLiked(userId, null, catchData.userId, catchId, emoji).catch(() => {});
+      }
+    }
+
     return true;
   }
 }

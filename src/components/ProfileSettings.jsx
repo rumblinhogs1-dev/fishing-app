@@ -1,17 +1,52 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { updateProfile } from 'firebase/auth';
-import { db, auth } from '../firebase';
+import { ref, uploadString, getDownloadURL } from 'firebase/storage';
+import { db, auth, storage } from '../firebase';
 import { useAuth } from '../contexts/AuthContext';
+import { useToast } from '../contexts/ToastContext';
 import styles from './ProfileSettings.module.css';
+
+const MAX_BIO = 150;
+
+function resizeImage(file, maxSize = 400) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let { width, height } = img;
+        if (width > maxSize || height > maxSize) {
+          if (width > height) {
+            height = Math.round((height * maxSize) / width);
+            width = maxSize;
+          } else {
+            width = Math.round((width * maxSize) / height);
+            height = maxSize;
+          }
+        }
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', 0.8));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
 
 export default function ProfileSettings() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [form, setForm] = useState({ displayName: '', bio: '', defaultVisibility: 'public' });
+  const toast = useToast();
+  const fileRef = useRef(null);
+  const [form, setForm] = useState({ displayName: '', bio: '', region: '', defaultVisibility: 'public' });
+  const [photoPreview, setPhotoPreview] = useState('');
+  const [photoFile, setPhotoFile] = useState(null);
   const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -22,34 +57,60 @@ export default function ProfileSettings() {
         setForm({
           displayName: data.displayName || user.displayName || '',
           bio: data.bio || '',
+          region: data.region || '',
           defaultVisibility: data.defaultVisibility || 'public',
         });
+        setPhotoPreview(data.photoURL || user.photoURL || '');
       } else {
         setForm({
           displayName: user.displayName || '',
           bio: '',
+          region: '',
           defaultVisibility: 'public',
         });
+        setPhotoPreview(user.photoURL || '');
       }
     }
     load();
   }, [user]);
 
+  async function handlePhotoChange(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const dataUrl = await resizeImage(file);
+    setPhotoPreview(dataUrl);
+    setPhotoFile(dataUrl);
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     if (!user) return;
     setSaving(true);
-    setSaved(false);
     try {
-      await updateProfile(auth.currentUser, { displayName: form.displayName });
+      let photoURL = photoPreview;
+
+      // Upload new photo if changed
+      if (photoFile) {
+        const storageRef = ref(storage, `avatars/${user.uid}`);
+        await uploadString(storageRef, photoFile, 'data_url');
+        photoURL = await getDownloadURL(storageRef);
+      }
+
+      await updateProfile(auth.currentUser, {
+        displayName: form.displayName,
+        photoURL,
+      });
       await updateDoc(doc(db, 'users', user.uid), {
         displayName: form.displayName,
-        bio: form.bio,
+        bio: form.bio.slice(0, MAX_BIO),
+        region: form.region,
+        photoURL,
         defaultVisibility: form.defaultVisibility,
       });
-      setSaved(true);
+      toast.success('Settings saved!');
     } catch (err) {
       console.error('Failed to save settings:', err);
+      toast.error('Failed to save. Please try again.');
     } finally {
       setSaving(false);
     }
@@ -69,14 +130,26 @@ export default function ProfileSettings() {
 
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.profilePreview}>
-          {user.photoURL ? (
-            <img src={user.photoURL} alt="" className={styles.avatar} referrerPolicy="no-referrer" />
+          {photoPreview ? (
+            <img src={photoPreview} alt="" className={styles.avatar} referrerPolicy="no-referrer" />
           ) : (
             <span className={styles.avatarInitial}>
               {(form.displayName || user.email || '?')[0].toUpperCase()}
             </span>
           )}
-          <span className={styles.email}>{user.email}</span>
+          <div className={styles.photoActions}>
+            <span className={styles.email}>{user.email}</span>
+            <label className={styles.photoBtn}>
+              Change Photo
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoChange}
+                style={{ display: 'none' }}
+              />
+            </label>
+          </div>
         </div>
 
         <label className={styles.field}>
@@ -90,12 +163,23 @@ export default function ProfileSettings() {
         </label>
 
         <label className={styles.field}>
-          <span>Bio</span>
+          <span>Home Fishing Region</span>
+          <input
+            type="text"
+            value={form.region}
+            onChange={(e) => setForm((prev) => ({ ...prev, region: e.target.value }))}
+            placeholder="e.g. Central Arizona"
+          />
+        </label>
+
+        <label className={styles.field}>
+          <span>Bio ({form.bio.length}/{MAX_BIO})</span>
           <textarea
             value={form.bio}
-            onChange={(e) => setForm((prev) => ({ ...prev, bio: e.target.value }))}
+            onChange={(e) => setForm((prev) => ({ ...prev, bio: e.target.value.slice(0, MAX_BIO) }))}
             placeholder="Tell others about your fishing interests..."
             rows={3}
+            maxLength={MAX_BIO}
           />
         </label>
 
@@ -110,8 +194,6 @@ export default function ProfileSettings() {
             <option value="private">Private</option>
           </select>
         </label>
-
-        {saved && <div className={styles.success}>Settings saved!</div>}
 
         <div className={styles.actions}>
           <button type="submit" className={styles.saveBtn} disabled={saving}>
