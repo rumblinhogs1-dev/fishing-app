@@ -16,6 +16,11 @@ const EMPTY = {
   lng: '',
   date: new Date().toISOString().slice(0, 16),
   weather: '',
+  weatherTemp: '',
+  weatherWind: '',
+  weatherPressure: '',
+  weatherCondition: '',
+  weatherCloudCover: '',
   waterTemp: '',
   flowRate: '',
   waterStation: '',
@@ -35,6 +40,7 @@ export default function CatchForm({ existing, onSubmit }) {
   const [gpsLoading, setGpsLoading] = useState(false);
   const [gpsError, setGpsError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [photoError, setPhotoError] = useState('');
   const [fishIdLoading, setFishIdLoading] = useState(false);
   const [fishIdResult, setFishIdResult] = useState(null);
   const [fishIdError, setFishIdError] = useState('');
@@ -51,6 +57,11 @@ export default function CatchForm({ existing, onSubmit }) {
         lng: existing.lng || '',
         date: existing.date || '',
         weather: existing.weather || '',
+        weatherTemp: existing.weatherTemp || '',
+        weatherWind: existing.weatherWind || '',
+        weatherPressure: existing.weatherPressure || '',
+        weatherCondition: existing.weatherCondition || '',
+        weatherCloudCover: existing.weatherCloudCover || '',
         waterTemp: existing.waterTemp || '',
         flowRate: existing.flowRate || '',
         waterStation: existing.waterStation || '',
@@ -80,6 +91,7 @@ export default function CatchForm({ existing, onSubmit }) {
 
   async function handleImageChange(img) {
     setForm((prev) => ({ ...prev, image: img }));
+    if (img) setPhotoError('');
     if (!img) {
       setFishIdResult(null);
       setFishIdError('');
@@ -141,6 +153,11 @@ export default function CatchForm({ existing, onSubmit }) {
         ...prev,
         location: prev.location || placeName || `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
         weather: weatherData ? weatherData.summary : prev.weather,
+        weatherTemp: weatherData?.temp ?? prev.weatherTemp,
+        weatherWind: weatherData?.wind ?? prev.weatherWind,
+        weatherPressure: weatherData?.pressure ?? prev.weatherPressure,
+        weatherCondition: weatherData?.condition ?? prev.weatherCondition,
+        weatherCloudCover: weatherData?.cloudCover ?? prev.weatherCloudCover,
         waterTemp: waterData?.waterTemp ?? prev.waterTemp,
         flowRate: waterData?.flowRate ?? prev.flowRate,
         waterStation: waterData?.stationName ?? prev.waterStation,
@@ -154,12 +171,20 @@ export default function CatchForm({ existing, onSubmit }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (!form.image) {
+      setPhotoError('A photo is required to log a catch.');
+      return;
+    }
     setSubmitting(true);
     try {
       await onSubmit({
         ...form,
         weight: form.weight ? Number(form.weight) : '',
         length: form.length ? Number(form.length) : '',
+        weatherTemp: form.weatherTemp ? Number(form.weatherTemp) : '',
+        weatherWind: form.weatherWind ? Number(form.weatherWind) : '',
+        weatherPressure: form.weatherPressure ? Number(form.weatherPressure) : '',
+        weatherCloudCover: form.weatherCloudCover !== '' ? Number(form.weatherCloudCover) : '',
         waterTemp: form.waterTemp ? Number(form.waterTemp) : '',
         flowRate: form.flowRate ? Number(form.flowRate) : '',
       });
@@ -258,6 +283,9 @@ export default function CatchForm({ existing, onSubmit }) {
         )}
 
         <ImageUpload image={form.image} onChange={handleImageChange} />
+        {photoError && (
+          <div className={styles.fishIdError}>{photoError}</div>
+        )}
 
         {fishIdLoading && (
           <div className={styles.fishIdStatus}>

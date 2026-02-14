@@ -51,7 +51,7 @@ export async function reverseGeocode(lat, lng) {
  * Fetch current weather from Open-Meteo (free, no API key).
  */
 export async function fetchWeather(lat, lng) {
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,wind_direction_10m,pressure_msl&temperature_unit=fahrenheit&wind_speed_unit=mph`;
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,wind_direction_10m,pressure_msl,cloud_cover&temperature_unit=fahrenheit&wind_speed_unit=mph`;
 
   const res = await fetch(url);
   if (!res.ok) throw new Error('Failed to fetch weather data.');
@@ -65,8 +65,9 @@ export async function fetchWeather(lat, lng) {
   const humidity = Math.round(c.relative_humidity_2m);
   const wind = Math.round(c.wind_speed_10m);
   const pressure = Math.round(c.pressure_msl);
+  const cloudCover = c.cloud_cover != null ? Math.round(c.cloud_cover) : null;
 
-  const summary = `${condition}, ${temp}°F, Humidity ${humidity}%, Wind ${wind} mph, Pressure ${pressure} hPa`;
+  const summary = `${condition}, ${temp}°F, Humidity ${humidity}%, Wind ${wind} mph, Pressure ${pressure} hPa${cloudCover != null ? `, Clouds ${cloudCover}%` : ''}`;
 
   return {
     summary,
@@ -75,6 +76,7 @@ export async function fetchWeather(lat, lng) {
     humidity,
     wind,
     pressure,
+    cloudCover,
   };
 }
 
