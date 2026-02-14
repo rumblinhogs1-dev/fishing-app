@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { TEMPLATES, generateShareCard } from '../utils/shareCard';
+import { useToast } from '../contexts/ToastContext';
 import styles from './ShareCardModal.module.css';
 
 export default function ShareCardModal({ entry, onClose }) {
+  const toast = useToast();
   const [template, setTemplate] = useState('clean');
   const [preview, setPreview] = useState(null);
   const [generating, setGenerating] = useState(false);
@@ -31,6 +33,7 @@ export default function ShareCardModal({ entry, onClose }) {
     a.download = `${(entry.species || 'catch').replace(/\s+/g, '-').toLowerCase()}-share.png`;
     a.click();
     URL.revokeObjectURL(url);
+    toast.success('Downloaded!');
   }
 
   async function handleCopy() {
@@ -41,8 +44,10 @@ export default function ShareCardModal({ entry, onClose }) {
       await navigator.clipboard.write([
         new ClipboardItem({ 'image/png': blob }),
       ]);
+      toast.success('Image copied!');
     } catch (err) {
       console.error('Copy failed:', err);
+      toast.error('Failed to copy image');
     }
   }
 

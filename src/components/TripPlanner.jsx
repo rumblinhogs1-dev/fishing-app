@@ -6,6 +6,8 @@ import { useTackleBox } from '../hooks/useTackleBox';
 import { addTrip, updateTrip, deleteTrip, subscribeToTrips, generateChecklist } from '../utils/trips';
 import { getFullForecast } from '../utils/forecast';
 import { getGPSLocation, reverseGeocode } from '../utils/weather';
+import { SkeletonCard } from './Skeleton';
+import { useToast } from '../contexts/ToastContext';
 import styles from './TripPlanner.module.css';
 
 const EMPTY_TRIP = {
@@ -21,6 +23,7 @@ export default function TripPlanner() {
   const { user } = useAuth();
   const { spots } = useSpots();
   const { items: tackleItems } = useTackleBox();
+  const toast = useToast();
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -90,12 +93,14 @@ export default function TripPlanner() {
         checklist: cl,
         catches: [],
       });
+      toast.success('Trip saved!');
       setForm(EMPTY_TRIP);
       setChecklist([]);
       setForecast(null);
       setShowForm(false);
     } catch (err) {
       console.error('Failed to create trip:', err);
+      toast.error('Failed to create trip');
     } finally {
       setSaving(false);
     }
@@ -130,7 +135,8 @@ export default function TripPlanner() {
     return (
       <div className={styles.container}>
         <h2 className={styles.heading}>Trip Planner</h2>
-        <p className={styles.loadingText}>Loading trips...</p>
+        <SkeletonCard />
+        <SkeletonCard />
       </div>
     );
   }

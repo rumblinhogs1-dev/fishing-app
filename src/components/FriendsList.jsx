@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useFriends } from '../hooks/useFriends';
 import { searchUsers, sendFriendRequest, acceptFriendRequest, rejectFriendRequest, removeFriend } from '../utils/friends';
+import { useToast } from '../contexts/ToastContext';
 import styles from './FriendsList.module.css';
 
 export default function FriendsList() {
   const { user } = useAuth();
   const { requests, friendProfiles, loading } = useFriends();
+  const toast = useToast();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
@@ -28,6 +30,7 @@ export default function FriendsList() {
 
   async function handleAccept(req) {
     await acceptFriendRequest(req.id, req.fromUserId, req.toUserId);
+    toast.info('Request accepted');
   }
 
   async function handleReject(req) {
@@ -43,9 +46,9 @@ export default function FriendsList() {
   async function handleSendRequest(toUserId) {
     try {
       await sendFriendRequest(user.uid, toUserId);
-      alert('Friend request sent!');
+      toast.success('Friend request sent');
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     }
   }
 

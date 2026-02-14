@@ -1,0 +1,113 @@
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #e0e0e0 25%, #f5f5f5 50%, #e0e0e0 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 4px;
+}
+
+/* SkeletonCard */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.cardPhoto {
+  width: 100%;
+  height: 180px;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+}
+
+.cardLine {
+  height: 14px;
+  margin-bottom: 0.6rem;
+  border-radius: 4px;
+}
+
+.cardLine:nth-child(2) { width: 80%; }
+.cardLine:nth-child(3) { width: 60%; }
+.cardLine:nth-child(4) { width: 40%; }
+
+/* SkeletonList */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* SkeletonText */
+.textLine {
+  height: 12px;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+}
+
+.textLine:last-child {
+  width: 70%;
+}
+
+/* SkeletonStats */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.statsBox {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.statsValue {
+  width: 60px;
+  height: 28px;
+  border-radius: 6px;
+}
+
+.statsLabel {
+  width: 100px;
+  height: 12px;
+  border-radius: 4px;
+}
+
+.statsChart {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+  margin-bottom: 1.5rem;
+}
+
+.statsChartTitle {
+  width: 140px;
+  height: 16px;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.statsChartArea {
+  width: 100%;
+  height: 140px;
+  border-radius: 8px;
+}
+
+@media (max-width: 600px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+}

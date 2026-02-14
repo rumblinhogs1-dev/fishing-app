@@ -1,0 +1,204 @@
+.container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.heading {
+  color: #0d47a1;
+  margin: 0 0 1.5rem;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.25rem;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.25rem;
+}
+
+.tab {
+  padding: 0.5rem 0.9rem;
+  border: none;
+  background: #e8f0fe;
+  color: #1a73e8;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
+}
+
+.tab:hover {
+  background: #d0e1fd;
+}
+
+.tabActive {
+  background: #1a73e8;
+  color: #fff;
+}
+
+.section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+  margin-bottom: 1.5rem;
+}
+
+.sectionTitle {
+  margin: 0 0 1rem;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.empty {
+  text-align: center;
+  color: #888;
+  padding: 2rem;
+}
+
+/* Records */
+.recordsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.recordCard {
+  background: linear-gradient(135deg, #e8f0fe, #f5f5f5);
+  border-radius: 10px;
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.recordValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a73e8;
+  display: block;
+}
+
+.recordLabel {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.recordSub {
+  font-size: 0.75rem;
+  color: #999;
+  display: block;
+}
+
+/* Ranked list */
+.rankedList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.rankedItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.rankedItem:last-child {
+  border-bottom: none;
+}
+
+.rankedName {
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.rankedBadge {
+  background: #e8f0fe;
+  color: #1a73e8;
+  padding: 0.15rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Canvas chart wrapper */
+.canvasWrap {
+  position: relative;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Conditions grid */
+.conditionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.conditionCard {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.conditionValue {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #333;
+  display: block;
+}
+
+.conditionLabel {
+  font-size: 0.78rem;
+  color: #888;
+  margin-top: 0.2rem;
+  display: block;
+}
+
+/* Sub-section heading */
+.subHeading {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 1.5rem 0 0.75rem;
+}
+
+.subHeading:first-child {
+  margin-top: 0;
+}
+
+/* Donut center */
+.donutWrap {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 600px) {
+  .tabs {
+    gap: 0.2rem;
+  }
+
+  .tab {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.8rem;
+  }
+
+  .recordsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .conditionsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

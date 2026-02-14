@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import UserMenu from './UserMenu';
 import styles from './Navbar.module.css';
 
-export default function Navbar() {
+export default function Navbar({ onSearchOpen }) {
   const { user } = useAuth();
   const [aiOpen, setAiOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -27,9 +27,16 @@ export default function Navbar() {
         <span className={styles.title}>Fishing Log</span>
       </div>
 
-      <button className={styles.hamburger} onClick={() => setMenuOpen(!menuOpen)}>
-        <span /><span /><span />
-      </button>
+      <div className={styles.navActions}>
+        <button className={styles.searchBtn} onClick={onSearchOpen} title="Search (Ctrl+K)">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+            <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+          </svg>
+        </button>
+        <button className={styles.hamburger} onClick={() => setMenuOpen(!menuOpen)}>
+          <span /><span /><span />
+        </button>
+      </div>
 
       <div className={`${styles.links} ${menuOpen ? styles.linksOpen : ''}`}>
         <NavLink to="/" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
@@ -71,8 +78,8 @@ export default function Navbar() {
             </div>
           )}
         </div>
-        <NavLink to="/stats" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
-          Stats
+        <NavLink to="/insights" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
+          Insights
         </NavLink>
         <NavLink to="/regulations" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
           Regs

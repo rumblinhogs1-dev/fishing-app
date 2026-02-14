@@ -12,6 +12,7 @@ import {
   rankMostSpecies,
   rankLongestFish,
 } from '../utils/leaderboard';
+import { SkeletonList } from './Skeleton';
 import styles from './Leaderboard.module.css';
 
 const CATEGORIES = [
@@ -98,7 +99,7 @@ export default function Leaderboard() {
         ))}
       </div>
 
-      {loading && <p className={styles.loadingText}>Loading rankings...</p>}
+      {loading && <SkeletonList count={5} />}
 
       {!loading && rankings.length === 0 && (
         <div className={styles.empty}>

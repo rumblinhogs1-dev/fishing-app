@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { updateCatch } from '../utils/firestore';
+import { useToast } from '../contexts/ToastContext';
 import styles from './CatchCard.module.css';
 
 export default function CatchCard({ entry, onDelete }) {
   const navigate = useNavigate();
+  const toast = useToast();
   const d = entry.date ? new Date(entry.date) : null;
   const dateStr = d
     ? d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
@@ -17,8 +19,10 @@ export default function CatchCard({ entry, onDelete }) {
   async function handleToggleVisibility() {
     try {
       await updateCatch(entry.id, { visibility: isPublic ? 'private' : 'public' });
+      toast.success('Visibility updated');
     } catch (err) {
       console.error('Failed to update visibility:', err);
+      toast.error('Failed to update visibility');
     }
   }
 

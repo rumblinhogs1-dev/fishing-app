@@ -6,6 +6,7 @@ import RegulationBadge from './RegulationBadge';
 import SpeciesInfoCard from './SpeciesInfoCard';
 import { getGPSLocation, reverseGeocode, fetchWeather, fetchWaterData } from '../utils/weather';
 import { identifyFish, getApiKey } from '../utils/gemini';
+import { useToast } from '../contexts/ToastContext';
 import styles from './CatchForm.module.css';
 
 const EMPTY = {
@@ -48,6 +49,7 @@ export default function CatchForm({ existing, onSubmit }) {
   const [fishIdConfirmed, setFishIdConfirmed] = useState(null);
   const [correctedSpecies, setCorrectedSpecies] = useState('');
   const navigate = useNavigate();
+  const toast = useToast();
 
   useEffect(() => {
     if (existing) {
@@ -239,9 +241,11 @@ export default function CatchForm({ existing, onSubmit }) {
         correctedSpecies: fishIdConfirmed === false && correctedSpecies.trim() ? correctedSpecies.trim() : '',
         speciesConfirmed: fishIdConfirmed,
       });
+      toast.success('Catch logged!');
       navigate('/');
     } catch (err) {
       console.error('Failed to save catch:', err);
+      toast.error('Failed to save catch. Please try again.');
       setSubmitting(false);
     }
   }

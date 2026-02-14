@@ -2,6 +2,8 @@ import { useState, useMemo } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useTackleBox } from '../hooks/useTackleBox';
 import { CATEGORIES } from '../utils/tackleBox';
+import { SkeletonList } from './Skeleton';
+import { useToast } from '../contexts/ToastContext';
 import styles from './TackleBox.module.css';
 
 const EMPTY_ITEM = { name: '', category: 'lure', quantity: 1, threshold: 1, photo: '' };
@@ -9,6 +11,7 @@ const EMPTY_ITEM = { name: '', category: 'lure', quantity: 1, threshold: 1, phot
 export default function TackleBox() {
   const { user } = useAuth();
   const { items, loading, addItem, updateItem, deleteItem } = useTackleBox();
+  const toast = useToast();
   const [form, setForm] = useState(EMPTY_ITEM);
   const [showForm, setShowForm] = useState(false);
   const [tab, setTab] = useState('inventory');
@@ -32,25 +35,35 @@ export default function TackleBox() {
   async function handleAdd(e) {
     e.preventDefault();
     if (!form.name.trim()) return;
-    await addItem({
-      name: form.name.trim(),
-      category: form.category,
-      quantity: Number(form.quantity) || 1,
-      threshold: Number(form.threshold) || 1,
-      photo: form.photo || '',
-    });
-    setForm(EMPTY_ITEM);
-    setShowForm(false);
+    try {
+      await addItem({
+        name: form.name.trim(),
+        category: form.category,
+        quantity: Number(form.quantity) || 1,
+        threshold: Number(form.threshold) || 1,
+        photo: form.photo || '',
+      });
+      toast.success('Item added');
+      setForm(EMPTY_ITEM);
+      setShowForm(false);
+    } catch (err) {
+      toast.error('Failed to add item');
+    }
   }
 
   async function handleQuickAdd(category, preset) {
-    await addItem({
-      name: preset,
-      category,
-      quantity: 1,
-      threshold: 1,
-      photo: '',
-    });
+    try {
+      await addItem({
+        name: preset,
+        category,
+        quantity: 1,
+        threshold: 1,
+        photo: '',
+      });
+      toast.success('Item added');
+    } catch (err) {
+      toast.error('Failed to add item');
+    }
   }
 
   async function handleQuantityChange(item, delta) {
@@ -75,7 +88,7 @@ export default function TackleBox() {
     return (
       <div className={styles.container}>
         <h2 className={styles.heading}>Tackle Box</h2>
-        <p className={styles.loadingText}>Loading inventory...</p>
+        <SkeletonList count={3} />
       </div>
     );
   }

@@ -9,12 +9,15 @@ import ReactionsBar from './ReactionsBar';
 import RegulationBadge from './RegulationBadge';
 import SaveSpotModal from './SaveSpotModal';
 import ShareCardModal from './ShareCardModal';
+import { SkeletonCard } from './Skeleton';
+import { useToast } from '../contexts/ToastContext';
 import styles from './CatchDetail.module.css';
 
 export default function CatchDetail() {
   const { id } = useParams();
   const { user } = useAuth();
   const { addSpot } = useSpots();
+  const toast = useToast();
   const [entry, setEntry] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showSpotModal, setShowSpotModal] = useState(false);
@@ -40,7 +43,7 @@ export default function CatchDetail() {
     load();
   }, [id]);
 
-  if (loading) return <p className={styles.loading}>Loading...</p>;
+  if (loading) return <div style={{ maxWidth: 700, margin: '2rem auto', padding: '0 1rem' }}><SkeletonCard /></div>;
   if (!entry) return <p className={styles.loading}>Catch not found.</p>;
 
   const d = entry.date ? new Date(entry.date) : null;
@@ -184,7 +187,7 @@ export default function CatchDetail() {
           lat={entry.lat}
           lng={entry.lng}
           defaultName={entry.species ? `${entry.species} Spot` : ''}
-          onSave={async (data) => { await addSpot(data); }}
+          onSave={async (data) => { await addSpot(data); toast.success('Spot saved!'); }}
           onClose={() => setShowSpotModal(false)}
         />
       )}

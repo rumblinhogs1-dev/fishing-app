@@ -28,6 +28,30 @@
   letter-spacing: 0.5px;
 }
 
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.searchBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #fff;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.searchBtn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
 /* Hamburger */
 .hamburger {
   display: none;

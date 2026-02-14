@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useFriends } from '../hooks/useFriends';
 import { getPublicFeed, getFriendsFeed, getPublicFeedFiltered, getPopularSpecies } from '../utils/activityFeed';
 import FeedCatchCard from './FeedCatchCard';
+import { SkeletonList } from './Skeleton';
 import styles from './ActivityFeed.module.css';
 
 export default function ActivityFeed() {
@@ -133,7 +134,7 @@ export default function ActivityFeed() {
         ))}
       </div>
 
-      {loading && <p className={styles.loadingText}>Loading...</p>}
+      {loading && <SkeletonList count={3} />}
 
       {hasMore && !loading && (
         <div ref={sentinelRef} className={styles.sentinel} />
