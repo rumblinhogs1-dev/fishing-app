@@ -135,33 +135,55 @@ export default function CatchForm({ existing, onSubmit }) {
     }));
   }
 
+  async function fetchLocationData(lat, lng) {
+    const [placeName, weatherData, waterData] = await Promise.all([
+      reverseGeocode(lat, lng).catch(() => null),
+      fetchWeather(lat, lng).catch(() => null),
+      fetchWaterData(lat, lng).catch(() => null),
+    ]);
+
+    setForm((prev) => ({
+      ...prev,
+      lat,
+      lng,
+      location: prev.location || placeName || `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
+      weather: weatherData ? weatherData.summary : prev.weather,
+      weatherTemp: weatherData?.temp ?? prev.weatherTemp,
+      weatherWind: weatherData?.wind ?? prev.weatherWind,
+      weatherPressure: weatherData?.pressure ?? prev.weatherPressure,
+      weatherCondition: weatherData?.condition ?? prev.weatherCondition,
+      weatherCloudCover: weatherData?.cloudCover ?? prev.weatherCloudCover,
+      waterTemp: waterData?.waterTemp ?? prev.waterTemp,
+      flowRate: waterData?.flowRate ?? prev.flowRate,
+      waterStation: waterData?.stationName ?? prev.waterStation,
+    }));
+  }
+
   async function handleGetLocation() {
     setGpsLoading(true);
     setGpsError('');
 
     try {
       const { lat, lng } = await getGPSLocation();
-      setForm((prev) => ({ ...prev, lat, lng }));
+      await fetchLocationData(lat, lng);
+    } catch (err) {
+      setGpsError(err.message);
+    } finally {
+      setGpsLoading(false);
+    }
+  }
 
-      const [placeName, weatherData, waterData] = await Promise.all([
-        reverseGeocode(lat, lng).catch(() => null),
-        fetchWeather(lat, lng).catch(() => null),
-        fetchWaterData(lat, lng).catch(() => null),
-      ]);
-
-      setForm((prev) => ({
-        ...prev,
-        location: prev.location || placeName || `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
-        weather: weatherData ? weatherData.summary : prev.weather,
-        weatherTemp: weatherData?.temp ?? prev.weatherTemp,
-        weatherWind: weatherData?.wind ?? prev.weatherWind,
-        weatherPressure: weatherData?.pressure ?? prev.weatherPressure,
-        weatherCondition: weatherData?.condition ?? prev.weatherCondition,
-        weatherCloudCover: weatherData?.cloudCover ?? prev.weatherCloudCover,
-        waterTemp: waterData?.waterTemp ?? prev.waterTemp,
-        flowRate: waterData?.flowRate ?? prev.flowRate,
-        waterStation: waterData?.stationName ?? prev.waterStation,
-      }));
+  async function handleManualCoords() {
+    const lat = parseFloat(form.lat);
+    const lng = parseFloat(form.lng);
+    if (isNaN(lat) || isNaN(lng)) {
+      setGpsError('Enter valid latitude and longitude values.');
+      return;
+    }
+    setGpsLoading(true);
+    setGpsError('');
+    try {
+      await fetchLocationData(lat, lng);
     } catch (err) {
       setGpsError(err.message);
     } finally {
@@ -213,10 +235,38 @@ export default function CatchForm({ existing, onSubmit }) {
             </>
           )}
         </button>
-        {form.lat && form.lng && (
+        {form.lat && form.lng && !gpsError && (
           <span className={styles.gpsCoords}>GPS: {Number(form.lat).toFixed(4)}, {Number(form.lng).toFixed(4)}</span>
         )}
-        {gpsError && <span className={styles.gpsError}>{gpsError}</span>}
+        {gpsError && (
+          <div className={styles.gpsFallback}>
+            <span className={styles.gpsError}>{gpsError}</span>
+            <span className={styles.gpsFallbackLabel}>Enter coordinates manually:</span>
+            <div className={styles.gpsFallbackRow}>
+              <input
+                className={styles.gpsFallbackInput}
+                name="lat"
+                type="number"
+                step="any"
+                placeholder="Latitude"
+                value={form.lat}
+                onChange={handleChange}
+              />
+              <input
+                className={styles.gpsFallbackInput}
+                name="lng"
+                type="number"
+                step="any"
+                placeholder="Longitude"
+                value={form.lng}
+                onChange={handleChange}
+              />
+              <button type="button" className={styles.gpsFallbackBtn} onClick={handleManualCoords} disabled={gpsLoading}>
+                {gpsLoading ? 'Loading...' : 'Fetch Data'}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       <RegulationBadge lat={form.lat} lng={form.lng} species={form.species} />

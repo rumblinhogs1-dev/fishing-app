@@ -24,7 +24,7 @@ export function getGPSLocation() {
         else if (err.code === 2) reject(new Error('Location unavailable. Please try again.'));
         else reject(new Error('Location request timed out. Please try again.'));
       },
-      { enableHighAccuracy: true, timeout: 10000 }
+      { enableHighAccuracy: true, timeout: 15000 }
     );
   });
 }
