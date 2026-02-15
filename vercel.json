@@ -1,0 +1,7 @@
+{
+  "buildCommand": "npm run build && mkdir -p dist_vercel/fishing-app && cp -r dist/* dist_vercel/fishing-app/",
+  "outputDirectory": "dist_vercel",
+  "rewrites": [
+    { "source": "/fishing-app/(.*)", "destination": "/fishing-app/index.html" }
+  ]
+}
