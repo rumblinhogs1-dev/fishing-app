@@ -326,27 +326,25 @@ function MapClickHandler() {
   return null;
 }
 
-function LocationSearch() {
+function MapRefSetter({ onMap }) {
   const map = useMap();
-  const boxRef = useRef(null);
+  useEffect(() => { onMap(map); }, [map, onMap]);
+  return null;
+}
+
+function LocationSearch({ mapRef }) {
   const [query, setQuery] = useState('');
   const [searching, setSearching] = useState(false);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (boxRef.current) {
-      L.DomEvent.disableClickPropagation(boxRef.current);
-    }
-  }, []);
-
   async function handleSearch() {
     const trimmed = query.trim();
-    if (!trimmed) return;
+    if (!trimmed || !mapRef.current) return;
     setError('');
     setSearching(true);
     try {
       const result = await geocodeLocation(trimmed);
-      map.flyTo([result.lat, result.lng], 13);
+      mapRef.current.flyTo([result.lat, result.lng], 13);
     } catch {
       setError('Location not found');
       setTimeout(() => setError(''), 3000);
@@ -360,7 +358,7 @@ function LocationSearch() {
   }
 
   return (
-    <div className={styles.searchBox} ref={boxRef}>
+    <div className={styles.searchBox}>
       <div className={styles.searchInputWrap}>
         <input
           type="text"
@@ -407,6 +405,7 @@ export default function MapView({ catches = [] }) {
   const [showLayerPanel, setShowLayerPanel] = useState(false);
   const [showStructure, setShowStructure] = useState(false);
   const [mapCenter, setMapCenter] = useState({ lat: US_CENTER[0], lng: US_CENTER[1] });
+  const mapInstanceRef = useRef(null);
 
   const catchesWithCoords = useMemo(
     () => catches.filter((c) => c.lat && c.lng),
@@ -449,6 +448,8 @@ export default function MapView({ catches = [] }) {
 
       <div className={styles.addHint}>Tap anywhere to log a catch</div>
 
+      <LocationSearch mapRef={mapInstanceRef} />
+
       <MapContainer center={center} zoom={zoom} className={styles.map} zoomControl={false}>
         <TileLayer
           key={layers.basemap}
@@ -479,7 +480,7 @@ export default function MapView({ catches = [] }) {
 
         <MapCenterTracker onCenterChange={setMapCenter} />
         <RecenterButton userLocation={userLocation} />
-        <LocationSearch />
+        <MapRefSetter onMap={useCallback((m) => { mapInstanceRef.current = m; }, [])} />
         <MapClickHandler />
       </MapContainer>
 
