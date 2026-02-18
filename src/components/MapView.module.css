@@ -264,6 +264,57 @@
   cursor: pointer;
 }
 
+/* Placeholder */
+.placeholder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  color: #555;
+}
+
+.placeholderIcon {
+  margin-bottom: 1rem;
+  opacity: 0.6;
+}
+
+.placeholderTitle {
+  margin: 0 0 0.5rem;
+  font-size: 1.3rem;
+  color: #333;
+}
+
+.placeholderText {
+  max-width: 400px;
+  margin: 0 0 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #777;
+}
+
+.placeholderLinks {
+  display: flex;
+  gap: 1rem;
+}
+
+.placeholderLink {
+  padding: 0.6rem 1.2rem;
+  background: #e8f0fe;
+  color: #1a73e8;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.placeholderLink:hover {
+  background: #d2e3fc;
+}
+
 @media (max-width: 600px) {
   .controls {
     padding: 0.4rem 0.75rem;

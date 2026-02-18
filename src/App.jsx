@@ -114,7 +114,7 @@ export default function App() {
               <Route path="/chat/new" element={<CreateGroup />} />
               <Route path="/chat/:groupId" element={<ChatRoom />} />
               <Route path="/chat/:groupId/settings" element={<GroupSettings />} />
-              <Route path="/map" element={<MapView catches={catches} />} />
+              <Route path="/map" element={<MapView />} />
               <Route path="/spots" element={<SpotsList />} />
               <Route path="/forecast" element={<Forecast />} />
               <Route path="/regulations" element={<Regulations />} />
