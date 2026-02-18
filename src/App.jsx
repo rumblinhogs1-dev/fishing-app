@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import OfflineBanner from './components/OfflineBanner';
 import ToastContainer from './components/Toast';
 import SearchModal from './components/SearchModal';
+import ErrorBoundary from './components/ErrorBoundary';
 import { SkeletonList } from './components/Skeleton';
 import { useCatchesProvider } from './hooks/useCatchesProvider';
 import { useSpots } from './hooks/useSpots';
@@ -94,39 +95,41 @@ export default function App() {
         {dataLoading ? (
           <SkeletonList count={3} />
         ) : (
-          <Suspense fallback={<SkeletonList count={3} />}>
-            <Routes>
-              <Route path="/" element={<CatchList catches={catches} onDelete={deleteCatch} />} />
-              <Route path="/add" element={<CatchForm onSubmit={addCatch} />} />
-              <Route path="/edit/:id" element={<EditPage getCatch={getCatch} updateCatch={updateCatch} />} />
-              <Route path="/identify" element={<FishIdentify />} />
-              <Route path="/identify-lure" element={<LureIdentify />} />
-              <Route path="/recommendations" element={<LureRecommendations />} />
-              <Route path="/stats" element={<Stats catches={catches} />} />
-              <Route path="/insights" element={<Insights catches={catches} />} />
-              <Route path="/auth" element={<AuthPage />} />
-              <Route path="/feed" element={<ActivityFeed />} />
-              <Route path="/catch/:id" element={<CatchDetail />} />
-              <Route path="/user/:userId" element={<UserProfile />} />
-              <Route path="/friends" element={<FriendsList />} />
-              <Route path="/settings" element={<ProfileSettings />} />
-              <Route path="/chat" element={<ChatPage />} />
-              <Route path="/chat/new" element={<CreateGroup />} />
-              <Route path="/chat/:groupId" element={<ChatRoom />} />
-              <Route path="/chat/:groupId/settings" element={<GroupSettings />} />
-              <Route path="/map" element={<MapView catches={catches} />} />
-              <Route path="/spots" element={<SpotsList />} />
-              <Route path="/forecast" element={<Forecast />} />
-              <Route path="/regulations" element={<Regulations />} />
-              <Route path="/leaderboard" element={<Leaderboard />} />
-              <Route path="/tackle" element={<TackleBox />} />
-              <Route path="/trips" element={<TripPlanner />} />
-              <Route path="/conservation" element={<ConservationGuide />} />
-              <Route path="/notifications" element={<Notifications />} />
-              <Route path="/challenges" element={<Challenges />} />
-              <Route path="/challenge/:id" element={<ChallengeDetail />} />
-            </Routes>
-          </Suspense>
+          <ErrorBoundary>
+            <Suspense fallback={<SkeletonList count={3} />}>
+              <Routes>
+                <Route path="/" element={<CatchList catches={catches} onDelete={deleteCatch} />} />
+                <Route path="/add" element={<CatchForm onSubmit={addCatch} />} />
+                <Route path="/edit/:id" element={<EditPage getCatch={getCatch} updateCatch={updateCatch} />} />
+                <Route path="/identify" element={<FishIdentify />} />
+                <Route path="/identify-lure" element={<LureIdentify />} />
+                <Route path="/recommendations" element={<LureRecommendations />} />
+                <Route path="/stats" element={<Stats catches={catches} />} />
+                <Route path="/insights" element={<Insights catches={catches} />} />
+                <Route path="/auth" element={<AuthPage />} />
+                <Route path="/feed" element={<ActivityFeed />} />
+                <Route path="/catch/:id" element={<CatchDetail />} />
+                <Route path="/user/:userId" element={<UserProfile />} />
+                <Route path="/friends" element={<FriendsList />} />
+                <Route path="/settings" element={<ProfileSettings />} />
+                <Route path="/chat" element={<ChatPage />} />
+                <Route path="/chat/new" element={<CreateGroup />} />
+                <Route path="/chat/:groupId" element={<ChatRoom />} />
+                <Route path="/chat/:groupId/settings" element={<GroupSettings />} />
+                <Route path="/map" element={<MapView catches={catches} />} />
+                <Route path="/spots" element={<SpotsList />} />
+                <Route path="/forecast" element={<Forecast />} />
+                <Route path="/regulations" element={<Regulations />} />
+                <Route path="/leaderboard" element={<Leaderboard />} />
+                <Route path="/tackle" element={<TackleBox />} />
+                <Route path="/trips" element={<TripPlanner />} />
+                <Route path="/conservation" element={<ConservationGuide />} />
+                <Route path="/notifications" element={<Notifications />} />
+                <Route path="/challenges" element={<Challenges />} />
+                <Route path="/challenge/:id" element={<ChallengeDetail />} />
+              </Routes>
+            </Suspense>
+          </ErrorBoundary>
         )}
       </main>
       {showSearch && (
