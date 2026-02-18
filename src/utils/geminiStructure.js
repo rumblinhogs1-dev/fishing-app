@@ -65,11 +65,11 @@ Provide 4-6 structure types most relevant to this water body. Be specific to the
     ],
   };
 
-  const res = await fetchWithRetry(`${API_URL}?key=${key.trim()}`, {
+  const res = await fetchWithRetry(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
-  });
+  }, key);
 
   if (!res.ok) {
     const errData = await res.json().catch(() => null);

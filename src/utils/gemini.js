@@ -1,6 +1,6 @@
 const API_KEY_STORAGE = 'fishing-log-gemini-key';
 const GEMINI_MODEL = 'gemini-1.5-flash';
-export const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+export const API_URL = `https://generativelanguage.googleapis.com/v1/models/${GEMINI_MODEL}:generateContent`;
 const MAX_SIZE = 1024;
 const MAX_RETRIES = 3;
 const BASE_DELAY_MS = 1000;
@@ -30,8 +30,15 @@ export function saveApiKey(key) {
 
 /**
  * Fetch with automatic retry on 429 (rate limit) using exponential backoff.
+ * Pass apiKey to have it sent via the x-goog-api-key header.
  */
-export async function fetchWithRetry(url, options) {
+export async function fetchWithRetry(url, options, apiKey) {
+  if (apiKey) {
+    options = {
+      ...options,
+      headers: { ...options.headers, 'x-goog-api-key': apiKey.trim() },
+    };
+  }
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     let res;
     try {
@@ -144,11 +151,11 @@ The confidence should be 0-100 representing how certain you are of the identific
     ],
   };
 
-  const res = await fetchWithRetry(`${API_URL}?key=${apiKey.trim()}`, {
+  const res = await fetchWithRetry(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
-  });
+  }, apiKey);
 
   if (!res.ok) {
     const errData = await res.json().catch(() => null);
