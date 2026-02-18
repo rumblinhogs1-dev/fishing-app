@@ -1,6 +1,4 @@
-import { getApiKey } from './gemini';
-
-const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+import { getApiKey, API_URL, fetchWithRetry } from './gemini';
 const CACHE_KEY = 'fishing-app-structure-cache';
 const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 
@@ -67,22 +65,17 @@ Provide 4-6 structure types most relevant to this water body. Be specific to the
     ],
   };
 
-  let res;
-  try {
-    res = await fetch(`${API_URL}?key=${key.trim()}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-  } catch {
-    if (!navigator.onLine) throw new Error('You appear to be offline.');
-    throw new Error('Network error. Please try again.');
-  }
+  const res = await fetchWithRetry(`${API_URL}?key=${key.trim()}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
 
   if (!res.ok) {
     const errData = await res.json().catch(() => null);
     const msg = errData?.error?.message || '';
-    if (res.status === 429) throw new Error('Rate limit exceeded. Please wait and try again.');
+    if (res.status === 429) throw new Error('Rate limit exceeded. Retries exhausted — please wait a minute and try again.');
+    if (res.status === 401 || res.status === 403) throw new Error('Invalid or unauthorized API key.');
     if (res.status >= 500) throw new Error('Gemini API temporarily unavailable.');
     throw new Error(msg || `API request failed (${res.status}).`);
   }

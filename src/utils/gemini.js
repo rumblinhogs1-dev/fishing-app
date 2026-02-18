@@ -1,6 +1,9 @@
 const API_KEY_STORAGE = 'fishing-log-gemini-key';
-const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+const GEMINI_MODEL = 'gemini-1.5-flash';
+export const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 const MAX_SIZE = 1024;
+const MAX_RETRIES = 3;
+const BASE_DELAY_MS = 1000;
 
 /**
  * Returns the Gemini API key from env var or localStorage fallback.
@@ -23,6 +26,37 @@ export function hasEnvKey() {
  */
 export function saveApiKey(key) {
   localStorage.setItem(API_KEY_STORAGE, key);
+}
+
+/**
+ * Fetch with automatic retry on 429 (rate limit) using exponential backoff.
+ */
+export async function fetchWithRetry(url, options) {
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    let res;
+    try {
+      res = await fetch(url, options);
+    } catch (err) {
+      if (attempt === MAX_RETRIES) {
+        if (!navigator.onLine) {
+          throw new Error('You appear to be offline. Please check your internet connection.');
+        }
+        throw new Error('Network error. Could not reach the Gemini API. Please try again.');
+      }
+      // Retry network errors too
+      await new Promise((r) => setTimeout(r, BASE_DELAY_MS * 2 ** attempt));
+      continue;
+    }
+
+    if (res.status === 429 && attempt < MAX_RETRIES) {
+      const retryAfter = res.headers.get('Retry-After');
+      const delay = retryAfter ? parseInt(retryAfter, 10) * 1000 : BASE_DELAY_MS * 2 ** attempt;
+      await new Promise((r) => setTimeout(r, delay));
+      continue;
+    }
+
+    return res;
+  }
 }
 
 /**
@@ -110,19 +144,11 @@ The confidence should be 0-100 representing how certain you are of the identific
     ],
   };
 
-  let res;
-  try {
-    res = await fetch(`${API_URL}?key=${apiKey.trim()}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-  } catch (err) {
-    if (!navigator.onLine) {
-      throw new Error('You appear to be offline. Please check your internet connection.');
-    }
-    throw new Error('Network error. Could not reach the Gemini API. Please try again.');
-  }
+  const res = await fetchWithRetry(`${API_URL}?key=${apiKey.trim()}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
 
   if (!res.ok) {
     const errData = await res.json().catch(() => null);
@@ -135,7 +161,7 @@ The confidence should be 0-100 representing how certain you are of the identific
       throw new Error('Invalid or unauthorized API key. Please check your Gemini API key.');
     }
     if (res.status === 429) {
-      throw new Error('Rate limit exceeded. Please wait a moment and try again.');
+      throw new Error('Rate limit exceeded. Retries exhausted — please wait a minute and try again.');
     }
     if (res.status >= 500) {
       throw new Error('Gemini API is temporarily unavailable. Please try again later.');
