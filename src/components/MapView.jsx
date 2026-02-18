@@ -328,9 +328,16 @@ function MapClickHandler() {
 
 function LocationSearch() {
   const map = useMap();
+  const boxRef = useRef(null);
   const [query, setQuery] = useState('');
   const [searching, setSearching] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (boxRef.current) {
+      L.DomEvent.disableClickPropagation(boxRef.current);
+    }
+  }, []);
 
   async function handleSearch() {
     const trimmed = query.trim();
@@ -353,7 +360,7 @@ function LocationSearch() {
   }
 
   return (
-    <div className={styles.searchBox}>
+    <div className={styles.searchBox} ref={boxRef}>
       <div className={styles.searchInputWrap}>
         <input
           type="text"
