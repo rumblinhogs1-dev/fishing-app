@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import ImageUpload from './ImageUpload';
 import QuickLureId from './QuickLureId';
 import RegulationBadge from './RegulationBadge';
@@ -52,6 +52,7 @@ export default function CatchForm({ existing, onSubmit }) {
   const [fishIdConfirmed, setFishIdConfirmed] = useState(null);
   const [correctedSpecies, setCorrectedSpecies] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
   const toast = useToast();
 
   useEffect(() => {
@@ -87,6 +88,15 @@ export default function CatchForm({ existing, onSubmit }) {
       });
     }
   }, [existing]);
+
+  useEffect(() => {
+    const lat = location.state?.lat;
+    const lng = location.state?.lng;
+    if (lat != null && lng != null) {
+      fetchLocationData(lat, lng);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function handleChange(e) {
     const { name, value } = e.target;
