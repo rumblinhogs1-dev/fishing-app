@@ -2,8 +2,8 @@ const API_KEY_STORAGE = 'fishing-log-gemini-key';
 const GEMINI_MODEL = 'gemini-2.0-flash';
 export const API_URL = `https://generativelanguage.googleapis.com/v1/models/${GEMINI_MODEL}:generateContent`;
 const MAX_SIZE = 1024;
-const MAX_RETRIES = 3;
-const BASE_DELAY_MS = 1000;
+const MAX_RETRIES = 5;
+const BASE_DELAY_MS = 2000;
 
 /**
  * Returns the Gemini API key from env var or localStorage fallback.
@@ -57,7 +57,9 @@ export async function fetchWithRetry(url, options, apiKey) {
 
     if (res.status === 429 && attempt < MAX_RETRIES) {
       const retryAfter = res.headers.get('Retry-After');
-      const delay = retryAfter ? parseInt(retryAfter, 10) * 1000 : BASE_DELAY_MS * 2 ** attempt;
+      const delay = retryAfter
+        ? parseInt(retryAfter, 10) * 1000
+        : Math.min(BASE_DELAY_MS * 2 ** attempt, 30000);
       await new Promise((r) => setTimeout(r, delay));
       continue;
     }
@@ -168,7 +170,7 @@ The confidence should be 0-100 representing how certain you are of the identific
       throw new Error('Invalid or unauthorized API key. Please check your Gemini API key.');
     }
     if (res.status === 429) {
-      throw new Error('Rate limit exceeded. Retries exhausted — please wait a minute and try again.');
+      throw new Error('Rate limit exceeded. The free Gemini API allows ~15 requests/min. Please wait a minute and try again.');
     }
     if (res.status >= 500) {
       throw new Error('Gemini API is temporarily unavailable. Please try again later.');
