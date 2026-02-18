@@ -8,7 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSpots } from '../hooks/useSpots';
 import { useMapLayers } from '../hooks/useMapLayers';
 import { useAuth } from '../contexts/AuthContext';
-import { getGPSLocation } from '../utils/weather';
+import { getGPSLocation, geocodeLocation } from '../utils/weather';
 import { fetchUSGSStations } from '../utils/usgs';
 import SaveSpotModal from './SaveSpotModal';
 import LayerControlPanel from './LayerControlPanel';
@@ -326,6 +326,69 @@ function MapClickHandler() {
   return null;
 }
 
+function LocationSearch() {
+  const map = useMap();
+  const [query, setQuery] = useState('');
+  const [searching, setSearching] = useState(false);
+  const [error, setError] = useState('');
+
+  async function handleSearch() {
+    const trimmed = query.trim();
+    if (!trimmed) return;
+    setError('');
+    setSearching(true);
+    try {
+      const result = await geocodeLocation(trimmed);
+      map.flyTo([result.lat, result.lng], 13);
+    } catch {
+      setError('Location not found');
+      setTimeout(() => setError(''), 3000);
+    } finally {
+      setSearching(false);
+    }
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === 'Enter') handleSearch();
+  }
+
+  return (
+    <div className={styles.searchBox}>
+      <div className={styles.searchInputWrap}>
+        <input
+          type="text"
+          className={styles.searchInput}
+          placeholder="Search lake, river, or place..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={handleKeyDown}
+          disabled={searching}
+        />
+        {query && (
+          <button
+            className={styles.searchClear}
+            onClick={() => { setQuery(''); setError(''); }}
+            title="Clear"
+          >
+            &times;
+          </button>
+        )}
+        <button
+          className={styles.searchBtn}
+          onClick={handleSearch}
+          disabled={searching || !query.trim()}
+          title="Search"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+          </svg>
+        </button>
+      </div>
+      {error && <div className={styles.searchError}>{error}</div>}
+    </div>
+  );
+}
+
 export default function MapView({ catches = [] }) {
   const { user } = useAuth();
   const { spots, addSpot } = useSpots();
@@ -409,6 +472,7 @@ export default function MapView({ catches = [] }) {
 
         <MapCenterTracker onCenterChange={setMapCenter} />
         <RecenterButton userLocation={userLocation} />
+        <LocationSearch />
         <MapClickHandler />
       </MapContainer>
 
