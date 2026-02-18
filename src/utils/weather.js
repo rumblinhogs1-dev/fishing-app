@@ -154,6 +154,24 @@ export function buildBBox(lat, lng, delta) {
   return `${(lng - delta).toFixed(4)},${(lat - delta).toFixed(4)},${(lng + delta).toFixed(4)},${(lat + delta).toFixed(4)}`;
 }
 
+/**
+ * Forward geocode a location query (city, zip, lake name, etc.) using Nominatim.
+ */
+export async function geocodeLocation(query) {
+  const res = await fetch(
+    `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1`
+  );
+  if (!res.ok) throw new Error('Geocoding request failed. Please try again.');
+  const results = await res.json();
+  if (!results.length) throw new Error(`No results found for "${query}". Try a different search.`);
+  const top = results[0];
+  return {
+    lat: parseFloat(top.lat),
+    lng: parseFloat(top.lon),
+    displayName: top.display_name,
+  };
+}
+
 /** Haversine distance in miles */
 export function haversine(lat1, lng1, lat2, lng2) {
   const R = 3959;

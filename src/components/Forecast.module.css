@@ -37,6 +37,77 @@
   cursor: not-allowed;
 }
 
+/* Location Section */
+.locationSection {
+  margin-bottom: 1.5rem;
+}
+
+.locationSection .gpsButton {
+  margin-bottom: 0;
+}
+
+.locationDivider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0.75rem 0;
+  color: #999;
+  font-size: 0.85rem;
+}
+
+.locationDivider::before,
+.locationDivider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #ddd;
+}
+
+.searchRow {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.searchInput {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.searchInput:focus {
+  border-color: #1a73e8;
+}
+
+.searchInput:disabled {
+  opacity: 0.6;
+}
+
+.searchBtn {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #1a73e8, #0d47a1);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+}
+
+.searchBtn:hover {
+  opacity: 0.9;
+}
+
+.searchBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* Loading */
 .loading {
   text-align: center;
@@ -645,5 +716,13 @@
 
   .dayDetailGrid {
     grid-template-columns: 1fr;
+  }
+
+  .searchRow {
+    flex-direction: column;
+  }
+
+  .searchBtn {
+    width: 100%;
   }
 }

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { getGPSLocation } from '../utils/weather';
+import { getGPSLocation, geocodeLocation } from '../utils/weather';
 import { WEATHER_CODES } from '../utils/weather';
 import { getFullForecast, getShouldIFishScore } from '../utils/forecast';
 import { IDEAL_TEMP_RANGES, getSpeciesTempStatus } from '../utils/solunar';
@@ -394,12 +394,12 @@ export default function Forecast() {
   const [error, setError] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
   const [manualTemp, setManualTemp] = useState(null);
+  const [locationQuery, setLocationQuery] = useState('');
 
-  const handleFetch = useCallback(async () => {
+  const fetchForecast = useCallback(async (lat, lng) => {
     setLoading(true);
     setError(null);
     try {
-      const { lat, lng } = await getGPSLocation();
       const forecast = await getFullForecast(lat, lng);
       setData(forecast);
       setSelectedDay(null);
@@ -410,6 +410,32 @@ export default function Forecast() {
     }
   }, []);
 
+  const handleFetch = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const { lat, lng } = await getGPSLocation();
+      await fetchForecast(lat, lng);
+    } catch (err) {
+      setError(err.message || 'Failed to load forecast.');
+      setLoading(false);
+    }
+  }, [fetchForecast]);
+
+  const handleSearch = useCallback(async () => {
+    const q = locationQuery.trim();
+    if (!q) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const { lat, lng } = await geocodeLocation(q);
+      await fetchForecast(lat, lng);
+    } catch (err) {
+      setError(err.message || 'Failed to find location.');
+      setLoading(false);
+    }
+  }, [locationQuery, fetchForecast]);
+
   const fishScore = data ? getShouldIFishScore(data) : null;
   const today = data?.days?.[0] || null;
   const windDir = today?.windDir ?? data?.current?.windDir ?? null;
@@ -418,9 +444,26 @@ export default function Forecast() {
     <div className={styles.container}>
       <h2 className={styles.heading}>Forecast</h2>
 
-      <button className={styles.gpsButton} onClick={handleFetch} disabled={loading}>
-        {loading ? 'Loading...' : data ? 'Refresh Forecast' : 'Get My Forecast'}
-      </button>
+      <div className={styles.locationSection}>
+        <button className={styles.gpsButton} onClick={handleFetch} disabled={loading}>
+          {loading ? 'Loading...' : data ? 'Refresh My Location' : 'Use My Location'}
+        </button>
+        <div className={styles.locationDivider}><span>or</span></div>
+        <div className={styles.searchRow}>
+          <input
+            className={styles.searchInput}
+            type="text"
+            placeholder="City, lake, zip code..."
+            value={locationQuery}
+            onChange={e => setLocationQuery(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter') handleSearch(); }}
+            disabled={loading}
+          />
+          <button className={styles.searchBtn} onClick={handleSearch} disabled={loading || !locationQuery.trim()}>
+            Search
+          </button>
+        </div>
+      </div>
 
       {error && <div className={styles.error}>{error}</div>}
 
