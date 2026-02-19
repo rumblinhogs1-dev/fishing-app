@@ -1,4 +1,4 @@
-import { getApiKey, API_URL, fetchWithRetry } from './gemini';
+import { getApiKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
 
 const CACHE_KEY = 'fishing-app-recommendations-cache';
 const CACHE_TTL = 2 * 60 * 60 * 1000; // 2 hours
@@ -37,29 +37,6 @@ function setCache(key, data) {
     cache[key] = { data, ts: Date.now() };
     localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
   } catch { /* ignore */ }
-}
-
-function extractJSON(text) {
-  // Try direct parse first
-  try {
-    return JSON.parse(text);
-  } catch { /* continue */ }
-
-  // Strip markdown code fences
-  let cleaned = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
-  try {
-    return JSON.parse(cleaned);
-  } catch { /* continue */ }
-
-  // Try to extract the first JSON object from the text
-  const match = text.match(/\{[\s\S]*\}/);
-  if (match) {
-    try {
-      return JSON.parse(match[0]);
-    } catch { /* continue */ }
-  }
-
-  return null;
 }
 
 function buildFallback(conditions) {

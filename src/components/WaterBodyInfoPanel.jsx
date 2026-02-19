@@ -83,8 +83,8 @@ export default function WaterBodyInfoPanel({ lat, lng, onClose }) {
 
   // Lazy-fetch recommendations when toggled on
   useEffect(() => {
-    if (!showRecs || recsData || recsLoading) return;
-    let cancelled = false;
+    if (!showRecs || recsData) return;
+    let active = true;
 
     async function loadRecs() {
       setRecsLoading(true);
@@ -96,17 +96,17 @@ export default function WaterBodyInfoPanel({ lat, lng, onClose }) {
           flowRate: waterData?.flowRate || undefined,
           season: getSeason(),
         });
-        if (!cancelled) setRecsData(data);
+        if (active) setRecsData(data);
       } catch (err) {
-        if (!cancelled) setRecsError(err.message || 'Failed to load recommendations.');
+        if (active) setRecsError(err.message || 'Failed to load recommendations.');
       } finally {
-        if (!cancelled) setRecsLoading(false);
+        if (active) setRecsLoading(false);
       }
     }
 
     loadRecs();
-    return () => { cancelled = true; };
-  }, [showRecs, recsData, recsLoading, waterBodyName, waterData, lat, lng]);
+    return () => { active = false; };
+  }, [showRecs, recsData, waterBodyName, waterData, lat, lng]);
 
   return (
     <div className={styles.overlay} onClick={onClose}>

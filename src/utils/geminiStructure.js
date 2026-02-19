@@ -1,4 +1,4 @@
-import { getApiKey, API_URL, fetchWithRetry } from './gemini';
+import { getApiKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
 const CACHE_KEY = 'fishing-app-structure-cache';
 const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 
@@ -84,12 +84,9 @@ Provide 4-6 structure types most relevant to this water body. Be specific to the
   const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
   if (!text) throw new Error('No response received.');
 
-  const cleaned = text.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
-  let result;
-  try {
-    result = JSON.parse(cleaned);
-  } catch {
-    throw new Error('Could not parse the AI response. Please try again.');
+  const result = extractJSON(text);
+  if (!result || !Array.isArray(result.structures)) {
+    throw new Error('AI structure analysis temporarily unavailable. Please try again.');
   }
 
   setCache(cacheKey, result);

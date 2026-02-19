@@ -69,6 +69,24 @@ export async function fetchWithRetry(url, options, apiKey) {
 }
 
 /**
+ * Robustly extract a JSON object from Gemini's text response.
+ * Handles markdown code fences, preamble text, etc.
+ */
+export function extractJSON(text) {
+  try { return JSON.parse(text); } catch { /* continue */ }
+
+  const cleaned = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+  try { return JSON.parse(cleaned); } catch { /* continue */ }
+
+  const match = text.match(/\{[\s\S]*\}/);
+  if (match) {
+    try { return JSON.parse(match[0]); } catch { /* continue */ }
+  }
+
+  return null;
+}
+
+/**
  * Resize an image File to a max dimension and return a JPEG base64 data URL.
  */
 export function resizeImage(file) {
@@ -189,16 +207,10 @@ The confidence should be 0-100 representing how certain you are of the identific
     throw new Error('No response received from Gemini. Please try a different photo.');
   }
 
-  const cleaned = text.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
-
-  try {
-    const parsed = JSON.parse(cleaned);
-    if (typeof parsed.species !== 'string' || typeof parsed.confidence !== 'number') {
-      throw new Error('Unexpected response format.');
-    }
-    parsed.alternatives = Array.isArray(parsed.alternatives) ? parsed.alternatives : [];
-    return parsed;
-  } catch {
+  const parsed = extractJSON(text);
+  if (!parsed || typeof parsed.species !== 'string') {
     throw new Error('Could not parse the AI response. Please try again with a clearer photo.');
   }
+  parsed.alternatives = Array.isArray(parsed.alternatives) ? parsed.alternatives : [];
+  return parsed;
 }

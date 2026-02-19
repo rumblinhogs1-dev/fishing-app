@@ -1,4 +1,4 @@
-import { getApiKey, API_URL, fetchWithRetry } from './gemini';
+import { getApiKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
 
 const CACHE_KEY = 'fishing-app-seasonal-calendar-cache';
 const CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
@@ -85,12 +85,9 @@ Provide all 12 months. Quality should be 1-10 (1=poor, 10=excellent). Be specifi
   const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
   if (!text) throw new Error('No response received.');
 
-  const cleaned = text.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
-  let result;
-  try {
-    result = JSON.parse(cleaned);
-  } catch {
-    throw new Error('Could not parse the AI response. Please try again.');
+  const result = extractJSON(text);
+  if (!result || !Array.isArray(result.months)) {
+    throw new Error('AI seasonal calendar temporarily unavailable. Please try again.');
   }
 
   setCache(cacheKey, result);
