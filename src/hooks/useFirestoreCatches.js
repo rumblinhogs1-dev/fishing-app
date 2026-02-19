@@ -29,12 +29,12 @@ export function useFirestoreCatches(user) {
   // One-time backfill: set visibility to public and add author info on old catches
   useEffect(() => {
     if (!userId || !catches.length || loading) return;
-    const migrateKey = `catches-backfill-${userId}`;
+    const migrateKey = `catches-backfill-v2-${userId}`;
     if (sessionStorage.getItem(migrateKey)) return;
     sessionStorage.setItem(migrateKey, '1');
 
     const toUpdate = catches.filter(
-      (c) => !c.visibility || !c.authorDisplayName
+      (c) => c.visibility !== 'public' || !c.authorDisplayName
     );
     if (!toUpdate.length) return;
 
@@ -42,7 +42,7 @@ export function useFirestoreCatches(user) {
     const photoURL = user?.photoURL || null;
     toUpdate.forEach((c) => {
       const patch = {};
-      if (!c.visibility) patch.visibility = 'public';
+      if (c.visibility !== 'public') patch.visibility = 'public';
       if (!c.authorDisplayName) patch.authorDisplayName = displayName;
       if (!c.authorPhotoURL && photoURL) patch.authorPhotoURL = photoURL;
       if (Object.keys(patch).length) {
