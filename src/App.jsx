@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { Routes, Route, useParams } from 'react-router-dom';
+import { Routes, Route, useParams, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import OfflineBanner from './components/OfflineBanner';
 import ToastContainer from './components/Toast';
@@ -127,6 +127,7 @@ export default function App() {
                 <Route path="/notifications" element={<Notifications />} />
                 <Route path="/challenges" element={<Challenges />} />
                 <Route path="/challenge/:id" element={<ChallengeDetail />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </Suspense>
           </ErrorBoundary>

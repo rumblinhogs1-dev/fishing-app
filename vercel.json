@@ -1,7 +1,11 @@
 {
   "buildCommand": "npm run build && mkdir -p dist_vercel/fishing-app && cp -r dist/* dist_vercel/fishing-app/",
   "outputDirectory": "dist_vercel",
+  "redirects": [
+    { "source": "/", "destination": "/fishing-app/", "statusCode": 308 }
+  ],
   "rewrites": [
+    { "source": "/fishing-app", "destination": "/fishing-app/index.html" },
     { "source": "/fishing-app/(.*)", "destination": "/fishing-app/index.html" }
   ]
 }
