@@ -1,0 +1,98 @@
+import { getApiKey, API_URL, fetchWithRetry } from './gemini';
+
+const CACHE_KEY = 'fishing-app-seasonal-calendar-cache';
+const CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+function getCacheKey(lat, lng) {
+  return `${Math.round(lat * 100) / 100},${Math.round(lng * 100) / 100}`;
+}
+
+function getCache(key) {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const cache = JSON.parse(raw);
+    const entry = cache[key];
+    if (entry && Date.now() - entry.ts < CACHE_TTL) return entry.data;
+    // Clean expired entry
+    delete cache[key];
+    localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+  } catch { /* ignore */ }
+  return null;
+}
+
+function setCache(key, data) {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    const cache = raw ? JSON.parse(raw) : {};
+    cache[key] = { data, ts: Date.now() };
+    localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+  } catch { /* ignore */ }
+}
+
+/**
+ * Get a 12-month seasonal fishing calendar for a water body near the given coordinates.
+ */
+export async function getSeasonalCalendar({ waterBodyName, lat, lng }) {
+  const cacheKey = getCacheKey(lat, lng);
+  const cached = getCache(cacheKey);
+  if (cached) return cached;
+
+  const key = getApiKey();
+  if (!key?.trim()) {
+    throw new Error('API key is required for seasonal calendar.');
+  }
+
+  const locationDesc = waterBodyName
+    ? `Water body: ${waterBodyName} (coordinates: ${lat.toFixed(4)}, ${lng.toFixed(4)})`
+    : `Coordinates: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+
+  const body = {
+    contents: [
+      {
+        parts: [
+          {
+            text: `You are an expert fishing guide. Analyze the following water body and provide a month-by-month fishing quality calendar for the entire year.
+
+${locationDesc}
+
+Respond ONLY with valid JSON in this exact format (no markdown, no code fences):
+{"waterBody": "Name of water body", "months": [{"month": "January", "quality": 5, "peakSpecies": ["species1", "species2"], "notes": "Brief note about fishing this month"}, {"month": "February", "quality": 4, "peakSpecies": ["species1"], "notes": "Brief note"}], "bestMonth": "June", "worstMonth": "January", "summary": "Brief overall summary of seasonal fishing patterns at this location"}
+
+Provide all 12 months. Quality should be 1-10 (1=poor, 10=excellent). Be specific to the region, water body type, and local species.`,
+          },
+        ],
+      },
+    ],
+  };
+
+  const res = await fetchWithRetry(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }, key);
+
+  if (!res.ok) {
+    const errData = await res.json().catch(() => null);
+    const msg = errData?.error?.message || '';
+    if (res.status === 429) throw new Error('Rate limit exceeded. Retries exhausted — please wait a minute and try again.');
+    if (res.status === 401 || res.status === 403) throw new Error('Invalid or unauthorized API key.');
+    if (res.status >= 500) throw new Error('Gemini API temporarily unavailable.');
+    throw new Error(msg || `API request failed (${res.status}).`);
+  }
+
+  const data = await res.json();
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!text) throw new Error('No response received.');
+
+  const cleaned = text.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+  let result;
+  try {
+    result = JSON.parse(cleaned);
+  } catch {
+    throw new Error('Could not parse the AI response. Please try again.');
+  }
+
+  setCache(cacheKey, result);
+  return result;
+}

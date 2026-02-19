@@ -13,6 +13,7 @@ import { fetchUSGSStations } from '../utils/usgs';
 import SaveSpotModal from './SaveSpotModal';
 import LayerControlPanel from './LayerControlPanel';
 import StructureHintsPanel from './StructureHintsPanel';
+import WaterBodyInfoPanel from './WaterBodyInfoPanel';
 import styles from './MapView.module.css';
 
 const US_CENTER = [39.8283, -98.5795];
@@ -404,6 +405,7 @@ export default function MapView({ catches = [] }) {
   const [spotModal, setSpotModal] = useState(null);
   const [showLayerPanel, setShowLayerPanel] = useState(false);
   const [showStructure, setShowStructure] = useState(false);
+  const [showWaterInfo, setShowWaterInfo] = useState(false);
   const [mapCenter, setMapCenter] = useState({ lat: US_CENTER[0], lng: US_CENTER[1] });
   const mapInstanceRef = useRef(null);
 
@@ -486,6 +488,16 @@ export default function MapView({ catches = [] }) {
 
       {/* Floating buttons */}
       <button
+        className={styles.waterInfoBtn}
+        onClick={() => setShowWaterInfo(true)}
+        title="Water Body Info"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2c-5.33 4.55-8 8.48-8 11.8 0 4.98 3.8 8.2 8 8.2s8-3.22 8-8.2C20 10.48 17.33 6.55 12 2zm0 18c-3.35 0-6-2.57-6-6.2 0-2.34 1.95-5.44 6-9.14 4.05 3.7 6 6.79 6 9.14 0 3.63-2.65 6.2-6 6.2z"/>
+        </svg>
+      </button>
+
+      <button
         className={styles.structureBtn}
         onClick={() => setShowStructure(true)}
         title="Find Structure & Hotspots"
@@ -519,6 +531,14 @@ export default function MapView({ catches = [] }) {
           lat={mapCenter.lat}
           lng={mapCenter.lng}
           onClose={() => setShowStructure(false)}
+        />
+      )}
+
+      {showWaterInfo && (
+        <WaterBodyInfoPanel
+          lat={mapCenter.lat}
+          lng={mapCenter.lng}
+          onClose={() => setShowWaterInfo(false)}
         />
       )}
 

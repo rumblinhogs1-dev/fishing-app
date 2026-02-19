@@ -1,8 +1,11 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { getGPSLocation, geocodeLocation } from '../utils/weather';
 import { WEATHER_CODES } from '../utils/weather';
 import { getFullForecast, getShouldIFishScore } from '../utils/forecast';
 import { IDEAL_TEMP_RANGES, getSpeciesTempStatus } from '../utils/solunar';
+import { getSeasonalCalendar } from '../utils/geminiSeasonalCalendar';
+import { getRecommendations } from '../utils/geminiRecommend';
+import SeasonalCalendar from './SeasonalCalendar';
 import styles from './Forecast.module.css';
 
 const DISPLAY_SPECIES = ['largemouth_bass', 'rainbow_trout', 'walleye', 'crappie', 'channel_catfish'];
@@ -395,10 +398,31 @@ export default function Forecast() {
   const [selectedDay, setSelectedDay] = useState(null);
   const [manualTemp, setManualTemp] = useState(null);
   const [locationQuery, setLocationQuery] = useState('');
+  const [forecastCoords, setForecastCoords] = useState(null);
+
+  // Water Body Info toggles
+  const [showFcConditions, setShowFcConditions] = useState(true);
+  const [showFcRecs, setShowFcRecs] = useState(false);
+  const [showFcCalendar, setShowFcCalendar] = useState(false);
+
+  // Water Body Info data
+  const [fcCalendarData, setFcCalendarData] = useState(null);
+  const [fcCalendarLoading, setFcCalendarLoading] = useState(false);
+  const [fcCalendarError, setFcCalendarError] = useState('');
+
+  const [fcRecsData, setFcRecsData] = useState(null);
+  const [fcRecsLoading, setFcRecsLoading] = useState(false);
+  const [fcRecsError, setFcRecsError] = useState('');
 
   const fetchForecast = useCallback(async (lat, lng) => {
     setLoading(true);
     setError(null);
+    // Reset water body info when location changes
+    setFcCalendarData(null);
+    setFcCalendarError('');
+    setFcRecsData(null);
+    setFcRecsError('');
+    setForecastCoords({ lat, lng });
     try {
       const forecast = await getFullForecast(lat, lng);
       setData(forecast);
@@ -435,6 +459,62 @@ export default function Forecast() {
       setLoading(false);
     }
   }, [locationQuery, fetchForecast]);
+
+  // Lazy-fetch seasonal calendar when toggled on
+  useEffect(() => {
+    if (!showFcCalendar || fcCalendarData || fcCalendarLoading || !forecastCoords) return;
+    let cancelled = false;
+    async function load() {
+      setFcCalendarLoading(true);
+      setFcCalendarError('');
+      try {
+        const result = await getSeasonalCalendar({
+          waterBodyName: data?.location || '',
+          lat: forecastCoords.lat,
+          lng: forecastCoords.lng,
+        });
+        if (!cancelled) setFcCalendarData(result);
+      } catch (err) {
+        if (!cancelled) setFcCalendarError(err.message || 'Failed to load seasonal calendar.');
+      } finally {
+        if (!cancelled) setFcCalendarLoading(false);
+      }
+    }
+    load();
+    return () => { cancelled = true; };
+  }, [showFcCalendar, fcCalendarData, fcCalendarLoading, forecastCoords, data?.location]);
+
+  // Lazy-fetch recommendations when toggled on
+  useEffect(() => {
+    if (!showFcRecs || fcRecsData || fcRecsLoading || !forecastCoords) return;
+    let cancelled = false;
+    function getSeason() {
+      const m = new Date().getMonth();
+      if (m >= 2 && m <= 4) return 'Spring';
+      if (m >= 5 && m <= 7) return 'Summer';
+      if (m >= 8 && m <= 10) return 'Fall';
+      return 'Winter';
+    }
+    async function load() {
+      setFcRecsLoading(true);
+      setFcRecsError('');
+      try {
+        const result = await getRecommendations({
+          location: data?.location || `${forecastCoords.lat.toFixed(4)}, ${forecastCoords.lng.toFixed(4)}`,
+          waterTemp: data?.waterData?.waterTemp || undefined,
+          flowRate: data?.waterData?.flowRate || undefined,
+          season: getSeason(),
+        });
+        if (!cancelled) setFcRecsData(result);
+      } catch (err) {
+        if (!cancelled) setFcRecsError(err.message || 'Failed to load recommendations.');
+      } finally {
+        if (!cancelled) setFcRecsLoading(false);
+      }
+    }
+    load();
+    return () => { cancelled = true; };
+  }, [showFcRecs, fcRecsData, fcRecsLoading, forecastCoords, data?.location, data?.waterData]);
 
   const fishScore = data ? getShouldIFishScore(data) : null;
   const today = data?.days?.[0] || null;
@@ -489,6 +569,112 @@ export default function Forecast() {
           <WaterTempSection waterData={data.waterData} manualTemp={manualTemp} onManualTemp={setManualTemp} />
 
           <WindTideSection current={data.current} tideData={data.tideData} waterData={data.waterData} windDir={windDir} />
+
+          {/* Water Body Info Section */}
+          <div className={styles.section}>
+            <h3 className={styles.sectionTitle}>Water Body Info</h3>
+
+            {/* Toggle: Water Conditions */}
+            <div className={styles.toggleRow}>
+              <span className={styles.toggleLabel}>Water Conditions</span>
+              <button
+                className={`${styles.toggleSwitch} ${showFcConditions ? styles.toggleOn : ''}`}
+                onClick={() => setShowFcConditions((v) => !v)}
+              >
+                <span className={styles.toggleKnob} />
+              </button>
+            </div>
+
+            {showFcConditions && data.waterData && (
+              <div style={{ padding: '0.5rem 0' }}>
+                <div className={styles.conditionsGrid}>
+                  {data.waterData.waterTemp != null && (
+                    <div className={styles.condCard}>
+                      <div className={styles.condValue}>{data.waterData.waterTemp}&deg;F</div>
+                      <div className={styles.condLabel}>Water Temp</div>
+                    </div>
+                  )}
+                  {data.waterData.flowRate != null && (
+                    <div className={styles.condCard}>
+                      <div className={styles.condValue}>{data.waterData.flowRate.toLocaleString()}</div>
+                      <div className={styles.condLabel}>Flow (ft&sup3;/s)</div>
+                    </div>
+                  )}
+                  {data.waterData.gaugeHeight != null && (
+                    <div className={styles.condCard}>
+                      <div className={styles.condValue}>{data.waterData.gaugeHeight} ft</div>
+                      <div className={styles.condLabel}>Gauge Height</div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+            {showFcConditions && !data.waterData && (
+              <p style={{ fontSize: '0.85rem', color: '#999', padding: '0.5rem 0' }}>No USGS water data available.</p>
+            )}
+
+            {/* Toggle: AI Recommendations */}
+            <div className={styles.toggleRow}>
+              <span className={styles.toggleLabel}>AI Recommendations</span>
+              <button
+                className={`${styles.toggleSwitch} ${showFcRecs ? styles.toggleOn : ''}`}
+                onClick={() => setShowFcRecs((v) => !v)}
+              >
+                <span className={styles.toggleKnob} />
+              </button>
+            </div>
+
+            {showFcRecs && (
+              <div style={{ padding: '0.5rem 0' }}>
+                {fcRecsLoading && (
+                  <div className={styles.loading} style={{ padding: '1rem 0' }}>
+                    <div className={styles.spinner} />
+                    <p style={{ margin: 0 }}>Getting recommendations...</p>
+                  </div>
+                )}
+                {fcRecsError && <div className={styles.error}>{fcRecsError}</div>}
+                {fcRecsData?.recommendations?.map((rec, i) => (
+                  <div key={i} className={styles.recCard}>
+                    <div className={styles.recCardType}>{rec.type}</div>
+                    <div className={styles.recCardName}>{rec.name}</div>
+                    {rec.color && <div className={styles.recCardDetail}>Color: {rec.color} | Size: {rec.size}</div>}
+                    {rec.technique && <div className={styles.recCardDetail}>{rec.technique}</div>}
+                  </div>
+                ))}
+                {fcRecsData?.generalTips && (
+                  <p style={{ fontSize: '0.82rem', color: '#555', margin: '0.5rem 0 0', background: '#fafafa', padding: '0.5rem', borderRadius: '6px' }}>
+                    <strong>Tips:</strong> {fcRecsData.generalTips}
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Toggle: Seasonal Calendar */}
+            <div className={styles.toggleRow}>
+              <span className={styles.toggleLabel}>Seasonal Calendar</span>
+              <button
+                className={`${styles.toggleSwitch} ${showFcCalendar ? styles.toggleOn : ''}`}
+                onClick={() => setShowFcCalendar((v) => !v)}
+              >
+                <span className={styles.toggleKnob} />
+              </button>
+            </div>
+
+            {showFcCalendar && (
+              <div style={{ padding: '0.5rem 0' }}>
+                {fcCalendarLoading && (
+                  <div className={styles.loading} style={{ padding: '1rem 0' }}>
+                    <div className={styles.spinner} />
+                    <p style={{ margin: 0 }}>Loading seasonal data...</p>
+                  </div>
+                )}
+                {fcCalendarError && <div className={styles.error}>{fcCalendarError}</div>}
+                {!fcCalendarLoading && !fcCalendarError && fcCalendarData && (
+                  <SeasonalCalendar data={fcCalendarData} />
+                )}
+              </div>
+            )}
+          </div>
 
           <FiveDayForecast days={data.days} selectedDay={selectedDay} onSelectDay={setSelectedDay} />
 
