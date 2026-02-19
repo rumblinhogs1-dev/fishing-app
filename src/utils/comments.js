@@ -45,5 +45,8 @@ export function subscribeToComments(catchId, callback) {
       ...d.data(),
       createdAt: d.data().createdAt?.toDate?.()?.toISOString() || null,
     })));
+  }, (error) => {
+    console.error('Firestore subscription error:', error);
+    callback([]);
   });
 }

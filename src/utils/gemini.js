@@ -1,9 +1,10 @@
 const API_KEY_STORAGE = 'fishing-log-gemini-key';
 const GEMINI_MODEL = 'gemini-2.0-flash';
 export const API_URL = `https://generativelanguage.googleapis.com/v1/models/${GEMINI_MODEL}:generateContent`;
-const MAX_SIZE = 1024;
-const MAX_RETRIES = 5;
+const MAX_SIZE = 512;
+const MAX_RETRIES = 1;
 const BASE_DELAY_MS = 2000;
+const FETCH_TIMEOUT_MS = 15000;
 
 /**
  * Returns the Gemini API key from env var or localStorage fallback.
@@ -42,7 +43,10 @@ export async function fetchWithRetry(url, options, apiKey) {
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     let res;
     try {
-      res = await fetch(url, options);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+      res = await fetch(url, { ...options, signal: controller.signal });
+      clearTimeout(timeoutId);
     } catch (err) {
       if (attempt === MAX_RETRIES) {
         if (!navigator.onLine) {

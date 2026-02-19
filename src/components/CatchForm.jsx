@@ -234,40 +234,38 @@ export default function CatchForm({ existing, onSubmit }) {
     }
   }
 
-  async function handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
     if (!form.image) {
       setPhotoError('A photo is required to log a catch.');
       return;
     }
     setSubmitting(true);
-    try {
-      await onSubmit({
-        ...form,
-        weight: form.weight ? Number(form.weight) : '',
-        length: form.length ? Number(form.length) : '',
-        weatherTemp: form.weatherTemp ? Number(form.weatherTemp) : '',
-        weatherWind: form.weatherWind ? Number(form.weatherWind) : '',
-        weatherPressure: form.weatherPressure ? Number(form.weatherPressure) : '',
-        weatherCloudCover: form.weatherCloudCover !== '' ? Number(form.weatherCloudCover) : '',
-        waterTemp: form.waterTemp ? Number(form.waterTemp) : '',
-        flowRate: form.flowRate ? Number(form.flowRate) : '',
-        depth: form.depth ? Number(form.depth) : '',
-        aiSpecies: fishIdResult?.species || '',
-        aiConfidence: fishIdResult?.confidence ?? null,
-        correctedSpecies: fishIdConfirmed === false && correctedSpecies.trim() ? correctedSpecies.trim() : '',
-        speciesConfirmed: fishIdConfirmed,
-      });
-      toast.success('Catch logged!');
-      if (form.released) {
-        setTimeout(() => toast.info(getRandomTip()), 500);
-      }
-      navigate('/');
-    } catch (err) {
+    const entry = {
+      ...form,
+      weight: form.weight ? Number(form.weight) : '',
+      length: form.length ? Number(form.length) : '',
+      weatherTemp: form.weatherTemp ? Number(form.weatherTemp) : '',
+      weatherWind: form.weatherWind ? Number(form.weatherWind) : '',
+      weatherPressure: form.weatherPressure ? Number(form.weatherPressure) : '',
+      weatherCloudCover: form.weatherCloudCover !== '' ? Number(form.weatherCloudCover) : '',
+      waterTemp: form.waterTemp ? Number(form.waterTemp) : '',
+      flowRate: form.flowRate ? Number(form.flowRate) : '',
+      depth: form.depth ? Number(form.depth) : '',
+      aiSpecies: fishIdResult?.species || '',
+      aiConfidence: fishIdResult?.confidence ?? null,
+      correctedSpecies: fishIdConfirmed === false && correctedSpecies.trim() ? correctedSpecies.trim() : '',
+      speciesConfirmed: fishIdConfirmed,
+    };
+    onSubmit(entry).catch((err) => {
       console.error('Failed to save catch:', err);
-      toast.error('Failed to save catch. Please try again.');
-      setSubmitting(false);
+      toast.error('Failed to save catch.');
+    });
+    toast.success('Catch saved!');
+    if (form.released) {
+      setTimeout(() => toast.info(getRandomTip()), 500);
     }
+    navigate('/');
   }
 
   return (

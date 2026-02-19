@@ -51,5 +51,8 @@ export function subscribeToSpots(userId, callback) {
       updatedAt: d.data().updatedAt?.toDate?.()?.toISOString() || null,
     }));
     callback(spots);
+  }, (error) => {
+    console.error('Firestore subscription error:', error);
+    callback([]);
   });
 }

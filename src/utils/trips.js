@@ -52,6 +52,9 @@ export function subscribeToTrips(userId, callback) {
       updatedAt: d.data().updatedAt?.toDate?.()?.toISOString() || null,
     }));
     callback(trips);
+  }, (error) => {
+    console.error('Firestore subscription error:', error);
+    callback([]);
   });
 }
 

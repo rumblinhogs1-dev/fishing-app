@@ -51,5 +51,8 @@ export function subscribeToCatches(userId, callback) {
       updatedAt: d.data().updatedAt?.toDate?.()?.toISOString() || null,
     }));
     callback(catches);
+  }, (error) => {
+    console.error('Firestore subscription error:', error);
+    callback([]);
   });
 }

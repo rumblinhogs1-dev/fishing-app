@@ -104,6 +104,9 @@ export function subscribeToNotifications(userId, callback) {
         createdAt: d.data().createdAt?.toDate?.()?.toISOString() || null,
       }))
     );
+  }, (error) => {
+    console.error('Firestore subscription error:', error);
+    callback([]);
   });
 }
 

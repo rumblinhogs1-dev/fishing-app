@@ -71,5 +71,8 @@ export function subscribeToTackleBox(userId, callback) {
       updatedAt: d.data().updatedAt?.toDate?.()?.toISOString() || null,
     }));
     callback(items);
+  }, (error) => {
+    console.error('Firestore subscription error:', error);
+    callback([]);
   });
 }

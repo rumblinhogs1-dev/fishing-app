@@ -98,6 +98,9 @@ export default function ChallengeDetail() {
         setChallenge(null);
       }
       setLoading(false);
+    }, (error) => {
+      console.error('Firestore subscription error:', error);
+      setLoading(false);
     });
     return unsub;
   }, [id]);

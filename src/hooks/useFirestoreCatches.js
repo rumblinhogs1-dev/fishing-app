@@ -26,23 +26,37 @@ export function useFirestoreCatches(userId) {
   }, [userId]);
 
   const addCatch = useCallback(async (entry) => {
-    const { image, ...data } = entry;
+    const { image, lureImage, ...data } = entry;
+    if (lureImage && lureImage.startsWith('data:')) {
+      data.lureImage = '';
+    }
     const catchId = await fsAddCatch(userId, { ...data, imageUrl: '' });
+    // Upload images in the background — don't block the UI
     if (image && image.startsWith('data:')) {
-      const imageUrl = await uploadCatchImage(userId, catchId, image);
-      await fsUpdateCatch(catchId, { imageUrl });
+      uploadCatchImage(userId, catchId, image)
+        .then((imageUrl) => fsUpdateCatch(catchId, { imageUrl }))
+        .catch((err) => console.error('Image upload failed:', err));
+    }
+    if (lureImage && lureImage.startsWith('data:')) {
+      uploadCatchImage(userId, `${catchId}/lure`, lureImage)
+        .then((lureImageUrl) => fsUpdateCatch(catchId, { lureImage: lureImageUrl }))
+        .catch((err) => console.error('Lure image upload failed:', err));
     }
     return catchId;
   }, [userId]);
 
   const updateCatch = useCallback(async (id, updates) => {
-    const { image, ...data } = updates;
+    const { image, lureImage, ...data } = updates;
     if (image && image.startsWith('data:')) {
       const imageUrl = await uploadCatchImage(userId, id, image);
       data.imageUrl = imageUrl;
     } else if (image === '') {
       await deleteCatchImage(userId, id);
       data.imageUrl = '';
+    }
+    if (lureImage && lureImage.startsWith('data:')) {
+      const lureImageUrl = await uploadCatchImage(userId, `${id}/lure`, lureImage);
+      data.lureImage = lureImageUrl;
     }
     await fsUpdateCatch(id, data);
   }, [userId]);

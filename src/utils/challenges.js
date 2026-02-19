@@ -116,6 +116,9 @@ export function subscribeToPublicChallenges(callback) {
   );
   return onSnapshot(q, (snap) => {
     callback(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+  }, (error) => {
+    console.error('Firestore subscription error:', error);
+    callback([]);
   });
 }
 
@@ -137,6 +140,9 @@ export function subscribeToChallenges(userId, callback) {
       return false;
     });
     callback(filtered);
+  }, (error) => {
+    console.error('Firestore subscription error:', error);
+    callback([]);
   });
 }
 
