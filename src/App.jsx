@@ -12,35 +12,52 @@ import { useTackleBox } from './hooks/useTackleBox';
 import { useAuth } from './contexts/AuthContext';
 import styles from './App.module.css';
 
-const CatchList = lazy(() => import('./components/CatchList'));
-const CatchForm = lazy(() => import('./components/CatchForm'));
-const Stats = lazy(() => import('./components/Stats'));
-const Insights = lazy(() => import('./components/Insights'));
-const FishIdentify = lazy(() => import('./components/FishIdentify'));
-const LureIdentify = lazy(() => import('./components/LureIdentify'));
-const LureRecommendations = lazy(() => import('./components/LureRecommendations'));
-const AuthPage = lazy(() => import('./components/AuthPage'));
-const DataMigration = lazy(() => import('./components/DataMigration'));
-const ActivityFeed = lazy(() => import('./components/ActivityFeed'));
-const CatchDetail = lazy(() => import('./components/CatchDetail'));
-const UserProfile = lazy(() => import('./components/UserProfile'));
-const FriendsList = lazy(() => import('./components/FriendsList'));
-const ProfileSettings = lazy(() => import('./components/ProfileSettings'));
-const ChatPage = lazy(() => import('./components/ChatPage'));
-const ChatRoom = lazy(() => import('./components/ChatRoom'));
-const CreateGroup = lazy(() => import('./components/CreateGroup'));
-const GroupSettings = lazy(() => import('./components/GroupSettings'));
-const Regulations = lazy(() => import('./components/Regulations'));
-const MapView = lazy(() => import('./components/MapView'));
-const Forecast = lazy(() => import('./components/Forecast'));
-const SpotsList = lazy(() => import('./components/SpotsList'));
-const Leaderboard = lazy(() => import('./components/Leaderboard'));
-const TackleBox = lazy(() => import('./components/TackleBox'));
-const TripPlanner = lazy(() => import('./components/TripPlanner'));
-const ConservationGuide = lazy(() => import('./components/ConservationGuide'));
-const Notifications = lazy(() => import('./components/Notifications'));
-const Challenges = lazy(() => import('./components/Challenges'));
-const ChallengeDetail = lazy(() => import('./components/ChallengeDetail'));
+// Retry dynamic imports once, then reload page to bust stale service worker cache
+function lazyRetry(importFn) {
+  return lazy(() =>
+    importFn().catch(() => {
+      // If chunk fails to load (stale SW cache), reload the page once
+      const key = 'chunk-reload';
+      if (!sessionStorage.getItem(key)) {
+        sessionStorage.setItem(key, '1');
+        window.location.reload();
+        return new Promise(() => {}); // never resolves — page is reloading
+      }
+      sessionStorage.removeItem(key);
+      return importFn(); // retry once after reload flag is set
+    })
+  );
+}
+
+const CatchList = lazyRetry(() => import('./components/CatchList'));
+const CatchForm = lazyRetry(() => import('./components/CatchForm'));
+const Stats = lazyRetry(() => import('./components/Stats'));
+const Insights = lazyRetry(() => import('./components/Insights'));
+const FishIdentify = lazyRetry(() => import('./components/FishIdentify'));
+const LureIdentify = lazyRetry(() => import('./components/LureIdentify'));
+const LureRecommendations = lazyRetry(() => import('./components/LureRecommendations'));
+const AuthPage = lazyRetry(() => import('./components/AuthPage'));
+const DataMigration = lazyRetry(() => import('./components/DataMigration'));
+const ActivityFeed = lazyRetry(() => import('./components/ActivityFeed'));
+const CatchDetail = lazyRetry(() => import('./components/CatchDetail'));
+const UserProfile = lazyRetry(() => import('./components/UserProfile'));
+const FriendsList = lazyRetry(() => import('./components/FriendsList'));
+const ProfileSettings = lazyRetry(() => import('./components/ProfileSettings'));
+const ChatPage = lazyRetry(() => import('./components/ChatPage'));
+const ChatRoom = lazyRetry(() => import('./components/ChatRoom'));
+const CreateGroup = lazyRetry(() => import('./components/CreateGroup'));
+const GroupSettings = lazyRetry(() => import('./components/GroupSettings'));
+const Regulations = lazyRetry(() => import('./components/Regulations'));
+const MapView = lazyRetry(() => import('./components/MapView'));
+const Forecast = lazyRetry(() => import('./components/Forecast'));
+const SpotsList = lazyRetry(() => import('./components/SpotsList'));
+const Leaderboard = lazyRetry(() => import('./components/Leaderboard'));
+const TackleBox = lazyRetry(() => import('./components/TackleBox'));
+const TripPlanner = lazyRetry(() => import('./components/TripPlanner'));
+const ConservationGuide = lazyRetry(() => import('./components/ConservationGuide'));
+const Notifications = lazyRetry(() => import('./components/Notifications'));
+const Challenges = lazyRetry(() => import('./components/Challenges'));
+const ChallengeDetail = lazyRetry(() => import('./components/ChallengeDetail'));
 
 function EditPage({ getCatch, updateCatch }) {
   const { id } = useParams();

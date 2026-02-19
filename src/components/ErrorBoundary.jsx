@@ -12,6 +12,11 @@ export default class ErrorBoundary extends Component {
   }
 
   handleRetry = () => {
+    // If it was a chunk loading error, reload the page to get fresh assets
+    if (this.state.error?.message?.includes('dynamically imported module') || this.state.error?.message?.includes('Loading chunk')) {
+      window.location.reload();
+      return;
+    }
     this.setState({ hasError: false, error: null });
   };
 

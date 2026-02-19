@@ -35,7 +35,7 @@ const EMPTY = {
   lureCategory: '',
   lureColor: '',
   released: true,
-  visibility: 'private',
+  visibility: 'public',
   notes: '',
   image: '',
 };

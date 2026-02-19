@@ -7,7 +7,8 @@ import {
 } from '../utils/firestore';
 import { uploadCatchImage, deleteCatchImage } from '../utils/firebaseStorage';
 
-export function useFirestoreCatches(userId) {
+export function useFirestoreCatches(user) {
+  const userId = user?.uid;
   const [catches, setCatches] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,11 +26,40 @@ export function useFirestoreCatches(userId) {
     return unsub;
   }, [userId]);
 
+  // One-time backfill: set visibility to public and add author info on old catches
+  useEffect(() => {
+    if (!userId || !catches.length || loading) return;
+    const migrateKey = `catches-backfill-${userId}`;
+    if (sessionStorage.getItem(migrateKey)) return;
+    sessionStorage.setItem(migrateKey, '1');
+
+    const toUpdate = catches.filter(
+      (c) => !c.visibility || !c.authorDisplayName
+    );
+    if (!toUpdate.length) return;
+
+    const displayName = user?.displayName || 'Angler';
+    const photoURL = user?.photoURL || null;
+    toUpdate.forEach((c) => {
+      const patch = {};
+      if (!c.visibility) patch.visibility = 'public';
+      if (!c.authorDisplayName) patch.authorDisplayName = displayName;
+      if (!c.authorPhotoURL && photoURL) patch.authorPhotoURL = photoURL;
+      if (Object.keys(patch).length) {
+        fsUpdateCatch(c.id, patch).catch((err) =>
+          console.error('Backfill failed for', c.id, err)
+        );
+      }
+    });
+  }, [userId, catches, loading, user]);
+
   const addCatch = useCallback(async (entry) => {
     const { image, lureImage, ...data } = entry;
     if (lureImage && lureImage.startsWith('data:')) {
       data.lureImage = '';
     }
+    data.authorDisplayName = user?.displayName || 'Angler';
+    data.authorPhotoURL = user?.photoURL || null;
     const catchId = await fsAddCatch(userId, { ...data, imageUrl: '' });
     // Upload images in the background — don't block the UI
     if (image && image.startsWith('data:')) {
@@ -43,7 +73,7 @@ export function useFirestoreCatches(userId) {
         .catch((err) => console.error('Lure image upload failed:', err));
     }
     return catchId;
-  }, [userId]);
+  }, [userId, user]);
 
   const updateCatch = useCallback(async (id, updates) => {
     const { image, lureImage, ...data } = updates;

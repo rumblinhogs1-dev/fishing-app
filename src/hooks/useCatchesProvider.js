@@ -5,7 +5,7 @@ import { useFirestoreCatches } from './useFirestoreCatches';
 export function useCatchesProvider() {
   const { user } = useAuth();
   const localCatches = useCatches();
-  const firestoreCatches = useFirestoreCatches(user?.uid);
+  const firestoreCatches = useFirestoreCatches(user);
 
   if (user) {
     return {
