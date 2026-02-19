@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+dist_vercel
 *.local
 .env
 
@@ -36,3 +37,4 @@ android/local.properties
 *.sln
 *.sw?
 .vercel
+test-gemini*
