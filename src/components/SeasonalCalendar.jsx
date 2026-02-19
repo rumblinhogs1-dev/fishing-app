@@ -2,6 +2,13 @@ import styles from './SeasonalCalendar.module.css';
 
 const MONTH_ABBR = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
+function getBarColor(quality) {
+  if (quality <= 3) return '#e65100';
+  if (quality <= 5) return '#f9a825';
+  if (quality <= 7) return '#66bb6a';
+  return '#2e7d32';
+}
+
 export default function SeasonalCalendar({ data }) {
   if (!data?.months?.length) return null;
 
@@ -16,13 +23,13 @@ export default function SeasonalCalendar({ data }) {
           const isCurrent = i === currentMonth;
           return (
             <div key={i} className={styles.barCol}>
-              <span className={styles.barScore}>{quality}</span>
               <div
                 className={`${styles.bar} ${isCurrent ? styles.barCurrent : ''}`}
-                style={{ height: `${heightPct}%` }}
+                style={{ height: `${heightPct}%`, background: getBarColor(quality) }}
                 title={`${m.month}: ${quality}/10${m.notes ? ' — ' + m.notes : ''}`}
               />
               <span className={styles.barLabel}>{MONTH_ABBR[i]}</span>
+              {isCurrent && <span className={styles.currentDot} />}
             </div>
           );
         })}

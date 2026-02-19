@@ -1,8 +1,8 @@
 .barChart {
   display: flex;
   align-items: flex-end;
-  height: 100px;
-  gap: 4px;
+  height: 120px;
+  gap: 6px;
   margin-bottom: 0.75rem;
 }
 
@@ -14,26 +14,28 @@
   gap: 2px;
 }
 
-.barScore {
-  font-size: 0.65rem;
-  font-weight: 600;
-  color: #555;
-}
-
 .bar {
   width: 100%;
-  border-radius: 4px 4px 0 0;
-  background: #90caf9;
+  border-radius: 6px 6px 0 0;
   transition: height 0.3s ease;
 }
 
 .barCurrent {
-  background: #1a73e8;
+  box-shadow: 0 0 8px rgba(26, 115, 232, 0.5);
 }
 
 .barLabel {
   font-size: 0.65rem;
   color: #888;
+  margin-top: 3px;
+}
+
+.currentDot {
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #1a73e8;
   margin-top: 2px;
 }
 
