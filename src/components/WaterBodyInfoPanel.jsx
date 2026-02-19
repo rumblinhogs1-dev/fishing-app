@@ -194,7 +194,17 @@ export default function WaterBodyInfoPanel({ lat, lng, onClose }) {
                 <span>Getting recommendations...</span>
               </div>
             )}
-            {recsError && <div className={styles.error}>{recsError}</div>}
+            {recsError && (
+              <div className={styles.error}>
+                {recsError}
+                <button
+                  className={styles.retryBtn}
+                  onClick={() => { setRecsData(null); setRecsError(''); }}
+                >
+                  Retry
+                </button>
+              </div>
+            )}
             {recsData?.recommendations?.map((rec, i) => (
               <div key={i} className={styles.recCard}>
                 <div className={styles.recType}>{rec.type}</div>
