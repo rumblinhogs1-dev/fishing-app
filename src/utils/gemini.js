@@ -74,17 +74,23 @@ export async function fetchWithRetry(url, options, apiKey) {
 
 /**
  * Robustly extract a JSON object from Gemini's text response.
- * Handles markdown code fences, preamble text, etc.
+ * Handles markdown code fences, preamble text, trailing commas, etc.
  */
 export function extractJSON(text) {
+  function stripTrailingCommas(s) {
+    return s.replace(/,\s*([\]}])/g, '$1');
+  }
+
   try { return JSON.parse(text); } catch { /* continue */ }
 
   const cleaned = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
   try { return JSON.parse(cleaned); } catch { /* continue */ }
+  try { return JSON.parse(stripTrailingCommas(cleaned)); } catch { /* continue */ }
 
   const match = text.match(/\{[\s\S]*\}/);
   if (match) {
     try { return JSON.parse(match[0]); } catch { /* continue */ }
+    try { return JSON.parse(stripTrailingCommas(match[0])); } catch { /* continue */ }
   }
 
   return null;

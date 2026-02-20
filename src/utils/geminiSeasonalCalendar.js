@@ -95,11 +95,19 @@ Provide all 12 months. Quality should be 1-10 (1=poor, 10=excellent). Be specifi
   };
 
   try {
-    const res = await fetchWithRetry(API_URL, {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 12000);
+
+    const res = await fetch(API_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': key.trim(),
+      },
       body: JSON.stringify(body),
-    }, key);
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
 
     if (!res.ok) {
       return getFallbackData(waterBodyName);

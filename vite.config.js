@@ -119,7 +119,7 @@ export default defineConfig({
         background_color: '#ffffff',
         display: 'standalone',
         icons: [
-          { src: '/fish-icon.svg', sizes: 'any', type: 'image/svg+xml' },
+          { src: 'fish-icon.svg', sizes: 'any', type: 'image/svg+xml' },
         ],
       },
     }),
