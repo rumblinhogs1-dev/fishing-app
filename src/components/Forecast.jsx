@@ -566,7 +566,8 @@ export default function Forecast() {
     }
     load();
     return () => { cancelled = true; };
-  }, [showFcCalendar, fcCalendarData, fcCalendarLoading, forecastCoords, data?.location]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showFcCalendar, fcCalendarData, forecastCoords, data?.location]);
 
   // Lazy-fetch recommendations when toggled on
   useEffect(() => {
@@ -598,7 +599,8 @@ export default function Forecast() {
     }
     load();
     return () => { cancelled = true; };
-  }, [showFcRecs, fcRecsData, fcRecsLoading, forecastCoords, data?.location, data?.waterData]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showFcRecs, fcRecsData, forecastCoords, data?.location, data?.waterData]);
 
   // Lazy-fetch insect hatch data when toggled on
   useEffect(() => {
@@ -624,7 +626,8 @@ export default function Forecast() {
     }
     load();
     return () => { cancelled = true; };
-  }, [showFcHatch, fcHatchData, fcHatchLoading, forecastCoords, data?.location, data?.waterData]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showFcHatch, fcHatchData, forecastCoords, data?.location, data?.waterData]);
 
   const fishScore = data ? getShouldIFishScore(data) : null;
   const today = data?.days?.[0] || null;

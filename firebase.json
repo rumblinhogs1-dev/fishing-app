@@ -1,11 +1,22 @@
 {
   "hosting": {
-    "public": "dist",
+    "public": "firebase-dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
+        "source": "/fishing-app/**",
+        "destination": "/fishing-app/index.html"
+      },
+      {
         "source": "**",
         "destination": "/fishing-app/index.html"
+      }
+    ],
+    "redirects": [
+      {
+        "source": "/",
+        "destination": "/fishing-app/",
+        "type": 302
       }
     ]
   }
