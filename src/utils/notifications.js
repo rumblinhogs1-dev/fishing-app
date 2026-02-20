@@ -102,6 +102,24 @@ export async function notifyChallengeInvite(fromUserId, fromDisplayName, toUserI
   });
 }
 
+export async function notifyFriendCatch(fromUserId, fromDisplayName, catchId, species) {
+  const userSnap = await getDoc(doc(db, 'users', fromUserId));
+  const friendIds = userSnap.exists() ? userSnap.data().friendIds || [] : [];
+  const label = species || 'a fish';
+  await Promise.all(
+    friendIds.map(async (friendId) => {
+      const prefs = await getUserNotifPrefs(friendId);
+      if (prefs && prefs.friend_catch === false) return;
+      return createNotification(friendId, {
+        type: 'friend_catch',
+        fromUserId,
+        message: `${fromDisplayName || 'Someone'} caught ${label}!`,
+        link: `/catch/${catchId}`,
+      });
+    })
+  );
+}
+
 export async function notifyChallengeResult(toUserId, challengeId, resultMessage) {
   const prefs = await getUserNotifPrefs(toUserId);
   if (prefs && prefs.challenge_result === false) return;

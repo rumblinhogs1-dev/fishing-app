@@ -50,6 +50,7 @@ export default function ProfileSettings() {
   const [notifPrefs, setNotifPrefs] = useState({
     friend_request: true,
     friend_accepted: true,
+    friend_catch: true,
     catch_liked: true,
     challenge_invite: true,
     challenge_result: true,
@@ -211,6 +212,7 @@ export default function ProfileSettings() {
           {[
             { key: 'friend_request', label: 'Friend Requests' },
             { key: 'friend_accepted', label: 'Friend Accepted' },
+            { key: 'friend_catch', label: "Friends' Catches" },
             { key: 'catch_liked', label: 'Catch Reactions' },
             { key: 'challenge_invite', label: 'Challenge Invites' },
             { key: 'challenge_result', label: 'Challenge Results' },

@@ -6,6 +6,7 @@ import {
   deleteCatch as fsDeleteCatch,
 } from '../utils/firestore';
 import { uploadCatchImage, deleteCatchImage } from '../utils/firebaseStorage';
+import { notifyFriendCatch } from '../utils/notifications';
 import { cacheCatches, getCachedCatches } from '../utils/offlineStorage';
 
 export function useFirestoreCatches(user) {
@@ -71,6 +72,8 @@ export function useFirestoreCatches(user) {
     data.authorDisplayName = user?.displayName || 'Angler';
     data.authorPhotoURL = user?.photoURL || null;
     const catchId = await fsAddCatch(userId, { ...data, imageUrl: '' });
+    // Notify friends in the background
+    notifyFriendCatch(userId, user?.displayName, catchId, data.species).catch(() => {});
     // Upload images in the background — don't block the UI
     if (image && image.startsWith('data:')) {
       uploadCatchImage(userId, catchId, image)
