@@ -463,8 +463,8 @@ export default function MapView({ catches = [] }) {
 
         {layers.noaaCharts && (
           <TileLayer
-            url="https://tileservice.charts.noaa.gov/tiles/50000_1/{z}/{x}/{y}.png"
-            attribution="&copy; NOAA"
+            url="https://gis.charttools.noaa.gov/arcgis/rest/services/MarineChart_Services/NOAACharts/MapServer/WMTS/tile/1.0.0/MarineChart_Services_NOAACharts/default/GoogleMapsCompatible/{z}/{y}/{x}.png"
+            attribution="&copy; NOAA Chart Display Service"
             opacity={0.7}
             zIndex={4}
           />
@@ -481,8 +481,8 @@ export default function MapView({ catches = [] }) {
 
         {layers.publicLands && (
           <TileLayer
-            url="https://gis1.usgs.gov/arcgis/rest/services/padus3/Designation/MapServer/tile/{z}/{y}/{x}"
-            attribution="&copy; USGS PAD-US"
+            url="https://gis.blm.gov/arcgis/rest/services/lands/BLM_Natl_SMA_Cached_with_PriUnk/MapServer/tile/{z}/{y}/{x}"
+            attribution="&copy; BLM Surface Management Agency"
             opacity={0.5}
             zIndex={4}
           />

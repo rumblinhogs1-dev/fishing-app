@@ -83,7 +83,7 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: /^https:\/\/tileservice\.charts\.noaa\.gov\/.*/i,
+            urlPattern: /^https:\/\/gis\.charttools\.noaa\.gov\/.*/i,
             handler: 'CacheFirst',
             options: {
               cacheName: 'noaa-tile-cache',
@@ -101,10 +101,10 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: /^https:\/\/gis1\.usgs\.gov\/.*/i,
+            urlPattern: /^https:\/\/gis\.blm\.gov\/.*/i,
             handler: 'CacheFirst',
             options: {
-              cacheName: 'padus-tile-cache',
+              cacheName: 'blm-lands-tile-cache',
               expiration: { maxEntries: 2000, maxAgeSeconds: 7 * 24 * 60 * 60 },
               cacheableResponse: { statuses: [0, 200] },
             },
