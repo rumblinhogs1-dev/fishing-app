@@ -5,6 +5,7 @@ import { getFullForecast, getShouldIFishScore } from '../utils/forecast';
 import { IDEAL_TEMP_RANGES, getSpeciesTempStatus } from '../utils/solunar';
 import { getSeasonalCalendar } from '../utils/geminiSeasonalCalendar';
 import { getRecommendations } from '../utils/geminiRecommend';
+import { getInsectHatch } from '../utils/geminiHatch';
 import SeasonalCalendar from './SeasonalCalendar';
 import styles from './Forecast.module.css';
 
@@ -389,6 +390,82 @@ function DayDetail({ day, index }) {
   );
 }
 
+function HatchChart({ data }) {
+  if (!data) return null;
+  const activityColor = (level) => {
+    if (level === 'high') return '#2e7d32';
+    if (level === 'moderate') return '#f9a825';
+    return '#999';
+  };
+  const intensityPct = (val) => Math.max(0, Math.min(100, ((val || 1) / 5) * 100));
+  const intensityBg = (val) => {
+    if (val >= 4) return 'rgba(46,125,50,0.15)';
+    if (val >= 3) return 'rgba(249,168,37,0.12)';
+    if (val >= 2) return 'rgba(0,0,0,0.05)';
+    return 'rgba(0,0,0,0.02)';
+  };
+
+  return (
+    <div>
+      {/* Current Hatches */}
+      {data.currentHatches?.length > 0 && (
+        <>
+          <h4 style={{ fontSize: '0.9rem', margin: '0 0 0.5rem', color: '#555' }}>Current Hatches</h4>
+          {data.currentHatches.map((insect, i) => (
+            <div key={i} className={styles.hatchCard}>
+              <div className={styles.hatchInsect}>
+                {insect.name}
+                <span className={styles.hatchOrder}>{insect.order}</span>
+              </div>
+              <div className={styles.hatchPattern}>{insect.flyPattern}</div>
+              <div className={styles.hatchMeta}>
+                Size {insect.size} &middot; {insect.color}
+                <span className={styles.hatchActivity} style={{ background: activityColor(insect.activityLevel) }} />
+                {insect.activityLevel}
+                {insect.bestTime && <> &middot; Best: {insect.bestTime}</>}
+              </div>
+            </div>
+          ))}
+        </>
+      )}
+
+      {/* Daily Timeline */}
+      {data.dailyTimeline?.length > 0 && (
+        <>
+          <h4 style={{ fontSize: '0.9rem', margin: '0.75rem 0 0.5rem', color: '#555' }}>Daily Timeline</h4>
+          <div className={styles.hatchTimeline}>
+            {data.dailyTimeline.map((slot, i) => (
+              <div key={i} className={styles.hatchTimeRow}>
+                <span className={styles.hatchTimePeriod}>{slot.period}</span>
+                <div className={styles.hatchTimeBar}>
+                  <div style={{ width: `${intensityPct(slot.intensity)}%`, height: '100%', borderRadius: 4, background: '#1a73e8', transition: 'width 0.3s' }} />
+                </div>
+                <span className={styles.hatchTimeInsects}>{(slot.insects || []).join(', ')}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* Monthly Calendar */}
+      {data.monthlyCalendar?.length > 0 && (
+        <>
+          <h4 style={{ fontSize: '0.9rem', margin: '0.75rem 0 0.5rem', color: '#555' }}>Monthly Calendar</h4>
+          <div className={styles.hatchMonthGrid}>
+            {data.monthlyCalendar.map((m, i) => (
+              <div key={i} className={styles.hatchMonthCell} style={{ background: intensityBg(m.intensity) }}>
+                <div className={styles.hatchMonthName}>{m.month?.slice(0, 3)}</div>
+                <div className={styles.hatchMonthInsects}>{(m.insects || []).join(', ')}</div>
+                {m.notes && <div style={{ fontSize: '0.65rem', color: '#888', marginTop: 2 }}>{m.notes}</div>}
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 // --- Main Component ---
 
 export default function Forecast() {
@@ -403,6 +480,7 @@ export default function Forecast() {
   // Water Body Info toggles
   const [showFcConditions, setShowFcConditions] = useState(true);
   const [showFcRecs, setShowFcRecs] = useState(false);
+  const [showFcHatch, setShowFcHatch] = useState(false);
   const [showFcCalendar, setShowFcCalendar] = useState(false);
 
   // Water Body Info data
@@ -414,6 +492,10 @@ export default function Forecast() {
   const [fcRecsLoading, setFcRecsLoading] = useState(false);
   const [fcRecsError, setFcRecsError] = useState('');
 
+  const [fcHatchData, setFcHatchData] = useState(null);
+  const [fcHatchLoading, setFcHatchLoading] = useState(false);
+  const [fcHatchError, setFcHatchError] = useState('');
+
   const fetchForecast = useCallback(async (lat, lng) => {
     setLoading(true);
     setError(null);
@@ -422,6 +504,8 @@ export default function Forecast() {
     setFcCalendarError('');
     setFcRecsData(null);
     setFcRecsError('');
+    setFcHatchData(null);
+    setFcHatchError('');
     setForecastCoords({ lat, lng });
     try {
       const forecast = await getFullForecast(lat, lng);
@@ -515,6 +599,32 @@ export default function Forecast() {
     load();
     return () => { cancelled = true; };
   }, [showFcRecs, fcRecsData, fcRecsLoading, forecastCoords, data?.location, data?.waterData]);
+
+  // Lazy-fetch insect hatch data when toggled on
+  useEffect(() => {
+    if (!showFcHatch || fcHatchData || fcHatchLoading || !forecastCoords) return;
+    let cancelled = false;
+    async function load() {
+      setFcHatchLoading(true);
+      setFcHatchError('');
+      try {
+        const result = await getInsectHatch({
+          waterBodyName: data?.location || '',
+          lat: forecastCoords.lat,
+          lng: forecastCoords.lng,
+          waterTemp: data?.waterData?.waterTemp || undefined,
+          month: new Date().toLocaleString('en-US', { month: 'long' }),
+        });
+        if (!cancelled) setFcHatchData(result);
+      } catch (err) {
+        if (!cancelled) setFcHatchError(err.message || 'Failed to load insect hatch data.');
+      } finally {
+        if (!cancelled) setFcHatchLoading(false);
+      }
+    }
+    load();
+    return () => { cancelled = true; };
+  }, [showFcHatch, fcHatchData, fcHatchLoading, forecastCoords, data?.location, data?.waterData]);
 
   const fishScore = data ? getShouldIFishScore(data) : null;
   const today = data?.days?.[0] || null;
@@ -645,6 +755,32 @@ export default function Forecast() {
                   <p style={{ fontSize: '0.82rem', color: '#555', margin: '0.5rem 0 0', background: '#fafafa', padding: '0.5rem', borderRadius: '6px' }}>
                     <strong>Tips:</strong> {fcRecsData.generalTips}
                   </p>
+                )}
+              </div>
+            )}
+
+            {/* Toggle: Insect Hatch Chart */}
+            <div className={styles.toggleRow}>
+              <span className={styles.toggleLabel}>Insect Hatch Chart</span>
+              <button
+                className={`${styles.toggleSwitch} ${showFcHatch ? styles.toggleOn : ''}`}
+                onClick={() => setShowFcHatch((v) => !v)}
+              >
+                <span className={styles.toggleKnob} />
+              </button>
+            </div>
+
+            {showFcHatch && (
+              <div style={{ padding: '0.5rem 0' }}>
+                {fcHatchLoading && (
+                  <div className={styles.loading} style={{ padding: '1rem 0' }}>
+                    <div className={styles.spinner} />
+                    <p style={{ margin: 0 }}>Loading insect hatch data...</p>
+                  </div>
+                )}
+                {fcHatchError && <div className={styles.error}>{fcHatchError}</div>}
+                {!fcHatchLoading && !fcHatchError && fcHatchData && (
+                  <HatchChart data={fcHatchData} />
                 )}
               </div>
             )}
