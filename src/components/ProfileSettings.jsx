@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { updateProfile } from 'firebase/auth';
 import { ref, uploadString, getDownloadURL } from 'firebase/storage';
 import { db, auth, storage } from '../firebase';
@@ -110,14 +110,14 @@ export default function ProfileSettings() {
         displayName: form.displayName,
         photoURL,
       });
-      await updateDoc(doc(db, 'users', user.uid), {
+      await setDoc(doc(db, 'users', user.uid), {
         displayName: form.displayName,
         bio: form.bio.slice(0, MAX_BIO),
         region: form.region,
         photoURL,
         defaultVisibility: form.defaultVisibility,
         notificationPreferences: notifPrefs,
-      });
+      }, { merge: true });
       toast.success('Settings saved!');
     } catch (err) {
       console.error('Failed to save settings:', err);
