@@ -3,6 +3,7 @@ import {
   doc,
   addDoc,
   updateDoc,
+  getDoc,
   getDocs,
   query,
   where,
@@ -16,6 +17,18 @@ import {
 import { db } from '../firebase';
 
 const MAX_NOTIFICATIONS = 100;
+
+async function getUserNotifPrefs(userId) {
+  try {
+    const snap = await getDoc(doc(db, 'users', userId));
+    if (snap.exists() && snap.data().notificationPreferences) {
+      return snap.data().notificationPreferences;
+    }
+  } catch (err) {
+    console.error('Failed to read notification preferences:', err);
+  }
+  return null;
+}
 
 export async function createNotification(toUserId, notification) {
   if (!toUserId) return;
@@ -44,6 +57,8 @@ export async function createNotification(toUserId, notification) {
 }
 
 export async function notifyFriendRequest(fromUserId, fromDisplayName, toUserId) {
+  const prefs = await getUserNotifPrefs(toUserId);
+  if (prefs && prefs.friend_request === false) return;
   return createNotification(toUserId, {
     type: 'friend_request',
     fromUserId,
@@ -53,6 +68,8 @@ export async function notifyFriendRequest(fromUserId, fromDisplayName, toUserId)
 }
 
 export async function notifyFriendAccepted(fromUserId, fromDisplayName, toUserId) {
+  const prefs = await getUserNotifPrefs(toUserId);
+  if (prefs && prefs.friend_accepted === false) return;
   return createNotification(toUserId, {
     type: 'friend_accepted',
     fromUserId,
@@ -63,6 +80,8 @@ export async function notifyFriendAccepted(fromUserId, fromDisplayName, toUserId
 
 export async function notifyCatchLiked(fromUserId, fromDisplayName, toUserId, catchId, emoji) {
   if (fromUserId === toUserId) return; // Don't notify self
+  const prefs = await getUserNotifPrefs(toUserId);
+  if (prefs && prefs.catch_liked === false) return;
   return createNotification(toUserId, {
     type: 'catch_liked',
     fromUserId,
@@ -73,6 +92,8 @@ export async function notifyCatchLiked(fromUserId, fromDisplayName, toUserId, ca
 }
 
 export async function notifyChallengeInvite(fromUserId, fromDisplayName, toUserId, challengeId) {
+  const prefs = await getUserNotifPrefs(toUserId);
+  if (prefs && prefs.challenge_invite === false) return;
   return createNotification(toUserId, {
     type: 'challenge_invite',
     fromUserId,
@@ -82,6 +103,8 @@ export async function notifyChallengeInvite(fromUserId, fromDisplayName, toUserI
 }
 
 export async function notifyChallengeResult(toUserId, challengeId, resultMessage) {
+  const prefs = await getUserNotifPrefs(toUserId);
+  if (prefs && prefs.challenge_result === false) return;
   return createNotification(toUserId, {
     type: 'challenge_result',
     message: resultMessage,

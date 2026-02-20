@@ -47,6 +47,13 @@ export default function ProfileSettings() {
   const [photoPreview, setPhotoPreview] = useState('');
   const [photoFile, setPhotoFile] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [notifPrefs, setNotifPrefs] = useState({
+    friend_request: true,
+    friend_accepted: true,
+    catch_liked: true,
+    challenge_invite: true,
+    challenge_result: true,
+  });
 
   useEffect(() => {
     if (!user) return;
@@ -61,6 +68,9 @@ export default function ProfileSettings() {
           defaultVisibility: data.defaultVisibility || 'public',
         });
         setPhotoPreview(data.photoURL || user.photoURL || '');
+        if (data.notificationPreferences) {
+          setNotifPrefs((prev) => ({ ...prev, ...data.notificationPreferences }));
+        }
       } else {
         setForm({
           displayName: user.displayName || '',
@@ -106,6 +116,7 @@ export default function ProfileSettings() {
         region: form.region,
         photoURL,
         defaultVisibility: form.defaultVisibility,
+        notificationPreferences: notifPrefs,
       });
       toast.success('Settings saved!');
     } catch (err) {
@@ -194,6 +205,29 @@ export default function ProfileSettings() {
             <option value="private">Private</option>
           </select>
         </label>
+
+        <div className={styles.notifSection}>
+          <h3 className={styles.sectionTitle}>Notification Preferences</h3>
+          {[
+            { key: 'friend_request', label: 'Friend Requests' },
+            { key: 'friend_accepted', label: 'Friend Accepted' },
+            { key: 'catch_liked', label: 'Catch Reactions' },
+            { key: 'challenge_invite', label: 'Challenge Invites' },
+            { key: 'challenge_result', label: 'Challenge Results' },
+          ].map(({ key, label }) => (
+            <div key={key} className={styles.toggleRow}>
+              <span className={styles.toggleLabel}>{label}</span>
+              <button
+                type="button"
+                className={`${styles.toggleSwitch} ${notifPrefs[key] ? styles.toggleOn : ''}`}
+                onClick={() => setNotifPrefs((prev) => ({ ...prev, [key]: !prev[key] }))}
+                aria-label={`Toggle ${label}`}
+              >
+                <span className={styles.toggleKnob} />
+              </button>
+            </div>
+          ))}
+        </div>
 
         <div className={styles.actions}>
           <button type="submit" className={styles.saveBtn} disabled={saving}>
