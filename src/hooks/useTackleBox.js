@@ -6,11 +6,20 @@ import {
   updateTackleItem as fsUpdate,
   deleteTackleItem as fsDelete,
 } from '../utils/tackleBox';
+import { cacheTackle, getCachedTackle } from '../utils/offlineStorage';
 
 export function useTackleBox() {
   const { user } = useAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Load IndexedDB cache first for instant display
+  useEffect(() => {
+    if (!user) return;
+    getCachedTackle().then((cached) => {
+      if (cached.length) setItems(cached);
+    }).catch(() => {});
+  }, [user]);
 
   useEffect(() => {
     if (!user) {
@@ -22,6 +31,7 @@ export function useTackleBox() {
     const unsub = subscribeToTackleBox(user.uid, (data) => {
       setItems(data);
       setLoading(false);
+      cacheTackle(data).catch(() => {});
     });
     return unsub;
   }, [user]);

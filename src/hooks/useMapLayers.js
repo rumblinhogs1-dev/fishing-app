@@ -9,6 +9,9 @@ const DEFAULTS = {
   heatmap: false,
   favoriteSpots: true,
   usgsGauges: false,
+  noaaCharts: false,
+  usgsTopo: false,
+  publicLands: false,
 };
 
 function loadLayers() {

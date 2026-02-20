@@ -55,6 +55,60 @@ export default defineConfig({
               expiration: { maxEntries: 50, maxAgeSeconds: 24 * 60 * 60 },
             },
           },
+          {
+            urlPattern: /^https:\/\/[abc]\.tile\.openstreetmap\.org\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'osm-tile-cache',
+              expiration: { maxEntries: 2000, maxAgeSeconds: 7 * 24 * 60 * 60 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/server\.arcgisonline\.com\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'esri-tile-cache',
+              expiration: { maxEntries: 2000, maxAgeSeconds: 7 * 24 * 60 * 60 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/tiles\.openseamap\.org\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'openseamap-tile-cache',
+              expiration: { maxEntries: 2000, maxAgeSeconds: 7 * 24 * 60 * 60 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/tileservice\.charts\.noaa\.gov\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'noaa-tile-cache',
+              expiration: { maxEntries: 2000, maxAgeSeconds: 7 * 24 * 60 * 60 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/basemap\.nationalmap\.gov\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'usgs-tile-cache',
+              expiration: { maxEntries: 2000, maxAgeSeconds: 7 * 24 * 60 * 60 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/gis1\.usgs\.gov\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'padus-tile-cache',
+              expiration: { maxEntries: 2000, maxAgeSeconds: 7 * 24 * 60 * 60 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
         ],
       },
       manifest: {

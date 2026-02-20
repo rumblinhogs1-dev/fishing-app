@@ -73,6 +73,5 @@ export function subscribeToTackleBox(userId, callback) {
     callback(items);
   }, (error) => {
     console.error('Firestore subscription error:', error);
-    callback([]);
   });
 }

@@ -461,6 +461,33 @@ export default function MapView({ catches = [] }) {
 
         {layers.depthContours && <DepthContourLayer />}
 
+        {layers.noaaCharts && (
+          <TileLayer
+            url="https://tileservice.charts.noaa.gov/tiles/50000_1/{z}/{x}/{y}.png"
+            attribution="&copy; NOAA"
+            opacity={0.7}
+            zIndex={4}
+          />
+        )}
+
+        {layers.usgsTopo && (
+          <TileLayer
+            url="https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}"
+            attribution="&copy; USGS"
+            opacity={0.6}
+            zIndex={4}
+          />
+        )}
+
+        {layers.publicLands && (
+          <TileLayer
+            url="https://gis1.usgs.gov/arcgis/rest/services/padus3/Designation/MapServer/tile/{z}/{y}/{x}"
+            attribution="&copy; USGS PAD-US"
+            opacity={0.5}
+            zIndex={4}
+          />
+        )}
+
         {layers.catchPins && (
           <CatchClusterLayer catches={catchesWithCoords} onSaveSpot={handleSaveSpot} />
         )}

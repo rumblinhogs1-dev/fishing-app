@@ -6,11 +6,20 @@ import {
   deleteCatch as fsDeleteCatch,
 } from '../utils/firestore';
 import { uploadCatchImage, deleteCatchImage } from '../utils/firebaseStorage';
+import { cacheCatches, getCachedCatches } from '../utils/offlineStorage';
 
 export function useFirestoreCatches(user) {
   const userId = user?.uid;
   const [catches, setCatches] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Load IndexedDB cache first for instant display
+  useEffect(() => {
+    if (!userId) return;
+    getCachedCatches().then((cached) => {
+      if (cached.length) setCatches(cached);
+    }).catch(() => {});
+  }, [userId]);
 
   useEffect(() => {
     if (!userId) {
@@ -22,6 +31,7 @@ export function useFirestoreCatches(user) {
     const unsub = subscribeToCatches(userId, (data) => {
       setCatches(data);
       setLoading(false);
+      cacheCatches(data).catch(() => {});
     });
     return unsub;
   }, [userId]);

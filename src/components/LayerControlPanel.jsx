@@ -6,8 +6,14 @@ const BASEMAPS = [
   { id: 'ocean', label: 'Ocean' },
 ];
 
-const LAYER_TOGGLES = [
+const MAP_OVERLAYS = [
   { key: 'depthContours', label: 'Depth Contours' },
+  { key: 'noaaCharts', label: 'NOAA Nautical Charts' },
+  { key: 'usgsTopo', label: 'USGS Topo' },
+  { key: 'publicLands', label: 'Public/Private Land' },
+];
+
+const DATA_OVERLAYS = [
   { key: 'catchPins', label: 'Catch Pins' },
   { key: 'favoriteSpots', label: 'Favorite Spots' },
   { key: 'heatmap', label: 'Heatmap' },
@@ -43,8 +49,24 @@ export default function LayerControlPanel({ layers, onToggle, onBasemap, onClose
         </div>
 
         <div className={styles.section}>
-          <span className={styles.sectionLabel}>Overlays</span>
-          {LAYER_TOGGLES.map(({ key, label }) => (
+          <span className={styles.sectionLabel}>Map Overlays</span>
+          {MAP_OVERLAYS.map(({ key, label }) => (
+            <div key={key} className={styles.toggleRow}>
+              <span className={styles.toggleLabel}>{label}</span>
+              <button
+                className={`${styles.toggleSwitch} ${layers[key] ? styles.toggleOn : ''}`}
+                onClick={() => onToggle(key)}
+                aria-label={`Toggle ${label}`}
+              >
+                <span className={styles.toggleKnob} />
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <div className={styles.section}>
+          <span className={styles.sectionLabel}>Data Overlays</span>
+          {DATA_OVERLAYS.map(({ key, label }) => (
             <div key={key} className={styles.toggleRow}>
               <span className={styles.toggleLabel}>{label}</span>
               <button

@@ -7,6 +7,7 @@ import SpeciesInfoCard from './SpeciesInfoCard';
 import { getGPSLocation, reverseGeocode, fetchWeather, fetchWaterData } from '../utils/weather';
 import { identifyFish, getApiKey } from '../utils/gemini';
 import { getRandomTip } from '../utils/conservationTips';
+import { addPendingCatch } from '../utils/offlineStorage';
 import { useToast } from '../contexts/ToastContext';
 import styles from './CatchForm.module.css';
 
@@ -234,7 +235,7 @@ export default function CatchForm({ existing, onSubmit }) {
     }
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     if (!form.image) {
       setPhotoError('A photo is required to log a catch.');
@@ -257,6 +258,19 @@ export default function CatchForm({ existing, onSubmit }) {
       correctedSpecies: fishIdConfirmed === false && correctedSpecies.trim() ? correctedSpecies.trim() : '',
       speciesConfirmed: fishIdConfirmed,
     };
+
+    if (!navigator.onLine) {
+      try {
+        await addPendingCatch(entry);
+        toast.success('Saved offline! Will sync when back online.');
+      } catch (err) {
+        console.error('Failed to save offline:', err);
+        toast.error('Failed to save catch offline.');
+      }
+      navigate('/');
+      return;
+    }
+
     onSubmit(entry).catch((err) => {
       console.error('Failed to save catch:', err);
       toast.error('Failed to save catch.');
