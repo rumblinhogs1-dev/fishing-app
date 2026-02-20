@@ -30,6 +30,34 @@ function setCache(key, data) {
   } catch { /* ignore */ }
 }
 
+function getFallbackData(waterBodyName) {
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
+  ];
+  const qualities = [3, 3, 5, 7, 8, 9, 8, 7, 8, 6, 4, 3];
+  const species = [
+    ['Trout'], ['Trout'], ['Trout', 'Bass'], ['Bass', 'Trout', 'Crappie'],
+    ['Bass', 'Walleye', 'Catfish'], ['Bass', 'Catfish', 'Panfish'], ['Bass', 'Catfish'],
+    ['Bass', 'Catfish'], ['Bass', 'Walleye', 'Trout'], ['Trout', 'Walleye'],
+    ['Trout', 'Walleye'], ['Trout'],
+  ];
+  const notes = [
+    'Slow fishing, target deep pools', 'Pre-spawn activity begins', 'Spring run starts',
+    'Excellent pre-spawn action', 'Peak season begins', 'Summer peak, fish early and late',
+    'Hot weather, fish deep or early/late', 'Similar to July, topwater at dawn/dusk',
+    'Fall feeding frenzy begins', 'Great fall fishing', 'Late fall, fish slow down',
+    'Winter patterns, slow presentations',
+  ];
+  return {
+    waterBody: waterBodyName || 'Local Water Body',
+    months: months.map((m, i) => ({ month: m, quality: qualities[i], peakSpecies: species[i], notes: notes[i] })),
+    bestMonth: 'June',
+    worstMonth: 'January',
+    summary: 'Generic seasonal calendar — AI data was unavailable. Actual patterns vary by region.',
+  };
+}
+
 /**
  * Get a 12-month seasonal fishing calendar for a water body near the given coordinates.
  */
@@ -40,7 +68,7 @@ export async function getSeasonalCalendar({ waterBodyName, lat, lng }) {
 
   const key = getApiKey();
   if (!key?.trim()) {
-    throw new Error('API key is required for seasonal calendar.');
+    return getFallbackData(waterBodyName);
   }
 
   const locationDesc = waterBodyName
@@ -66,30 +94,29 @@ Provide all 12 months. Quality should be 1-10 (1=poor, 10=excellent). Be specifi
     ],
   };
 
-  const res = await fetchWithRetry(API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  }, key);
+  try {
+    const res = await fetchWithRetry(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    }, key);
 
-  if (!res.ok) {
-    const errData = await res.json().catch(() => null);
-    const msg = errData?.error?.message || '';
-    if (res.status === 429) throw new Error('Rate limit exceeded. Retries exhausted — please wait a minute and try again.');
-    if (res.status === 401 || res.status === 403) throw new Error('Invalid or unauthorized API key.');
-    if (res.status >= 500) throw new Error('Gemini API temporarily unavailable.');
-    throw new Error(msg || `API request failed (${res.status}).`);
+    if (!res.ok) {
+      return getFallbackData(waterBodyName);
+    }
+
+    const data = await res.json();
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!text) return getFallbackData(waterBodyName);
+
+    const result = extractJSON(text);
+    if (!result || !Array.isArray(result.months)) {
+      return getFallbackData(waterBodyName);
+    }
+
+    setCache(cacheKey, result);
+    return result;
+  } catch {
+    return getFallbackData(waterBodyName);
   }
-
-  const data = await res.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) throw new Error('No response received.');
-
-  const result = extractJSON(text);
-  if (!result || !Array.isArray(result.months)) {
-    throw new Error('AI seasonal calendar temporarily unavailable. Please try again.');
-  }
-
-  setCache(cacheKey, result);
-  return result;
 }
