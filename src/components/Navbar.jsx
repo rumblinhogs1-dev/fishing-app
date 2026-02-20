@@ -24,7 +24,7 @@ export default function Navbar({ onSearchOpen }) {
   return (
     <nav className={styles.nav}>
       <div className={styles.brand}>
-        <img src="/logo-192.png" alt="" className={styles.icon} />
+        <img src={import.meta.env.BASE_URL + 'logo-192.png'} alt="" className={styles.icon} />
         <span className={styles.title}>Crawdaddy's Catch</span>
       </div>
 
