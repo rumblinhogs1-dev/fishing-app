@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Fishing Log</string>
-    <string name="title_activity_main">Fishing Log</string>
+    <string name="app_name">Crawdaddy\'s Catch</string>
+    <string name="title_activity_main">Crawdaddy\'s Catch</string>
     <string name="package_name">com.fishinglog.app</string>
     <string name="custom_url_scheme">com.fishinglog.app</string>
 </resources>

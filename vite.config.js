@@ -112,14 +112,15 @@ export default defineConfig({
         ],
       },
       manifest: {
-        name: 'Fishing Log',
-        short_name: 'Fishing Log',
+        name: "Crawdaddy's Catch",
+        short_name: "Crawdaddy's",
         description: 'Log catches, plan trips, and track your fishing adventures',
         theme_color: '#0d47a1',
         background_color: '#ffffff',
         display: 'standalone',
         icons: [
-          { src: 'fish-icon.svg', sizes: 'any', type: 'image/svg+xml' },
+          { src: 'logo-192.png', sizes: '192x192', type: 'image/png' },
+          { src: 'logo-512.png', sizes: '512x512', type: 'image/png' },
         ],
       },
     }),

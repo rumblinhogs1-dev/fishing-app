@@ -24,8 +24,8 @@ export default function Navbar({ onSearchOpen }) {
   return (
     <nav className={styles.nav}>
       <div className={styles.brand}>
-        <img src="/fish-icon.svg" alt="" className={styles.icon} />
-        <span className={styles.title}>Fishing Log</span>
+        <img src="/logo-192.png" alt="" className={styles.icon} />
+        <span className={styles.title}>Crawdaddy's Catch</span>
       </div>
 
       <div className={styles.navActions}>

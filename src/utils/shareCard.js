@@ -180,7 +180,7 @@ export async function generateShareCard(catchData, templateKey = 'clean') {
   ctx.fillStyle = t.textColor;
   ctx.globalAlpha = 0.25;
   ctx.textAlign = 'right';
-  ctx.fillText('Fishing Log', W - 40, H - 30);
+  ctx.fillText("Crawdaddy's Catch", W - 40, H - 30);
   ctx.textAlign = 'left';
   ctx.globalAlpha = 1;
 
