@@ -189,12 +189,20 @@ export default function LocalGuide() {
             <div key={i} className={styles.card}>
               <h4 className={styles.cardName}>{item.name}</h4>
               <p className={styles.cardDesc}>{item.description}</p>
+              <a
+                href={`https://www.google.com/search?q=${encodeURIComponent(item.name + ' ' + location)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.googleLink}
+              >
+                Search on Google
+              </a>
               <CardMeta item={item} category={item._category} />
             </div>
           ))}
 
           <p className={styles.disclaimer}>
-            Results are AI-generated and may not reflect actual businesses. Always verify before visiting.
+            Results are AI-suggested and may not be accurate. Use "Search on Google" to verify businesses before visiting.
           </p>
         </>
       )}

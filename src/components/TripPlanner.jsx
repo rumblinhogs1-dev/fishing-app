@@ -422,21 +422,46 @@ export default function TripPlanner() {
           <h3 className={styles.sectionTitle}>Past Trips</h3>
           {completed.map((trip) => (
             <div key={trip.id} className={`${styles.tripCard} ${styles.tripCompleted}`}>
-              <div className={styles.tripHeader}>
-                <h4 className={styles.tripName}>{trip.name}</h4>
-                <button className={styles.tripDeleteBtn} onClick={() => deleteTrip(trip.id)} title="Delete">&times;</button>
+              <div
+                className={styles.tripClickable}
+                onClick={() => setActiveTrip(activeTrip === trip.id ? null : trip.id)}
+              >
+                <div className={styles.tripHeader}>
+                  <h4 className={styles.tripName}>{trip.name}</h4>
+                  <span className={styles.expandIcon}>{activeTrip === trip.id ? '\u25B2' : '\u25BC'}</span>
+                </div>
+                <div className={styles.tripMeta}>
+                  {trip.destination && <span>{trip.destination}</span>}
+                  {trip.date && (
+                    <span>
+                      {new Date(trip.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      {trip.endDate && ` \u2192 ${new Date(trip.endDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`}
+                    </span>
+                  )}
+                  {trip.targetSpecies && <span className={styles.speciesTag}>{trip.targetSpecies}</span>}
+                </div>
               </div>
-              <div className={styles.tripMeta}>
-                {trip.destination && <span>{trip.destination}</span>}
-                {trip.date && (
-                  <span>
-                    {new Date(trip.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                    {trip.endDate && ` \u2192 ${new Date(trip.endDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`}
-                  </span>
-                )}
-                {trip.targetSpecies && <span className={styles.speciesTag}>{trip.targetSpecies}</span>}
-              </div>
-              <Link to="/add" className={styles.logLink}>Log catches from this trip</Link>
+              {activeTrip === trip.id && (
+                <div className={styles.tripDetails}>
+                  <div className={styles.tripActions}>
+                    <button className={styles.tripDeleteBtn} onClick={() => deleteTrip(trip.id)} title="Delete">&times;</button>
+                  </div>
+                  {trip.members && trip.members.length > 1 && (
+                    <div className={styles.memberAvatars}>
+                      {trip.members.map((m) => (
+                        m.photoURL ? (
+                          <img key={m.userId} src={m.photoURL} alt={m.displayName} className={styles.memberAvatar} referrerPolicy="no-referrer" title={m.displayName} />
+                        ) : (
+                          <span key={m.userId} className={styles.memberInitial} title={m.displayName}>
+                            {(m.displayName || '?')[0].toUpperCase()}
+                          </span>
+                        )
+                      ))}
+                    </div>
+                  )}
+                  <Link to="/add" className={styles.logLink}>Log catches from this trip</Link>
+                </div>
+              )}
             </div>
           ))}
         </div>
