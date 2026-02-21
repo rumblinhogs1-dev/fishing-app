@@ -5,7 +5,6 @@ import {
   doc,
   query,
   where,
-  orderBy,
   onSnapshot,
   updateDoc,
   increment,
@@ -36,15 +35,16 @@ export async function deleteComment(commentId, catchId) {
 export function subscribeToComments(catchId, callback) {
   const q = query(
     collection(db, 'comments'),
-    where('catchId', '==', catchId),
-    orderBy('createdAt', 'asc')
+    where('catchId', '==', catchId)
   );
   return onSnapshot(q, (snapshot) => {
-    callback(snapshot.docs.map((d) => ({
+    const comments = snapshot.docs.map((d) => ({
       id: d.id,
       ...d.data(),
       createdAt: d.data().createdAt?.toDate?.()?.toISOString() || null,
-    })));
+    }));
+    comments.sort((a, b) => (a.createdAt || '').localeCompare(b.createdAt || ''));
+    callback(comments);
   }, (error) => {
     console.error('Firestore subscription error:', error);
     callback([]);

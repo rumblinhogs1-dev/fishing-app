@@ -66,6 +66,30 @@ export default function ShareCardModal({ entry, onClose }) {
     }
   }
 
+  function getCatchUrl() {
+    return `${window.location.origin}/catch/${entry.id}`;
+  }
+
+  async function handleCopyLink() {
+    try {
+      await navigator.clipboard.writeText(getCatchUrl());
+      toast.success('Link copied!');
+    } catch {
+      toast.error('Failed to copy link');
+    }
+  }
+
+  function handleEmailShare() {
+    const subject = encodeURIComponent(`Check out this ${entry.species || 'catch'}!`);
+    const body = encodeURIComponent(`I caught a ${entry.species || 'fish'}${entry.weight ? ` weighing ${entry.weight} lbs` : ''}!\n\n${getCatchUrl()}`);
+    window.open(`mailto:?subject=${subject}&body=${body}`, '_self');
+  }
+
+  function handleTextShare() {
+    const body = encodeURIComponent(`Check out this ${entry.species || 'catch'}${entry.weight ? ` - ${entry.weight} lbs` : ''}! ${getCatchUrl()}`);
+    window.open(`sms:?body=${body}`, '_self');
+  }
+
   const canCopy = typeof ClipboardItem !== 'undefined';
   const canShare = typeof navigator.share === 'function' && typeof navigator.canShare === 'function';
 
@@ -116,6 +140,27 @@ export default function ShareCardModal({ entry, onClose }) {
               Share
             </button>
           )}
+        </div>
+
+        <div className={styles.actions}>
+          <button className={styles.actionBtn} onClick={handleCopyLink}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+            </svg>
+            Copy Link
+          </button>
+          <button className={styles.actionBtn} onClick={handleEmailShare}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+            </svg>
+            Email
+          </button>
+          <button className={styles.actionBtn} onClick={handleTextShare}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+            </svg>
+            Text
+          </button>
         </div>
 
         <button className={styles.closeBtn} onClick={onClose}>Close</button>
