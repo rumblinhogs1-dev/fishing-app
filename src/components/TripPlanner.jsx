@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useFriends } from '../hooks/useFriends';
 import { useSpots } from '../hooks/useSpots';
-import { addTrip, updateTrip, deleteTrip, subscribeToTrips, backfillMemberIds } from '../utils/trips';
+import { addTrip, updateTrip, deleteTrip, subscribeToTrips, backfillMemberIds, addMemberToTrip, removeMemberFromTrip, getTripCatches } from '../utils/trips';
 import { notifyTripInvite } from '../utils/notifications';
+import { useNavigate } from 'react-router-dom';
 import { getGPSLocation, reverseGeocode } from '../utils/weather';
 import { SkeletonCard } from './Skeleton';
 import { useToast } from '../contexts/ToastContext';
@@ -20,11 +21,12 @@ const EMPTY_TRIP = {
   targetSpecies: '',
 };
 
-export default function TripPlanner() {
+export default function TripPlanner({ catches = [] }) {
   const { user } = useAuth();
   const { friendProfiles } = useFriends();
   const { spots } = useSpots();
   const toast = useToast();
+  const navigate = useNavigate();
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -34,6 +36,9 @@ export default function TripPlanner() {
   const [invitedIds, setInvitedIds] = useState([]);
   const [editingTrip, setEditingTrip] = useState(null);
   const [editForm, setEditForm] = useState(EMPTY_TRIP);
+  const [managingMembers, setManagingMembers] = useState(null);
+  const [tripCatches, setTripCatches] = useState({});
+  const [loadingCatches, setLoadingCatches] = useState({});
   const backfilled = useRef(false);
 
   // Backfill existing trips that lack memberIds
@@ -139,6 +144,62 @@ export default function TripPlanner() {
   function cancelEditing() {
     setEditingTrip(null);
     setEditForm(EMPTY_TRIP);
+  }
+
+  async function handleAddMember(trip, friendProfile) {
+    try {
+      const memberObj = {
+        userId: friendProfile.id,
+        displayName: friendProfile.displayName || 'Angler',
+        photoURL: friendProfile.photoURL || null,
+      };
+      await addMemberToTrip(trip.id, memberObj);
+      notifyTripInvite(user.uid, user.displayName, friendProfile.id, trip.name).catch(() => {});
+      toast.success(`${friendProfile.displayName || 'Friend'} added!`);
+    } catch (err) {
+      console.error('Failed to add member:', err);
+      toast.error('Failed to add member');
+    }
+  }
+
+  async function handleRemoveMember(trip, memberId) {
+    try {
+      await removeMemberFromTrip(trip.id, memberId);
+      toast.success('Member removed');
+    } catch (err) {
+      console.error('Failed to remove member:', err);
+      toast.error('Failed to remove member');
+    }
+  }
+
+  async function loadTripCatches(trip) {
+    if (tripCatches[trip.id] || loadingCatches[trip.id]) return;
+    if (!trip.date || !trip.endDate) return;
+    setLoadingCatches((prev) => ({ ...prev, [trip.id]: true }));
+    try {
+      // Own catches from prop (filter by date range)
+      const start = new Date(trip.date);
+      const end = new Date(trip.endDate);
+      const ownMatches = catches.filter((c) => {
+        if (!c.createdAt) return false;
+        const d = new Date(c.createdAt);
+        return d >= start && d <= end;
+      });
+      // Friend catches from Firestore
+      const friendMemberIds = (trip.memberIds || []).filter((id) => id !== user.uid);
+      let friendCatches = [];
+      if (friendMemberIds.length > 0) {
+        friendCatches = await getTripCatches(friendMemberIds, trip.date, trip.endDate);
+      }
+      const all = [...ownMatches, ...friendCatches];
+      all.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+      setTripCatches((prev) => ({ ...prev, [trip.id]: all }));
+    } catch (err) {
+      console.error('Failed to load trip catches:', err);
+      setTripCatches((prev) => ({ ...prev, [trip.id]: [] }));
+    } finally {
+      setLoadingCatches((prev) => ({ ...prev, [trip.id]: false }));
+    }
   }
 
   async function handleSaveEdit(e) {
@@ -380,6 +441,14 @@ export default function TripPlanner() {
                         <button className={styles.editBtn} onClick={() => startEditing(trip)} title="Edit trip">
                           Edit
                         </button>
+                        {trip.userId === user.uid && (
+                          <button
+                            className={styles.manageMembersBtn}
+                            onClick={() => setManagingMembers(managingMembers === trip.id ? null : trip.id)}
+                          >
+                            {managingMembers === trip.id ? 'Close' : 'Manage Members'}
+                          </button>
+                        )}
                         <button className={styles.completeBtn} onClick={() => handleCompleteTrip(trip)} title="Mark complete">
                           Done
                         </button>
@@ -405,6 +474,46 @@ export default function TripPlanner() {
                           ))}
                         </div>
                       )}
+                      {managingMembers === trip.id && (
+                        <div className={styles.manageMembersPanel}>
+                          <h5 className={styles.panelTitle}>Current Members</h5>
+                          {(trip.members || []).map((m) => (
+                            <div key={m.userId} className={styles.memberRow}>
+                              {m.photoURL ? (
+                                <img src={m.photoURL} alt="" className={styles.memberAvatar} referrerPolicy="no-referrer" />
+                              ) : (
+                                <span className={styles.memberInitial}>{(m.displayName || '?')[0].toUpperCase()}</span>
+                              )}
+                              <span className={styles.memberName}>{m.displayName || 'Angler'}</span>
+                              {m.userId !== user.uid && (
+                                <button className={styles.removeBtn} onClick={() => handleRemoveMember(trip, m.userId)}>
+                                  Remove
+                                </button>
+                              )}
+                            </div>
+                          ))}
+                          {friendProfiles.filter((f) => !(trip.memberIds || []).includes(f.id)).length > 0 && (
+                            <>
+                              <h5 className={styles.panelTitle}>Invite Friends</h5>
+                              {friendProfiles
+                                .filter((f) => !(trip.memberIds || []).includes(f.id))
+                                .map((f) => (
+                                  <div key={f.id} className={styles.memberRow}>
+                                    {f.photoURL ? (
+                                      <img src={f.photoURL} alt="" className={styles.memberAvatar} referrerPolicy="no-referrer" />
+                                    ) : (
+                                      <span className={styles.memberInitial}>{(f.displayName || '?')[0].toUpperCase()}</span>
+                                    )}
+                                    <span className={styles.memberName}>{f.displayName || 'Angler'}</span>
+                                    <button className={styles.inviteBtn} onClick={() => handleAddMember(trip, f)}>
+                                      Invite
+                                    </button>
+                                  </div>
+                                ))}
+                            </>
+                          )}
+                        </div>
+                      )}
                       {trip.status === 'completed' && (
                         <Link to="/add" className={styles.logLink}>Log catches from this trip</Link>
                       )}
@@ -424,7 +533,11 @@ export default function TripPlanner() {
             <div key={trip.id} className={`${styles.tripCard} ${styles.tripCompleted}`}>
               <div
                 className={styles.tripClickable}
-                onClick={() => setActiveTrip(activeTrip === trip.id ? null : trip.id)}
+                onClick={() => {
+                  const expanding = activeTrip !== trip.id;
+                  setActiveTrip(expanding ? trip.id : null);
+                  if (expanding) loadTripCatches(trip);
+                }}
               >
                 <div className={styles.tripHeader}>
                   <h4 className={styles.tripName}>{trip.name}</h4>
@@ -459,6 +572,42 @@ export default function TripPlanner() {
                       ))}
                     </div>
                   )}
+                  <div className={styles.tripCatchesSection}>
+                    <h5 className={styles.panelTitle}>Catches</h5>
+                    {!trip.date || !trip.endDate ? (
+                      <p className={styles.noCatches}>Add trip dates to see catches from this trip.</p>
+                    ) : loadingCatches[trip.id] ? (
+                      <p className={styles.noCatches}>Loading catches...</p>
+                    ) : tripCatches[trip.id] ? (
+                      tripCatches[trip.id].length > 0 ? (
+                        <div className={styles.tripCatchesList}>
+                          {tripCatches[trip.id].map((c) => (
+                            <div
+                              key={c.id}
+                              className={styles.tripCatchItem}
+                              onClick={() => navigate(`/catch/${c.id}`)}
+                            >
+                              {c.imageUrl ? (
+                                <img src={c.imageUrl} alt="" className={styles.tripCatchThumb} />
+                              ) : (
+                                <span className={styles.tripCatchThumbPlaceholder}>🐟</span>
+                              )}
+                              <div className={styles.tripCatchInfo}>
+                                <span className={styles.tripCatchSpecies}>{c.species || 'Unknown species'}</span>
+                                <span className={styles.tripCatchMeta}>
+                                  {c.weight ? `${c.weight} lbs` : ''}
+                                  {c.weight && c.authorDisplayName ? ' · ' : ''}
+                                  {c.authorDisplayName || ''}
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className={styles.noCatches}>No catches logged during this trip.</p>
+                      )
+                    ) : null}
+                  </div>
                   <Link to="/add" className={styles.logLink}>Log catches from this trip</Link>
                 </div>
               )}

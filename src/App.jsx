@@ -140,7 +140,7 @@ export default function App() {
                 <Route path="/regulations" element={<Regulations />} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/tackle" element={<TackleBox />} />
-                <Route path="/trips" element={<TripPlanner />} />
+                <Route path="/trips" element={<TripPlanner catches={catches} />} />
                 <Route path="/conservation" element={<ConservationGuide />} />
                 <Route path="/notifications" element={<Notifications />} />
                 <Route path="/challenges" element={<Challenges />} />

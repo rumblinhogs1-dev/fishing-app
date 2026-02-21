@@ -12,6 +12,8 @@ import {
   arrayUnion,
   arrayRemove,
   getDocs,
+  getDoc,
+  Timestamp,
 } from 'firebase/firestore';
 import { db } from '../firebase';
 
@@ -94,6 +96,58 @@ export async function backfillMemberIds(userId) {
     }
   });
   await Promise.all(updates);
+}
+
+export async function addMemberToTrip(tripId, memberProfile) {
+  const ref = doc(db, TRIPS_COL, tripId);
+  await updateDoc(ref, {
+    memberIds: arrayUnion(memberProfile.userId),
+    invitedIds: arrayUnion(memberProfile.userId),
+    members: arrayUnion(memberProfile),
+    updatedAt: serverTimestamp(),
+  });
+}
+
+export async function removeMemberFromTrip(tripId, userId) {
+  const ref = doc(db, TRIPS_COL, tripId);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) return;
+  const data = snap.data();
+  await updateDoc(ref, {
+    memberIds: (data.memberIds || []).filter((id) => id !== userId),
+    invitedIds: (data.invitedIds || []).filter((id) => id !== userId),
+    members: (data.members || []).filter((m) => m.userId !== userId),
+    updatedAt: serverTimestamp(),
+  });
+}
+
+export async function getTripCatches(memberIds, startDate, endDate) {
+  if (!memberIds?.length || !startDate || !endDate) return [];
+  const start = Timestamp.fromDate(new Date(startDate));
+  const end = Timestamp.fromDate(new Date(endDate));
+  const allCatches = [];
+  // Query each member separately — Firestore can't combine 'in' with range on different fields
+  for (const uid of memberIds) {
+    const q = query(
+      collection(db, 'catches'),
+      where('userId', '==', uid),
+      where('createdAt', '>=', start),
+      where('createdAt', '<=', end),
+      orderBy('createdAt', 'desc')
+    );
+    const snap = await getDocs(q);
+    snap.docs.forEach((d) => {
+      const c = d.data();
+      if (c.visibility === 'private') return;
+      allCatches.push({
+        id: d.id,
+        ...c,
+        createdAt: c.createdAt?.toDate?.()?.toISOString() || null,
+      });
+    });
+  }
+  allCatches.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+  return allCatches;
 }
 
 export function generateChecklist(targetSpecies, forecast, tackleItems) {
