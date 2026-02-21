@@ -77,6 +77,9 @@ export default function Navbar({ onSearchOpen }) {
               <NavLink to="/recommendations" className={styles.dropdownItem} onClick={() => { setAiOpen(false); setMenuOpen(false); }}>
                 Recommendations
               </NavLink>
+              <NavLink to="/local-guide" className={styles.dropdownItem} onClick={() => { setAiOpen(false); setMenuOpen(false); }}>
+                Local Guide
+              </NavLink>
             </div>
           )}
         </div>

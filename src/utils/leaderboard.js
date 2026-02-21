@@ -9,6 +9,54 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebase';
 
+export async function getRegionUserIds(region) {
+  if (!region) return [];
+  const snap = await getDocs(collection(db, 'users'));
+  const regionLower = region.toLowerCase();
+  return snap.docs
+    .filter((d) => (d.data().region || '').toLowerCase() === regionLower)
+    .map((d) => d.id);
+}
+
+export async function getMonthlyRegionCatches(region) {
+  const userIds = await getRegionUserIds(region);
+  if (!userIds.length) return [];
+  const results = [];
+  for (let i = 0; i < userIds.length; i += 30) {
+    const batch = userIds.slice(i, i + 30);
+    const q = query(
+      collection(db, 'catches'),
+      where('userId', 'in', batch),
+      where('visibility', 'in', ['public', 'friends']),
+      where('createdAt', '>=', getMonthStart()),
+      orderBy('createdAt', 'desc'),
+      limit(500)
+    );
+    const snap = await getDocs(q);
+    results.push(...snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+  }
+  return results;
+}
+
+export async function getAllRegionCatches(region) {
+  const userIds = await getRegionUserIds(region);
+  if (!userIds.length) return [];
+  const results = [];
+  for (let i = 0; i < userIds.length; i += 30) {
+    const batch = userIds.slice(i, i + 30);
+    const q = query(
+      collection(db, 'catches'),
+      where('userId', 'in', batch),
+      where('visibility', 'in', ['public', 'friends']),
+      orderBy('createdAt', 'desc'),
+      limit(1000)
+    );
+    const snap = await getDocs(q);
+    results.push(...snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+  }
+  return results;
+}
+
 function getMonthStart() {
   const now = new Date();
   return Timestamp.fromDate(new Date(now.getFullYear(), now.getMonth(), 1));

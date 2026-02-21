@@ -54,6 +54,7 @@ export default function ProfileSettings() {
     catch_liked: true,
     challenge_invite: true,
     challenge_result: true,
+    trip_invite: true,
   });
 
   useEffect(() => {
@@ -217,6 +218,7 @@ export default function ProfileSettings() {
             { key: 'catch_liked', label: 'Catch Reactions' },
             { key: 'challenge_invite', label: 'Challenge Invites' },
             { key: 'challenge_result', label: 'Challenge Results' },
+            { key: 'trip_invite', label: 'Trip Invites' },
           ].map(({ key, label }) => (
             <div key={key} className={styles.toggleRow}>
               <span className={styles.toggleLabel}>{label}</span>

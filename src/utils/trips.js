@@ -9,15 +9,22 @@ import {
   orderBy,
   onSnapshot,
   serverTimestamp,
+  arrayUnion,
+  arrayRemove,
+  getDocs,
 } from 'firebase/firestore';
 import { db } from '../firebase';
 
 const TRIPS_COL = 'trips';
 
 export async function addTrip(userId, data) {
+  const invitedIds = data.invitedIds || [];
+  const members = data.members || [];
   const docRef = await addDoc(collection(db, TRIPS_COL), {
     ...data,
     userId,
+    memberIds: [userId, ...invitedIds],
+    members,
     status: 'planned',
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
@@ -41,7 +48,7 @@ export async function deleteTrip(tripId) {
 export function subscribeToTrips(userId, callback) {
   const q = query(
     collection(db, TRIPS_COL),
-    where('userId', '==', userId),
+    where('memberIds', 'array-contains', userId),
     orderBy('createdAt', 'desc')
   );
   return onSnapshot(q, (snapshot) => {
@@ -56,6 +63,37 @@ export function subscribeToTrips(userId, callback) {
     console.error('Firestore subscription error:', error);
     callback([]);
   });
+}
+
+export async function inviteToTrip(tripId, userId) {
+  const ref = doc(db, TRIPS_COL, tripId);
+  await updateDoc(ref, {
+    memberIds: arrayUnion(userId),
+    updatedAt: serverTimestamp(),
+  });
+}
+
+export async function removeFromTrip(tripId, userId) {
+  const ref = doc(db, TRIPS_COL, tripId);
+  await updateDoc(ref, {
+    memberIds: arrayRemove(userId),
+    updatedAt: serverTimestamp(),
+  });
+}
+
+export async function backfillMemberIds(userId) {
+  const q = query(
+    collection(db, TRIPS_COL),
+    where('userId', '==', userId)
+  );
+  const snap = await getDocs(q);
+  const updates = [];
+  snap.docs.forEach((d) => {
+    if (!d.data().memberIds) {
+      updates.push(updateDoc(d.ref, { memberIds: [userId] }));
+    }
+  });
+  await Promise.all(updates);
 }
 
 export function generateChecklist(targetSpecies, forecast, tackleItems) {

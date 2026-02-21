@@ -58,6 +58,7 @@ const ConservationGuide = lazyRetry(() => import('./components/ConservationGuide
 const Notifications = lazyRetry(() => import('./components/Notifications'));
 const Challenges = lazyRetry(() => import('./components/Challenges'));
 const ChallengeDetail = lazyRetry(() => import('./components/ChallengeDetail'));
+const LocalGuide = lazyRetry(() => import('./components/LocalGuide'));
 
 function EditPage({ getCatch, updateCatch }) {
   const { id } = useParams();
@@ -144,6 +145,7 @@ export default function App() {
                 <Route path="/notifications" element={<Notifications />} />
                 <Route path="/challenges" element={<Challenges />} />
                 <Route path="/challenge/:id" element={<ChallengeDetail />} />
+                <Route path="/local-guide" element={<LocalGuide />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </Suspense>

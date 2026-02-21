@@ -120,6 +120,17 @@ export async function notifyFriendCatch(fromUserId, fromDisplayName, catchId, sp
   );
 }
 
+export async function notifyTripInvite(fromUserId, fromDisplayName, toUserId, tripName) {
+  const prefs = await getUserNotifPrefs(toUserId);
+  if (prefs && prefs.trip_invite === false) return;
+  return createNotification(toUserId, {
+    type: 'trip_invite',
+    fromUserId,
+    message: `${fromDisplayName || 'Someone'} invited you to a trip: ${tripName}`,
+    link: '/trips',
+  });
+}
+
 export async function notifyChallengeResult(toUserId, challengeId, resultMessage) {
   const prefs = await getUserNotifPrefs(toUserId);
   if (prefs && prefs.challenge_result === false) return;

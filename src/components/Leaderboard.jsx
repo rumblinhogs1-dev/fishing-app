@@ -7,6 +7,8 @@ import {
   getAllPublicCatches,
   getMonthlyFriendsCatches,
   getAllFriendsCatches,
+  getMonthlyRegionCatches,
+  getAllRegionCatches,
   rankBiggestCatch,
   rankMostCatches,
   rankMostSpecies,
@@ -40,7 +42,13 @@ export default function Leaderboard() {
         const cat = CATEGORIES.find((c) => c.key === category);
         let catches;
 
-        if (scope === 'friends') {
+        if (scope === 'local') {
+          const region = userProfile?.region;
+          if (!region) { if (!cancelled) { setRankings([]); setLoading(false); } return; }
+          catches = cat.period === 'month'
+            ? await getMonthlyRegionCatches(region)
+            : await getAllRegionCatches(region);
+        } else if (scope === 'friends') {
           const ids = userProfile?.friendIds?.length
             ? [user?.uid, ...userProfile.friendIds].slice(0, 30)
             : user ? [user.uid] : [];
@@ -85,7 +93,22 @@ export default function Leaderboard() {
             Friends
           </button>
         )}
+        {user && userProfile?.region && (
+          <button
+            className={`${styles.tab} ${scope === 'local' ? styles.tabActive : ''}`}
+            onClick={() => setScope('local')}
+          >
+            Local
+          </button>
+        )}
       </div>
+
+      {scope === 'local' && userProfile?.region && (
+        <p className={styles.regionLabel}>{userProfile.region}</p>
+      )}
+      {scope === 'local' && !userProfile?.region && (
+        <p className={styles.regionLabel}>Set your region in Settings to see local rankings.</p>
+      )}
 
       <div className={styles.categories}>
         {CATEGORIES.map((cat) => (

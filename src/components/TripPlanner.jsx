@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useFriends } from '../hooks/useFriends';
 import { useSpots } from '../hooks/useSpots';
 import { useTackleBox } from '../hooks/useTackleBox';
-import { addTrip, updateTrip, deleteTrip, subscribeToTrips, generateChecklist } from '../utils/trips';
+import { addTrip, updateTrip, deleteTrip, subscribeToTrips, generateChecklist, backfillMemberIds } from '../utils/trips';
+import { notifyTripInvite } from '../utils/notifications';
 import { getFullForecast } from '../utils/forecast';
 import { getGPSLocation, reverseGeocode } from '../utils/weather';
 import { SkeletonCard } from './Skeleton';
@@ -21,6 +23,7 @@ const EMPTY_TRIP = {
 
 export default function TripPlanner() {
   const { user } = useAuth();
+  const { friendProfiles } = useFriends();
   const { spots } = useSpots();
   const { items: tackleItems } = useTackleBox();
   const toast = useToast();
@@ -33,6 +36,15 @@ export default function TripPlanner() {
   const [checklist, setChecklist] = useState([]);
   const [activeTrip, setActiveTrip] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [invitedIds, setInvitedIds] = useState([]);
+  const backfilled = useRef(false);
+
+  // Backfill existing trips that lack memberIds
+  useEffect(() => {
+    if (!user || backfilled.current) return;
+    backfilled.current = true;
+    backfillMemberIds(user.uid).catch(() => {});
+  }, [user]);
 
   useEffect(() => {
     if (!user) { setTrips([]); setLoading(false); return; }
@@ -77,12 +89,25 @@ export default function TripPlanner() {
     }
   }
 
+  function toggleInvite(id) {
+    setInvitedIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  }
+
   async function handleCreateTrip(e) {
     e.preventDefault();
     if (!form.name.trim() || !form.destination.trim()) return;
     setSaving(true);
     try {
       const cl = checklist.length > 0 ? checklist : generateChecklist(form.targetSpecies, forecast, tackleItems);
+      const members = [
+        { userId: user.uid, displayName: user.displayName || 'You', photoURL: user.photoURL || null },
+        ...invitedIds.map((id) => {
+          const f = friendProfiles.find((fp) => fp.id === id);
+          return { userId: id, displayName: f?.displayName || 'Angler', photoURL: f?.photoURL || null };
+        }),
+      ];
       await addTrip(user.uid, {
         name: form.name.trim(),
         destination: form.destination.trim(),
@@ -92,11 +117,19 @@ export default function TripPlanner() {
         targetSpecies: form.targetSpecies.trim(),
         checklist: cl,
         catches: [],
+        invitedIds,
+        members,
+      });
+      // Notify invited friends
+      const tripName = form.name.trim();
+      invitedIds.forEach((id) => {
+        notifyTripInvite(user.uid, user.displayName, id, tripName).catch(() => {});
       });
       toast.success('Trip saved!');
       setForm(EMPTY_TRIP);
       setChecklist([]);
       setForecast(null);
+      setInvitedIds([]);
       setShowForm(false);
     } catch (err) {
       console.error('Failed to create trip:', err);
@@ -108,7 +141,14 @@ export default function TripPlanner() {
 
   async function handleToggleCheckItem(trip, index) {
     const updated = [...(trip.checklist || [])];
-    updated[index] = { ...updated[index], packed: !updated[index].packed };
+    const item = updated[index];
+    const nowPacked = !item.packed;
+    updated[index] = {
+      ...item,
+      packed: nowPacked,
+      packedBy: nowPacked ? user.uid : null,
+      packedByName: nowPacked ? (user.displayName || 'You') : null,
+    };
     await updateTrip(trip.id, { checklist: updated });
   }
 
@@ -240,6 +280,32 @@ export default function TripPlanner() {
             </div>
           )}
 
+          {friendProfiles.length > 0 && (
+            <div className={styles.inviteSection}>
+              <span className={styles.inviteLabel}>
+                Invite Friends ({invitedIds.length} selected)
+              </span>
+              <div className={styles.inviteList}>
+                {friendProfiles.map((f) => (
+                  <label key={f.id} className={`${styles.inviteItem} ${invitedIds.includes(f.id) ? styles.inviteSelected : ''}`}>
+                    <input
+                      type="checkbox"
+                      checked={invitedIds.includes(f.id)}
+                      onChange={() => toggleInvite(f.id)}
+                      className={styles.inviteCheckbox}
+                    />
+                    {f.photoURL ? (
+                      <img src={f.photoURL} alt="" className={styles.inviteAvatar} referrerPolicy="no-referrer" />
+                    ) : (
+                      <span className={styles.inviteInitial}>{(f.displayName || '?')[0].toUpperCase()}</span>
+                    )}
+                    <span className={styles.inviteName}>{f.displayName || 'Angler'}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
+
           <button type="submit" className={styles.submitBtn} disabled={saving}>
             {saving ? 'Saving...' : 'Create Trip'}
           </button>
@@ -267,6 +333,19 @@ export default function TripPlanner() {
                 {trip.date && <span>{new Date(trip.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>}
                 {trip.targetSpecies && <span className={styles.speciesTag}>{trip.targetSpecies}</span>}
               </div>
+              {trip.members && trip.members.length > 1 && (
+                <div className={styles.memberAvatars}>
+                  {trip.members.map((m) => (
+                    m.photoURL ? (
+                      <img key={m.userId} src={m.photoURL} alt={m.displayName} className={styles.memberAvatar} referrerPolicy="no-referrer" title={m.displayName} />
+                    ) : (
+                      <span key={m.userId} className={styles.memberInitial} title={m.displayName}>
+                        {(m.displayName || '?')[0].toUpperCase()}
+                      </span>
+                    )
+                  ))}
+                </div>
+              )}
               <button
                 className={styles.toggleChecklist}
                 onClick={() => setActiveTrip(activeTrip === trip.id ? null : trip.id)}
@@ -283,6 +362,9 @@ export default function TripPlanner() {
                         onChange={() => handleToggleCheckItem(trip, i)}
                       />
                       <span className={item.packed ? styles.checkedText : ''}>{item.text}</span>
+                      {item.packed && item.packedByName && (
+                        <span className={styles.packedBy}>{item.packedByName}</span>
+                      )}
                       <span className={styles.checkCat}>{item.category}</span>
                     </label>
                   ))}
