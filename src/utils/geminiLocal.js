@@ -1,6 +1,6 @@
 import { getApiKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
 
-const CACHE_KEY = 'fishing-app-local-guide-cache-v2';
+const CACHE_KEY = 'fishing-app-local-guide-cache-v3';
 const CACHE_TTL = 2 * 60 * 60 * 1000; // 2 hours
 const MAX_CACHE_ENTRIES = 30;
 
@@ -73,9 +73,9 @@ export async function getLocalRecommendations(location, apiKey) {
 IMPORTANT: Respond with ONLY a JSON object. No explanation, no markdown, no code fences. Just the raw JSON.
 
 Required JSON format:
-{"fishingGuides": [{"name": "Guide/charter name", "description": "Brief description of services", "priceRange": "$100-200/trip", "specialty": "Species or technique specialty", "website": "https://example.com", "rating": 4.5, "reviewCount": 128}], "hotels": [{"name": "Hotel name", "description": "Brief description", "priceRange": "$80-150/night", "distanceToWater": "5 min drive", "website": "https://example.com", "rating": 4.2, "reviewCount": 95}], "cabins": [{"name": "Cabin/lodge name", "description": "Brief description", "priceRange": "$120-200/night", "amenities": "Key amenities", "website": "https://example.com", "rating": 4.7, "reviewCount": 64}], "camping": [{"name": "Campground name", "description": "Brief description", "priceRange": "$20-40/night", "features": "Key features", "website": "https://example.com", "rating": 4.0, "reviewCount": 210}], "baitShops": [{"name": "Shop name", "description": "Brief description", "priceRange": "$", "services": "Key services like live bait, tackle rental, etc.", "website": "https://example.com", "rating": 4.3, "reviewCount": 47}], "localTips": "2-3 sentences of local fishing tips for this area", "regulationsUrl": "https://example.com/state-fishing-regulations", "licenseUrl": "https://example.com/buy-fishing-license"}
+{"fishingGuides": [{"name": "Guide/charter name", "description": "Brief description of services", "priceRange": "$100-200/trip", "specialty": "Species or technique specialty", "rating": 4.5, "reviewCount": 128}], "hotels": [{"name": "Hotel name", "description": "Brief description", "priceRange": "$80-150/night", "distanceToWater": "5 min drive", "rating": 4.2, "reviewCount": 95}], "cabins": [{"name": "Cabin/lodge name", "description": "Brief description", "priceRange": "$120-200/night", "amenities": "Key amenities", "rating": 4.7, "reviewCount": 64}], "camping": [{"name": "Campground name", "description": "Brief description", "priceRange": "$20-40/night", "features": "Key features", "rating": 4.0, "reviewCount": 210}], "baitShops": [{"name": "Shop name", "description": "Brief description", "priceRange": "$", "services": "Key services like live bait, tackle rental, etc.", "rating": 4.3, "reviewCount": 47}], "localTips": "2-3 sentences of local fishing tips for this area", "regulationsUrl": "https://example.com/state-fishing-regulations", "licenseUrl": "https://example.com/buy-fishing-license"}
 
-Provide 2-4 recommendations per category. Make them realistic and helpful for anglers visiting this area. Include a real website URL for each business when possible. Include an estimated Google rating (1-5) and approximate review count for each business. Also include "regulationsUrl" (a URL to the state/region fishing regulations page) and "licenseUrl" (a URL to apply for or purchase a fishing license in that state/region).`,
+Provide 2-4 recommendations per category. Make them realistic and helpful for anglers visiting this area. Do NOT include website URLs for individual businesses. Include an estimated Google rating (1-5) and approximate review count for each business. Include "regulationsUrl" (a URL to the state/region fishing regulations page) and "licenseUrl" (a URL to apply for or purchase a fishing license in that state/region) — these should be real official government URLs.`,
           },
         ],
       },
