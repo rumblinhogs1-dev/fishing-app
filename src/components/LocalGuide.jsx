@@ -154,6 +154,21 @@ export default function LocalGuide() {
             </div>
           )}
 
+          {(results.regulationsUrl || results.licenseUrl) && (
+            <div className={styles.regsRow}>
+              {results.regulationsUrl && (
+                <a href={results.regulationsUrl} target="_blank" rel="noopener noreferrer" className={styles.regsLink}>
+                  Fishing Regulations
+                </a>
+              )}
+              {results.licenseUrl && (
+                <a href={results.licenseUrl} target="_blank" rel="noopener noreferrer" className={styles.regsLink}>
+                  Get a Fishing License
+                </a>
+              )}
+            </div>
+          )}
+
           <div className={styles.tabs}>
             {CATEGORIES.map((cat) => (
               <button

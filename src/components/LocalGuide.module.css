@@ -74,6 +74,16 @@
 .tipsTitle { margin: 0 0 0.3rem; font-size: 0.85rem; color: #0d47a1; }
 .tipsText { margin: 0; font-size: 0.85rem; color: #333; }
 
+.regsRow {
+  display: flex; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap;
+}
+.regsLink {
+  display: inline-block; padding: 0.45rem 0.9rem; border: 1.5px solid #0d47a1;
+  border-radius: 8px; background: #fff; color: #0d47a1; font-size: 0.82rem;
+  font-weight: 600; text-decoration: none; transition: background 0.2s;
+}
+.regsLink:hover { background: #e8f0fe; }
+
 .disclaimer {
   text-align: center; font-size: 0.75rem; color: #aaa; margin-top: 1.5rem;
   font-style: italic;
