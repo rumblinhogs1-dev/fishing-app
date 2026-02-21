@@ -8,7 +8,6 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { SkeletonList } from './components/Skeleton';
 import { useCatchesProvider } from './hooks/useCatchesProvider';
 import { useSpots } from './hooks/useSpots';
-import { useTackleBox } from './hooks/useTackleBox';
 import { useAuth } from './contexts/AuthContext';
 import styles from './App.module.css';
 
@@ -52,7 +51,6 @@ const MapView = lazyRetry(() => import('./components/MapView'));
 const Forecast = lazyRetry(() => import('./components/Forecast'));
 const SpotsList = lazyRetry(() => import('./components/SpotsList'));
 const Leaderboard = lazyRetry(() => import('./components/Leaderboard'));
-const TackleBox = lazyRetry(() => import('./components/TackleBox'));
 const TripPlanner = lazyRetry(() => import('./components/TripPlanner'));
 const ConservationGuide = lazyRetry(() => import('./components/ConservationGuide'));
 const Notifications = lazyRetry(() => import('./components/Notifications'));
@@ -73,7 +71,6 @@ export default function App() {
   const { user, loading: authLoading } = useAuth();
   const { catches, loading: dataLoading, addCatch, updateCatch, deleteCatch, getCatch, isAuthenticated } = useCatchesProvider();
   const { spots } = useSpots();
-  const { items: tackleItems } = useTackleBox();
   const [showMigration, setShowMigration] = useState(true);
   const [showSearch, setShowSearch] = useState(false);
 
@@ -139,7 +136,6 @@ export default function App() {
                 <Route path="/forecast" element={<Forecast />} />
                 <Route path="/regulations" element={<Regulations />} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
-                <Route path="/tackle" element={<TackleBox />} />
                 <Route path="/trips" element={<TripPlanner catches={catches} />} />
                 <Route path="/conservation" element={<ConservationGuide />} />
                 <Route path="/notifications" element={<Notifications />} />
@@ -156,7 +152,6 @@ export default function App() {
         <SearchModal
           catches={catches}
           spots={spots}
-          tackleItems={tackleItems}
           onClose={() => setShowSearch(false)}
         />
       )}

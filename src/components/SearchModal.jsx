@@ -2,9 +2,9 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './SearchModal.module.css';
 
-export default function SearchModal({ catches, spots, tackleItems, onClose }) {
+export default function SearchModal({ catches, spots, onClose }) {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState({ catches: [], spots: [], tackle: [] });
+  const [results, setResults] = useState({ catches: [], spots: [] });
   const inputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ export default function SearchModal({ catches, spots, tackleItems, onClose }) {
 
   const search = useCallback((q) => {
     if (!q.trim()) {
-      setResults({ catches: [], spots: [], tackle: [] });
+      setResults({ catches: [], spots: [] });
       return;
     }
     const lower = q.toLowerCase();
@@ -38,13 +38,8 @@ export default function SearchModal({ catches, spots, tackleItems, onClose }) {
       (s.notes && s.notes.toLowerCase().includes(lower))
     ).slice(0, 5);
 
-    const matchedTackle = (tackleItems || []).filter((t) =>
-      (t.name && t.name.toLowerCase().includes(lower)) ||
-      (t.category && t.category.toLowerCase().includes(lower))
-    ).slice(0, 5);
-
-    setResults({ catches: matchedCatches, spots: matchedSpots, tackle: matchedTackle });
-  }, [catches, spots, tackleItems]);
+    setResults({ catches: matchedCatches, spots: matchedSpots });
+  }, [catches, spots]);
 
   useEffect(() => {
     const timer = setTimeout(() => search(query), 150);
@@ -56,7 +51,7 @@ export default function SearchModal({ catches, spots, tackleItems, onClose }) {
     navigate(path);
   }
 
-  const hasResults = results.catches.length || results.spots.length || results.tackle.length;
+  const hasResults = results.catches.length || results.spots.length;
 
   return (
     <div className={styles.overlay} onClick={onClose}>
@@ -69,7 +64,7 @@ export default function SearchModal({ catches, spots, tackleItems, onClose }) {
             ref={inputRef}
             className={styles.input}
             type="text"
-            placeholder="Search catches, spots, tackle..."
+            placeholder="Search catches, spots..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
@@ -119,22 +114,6 @@ export default function SearchModal({ catches, spots, tackleItems, onClose }) {
             </div>
           )}
 
-          {results.tackle.length > 0 && (
-            <div className={styles.group}>
-              <div className={styles.groupTitle}>Tackle</div>
-              {results.tackle.map((t) => (
-                <a key={t.id} className={styles.resultItem} onClick={() => handleSelect('/tackle')}>
-                  <span className={`${styles.resultIcon} ${styles.iconTackle}`}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2z"/></svg>
-                  </span>
-                  <div className={styles.resultText}>
-                    <div className={styles.resultTitle}>{t.name}</div>
-                    <div className={styles.resultSub}>{t.category} - Qty: {t.quantity}</div>
-                  </div>
-                </a>
-              ))}
-            </div>
-          )}
         </div>
       </div>
     </div>
