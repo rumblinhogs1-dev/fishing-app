@@ -48,8 +48,7 @@ export async function deleteTrip(tripId) {
 export function subscribeToTrips(userId, callback) {
   const q = query(
     collection(db, TRIPS_COL),
-    where('memberIds', 'array-contains', userId),
-    orderBy('createdAt', 'desc')
+    where('memberIds', 'array-contains', userId)
   );
   return onSnapshot(q, (snapshot) => {
     const trips = snapshot.docs.map((d) => ({
@@ -58,6 +57,7 @@ export function subscribeToTrips(userId, callback) {
       createdAt: d.data().createdAt?.toDate?.()?.toISOString() || null,
       updatedAt: d.data().updatedAt?.toDate?.()?.toISOString() || null,
     }));
+    trips.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
     callback(trips);
   }, (error) => {
     console.error('Firestore subscription error:', error);
