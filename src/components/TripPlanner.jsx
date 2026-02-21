@@ -3,10 +3,8 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useFriends } from '../hooks/useFriends';
 import { useSpots } from '../hooks/useSpots';
-import { useTackleBox } from '../hooks/useTackleBox';
-import { addTrip, updateTrip, deleteTrip, subscribeToTrips, generateChecklist, backfillMemberIds } from '../utils/trips';
+import { addTrip, updateTrip, deleteTrip, subscribeToTrips, backfillMemberIds } from '../utils/trips';
 import { notifyTripInvite } from '../utils/notifications';
-import { getFullForecast } from '../utils/forecast';
 import { getGPSLocation, reverseGeocode } from '../utils/weather';
 import { SkeletonCard } from './Skeleton';
 import { useToast } from '../contexts/ToastContext';
@@ -26,15 +24,11 @@ export default function TripPlanner() {
   const { user } = useAuth();
   const { friendProfiles } = useFriends();
   const { spots } = useSpots();
-  const { items: tackleItems } = useTackleBox();
   const toast = useToast();
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState(EMPTY_TRIP);
-  const [forecast, setForecast] = useState(null);
-  const [forecastLoading, setForecastLoading] = useState(false);
-  const [checklist, setChecklist] = useState([]);
   const [activeTrip, setActiveTrip] = useState(null);
   const [saving, setSaving] = useState(false);
   const [invitedIds, setInvitedIds] = useState([]);
@@ -77,21 +71,6 @@ export default function TripPlanner() {
     }
   }
 
-  async function handleFetchForecast() {
-    if (!form.lat || !form.lng) return;
-    setForecastLoading(true);
-    try {
-      const data = await getFullForecast(form.lat, form.lng);
-      setForecast(data);
-      const cl = generateChecklist(form.targetSpecies, data, tackleItems);
-      setChecklist(cl);
-    } catch (err) {
-      console.error('Forecast error:', err);
-    } finally {
-      setForecastLoading(false);
-    }
-  }
-
   function toggleInvite(id) {
     setInvitedIds((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
@@ -103,7 +82,6 @@ export default function TripPlanner() {
     if (!form.name.trim() || !form.destination.trim()) return;
     setSaving(true);
     try {
-      const cl = checklist.length > 0 ? checklist : generateChecklist(form.targetSpecies, forecast, tackleItems);
       const members = [
         { userId: user.uid, displayName: user.displayName || 'You', photoURL: user.photoURL || null },
         ...invitedIds.map((id) => {
@@ -119,7 +97,6 @@ export default function TripPlanner() {
         date: form.date || null,
         endDate: form.endDate || null,
         targetSpecies: form.targetSpecies.trim(),
-        checklist: cl,
         catches: [],
         invitedIds,
         members,
@@ -131,8 +108,6 @@ export default function TripPlanner() {
       });
       toast.success('Trip saved!');
       setForm(EMPTY_TRIP);
-      setChecklist([]);
-      setForecast(null);
       setInvitedIds([]);
       setShowForm(false);
       setActiveTrip(newId);
@@ -144,27 +119,8 @@ export default function TripPlanner() {
     }
   }
 
-  async function handleToggleCheckItem(trip, index) {
-    const updated = [...(trip.checklist || [])];
-    const item = updated[index];
-    const nowPacked = !item.packed;
-    updated[index] = {
-      ...item,
-      packed: nowPacked,
-      packedBy: nowPacked ? user.uid : null,
-      packedByName: nowPacked ? (user.displayName || 'You') : null,
-    };
-    await updateTrip(trip.id, { checklist: updated });
-  }
-
   async function handleCompleteTrip(trip) {
     await updateTrip(trip.id, { status: 'completed' });
-  }
-
-  function toggleChecklistItem(index) {
-    setChecklist((prev) => prev.map((item, i) =>
-      i === index ? { ...item, packed: !item.packed } : item
-    ));
   }
 
   function startEditing(trip) {
@@ -298,45 +254,6 @@ export default function TripPlanner() {
               onChange={(e) => setForm({ ...form, targetSpecies: e.target.value })}
             />
           </div>
-
-          {form.lat && form.lng && (
-            <button type="button" className={styles.forecastBtn} onClick={handleFetchForecast} disabled={forecastLoading}>
-              {forecastLoading ? 'Loading forecast...' : 'Pull Forecast for This Location'}
-            </button>
-          )}
-
-          {forecast && forecast.days?.[0] && (
-            <div className={styles.forecastPreview}>
-              <h4 className={styles.forecastTitle}>Forecast Preview</h4>
-              <div className={styles.forecastGrid}>
-                <span>Temp: {forecast.days[0].tempMin}° - {forecast.days[0].tempMax}°F</span>
-                <span>Wind: {forecast.days[0].windMax} mph</span>
-                <span>Precip: {forecast.days[0].precip}"</span>
-                {forecast.days[0].biteScore && (
-                  <span style={{ color: forecast.days[0].biteScore.color }}>
-                    Bite Score: {forecast.days[0].biteScore.score}/10
-                  </span>
-                )}
-              </div>
-            </div>
-          )}
-
-          {checklist.length > 0 && (
-            <div className={styles.checklistPreview}>
-              <h4 className={styles.checklistTitle}>Suggested Packing List</h4>
-              {checklist.map((item, i) => (
-                <label key={i} className={styles.checkItem}>
-                  <input
-                    type="checkbox"
-                    checked={item.packed}
-                    onChange={() => toggleChecklistItem(i)}
-                  />
-                  <span className={item.packed ? styles.checkedText : ''}>{item.text}</span>
-                  <span className={styles.checkCat}>{item.category}</span>
-                </label>
-              ))}
-            </div>
-          )}
 
           <div className={styles.inviteSection}>
             <span className={styles.inviteLabel}>
@@ -485,25 +402,6 @@ export default function TripPlanner() {
                                 {(m.displayName || '?')[0].toUpperCase()}
                               </span>
                             )
-                          ))}
-                        </div>
-                      )}
-                      {trip.checklist && trip.checklist.length > 0 && (
-                        <div className={styles.tripChecklist}>
-                          <h5 className={styles.checklistHeading}>Checklist ({(trip.checklist || []).filter(c => c.packed).length}/{(trip.checklist || []).length})</h5>
-                          {trip.checklist.map((item, i) => (
-                            <label key={i} className={styles.checkItem}>
-                              <input
-                                type="checkbox"
-                                checked={item.packed}
-                                onChange={() => handleToggleCheckItem(trip, i)}
-                              />
-                              <span className={item.packed ? styles.checkedText : ''}>{item.text}</span>
-                              {item.packed && item.packedByName && (
-                                <span className={styles.packedBy}>{item.packedByName}</span>
-                              )}
-                              <span className={styles.checkCat}>{item.category}</span>
-                            </label>
                           ))}
                         </div>
                       )}
