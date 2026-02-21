@@ -75,9 +75,16 @@
   box-shadow: 0 2px 10px rgba(0,0,0,0.07); margin-bottom: 0.75rem;
 }
 .tripCompleted { opacity: 0.7; }
+.tripClickable { cursor: pointer; }
+.tripClickable:hover .tripName { color: #1a73e8; }
 .tripHeader { display: flex; justify-content: space-between; align-items: flex-start; }
-.tripName { margin: 0; font-size: 1rem; color: #222; }
-.tripActions { display: flex; gap: 0.35rem; }
+.tripName { margin: 0; font-size: 1rem; color: #222; transition: color 0.15s; }
+.expandIcon { color: #aaa; font-size: 0.7rem; margin-top: 0.2rem; }
+.tripDetails {
+  margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #f0f0f0;
+}
+.tripActions { display: flex; gap: 0.35rem; margin-bottom: 0.5rem; }
+.checklistHeading { margin: 0 0 0.35rem; font-size: 0.85rem; color: #555; }
 .completeBtn {
   padding: 0.25rem 0.6rem; border: 1px solid #4caf50; border-radius: 6px;
   background: #fff; color: #4caf50; font-size: 0.75rem; font-weight: 600;

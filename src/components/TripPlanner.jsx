@@ -438,74 +438,79 @@ export default function TripPlanner() {
                 </form>
               ) : (
                 <>
-                  <div className={styles.tripHeader}>
-                    <h4 className={styles.tripName}>{trip.name}</h4>
-                    <div className={styles.tripActions}>
-                      <button className={styles.editBtn} onClick={() => startEditing(trip)} title="Edit trip">
-                        Edit
-                      </button>
-                      <button className={styles.completeBtn} onClick={() => handleCompleteTrip(trip)} title="Mark complete">
-                        Done
-                      </button>
-                      <button className={styles.tripDeleteBtn} onClick={() => deleteTrip(trip.id)} title="Delete">
-                        &times;
-                      </button>
-                    </div>
-                  </div>
-                  <div className={styles.tripMeta}>
-                    {trip.destination && <span>{trip.destination}</span>}
-                    {trip.date && (
-                      <span>
-                        {new Date(trip.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
-                        {trip.endDate && ` \u2192 ${new Date(trip.endDate).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}`}
-                      </span>
-                    )}
-                    {trip.targetSpecies && <span className={styles.speciesTag}>{trip.targetSpecies}</span>}
-                  </div>
-                  {trip.destination && (
-                    <Link to={`/local-guide?location=${encodeURIComponent(trip.destination)}`} className={styles.guideLink}>
-                      Find Guides & Lodging
-                    </Link>
-                  )}
-                  {trip.members && trip.members.length > 1 && (
-                    <div className={styles.memberAvatars}>
-                      {trip.members.map((m) => (
-                        m.photoURL ? (
-                          <img key={m.userId} src={m.photoURL} alt={m.displayName} className={styles.memberAvatar} referrerPolicy="no-referrer" title={m.displayName} />
-                        ) : (
-                          <span key={m.userId} className={styles.memberInitial} title={m.displayName}>
-                            {(m.displayName || '?')[0].toUpperCase()}
-                          </span>
-                        )
-                      ))}
-                    </div>
-                  )}
-                  <button
-                    className={styles.toggleChecklist}
+                  <div
+                    className={styles.tripClickable}
                     onClick={() => setActiveTrip(activeTrip === trip.id ? null : trip.id)}
                   >
-                    {activeTrip === trip.id ? 'Hide Checklist' : `Checklist (${(trip.checklist || []).filter(c => c.packed).length}/${(trip.checklist || []).length})`}
-                  </button>
-                  {activeTrip === trip.id && trip.checklist && (
-                    <div className={styles.tripChecklist}>
-                      {trip.checklist.map((item, i) => (
-                        <label key={i} className={styles.checkItem}>
-                          <input
-                            type="checkbox"
-                            checked={item.packed}
-                            onChange={() => handleToggleCheckItem(trip, i)}
-                          />
-                          <span className={item.packed ? styles.checkedText : ''}>{item.text}</span>
-                          {item.packed && item.packedByName && (
-                            <span className={styles.packedBy}>{item.packedByName}</span>
-                          )}
-                          <span className={styles.checkCat}>{item.category}</span>
-                        </label>
-                      ))}
+                    <div className={styles.tripHeader}>
+                      <h4 className={styles.tripName}>{trip.name}</h4>
+                      <span className={styles.expandIcon}>{activeTrip === trip.id ? '\u25B2' : '\u25BC'}</span>
                     </div>
-                  )}
-                  {trip.status === 'completed' && (
-                    <Link to="/add" className={styles.logLink}>Log catches from this trip</Link>
+                    <div className={styles.tripMeta}>
+                      {trip.destination && <span>{trip.destination}</span>}
+                      {trip.date && (
+                        <span>
+                          {new Date(trip.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                          {trip.endDate && ` \u2192 ${new Date(trip.endDate).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}`}
+                        </span>
+                      )}
+                      {trip.targetSpecies && <span className={styles.speciesTag}>{trip.targetSpecies}</span>}
+                    </div>
+                  </div>
+                  {activeTrip === trip.id && (
+                    <div className={styles.tripDetails}>
+                      <div className={styles.tripActions}>
+                        <button className={styles.editBtn} onClick={() => startEditing(trip)} title="Edit trip">
+                          Edit
+                        </button>
+                        <button className={styles.completeBtn} onClick={() => handleCompleteTrip(trip)} title="Mark complete">
+                          Done
+                        </button>
+                        <button className={styles.tripDeleteBtn} onClick={() => deleteTrip(trip.id)} title="Delete">
+                          &times;
+                        </button>
+                      </div>
+                      {trip.destination && (
+                        <Link to={`/local-guide?location=${encodeURIComponent(trip.destination)}`} className={styles.guideLink}>
+                          Find Guides & Lodging
+                        </Link>
+                      )}
+                      {trip.members && trip.members.length > 1 && (
+                        <div className={styles.memberAvatars}>
+                          {trip.members.map((m) => (
+                            m.photoURL ? (
+                              <img key={m.userId} src={m.photoURL} alt={m.displayName} className={styles.memberAvatar} referrerPolicy="no-referrer" title={m.displayName} />
+                            ) : (
+                              <span key={m.userId} className={styles.memberInitial} title={m.displayName}>
+                                {(m.displayName || '?')[0].toUpperCase()}
+                              </span>
+                            )
+                          ))}
+                        </div>
+                      )}
+                      {trip.checklist && trip.checklist.length > 0 && (
+                        <div className={styles.tripChecklist}>
+                          <h5 className={styles.checklistHeading}>Checklist ({(trip.checklist || []).filter(c => c.packed).length}/{(trip.checklist || []).length})</h5>
+                          {trip.checklist.map((item, i) => (
+                            <label key={i} className={styles.checkItem}>
+                              <input
+                                type="checkbox"
+                                checked={item.packed}
+                                onChange={() => handleToggleCheckItem(trip, i)}
+                              />
+                              <span className={item.packed ? styles.checkedText : ''}>{item.text}</span>
+                              {item.packed && item.packedByName && (
+                                <span className={styles.packedBy}>{item.packedByName}</span>
+                              )}
+                              <span className={styles.checkCat}>{item.category}</span>
+                            </label>
+                          ))}
+                        </div>
+                      )}
+                      {trip.status === 'completed' && (
+                        <Link to="/add" className={styles.logLink}>Log catches from this trip</Link>
+                      )}
+                    </div>
                   )}
                 </>
               )}
