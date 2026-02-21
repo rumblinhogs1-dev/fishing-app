@@ -38,6 +38,8 @@ export default function TripPlanner() {
   const [activeTrip, setActiveTrip] = useState(null);
   const [saving, setSaving] = useState(false);
   const [invitedIds, setInvitedIds] = useState([]);
+  const [editingTrip, setEditingTrip] = useState(null);
+  const [editForm, setEditForm] = useState(EMPTY_TRIP);
   const backfilled = useRef(false);
 
   // Backfill existing trips that lack memberIds
@@ -163,6 +165,49 @@ export default function TripPlanner() {
     setChecklist((prev) => prev.map((item, i) =>
       i === index ? { ...item, packed: !item.packed } : item
     ));
+  }
+
+  function startEditing(trip) {
+    setEditingTrip(trip.id);
+    setEditForm({
+      name: trip.name || '',
+      destination: trip.destination || '',
+      lat: trip.lat || '',
+      lng: trip.lng || '',
+      date: trip.date || '',
+      endDate: trip.endDate || '',
+      targetSpecies: trip.targetSpecies || '',
+    });
+  }
+
+  function cancelEditing() {
+    setEditingTrip(null);
+    setEditForm(EMPTY_TRIP);
+  }
+
+  async function handleSaveEdit(e) {
+    e.preventDefault();
+    if (!editForm.name.trim() || !editForm.destination.trim()) return;
+    setSaving(true);
+    try {
+      await updateTrip(editingTrip, {
+        name: editForm.name.trim(),
+        destination: editForm.destination.trim(),
+        lat: editForm.lat || null,
+        lng: editForm.lng || null,
+        date: editForm.date || null,
+        endDate: editForm.endDate || null,
+        targetSpecies: editForm.targetSpecies.trim(),
+      });
+      toast.success('Trip updated!');
+      setEditingTrip(null);
+      setEditForm(EMPTY_TRIP);
+    } catch (err) {
+      console.error('Failed to update trip:', err);
+      toast.error('Failed to update trip');
+    } finally {
+      setSaving(false);
+    }
   }
 
   if (!user) {
@@ -334,71 +379,135 @@ export default function TripPlanner() {
           <h3 className={styles.sectionTitle}>Upcoming Trips</h3>
           {planned.map((trip) => (
             <div key={trip.id} className={styles.tripCard}>
-              <div className={styles.tripHeader}>
-                <h4 className={styles.tripName}>{trip.name}</h4>
-                <div className={styles.tripActions}>
-                  <button className={styles.completeBtn} onClick={() => handleCompleteTrip(trip)} title="Mark complete">
-                    Done
-                  </button>
-                  <button className={styles.tripDeleteBtn} onClick={() => deleteTrip(trip.id)} title="Delete">
-                    &times;
-                  </button>
-                </div>
-              </div>
-              <div className={styles.tripMeta}>
-                {trip.destination && <span>{trip.destination}</span>}
-                {trip.date && (
-                  <span>
-                    {new Date(trip.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
-                    {trip.endDate && ` \u2192 ${new Date(trip.endDate).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}`}
-                  </span>
-                )}
-                {trip.targetSpecies && <span className={styles.speciesTag}>{trip.targetSpecies}</span>}
-              </div>
-              {trip.destination && (
-                <Link to={`/local-guide?location=${encodeURIComponent(trip.destination)}`} className={styles.guideLink}>
-                  Find Guides & Lodging
-                </Link>
-              )}
-              {trip.members && trip.members.length > 1 && (
-                <div className={styles.memberAvatars}>
-                  {trip.members.map((m) => (
-                    m.photoURL ? (
-                      <img key={m.userId} src={m.photoURL} alt={m.displayName} className={styles.memberAvatar} referrerPolicy="no-referrer" title={m.displayName} />
-                    ) : (
-                      <span key={m.userId} className={styles.memberInitial} title={m.displayName}>
-                        {(m.displayName || '?')[0].toUpperCase()}
-                      </span>
-                    )
-                  ))}
-                </div>
-              )}
-              <button
-                className={styles.toggleChecklist}
-                onClick={() => setActiveTrip(activeTrip === trip.id ? null : trip.id)}
-              >
-                {activeTrip === trip.id ? 'Hide Checklist' : `Checklist (${(trip.checklist || []).filter(c => c.packed).length}/${(trip.checklist || []).length})`}
-              </button>
-              {activeTrip === trip.id && trip.checklist && (
-                <div className={styles.tripChecklist}>
-                  {trip.checklist.map((item, i) => (
-                    <label key={i} className={styles.checkItem}>
+              {editingTrip === trip.id ? (
+                <form className={styles.editForm} onSubmit={handleSaveEdit}>
+                  <div className={styles.fieldGroup}>
+                    <label className={styles.label}>Trip Name</label>
+                    <input
+                      className={styles.input}
+                      value={editForm.name}
+                      onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                      required
+                      autoFocus
+                    />
+                  </div>
+                  <div className={styles.fieldGroup}>
+                    <label className={styles.label}>Destination</label>
+                    <input
+                      className={styles.input}
+                      value={editForm.destination}
+                      onChange={(e) => setEditForm({ ...editForm, destination: e.target.value })}
+                    />
+                  </div>
+                  <div className={styles.row}>
+                    <div className={styles.fieldGroup}>
+                      <label className={styles.label}>Arrival</label>
                       <input
-                        type="checkbox"
-                        checked={item.packed}
-                        onChange={() => handleToggleCheckItem(trip, i)}
+                        type="datetime-local"
+                        className={styles.input}
+                        value={editForm.date}
+                        onChange={(e) => setEditForm({ ...editForm, date: e.target.value })}
                       />
-                      <span className={item.packed ? styles.checkedText : ''}>{item.text}</span>
-                      {item.packed && item.packedByName && (
-                        <span className={styles.packedBy}>{item.packedByName}</span>
-                      )}
-                      <span className={styles.checkCat}>{item.category}</span>
-                    </label>
-                  ))}
-                </div>
-              )}
-              {trip.status === 'completed' && (
-                <Link to="/add" className={styles.logLink}>Log catches from this trip</Link>
+                    </div>
+                    <div className={styles.fieldGroup}>
+                      <label className={styles.label}>Departure</label>
+                      <input
+                        type="datetime-local"
+                        className={styles.input}
+                        value={editForm.endDate}
+                        onChange={(e) => setEditForm({ ...editForm, endDate: e.target.value })}
+                      />
+                    </div>
+                  </div>
+                  <div className={styles.fieldGroup}>
+                    <label className={styles.label}>Target Species</label>
+                    <input
+                      className={styles.input}
+                      value={editForm.targetSpecies}
+                      onChange={(e) => setEditForm({ ...editForm, targetSpecies: e.target.value })}
+                    />
+                  </div>
+                  <div className={styles.editActions}>
+                    <button type="submit" className={styles.saveBtn} disabled={saving}>
+                      {saving ? 'Saving...' : 'Save'}
+                    </button>
+                    <button type="button" className={styles.cancelBtn} onClick={cancelEditing}>
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <>
+                  <div className={styles.tripHeader}>
+                    <h4 className={styles.tripName}>{trip.name}</h4>
+                    <div className={styles.tripActions}>
+                      <button className={styles.editBtn} onClick={() => startEditing(trip)} title="Edit trip">
+                        Edit
+                      </button>
+                      <button className={styles.completeBtn} onClick={() => handleCompleteTrip(trip)} title="Mark complete">
+                        Done
+                      </button>
+                      <button className={styles.tripDeleteBtn} onClick={() => deleteTrip(trip.id)} title="Delete">
+                        &times;
+                      </button>
+                    </div>
+                  </div>
+                  <div className={styles.tripMeta}>
+                    {trip.destination && <span>{trip.destination}</span>}
+                    {trip.date && (
+                      <span>
+                        {new Date(trip.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                        {trip.endDate && ` \u2192 ${new Date(trip.endDate).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}`}
+                      </span>
+                    )}
+                    {trip.targetSpecies && <span className={styles.speciesTag}>{trip.targetSpecies}</span>}
+                  </div>
+                  {trip.destination && (
+                    <Link to={`/local-guide?location=${encodeURIComponent(trip.destination)}`} className={styles.guideLink}>
+                      Find Guides & Lodging
+                    </Link>
+                  )}
+                  {trip.members && trip.members.length > 1 && (
+                    <div className={styles.memberAvatars}>
+                      {trip.members.map((m) => (
+                        m.photoURL ? (
+                          <img key={m.userId} src={m.photoURL} alt={m.displayName} className={styles.memberAvatar} referrerPolicy="no-referrer" title={m.displayName} />
+                        ) : (
+                          <span key={m.userId} className={styles.memberInitial} title={m.displayName}>
+                            {(m.displayName || '?')[0].toUpperCase()}
+                          </span>
+                        )
+                      ))}
+                    </div>
+                  )}
+                  <button
+                    className={styles.toggleChecklist}
+                    onClick={() => setActiveTrip(activeTrip === trip.id ? null : trip.id)}
+                  >
+                    {activeTrip === trip.id ? 'Hide Checklist' : `Checklist (${(trip.checklist || []).filter(c => c.packed).length}/${(trip.checklist || []).length})`}
+                  </button>
+                  {activeTrip === trip.id && trip.checklist && (
+                    <div className={styles.tripChecklist}>
+                      {trip.checklist.map((item, i) => (
+                        <label key={i} className={styles.checkItem}>
+                          <input
+                            type="checkbox"
+                            checked={item.packed}
+                            onChange={() => handleToggleCheckItem(trip, i)}
+                          />
+                          <span className={item.packed ? styles.checkedText : ''}>{item.text}</span>
+                          {item.packed && item.packedByName && (
+                            <span className={styles.packedBy}>{item.packedByName}</span>
+                          )}
+                          <span className={styles.checkCat}>{item.category}</span>
+                        </label>
+                      ))}
+                    </div>
+                  )}
+                  {trip.status === 'completed' && (
+                    <Link to="/add" className={styles.logLink}>Log catches from this trip</Link>
+                  )}
+                </>
               )}
             </div>
           ))}

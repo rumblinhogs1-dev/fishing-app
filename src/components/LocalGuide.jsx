@@ -14,9 +14,24 @@ const CATEGORIES = [
   { key: 'baitShops', label: 'Bait Shops' },
 ];
 
+function StarRating({ rating, reviewCount }) {
+  if (!rating) return null;
+  const full = Math.floor(rating);
+  const half = rating - full >= 0.25 && rating - full < 0.75;
+  const empty = 5 - full - (half ? 1 : 0);
+  return (
+    <span className={styles.cardRating}>
+      {'★'.repeat(full)}{half ? '½' : ''}{'☆'.repeat(empty)}{' '}
+      {rating.toFixed(1)}
+      {reviewCount != null && <span className={styles.reviewCount}>({reviewCount})</span>}
+    </span>
+  );
+}
+
 function CardMeta({ item, category }) {
   return (
     <div className={styles.cardMeta}>
+      <StarRating rating={item.rating} reviewCount={item.reviewCount} />
       {item.priceRange && <span>{item.priceRange}</span>}
       {item.specialty && <span className={styles.cardTag}>{item.specialty}</span>}
       {item.distanceToWater && <span>{item.distanceToWater}</span>}
