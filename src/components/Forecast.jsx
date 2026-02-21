@@ -6,6 +6,7 @@ import { IDEAL_TEMP_RANGES, getSpeciesTempStatus } from '../utils/solunar';
 import { getSeasonalCalendar } from '../utils/geminiSeasonalCalendar';
 import { getRecommendations } from '../utils/geminiRecommend';
 import { getInsectHatch } from '../utils/geminiHatch';
+import { getFlyPatternImage } from '../utils/flyPatternImage';
 import SeasonalCalendar from './SeasonalCalendar';
 import styles from './Forecast.module.css';
 
@@ -390,13 +391,73 @@ function DayDetail({ day, index }) {
   );
 }
 
-function HatchChart({ data }) {
-  if (!data) return null;
+function HatchCard({ insect }) {
+  const [expanded, setExpanded] = useState(false);
+  const [flyImage, setFlyImage] = useState(null);
+  const [imageLoading, setImageLoading] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
+
   const activityColor = (level) => {
     if (level === 'high') return '#2e7d32';
     if (level === 'moderate') return '#f9a825';
     return '#999';
   };
+
+  function handleClick() {
+    const next = !expanded;
+    setExpanded(next);
+    if (next && !flyImage && !imageLoading && !imageFailed) {
+      setImageLoading(true);
+      getFlyPatternImage(insect.flyPattern, insect.name)
+        .then((img) => {
+          if (img) setFlyImage(img);
+          else setImageFailed(true);
+        })
+        .catch(() => setImageFailed(true))
+        .finally(() => setImageLoading(false));
+    }
+  }
+
+  const searchUrl = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(insect.flyPattern + ' fly fishing fly')}`;
+
+  return (
+    <div className={`${styles.hatchCard} ${expanded ? styles.hatchCardExpanded : ''}`} onClick={handleClick} role="button" tabIndex={0}>
+      <div className={styles.hatchInsect}>
+        {insect.name}
+        <span className={styles.hatchOrder}>{insect.order}</span>
+        <span className={styles.hatchExpandIcon}>{expanded ? '▾' : '▸'}</span>
+      </div>
+      <div className={styles.hatchPattern}>{insect.flyPattern}</div>
+      <div className={styles.hatchMeta}>
+        Size {insect.size} &middot; {insect.color}
+        <span className={styles.hatchActivity} style={{ background: activityColor(insect.activityLevel) }} />
+        {insect.activityLevel}
+        {insect.bestTime && <> &middot; Best: {insect.bestTime}</>}
+      </div>
+
+      {expanded && (
+        <div className={styles.hatchExpanded} onClick={(e) => e.stopPropagation()}>
+          <div className={styles.hatchFlyImageWrap}>
+            {imageLoading && <div className={styles.hatchFlyLoading}>Generating fly image...</div>}
+            {flyImage && <img src={flyImage} alt={insect.flyPattern} className={styles.hatchFlyImage} />}
+            {imageFailed && !flyImage && (
+              <a href={searchUrl} target="_blank" rel="noopener noreferrer" className={styles.hatchFlyLink}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                View {insect.flyPattern} images
+              </a>
+            )}
+          </div>
+          <div className={styles.hatchFlyCaption}>
+            <strong>{insect.flyPattern}</strong> — imitates the {insect.name} ({insect.order})
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function HatchChart({ data }) {
+  if (!data) return null;
   const intensityPct = (val) => Math.max(0, Math.min(100, ((val || 1) / 5) * 100));
   const intensityBg = (val) => {
     if (val >= 4) return 'rgba(46,125,50,0.15)';
@@ -410,21 +471,9 @@ function HatchChart({ data }) {
       {/* Current Hatches */}
       {data.currentHatches?.length > 0 && (
         <>
-          <h4 style={{ fontSize: '0.9rem', margin: '0 0 0.5rem', color: '#555' }}>Current Hatches</h4>
+          <h4 style={{ fontSize: '0.9rem', margin: '0 0 0.5rem', color: '#555' }}>Current Hatches <span style={{ fontSize: '0.75rem', color: '#999', fontWeight: 400 }}>— tap for fly photo</span></h4>
           {data.currentHatches.map((insect, i) => (
-            <div key={i} className={styles.hatchCard}>
-              <div className={styles.hatchInsect}>
-                {insect.name}
-                <span className={styles.hatchOrder}>{insect.order}</span>
-              </div>
-              <div className={styles.hatchPattern}>{insect.flyPattern}</div>
-              <div className={styles.hatchMeta}>
-                Size {insect.size} &middot; {insect.color}
-                <span className={styles.hatchActivity} style={{ background: activityColor(insect.activityLevel) }} />
-                {insect.activityLevel}
-                {insect.bestTime && <> &middot; Best: {insect.bestTime}</>}
-              </div>
-            </div>
+            <HatchCard key={i} insect={insect} />
           ))}
         </>
       )}

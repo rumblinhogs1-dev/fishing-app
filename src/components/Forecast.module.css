@@ -880,6 +880,74 @@
   margin-top: 2px;
 }
 
+.hatchCard {
+  cursor: pointer;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.hatchCard:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+.hatchCardExpanded {
+  border-color: #1a73e8;
+  border-left-color: #1a73e8;
+}
+
+.hatchExpandIcon {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.hatchExpanded {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #eee;
+}
+
+.hatchFlyImageWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80px;
+  margin-bottom: 0.4rem;
+}
+
+.hatchFlyImage {
+  max-width: 100%;
+  max-height: 220px;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.hatchFlyLoading {
+  font-size: 0.8rem;
+  color: #888;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.hatchFlyLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  color: #1a73e8;
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.hatchFlyLink:hover {
+  background: #e8f0fe;
+}
+
+.hatchFlyCaption {
+  font-size: 0.8rem;
+  color: #555;
+  text-align: center;
+}
+
 /* Attribution */
 .attribution {
   text-align: center;
