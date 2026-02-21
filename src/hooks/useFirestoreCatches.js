@@ -5,7 +5,6 @@ import {
   updateCatch as fsUpdateCatch,
   deleteCatch as fsDeleteCatch,
 } from '../utils/firestore';
-import { uploadCatchImage, deleteCatchImage } from '../utils/firebaseStorage';
 import { notifyFriendCatch } from '../utils/notifications';
 import { cacheCatches, getCachedCatches } from '../utils/offlineStorage';
 
@@ -69,38 +68,15 @@ export function useFirestoreCatches(user) {
     data.authorDisplayName = user?.displayName || 'Angler';
     data.authorPhotoURL = user?.photoURL || null;
 
-    // Upload image BEFORE creating the doc so imageUrl is set from the start
+    // Store image data URL directly in Firestore (already compressed by ImageUpload)
     if (image && image.startsWith('data:')) {
-      // Need a temp ID for the storage path — create doc first with placeholder
-      const catchId = await fsAddCatch(userId, { ...data, imageUrl: '', lureImage: '' });
-      try {
-        const imageUrl = await uploadCatchImage(userId, catchId, image);
-        if (imageUrl) await fsUpdateCatch(catchId, { imageUrl });
-      } catch (err) {
-        console.error('Image upload failed:', err);
-      }
-      if (lureImage && lureImage.startsWith('data:')) {
-        try {
-          const lureImageUrl = await uploadCatchImage(userId, `${catchId}/lure`, lureImage);
-          if (lureImageUrl) await fsUpdateCatch(catchId, { lureImage: lureImageUrl });
-        } catch (err) {
-          console.error('Lure image upload failed:', err);
-        }
-      }
-      notifyFriendCatch(userId, user?.displayName, catchId, data.species).catch(() => {});
-      return catchId;
+      data.imageUrl = image;
+    }
+    if (lureImage && lureImage.startsWith('data:')) {
+      data.lureImage = lureImage;
     }
 
-    // No image — just create the doc
-    if (lureImage && lureImage.startsWith('data:')) {
-      data.lureImage = '';
-    }
-    const catchId = await fsAddCatch(userId, { ...data, imageUrl: '' });
-    if (lureImage && lureImage.startsWith('data:')) {
-      uploadCatchImage(userId, `${catchId}/lure`, lureImage)
-        .then((lureImageUrl) => fsUpdateCatch(catchId, { lureImage: lureImageUrl }))
-        .catch((err) => console.error('Lure image upload failed:', err));
-    }
+    const catchId = await fsAddCatch(userId, data);
     notifyFriendCatch(userId, user?.displayName, catchId, data.species).catch(() => {});
     return catchId;
   }, [userId, user]);
@@ -108,23 +84,19 @@ export function useFirestoreCatches(user) {
   const updateCatch = useCallback(async (id, updates) => {
     const { image, lureImage, ...data } = updates;
     if (image && image.startsWith('data:')) {
-      const imageUrl = await uploadCatchImage(userId, id, image);
-      data.imageUrl = imageUrl;
+      data.imageUrl = image;
     } else if (image === '') {
-      await deleteCatchImage(userId, id);
       data.imageUrl = '';
     }
     if (lureImage && lureImage.startsWith('data:')) {
-      const lureImageUrl = await uploadCatchImage(userId, `${id}/lure`, lureImage);
-      data.lureImage = lureImageUrl;
+      data.lureImage = lureImage;
     }
     await fsUpdateCatch(id, data);
-  }, [userId]);
+  }, []);
 
   const deleteCatch = useCallback(async (id) => {
-    await deleteCatchImage(userId, id).catch(() => {});
     await fsDeleteCatch(id);
-  }, [userId]);
+  }, []);
 
   const getCatch = useCallback((id) => {
     return catches.find((c) => c.id === id) || null;
