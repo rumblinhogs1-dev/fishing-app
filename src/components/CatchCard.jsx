@@ -28,8 +28,8 @@ export default function CatchCard({ entry, onDelete }) {
 
   return (
     <div className={styles.card}>
-      {entry.image && (
-        <img src={entry.image} alt={entry.species} className={styles.photo} />
+      {(entry.imageUrl || entry.image) && (
+        <img src={entry.imageUrl || entry.image} alt={entry.species} className={styles.photo} />
       )}
       <div className={styles.header}>
         <h3 className={styles.species}>{entry.species}</h3>
