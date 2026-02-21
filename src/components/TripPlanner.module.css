@@ -163,6 +163,20 @@
   font-size: 0.65rem; color: #1a73e8; font-weight: 500; font-style: italic;
 }
 
+.noFriends {
+  font-size: 0.8rem; color: #888; margin: 0.25rem 0 0;
+}
+.noFriendsLink {
+  color: #1a73e8; font-weight: 600; text-decoration: none;
+}
+.noFriendsLink:hover { text-decoration: underline; }
+
+.guideLink {
+  display: inline-block; margin-top: 0.4rem;
+  color: #0d47a1; font-size: 0.8rem; font-weight: 600; text-decoration: none;
+}
+.guideLink:hover { text-decoration: underline; }
+
 @media (max-width: 600px) {
   .row { flex-direction: column; }
 }

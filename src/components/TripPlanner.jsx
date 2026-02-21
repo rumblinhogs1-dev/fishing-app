@@ -18,6 +18,7 @@ const EMPTY_TRIP = {
   lat: '',
   lng: '',
   date: '',
+  endDate: '',
   targetSpecies: '',
 };
 
@@ -108,12 +109,13 @@ export default function TripPlanner() {
           return { userId: id, displayName: f?.displayName || 'Angler', photoURL: f?.photoURL || null };
         }),
       ];
-      await addTrip(user.uid, {
+      const newId = await addTrip(user.uid, {
         name: form.name.trim(),
         destination: form.destination.trim(),
         lat: form.lat || null,
         lng: form.lng || null,
         date: form.date || null,
+        endDate: form.endDate || null,
         targetSpecies: form.targetSpecies.trim(),
         checklist: cl,
         catches: [],
@@ -131,6 +133,7 @@ export default function TripPlanner() {
       setForecast(null);
       setInvitedIds([]);
       setShowForm(false);
+      setActiveTrip(newId);
     } catch (err) {
       console.error('Failed to create trip:', err);
       toast.error('Failed to create trip');
@@ -222,7 +225,7 @@ export default function TripPlanner() {
 
           <div className={styles.row}>
             <div className={styles.fieldGroup}>
-              <label className={styles.label}>Date & Time</label>
+              <label className={styles.label}>Arrival</label>
               <input
                 type="datetime-local"
                 className={styles.input}
@@ -231,14 +234,24 @@ export default function TripPlanner() {
               />
             </div>
             <div className={styles.fieldGroup}>
-              <label className={styles.label}>Target Species</label>
+              <label className={styles.label}>Departure</label>
               <input
+                type="datetime-local"
                 className={styles.input}
-                placeholder="e.g. Largemouth Bass"
-                value={form.targetSpecies}
-                onChange={(e) => setForm({ ...form, targetSpecies: e.target.value })}
+                value={form.endDate}
+                onChange={(e) => setForm({ ...form, endDate: e.target.value })}
               />
             </div>
+          </div>
+
+          <div className={styles.fieldGroup}>
+            <label className={styles.label}>Target Species</label>
+            <input
+              className={styles.input}
+              placeholder="e.g. Largemouth Bass"
+              value={form.targetSpecies}
+              onChange={(e) => setForm({ ...form, targetSpecies: e.target.value })}
+            />
           </div>
 
           {form.lat && form.lng && (
@@ -280,11 +293,11 @@ export default function TripPlanner() {
             </div>
           )}
 
-          {friendProfiles.length > 0 && (
-            <div className={styles.inviteSection}>
-              <span className={styles.inviteLabel}>
-                Invite Friends ({invitedIds.length} selected)
-              </span>
+          <div className={styles.inviteSection}>
+            <span className={styles.inviteLabel}>
+              Invite Friends {friendProfiles.length > 0 && `(${invitedIds.length} selected)`}
+            </span>
+            {friendProfiles.length > 0 ? (
               <div className={styles.inviteList}>
                 {friendProfiles.map((f) => (
                   <label key={f.id} className={`${styles.inviteItem} ${invitedIds.includes(f.id) ? styles.inviteSelected : ''}`}>
@@ -303,8 +316,12 @@ export default function TripPlanner() {
                   </label>
                 ))}
               </div>
-            </div>
-          )}
+            ) : (
+              <p className={styles.noFriends}>
+                <Link to="/friends" className={styles.noFriendsLink}>Add friends</Link> to invite them on trips
+              </p>
+            )}
+          </div>
 
           <button type="submit" className={styles.submitBtn} disabled={saving}>
             {saving ? 'Saving...' : 'Create Trip'}
@@ -330,9 +347,19 @@ export default function TripPlanner() {
               </div>
               <div className={styles.tripMeta}>
                 {trip.destination && <span>{trip.destination}</span>}
-                {trip.date && <span>{new Date(trip.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>}
+                {trip.date && (
+                  <span>
+                    {new Date(trip.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                    {trip.endDate && ` \u2192 ${new Date(trip.endDate).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}`}
+                  </span>
+                )}
                 {trip.targetSpecies && <span className={styles.speciesTag}>{trip.targetSpecies}</span>}
               </div>
+              {trip.destination && (
+                <Link to={`/local-guide?location=${encodeURIComponent(trip.destination)}`} className={styles.guideLink}>
+                  Find Guides & Lodging
+                </Link>
+              )}
               {trip.members && trip.members.length > 1 && (
                 <div className={styles.memberAvatars}>
                   {trip.members.map((m) => (
@@ -389,7 +416,12 @@ export default function TripPlanner() {
               </div>
               <div className={styles.tripMeta}>
                 {trip.destination && <span>{trip.destination}</span>}
-                {trip.date && <span>{new Date(trip.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>}
+                {trip.date && (
+                  <span>
+                    {new Date(trip.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                    {trip.endDate && ` \u2192 ${new Date(trip.endDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`}
+                  </span>
+                )}
                 {trip.targetSpecies && <span className={styles.speciesTag}>{trip.targetSpecies}</span>}
               </div>
               <Link to="/add" className={styles.logLink}>Log catches from this trip</Link>

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { getLocalRecommendations } from '../utils/geminiLocal';
 import { getGPSLocation, reverseGeocode } from '../utils/weather';
 import { SkeletonCard } from './Skeleton';
@@ -28,12 +29,28 @@ function CardMeta({ item, category }) {
 }
 
 export default function LocalGuide() {
+  const [searchParams] = useSearchParams();
   const [location, setLocation] = useState('');
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [gpsLoading, setGpsLoading] = useState(false);
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('all');
+  const autoSearched = useRef(false);
+
+  useEffect(() => {
+    const loc = searchParams.get('location');
+    if (loc && !autoSearched.current) {
+      autoSearched.current = true;
+      setLocation(loc);
+      setLoading(true);
+      setError('');
+      getLocalRecommendations(loc)
+        .then((data) => { setResults(data); setActiveTab('all'); })
+        .catch((err) => setError(err.message || 'Failed to get recommendations.'))
+        .finally(() => setLoading(false));
+    }
+  }, [searchParams]);
 
   async function handleGPS() {
     setGpsLoading(true);
