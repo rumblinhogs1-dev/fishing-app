@@ -22,17 +22,26 @@ export default function CatchDetail() {
   const [loading, setLoading] = useState(true);
   const [showSpotModal, setShowSpotModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [publicFields, setPublicFields] = useState(null);
 
   useEffect(() => {
     async function load() {
       try {
         const snap = await getDoc(doc(db, 'catches', id));
         if (snap.exists()) {
-          setEntry({
+          const catchData = {
             id: snap.id,
             ...snap.data(),
             createdAt: snap.data().createdAt?.toDate?.()?.toISOString() || null,
-          });
+          };
+          setEntry(catchData);
+          // Fetch author's public field preferences if viewing someone else's catch
+          if (catchData.userId && catchData.userId !== user?.uid) {
+            const userSnap = await getDoc(doc(db, 'users', catchData.userId));
+            if (userSnap.exists() && userSnap.data().publicCatchFields) {
+              setPublicFields(userSnap.data().publicCatchFields);
+            }
+          }
         }
       } catch (err) {
         console.error('Failed to load catch:', err);
@@ -41,7 +50,7 @@ export default function CatchDetail() {
       }
     }
     load();
-  }, [id]);
+  }, [id, user]);
 
   if (loading) return <div style={{ maxWidth: 700, margin: '2rem auto', padding: '0 1rem' }}><SkeletonCard /></div>;
   if (!entry) return <p className={styles.loading}>Catch not found.</p>;
@@ -50,6 +59,9 @@ export default function CatchDetail() {
   const dateStr = d ? d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }) : '';
   const timeStr = d ? d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : '';
   const img = entry.imageUrl || entry.image;
+  const isOwn = !user || entry.userId === user.uid;
+  // If publicFields is null, the author hasn't set preferences — show everything
+  const show = (field) => isOwn || !publicFields || publicFields[field] !== false;
 
   return (
     <div className={styles.container}>
@@ -82,55 +94,55 @@ export default function CatchDetail() {
           </div>
 
           <div className={styles.details}>
-            {entry.weight && (
+            {entry.weight && show('weight') && (
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Weight</span>
                 <span className={styles.detailValue}>{entry.weight} lbs</span>
               </div>
             )}
-            {entry.length && (
+            {entry.length && show('length') && (
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Length</span>
                 <span className={styles.detailValue}>{entry.length} in</span>
               </div>
             )}
-            {entry.location && (
+            {entry.location && show('location') && (
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Location</span>
                 <span className={styles.detailValue}>{entry.location}</span>
               </div>
             )}
-            {entry.weather && (
+            {entry.weather && show('weather') && (
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Weather</span>
                 <span className={styles.detailValue}>{entry.weather}</span>
               </div>
             )}
-            {entry.waterTemp && (
+            {entry.waterTemp && show('waterTemp') && (
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Water Temp</span>
                 <span className={styles.detailValue}>{entry.waterTemp}°F</span>
               </div>
             )}
-            {entry.flowRate && (
+            {entry.flowRate && show('weather') && (
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Flow Rate</span>
                 <span className={styles.detailValue}>{entry.flowRate} ft³/s</span>
               </div>
             )}
-            {entry.depth && (
+            {entry.depth && show('depth') && (
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Depth</span>
                 <span className={styles.detailValue}>{entry.depth} ft</span>
               </div>
             )}
-            {entry.bait && (
+            {entry.bait && show('bait') && (
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Bait / Lure</span>
                 <span className={styles.detailValue}>{entry.bait}</span>
               </div>
             )}
-            {entry.lureName && (
+            {entry.lureName && show('bait') && (
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Lure</span>
                 <span className={styles.detailValue}>{entry.lureName}</span>
@@ -162,7 +174,7 @@ export default function CatchDetail() {
             </div>
           )}
 
-          {entry.notes && (
+          {entry.notes && show('notes') && (
             <div className={styles.notes}>
               <h4>Notes</h4>
               <p>{entry.notes}</p>

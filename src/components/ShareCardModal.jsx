@@ -67,7 +67,7 @@ export default function ShareCardModal({ entry, onClose }) {
   }
 
   function getCatchUrl() {
-    return `${window.location.origin}/catch/${entry.id}`;
+    return `${window.location.origin}/fishing-app/catch/${entry.id}`;
   }
 
   async function handleCopyLink() {

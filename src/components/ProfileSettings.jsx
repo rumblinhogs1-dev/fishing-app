@@ -56,6 +56,16 @@ export default function ProfileSettings() {
     challenge_result: true,
     trip_invite: true,
   });
+  const [publicFields, setPublicFields] = useState({
+    weight: true,
+    length: true,
+    location: true,
+    bait: true,
+    weather: true,
+    waterTemp: true,
+    depth: true,
+    notes: true,
+  });
 
   useEffect(() => {
     if (!user) return;
@@ -72,6 +82,9 @@ export default function ProfileSettings() {
         setPhotoPreview(data.photoURL || user.photoURL || '');
         if (data.notificationPreferences) {
           setNotifPrefs((prev) => ({ ...prev, ...data.notificationPreferences }));
+        }
+        if (data.publicCatchFields) {
+          setPublicFields((prev) => ({ ...prev, ...data.publicCatchFields }));
         }
       } else {
         setForm({
@@ -119,6 +132,7 @@ export default function ProfileSettings() {
         photoURL,
         defaultVisibility: form.defaultVisibility,
         notificationPreferences: notifPrefs,
+        publicCatchFields: publicFields,
       }, { merge: true });
       toast.success('Settings saved!');
       navigate('/');
@@ -226,6 +240,33 @@ export default function ProfileSettings() {
                 type="button"
                 className={`${styles.toggleSwitch} ${notifPrefs[key] ? styles.toggleOn : ''}`}
                 onClick={() => setNotifPrefs((prev) => ({ ...prev, [key]: !prev[key] }))}
+                aria-label={`Toggle ${label}`}
+              >
+                <span className={styles.toggleKnob} />
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <div className={styles.notifSection}>
+          <h3 className={styles.sectionTitle}>Public Catch Display</h3>
+          <p className={styles.sectionHint}>Choose which fields others can see on your public catches.</p>
+          {[
+            { key: 'weight', label: 'Weight' },
+            { key: 'length', label: 'Length' },
+            { key: 'location', label: 'Location' },
+            { key: 'bait', label: 'Bait / Lure' },
+            { key: 'weather', label: 'Weather' },
+            { key: 'waterTemp', label: 'Water Temp' },
+            { key: 'depth', label: 'Depth' },
+            { key: 'notes', label: 'Notes' },
+          ].map(({ key, label }) => (
+            <div key={key} className={styles.toggleRow}>
+              <span className={styles.toggleLabel}>{label}</span>
+              <button
+                type="button"
+                className={`${styles.toggleSwitch} ${publicFields[key] ? styles.toggleOn : ''}`}
+                onClick={() => setPublicFields((prev) => ({ ...prev, [key]: !prev[key] }))}
                 aria-label={`Toggle ${label}`}
               >
                 <span className={styles.toggleKnob} />
