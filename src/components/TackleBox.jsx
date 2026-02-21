@@ -14,8 +14,6 @@ export default function TackleBox() {
   const toast = useToast();
   const [form, setForm] = useState(EMPTY_ITEM);
   const [showForm, setShowForm] = useState(false);
-  const [tab, setTab] = useState('inventory');
-
   const grouped = useMemo(() => {
     const groups = {};
     Object.keys(CATEGORIES).forEach((key) => { groups[key] = []; });
@@ -26,11 +24,6 @@ export default function TackleBox() {
     });
     return groups;
   }, [items]);
-
-  const lowStock = useMemo(() =>
-    items.filter((i) => i.quantity <= (i.threshold || 1)),
-    [items]
-  );
 
   async function handleAdd(e) {
     e.preventDefault();
@@ -97,27 +90,9 @@ export default function TackleBox() {
     <div className={styles.container}>
       <h2 className={styles.heading}>Tackle Box</h2>
 
-      <div className={styles.tabs}>
-        <button className={`${styles.tab} ${tab === 'inventory' ? styles.tabActive : ''}`} onClick={() => setTab('inventory')}>
-          Inventory
-        </button>
-        <button className={`${styles.tab} ${tab === 'shopping' ? styles.tabActive : ''}`} onClick={() => setTab('shopping')}>
-          Shopping List {lowStock.length > 0 && <span className={styles.badge}>{lowStock.length}</span>}
-        </button>
-      </div>
-
-      {tab === 'inventory' && (
-        <>
-          {lowStock.length > 0 && (
-            <div className={styles.lowStockAlert}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-              {lowStock.length} item{lowStock.length > 1 ? 's' : ''} low on stock
-            </div>
-          )}
-
-          <button className={styles.addBtn} onClick={() => setShowForm(!showForm)}>
-            {showForm ? 'Cancel' : '+ Add Item'}
-          </button>
+      <button className={styles.addBtn} onClick={() => setShowForm(!showForm)}>
+        {showForm ? 'Cancel' : '+ Add Item'}
+      </button>
 
           {showForm && (
             <form className={styles.form} onSubmit={handleAdd}>
@@ -226,32 +201,8 @@ export default function TackleBox() {
             );
           })}
 
-          {items.length === 0 && (
-            <p className={styles.empty}>Your tackle box is empty. Add items above!</p>
-          )}
-        </>
-      )}
-
-      {tab === 'shopping' && (
-        <div className={styles.shoppingList}>
-          {lowStock.length === 0 ? (
-            <p className={styles.empty}>All stocked up! No items are low.</p>
-          ) : (
-            lowStock.map((item) => (
-              <div key={item.id} className={styles.shoppingRow}>
-                <div className={styles.shoppingInfo}>
-                  <span className={styles.shoppingName}>{item.name}</span>
-                  <span className={styles.shoppingMeta}>
-                    {CATEGORIES[item.category]?.label || item.category} — {item.quantity} left (threshold: {item.threshold || 1})
-                  </span>
-                </div>
-                <button className={styles.restockBtn} onClick={() => updateItem(item.id, { quantity: (item.threshold || 1) + 5 })}>
-                  Restock
-                </button>
-              </div>
-            ))
-          )}
-        </div>
+      {items.length === 0 && (
+        <p className={styles.empty}>Your tackle box is empty. Add items above!</p>
       )}
     </div>
   );

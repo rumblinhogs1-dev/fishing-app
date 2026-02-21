@@ -3,24 +3,6 @@
 .loadingText { text-align: center; color: #888; padding: 2rem; }
 .empty { text-align: center; color: #888; padding: 3rem 1rem; }
 
-.tabs { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; }
-.tab {
-  padding: 0.5rem 1.25rem; border: 1.5px solid #ccc; border-radius: 20px;
-  background: #fff; color: #666; font-size: 0.9rem; font-weight: 500;
-  cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.35rem;
-}
-.tab:hover { border-color: #1a73e8; color: #1a73e8; }
-.tabActive { background: #1a73e8 !important; color: #fff !important; border-color: #1a73e8 !important; }
-.badge {
-  background: #d32f2f; color: #fff; font-size: 0.7rem; font-weight: 700;
-  padding: 0.1rem 0.45rem; border-radius: 10px; min-width: 18px; text-align: center;
-}
-
-.lowStockAlert {
-  display: flex; align-items: center; gap: 0.5rem;
-  background: #fff3e0; color: #e65100; padding: 0.6rem 1rem;
-  border-radius: 8px; font-size: 0.85rem; font-weight: 600; margin-bottom: 1rem;
-}
 
 .addBtn {
   display: block; width: 100%; padding: 0.6rem; border: 1.5px dashed #1a73e8;
@@ -109,21 +91,6 @@
 }
 .deleteBtn:hover { background: rgba(211,47,47,0.1); }
 
-.shoppingList { display: flex; flex-direction: column; gap: 0.5rem; }
-.shoppingRow {
-  display: flex; align-items: center; gap: 0.75rem;
-  background: #fff; padding: 0.75rem 1rem; border-radius: 10px;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
-}
-.shoppingInfo { flex: 1; }
-.shoppingName { display: block; font-weight: 600; color: #333; font-size: 0.9rem; }
-.shoppingMeta { font-size: 0.75rem; color: #888; }
-.restockBtn {
-  padding: 0.4rem 0.8rem; border: none; border-radius: 8px;
-  background: #4caf50; color: #fff; font-size: 0.8rem; font-weight: 600;
-  cursor: pointer; transition: background 0.2s; flex-shrink: 0;
-}
-.restockBtn:hover { background: #388e3c; }
 
 @media (max-width: 600px) {
   .formRow { flex-direction: column; }
