@@ -271,15 +271,18 @@ export default function CatchForm({ existing, onSubmit }) {
       return;
     }
 
-    onSubmit(entry).catch((err) => {
+    try {
+      await onSubmit(entry);
+      toast.success('Catch saved!');
+      if (form.released) {
+        setTimeout(() => toast.info(getRandomTip()), 500);
+      }
+      navigate('/');
+    } catch (err) {
       console.error('Failed to save catch:', err);
       toast.error('Failed to save catch.');
-    });
-    toast.success('Catch saved!');
-    if (form.released) {
-      setTimeout(() => toast.info(getRandomTip()), 500);
+      setSubmitting(false);
     }
-    navigate('/');
   }
 
   return (
@@ -556,7 +559,7 @@ export default function CatchForm({ existing, onSubmit }) {
 
       <div className={styles.actions}>
         <button type="submit" className={styles.submitBtn} disabled={submitting}>
-          {submitting ? 'Saving...' : existing ? 'Save Changes' : 'Add Catch'}
+          {submitting ? 'Uploading & Saving...' : existing ? 'Save Changes' : 'Add Catch'}
         </button>
         <button type="button" className={styles.cancelBtn} onClick={() => navigate('/')}>
           Cancel

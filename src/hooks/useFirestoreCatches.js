@@ -66,25 +66,42 @@ export function useFirestoreCatches(user) {
 
   const addCatch = useCallback(async (entry) => {
     const { image, lureImage, ...data } = entry;
+    data.authorDisplayName = user?.displayName || 'Angler';
+    data.authorPhotoURL = user?.photoURL || null;
+
+    // Upload image BEFORE creating the doc so imageUrl is set from the start
+    if (image && image.startsWith('data:')) {
+      // Need a temp ID for the storage path — create doc first with placeholder
+      const catchId = await fsAddCatch(userId, { ...data, imageUrl: '', lureImage: '' });
+      try {
+        const imageUrl = await uploadCatchImage(userId, catchId, image);
+        if (imageUrl) await fsUpdateCatch(catchId, { imageUrl });
+      } catch (err) {
+        console.error('Image upload failed:', err);
+      }
+      if (lureImage && lureImage.startsWith('data:')) {
+        try {
+          const lureImageUrl = await uploadCatchImage(userId, `${catchId}/lure`, lureImage);
+          if (lureImageUrl) await fsUpdateCatch(catchId, { lureImage: lureImageUrl });
+        } catch (err) {
+          console.error('Lure image upload failed:', err);
+        }
+      }
+      notifyFriendCatch(userId, user?.displayName, catchId, data.species).catch(() => {});
+      return catchId;
+    }
+
+    // No image — just create the doc
     if (lureImage && lureImage.startsWith('data:')) {
       data.lureImage = '';
     }
-    data.authorDisplayName = user?.displayName || 'Angler';
-    data.authorPhotoURL = user?.photoURL || null;
     const catchId = await fsAddCatch(userId, { ...data, imageUrl: '' });
-    // Notify friends in the background
-    notifyFriendCatch(userId, user?.displayName, catchId, data.species).catch(() => {});
-    // Upload images in the background — don't block the UI
-    if (image && image.startsWith('data:')) {
-      uploadCatchImage(userId, catchId, image)
-        .then((imageUrl) => fsUpdateCatch(catchId, { imageUrl }))
-        .catch((err) => console.error('Image upload failed:', err));
-    }
     if (lureImage && lureImage.startsWith('data:')) {
       uploadCatchImage(userId, `${catchId}/lure`, lureImage)
         .then((lureImageUrl) => fsUpdateCatch(catchId, { lureImage: lureImageUrl }))
         .catch((err) => console.error('Lure image upload failed:', err));
     }
+    notifyFriendCatch(userId, user?.displayName, catchId, data.species).catch(() => {});
     return catchId;
   }, [userId, user]);
 
