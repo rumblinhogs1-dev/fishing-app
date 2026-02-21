@@ -120,6 +120,7 @@ export default function ProfileSettings() {
         notificationPreferences: notifPrefs,
       }, { merge: true });
       toast.success('Settings saved!');
+      navigate('/');
     } catch (err) {
       console.error('Failed to save settings:', err);
       toast.error('Failed to save. Please try again.');
