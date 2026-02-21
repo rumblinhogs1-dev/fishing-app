@@ -73,9 +73,9 @@ export async function getLocalRecommendations(location, apiKey) {
 IMPORTANT: Respond with ONLY a JSON object. No explanation, no markdown, no code fences. Just the raw JSON.
 
 Required JSON format:
-{"fishingGuides": [{"name": "Guide/charter name", "description": "Brief description of services", "priceRange": "$100-200/trip", "specialty": "Species or technique specialty"}], "hotels": [{"name": "Hotel name", "description": "Brief description", "priceRange": "$80-150/night", "distanceToWater": "5 min drive"}], "cabins": [{"name": "Cabin/lodge name", "description": "Brief description", "priceRange": "$120-200/night", "amenities": "Key amenities"}], "camping": [{"name": "Campground name", "description": "Brief description", "priceRange": "$20-40/night", "features": "Key features"}], "baitShops": [{"name": "Shop name", "description": "Brief description", "priceRange": "$", "services": "Key services like live bait, tackle rental, etc."}], "localTips": "2-3 sentences of local fishing tips for this area"}
+{"fishingGuides": [{"name": "Guide/charter name", "description": "Brief description of services", "priceRange": "$100-200/trip", "specialty": "Species or technique specialty", "website": "https://example.com"}], "hotels": [{"name": "Hotel name", "description": "Brief description", "priceRange": "$80-150/night", "distanceToWater": "5 min drive", "website": "https://example.com"}], "cabins": [{"name": "Cabin/lodge name", "description": "Brief description", "priceRange": "$120-200/night", "amenities": "Key amenities", "website": "https://example.com"}], "camping": [{"name": "Campground name", "description": "Brief description", "priceRange": "$20-40/night", "features": "Key features", "website": "https://example.com"}], "baitShops": [{"name": "Shop name", "description": "Brief description", "priceRange": "$", "services": "Key services like live bait, tackle rental, etc.", "website": "https://example.com"}], "localTips": "2-3 sentences of local fishing tips for this area"}
 
-Provide 2-4 recommendations per category. Make them realistic and helpful for anglers visiting this area.`,
+Provide 2-4 recommendations per category. Make them realistic and helpful for anglers visiting this area. Include a real website URL for each business when possible.`,
           },
         ],
       },

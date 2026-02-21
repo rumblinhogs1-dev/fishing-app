@@ -159,6 +159,11 @@ export default function LocalGuide() {
             <div key={i} className={styles.card}>
               <h4 className={styles.cardName}>{item.name}</h4>
               <p className={styles.cardDesc}>{item.description}</p>
+              {item.website && (
+                <a href={item.website} target="_blank" rel="noopener noreferrer" className={styles.cardWebsite}>
+                  {item.website.replace(/^https?:\/\//, '').replace(/\/$/, '')}
+                </a>
+              )}
               <CardMeta item={item} category={item._category} />
             </div>
           ))}
