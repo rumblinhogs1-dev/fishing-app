@@ -46,6 +46,13 @@ export default function FeedCatchCard({ entry }) {
 
       {img && <img src={img} alt={entry.species} className={styles.photo} />}
 
+      {entry.lureImage && (
+        <div className={styles.lureSection}>
+          <span className={styles.lureSectionLabel}>Lure Used</span>
+          <img src={entry.lureImage} alt={entry.lureName || 'Lure'} className={styles.lurePhoto} />
+        </div>
+      )}
+
       <div className={styles.body}>
         <h3 className={styles.species}>{entry.species}</h3>
         <div className={styles.details}>
