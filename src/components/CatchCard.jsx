@@ -31,12 +31,6 @@ export default function CatchCard({ entry, onDelete }) {
       {(entry.imageUrl || entry.image) && (
         <img src={entry.imageUrl || entry.image} alt={entry.species} className={styles.photo} />
       )}
-      {entry.lureImage && (
-        <div className={styles.lureSection}>
-          <span className={styles.lureSectionLabel}>Lure Used</span>
-          <img src={entry.lureImage} alt={entry.lureName || 'Lure'} className={styles.lurePhoto} />
-        </div>
-      )}
       <div className={styles.header}>
         <h3 className={styles.species}>{entry.species}</h3>
         <div className={styles.actions}>
