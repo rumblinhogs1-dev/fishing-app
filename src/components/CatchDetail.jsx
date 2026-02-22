@@ -159,6 +159,14 @@ export default function CatchDetail() {
             )}
           </div>
 
+          {entry.lureImage && show('bait') && (
+            <div className={styles.lureSection}>
+              <h4 className={styles.lureSectionTitle}>Lure Used</h4>
+              <img src={entry.lureImage} alt={entry.lureName || 'Lure'} className={styles.lurePhoto} />
+              {entry.lureName && <p className={styles.lureName}>{entry.lureName}</p>}
+            </div>
+          )}
+
           {entry.aiSpecies && (
             <div className={styles.aiSection}>
               <div className={styles.detailItem}>

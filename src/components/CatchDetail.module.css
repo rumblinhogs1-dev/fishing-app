@@ -87,6 +87,34 @@
   border: 1px solid #c5d8f8;
 }
 
+.lureSection {
+  margin-bottom: 1rem;
+}
+
+.lureSectionTitle {
+  margin: 0 0 0.5rem;
+  color: #0d47a1;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.lurePhoto {
+  width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  background: #f8f9fa;
+  border-radius: 8px;
+  display: block;
+}
+
+.lureName {
+  margin: 0.4rem 0 0;
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+}
+
 .notes { margin-top: 1rem; }
 .notes h4 { margin: 0 0 0.3rem; color: #0d47a1; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.3px; }
 .notes p { margin: 0; color: #444; font-size: 0.9rem; line-height: 1.5; }
