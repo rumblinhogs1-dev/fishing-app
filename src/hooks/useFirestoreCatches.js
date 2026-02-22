@@ -63,6 +63,44 @@ export function useFirestoreCatches(user) {
     });
   }, [userId, catches, loading, user]);
 
+  // One-time repair: fix catches with missing imageUrl from DataMigration or offline sync
+  useEffect(() => {
+    if (!userId || !catches.length || loading) return;
+    const repairKey = `catches-image-repair-v1-${userId}`;
+    if (localStorage.getItem(repairKey)) return;
+
+    const needsRepair = catches.filter((c) => !c.imageUrl);
+    if (!needsRepair.length) {
+      localStorage.setItem(repairKey, '1');
+      return;
+    }
+
+    // Mark as attempted so it only runs once
+    localStorage.setItem(repairKey, '1');
+    console.log(`Image repair: found ${needsRepair.length} catches with missing imageUrl`);
+
+    needsRepair.forEach(async (c) => {
+      try {
+        // Case 1: image field exists (from offline sync storing image instead of imageUrl)
+        if (c.image && typeof c.image === 'string' && c.image.startsWith('data:')) {
+          await fsUpdateCatch(c.id, { imageUrl: c.image });
+          console.log('Image repair: copied image→imageUrl for catch', c.id);
+          return;
+        }
+
+        // Case 2: try to recover from Firebase Storage (DataMigration uploaded but failed to update doc)
+        const { getDownloadURL, ref } = await import('firebase/storage');
+        const { storage } = await import('../firebase');
+        const storageRef = ref(storage, `users/${userId}/catches/${c.id}/photo.jpg`);
+        const url = await getDownloadURL(storageRef);
+        await fsUpdateCatch(c.id, { imageUrl: url });
+        console.log('Image repair: recovered Storage URL for catch', c.id);
+      } catch {
+        // No image source found — nothing to recover
+      }
+    });
+  }, [userId, catches, loading]);
+
   const addCatch = useCallback(async (entry) => {
     const { image, lureImage, ...data } = entry;
     data.authorDisplayName = user?.displayName || 'Angler';

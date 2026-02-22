@@ -37,7 +37,21 @@ export default function OfflineBanner() {
       const pending = await getPendingCatches();
       if (pending.length === 0) return;
 
-      const result = await syncPendingCatches(user.uid, addCatch, []);
+      // Wrap addCatch to transform image→imageUrl and add author info (matching useFirestoreCatches)
+      const addCatchWithImage = (userId, data) => {
+        const { image, lureImage, ...rest } = data;
+        if (image && image.startsWith('data:')) {
+          rest.imageUrl = image;
+        }
+        if (lureImage && lureImage.startsWith('data:')) {
+          rest.lureImage = lureImage;
+        }
+        rest.authorDisplayName = user.displayName || 'Angler';
+        rest.authorPhotoURL = user.photoURL || null;
+        return addCatch(userId, rest);
+      };
+
+      const result = await syncPendingCatches(user.uid, addCatchWithImage, []);
       if (result.synced > 0) {
         setSyncCount(result.synced);
         setShowSynced(true);

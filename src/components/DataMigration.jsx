@@ -31,14 +31,18 @@ export default function DataMigration({ userId, onComplete }) {
       if (cancelledRef.current) break;
       const { id, image, createdAt, ...data } = localCatches[i];
       try {
-        const catchId = await withTimeout(addCatch(userId, { ...data, imageUrl: '' }), 15000);
-        if (image && image.startsWith('data:')) {
+        // Store data URL directly as imageUrl (same as normal catch flow)
+        const imageUrl = (image && image.startsWith('data:')) ? image : '';
+        const catchId = await withTimeout(addCatch(userId, { ...data, imageUrl }), 15000);
+        // Try upgrading to Firebase Storage URL (optional, non-blocking)
+        if (imageUrl) {
           try {
-            const imageUrl = await withTimeout(uploadCatchImage(userId, catchId, image), 20000);
+            const storageUrl = await withTimeout(uploadCatchImage(userId, catchId, image), 20000);
             const { updateCatch } = await import('../utils/firestore');
-            await withTimeout(updateCatch(catchId, { imageUrl }), 10000);
+            await withTimeout(updateCatch(catchId, { imageUrl: storageUrl }), 10000);
           } catch (imgErr) {
-            console.error('Failed to upload image for catch:', imgErr);
+            // Image is already saved as data URL, so this is non-critical
+            console.warn('Storage upload failed, using inline image:', imgErr);
           }
         }
       } catch (err) {
