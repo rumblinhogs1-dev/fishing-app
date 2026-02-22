@@ -11,8 +11,9 @@
   width: calc(100% + 2.5rem);
   margin: -1.25rem -1.25rem 0.75rem;
   display: block;
-  object-fit: cover;
-  max-height: 220px;
+  object-fit: contain;
+  background: #f0f0f0;
+  max-height: 300px;
 }
 
 .card:hover {
