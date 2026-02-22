@@ -37,4 +37,7 @@ android/local.properties
 *.sln
 *.sw?
 .vercel
+.firebase
+firebase-dist
+cors.json
 test-gemini*
