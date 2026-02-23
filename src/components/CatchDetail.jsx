@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -23,6 +23,24 @@ export default function CatchDetail() {
   const [showSpotModal, setShowSpotModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [publicFields, setPublicFields] = useState(null);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const handler = (e) => {
+      const tip = e.target.closest('[data-tooltip]');
+      if (tip) {
+        const wasActive = tip.classList.contains('tooltipActive');
+        el.querySelectorAll('.tooltipActive').forEach((t) => t.classList.remove('tooltipActive'));
+        if (!wasActive) tip.classList.add('tooltipActive');
+      } else {
+        el.querySelectorAll('.tooltipActive').forEach((t) => t.classList.remove('tooltipActive'));
+      }
+    };
+    el.addEventListener('click', handler);
+    return () => el.removeEventListener('click', handler);
+  }, []);
 
   useEffect(() => {
     async function load() {
@@ -67,7 +85,7 @@ export default function CatchDetail() {
   const show = (field) => isOwn || !publicFields || publicFields[field] !== false;
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} ref={containerRef}>
       <Link to="/" className={styles.backLink}>&#8592; Back</Link>
 
       <div className={styles.card}>

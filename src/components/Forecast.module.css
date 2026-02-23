@@ -269,7 +269,8 @@
   z-index: 1;
 }
 
-.hasTooltip:hover::before {
+.hasTooltip:hover::before,
+.hasTooltip.tooltipActive::before {
   opacity: 1;
   background: #1a73e8;
   color: #fff;
@@ -296,7 +297,8 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.hasTooltip:hover::after {
+.hasTooltip:hover::after,
+.hasTooltip.tooltipActive::after {
   opacity: 1;
 }
 

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { getGPSLocation, geocodeLocation } from '../utils/weather';
 import { WEATHER_CODES } from '../utils/weather';
 import { getFullForecast, getShouldIFishScore } from '../utils/forecast';
@@ -530,6 +530,24 @@ export default function Forecast() {
   const [locationQuery, setLocationQuery] = useState('');
   const [forecastCoords, setForecastCoords] = useState(null);
 
+  const containerRef = useRef(null);
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const handler = (e) => {
+      const tip = e.target.closest('[data-tooltip]');
+      if (tip) {
+        const wasActive = tip.classList.contains('tooltipActive');
+        el.querySelectorAll('.tooltipActive').forEach((t) => t.classList.remove('tooltipActive'));
+        if (!wasActive) tip.classList.add('tooltipActive');
+      } else {
+        el.querySelectorAll('.tooltipActive').forEach((t) => t.classList.remove('tooltipActive'));
+      }
+    };
+    el.addEventListener('click', handler);
+    return () => el.removeEventListener('click', handler);
+  }, []);
+
   // Water Body Info toggles
   const [showFcConditions, setShowFcConditions] = useState(true);
   const [showFcRecs, setShowFcRecs] = useState(false);
@@ -687,7 +705,7 @@ export default function Forecast() {
   const windDir = today?.windDir ?? data?.current?.windDir ?? null;
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} ref={containerRef}>
       <h2 className={styles.heading}>Forecast</h2>
 
       <div className={styles.locationSection}>
