@@ -248,6 +248,33 @@
   cursor: help;
 }
 
+.hasTooltip::before {
+  content: 'i';
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #90caf9;
+  color: #0d47a1;
+  font-size: 10px;
+  font-weight: 700;
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  opacity: 0.7;
+  z-index: 1;
+}
+
+.hasTooltip:hover::before {
+  opacity: 1;
+  background: #1a73e8;
+  color: #fff;
+}
+
 .hasTooltip::after {
   content: attr(data-tooltip);
   position: absolute;
