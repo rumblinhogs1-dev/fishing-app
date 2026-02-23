@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { markStepComplete } from '../utils/onboarding';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -396,6 +397,7 @@ function LocationSearch({ mapRef }) {
 }
 
 export default function MapView({ catches = [] }) {
+  useEffect(() => { markStepComplete('exploredMap'); }, []);
   const { user } = useAuth();
   const { spots, addSpot } = useSpots();
   const { layers, toggleLayer, setBasemap } = useMapLayers();

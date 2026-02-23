@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import CatchCard from './CatchCard';
+import GettingStarted from './GettingStarted';
 import QuickIdentify from './QuickIdentify';
 import styles from './CatchList.module.css';
 
@@ -187,6 +188,7 @@ export default function CatchList({ catches, onDelete }) {
 
   return (
     <div className={styles.container}>
+      <GettingStarted catches={catches} />
       <QuickIdentify />
 
       <div className={styles.toolbar}>

@@ -6,6 +6,7 @@ import ToastContainer from './components/Toast';
 import SearchModal from './components/SearchModal';
 import ErrorBoundary from './components/ErrorBoundary';
 import { SkeletonList } from './components/Skeleton';
+import { getOnboardingState } from './utils/onboarding';
 import { useCatchesProvider } from './hooks/useCatchesProvider';
 import { useSpots } from './hooks/useSpots';
 import { useAuth } from './contexts/AuthContext';
@@ -57,6 +58,7 @@ const Notifications = lazyRetry(() => import('./components/Notifications'));
 const Challenges = lazyRetry(() => import('./components/Challenges'));
 const ChallengeDetail = lazyRetry(() => import('./components/ChallengeDetail'));
 const LocalGuide = lazyRetry(() => import('./components/LocalGuide'));
+const WelcomeModal = lazyRetry(() => import('./components/WelcomeModal'));
 
 function EditPage({ getCatch, updateCatch }) {
   const { id } = useParams();
@@ -73,6 +75,10 @@ export default function App() {
   const { spots } = useSpots();
   const [showMigration, setShowMigration] = useState(true);
   const [showSearch, setShowSearch] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(() => {
+    const s = getOnboardingState();
+    return !s || !s.welcomed;
+  });
 
   useEffect(() => {
     function handleKeyDown(e) {
@@ -104,6 +110,11 @@ export default function App() {
       {isAuthenticated && showMigration && (
         <Suspense fallback={null}>
           <DataMigration userId={user.uid} onComplete={() => setShowMigration(false)} />
+        </Suspense>
+      )}
+      {isAuthenticated && showWelcome && !dataLoading && catches.length === 0 && (
+        <Suspense fallback={null}>
+          <WelcomeModal onDismiss={() => setShowWelcome(false)} />
         </Suspense>
       )}
       <main className={styles.main}>

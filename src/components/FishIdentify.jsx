@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { getApiKey, hasEnvKey, saveApiKey, resizeImage, identifyFish } from '../utils/gemini';
+import { markStepComplete } from '../utils/onboarding';
 import SpeciesInfoCard from './SpeciesInfoCard';
 import styles from './FishIdentify.module.css';
 
@@ -58,6 +59,7 @@ export default function FishIdentify() {
       const parsed = await identifyFish(image, key);
       setResult(parsed);
       setSelectedSpecies(parsed.species || '');
+      if (parsed.confidence > 0) markStepComplete('fishId');
     } catch (err) {
       setError(err.message);
     } finally {
