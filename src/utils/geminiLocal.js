@@ -1,6 +1,6 @@
 import { getApiKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
 
-const CACHE_KEY = 'fishing-app-local-guide-cache-v4';
+const CACHE_KEY = 'fishing-app-local-guide-cache-v5';
 const CACHE_TTL = 2 * 60 * 60 * 1000; // 2 hours
 const MAX_CACHE_ENTRIES = 30;
 
@@ -41,12 +41,9 @@ function setCache(key, data) {
 
 function buildFallback() {
   return {
-    fishingGuides: [],
-    hotels: [],
-    cabins: [],
-    camping: [],
-    baitShops: [],
     localTips: 'AI recommendations are temporarily unavailable. Try checking local fishing forums or bait shop bulletin boards for current info.',
+    regulationsUrl: '',
+    licenseUrl: '',
   };
 }
 
@@ -68,16 +65,14 @@ export async function getLocalRecommendations(location, apiKey) {
       {
         parts: [
           {
-            text: `You are a local fishing travel expert. For the location "${location}", recommend nearby fishing-related services and accommodations.
-
-CRITICAL: Only recommend REAL businesses that actually exist and can be found on Google Maps or Google Search. Do NOT invent or fabricate business names. If you are not confident a business exists, do not include it. It is better to return fewer results than to include fake ones.
+            text: `You are a local fishing expert. For the location "${location}", provide local fishing tips and links to official fishing regulations and license pages for that state/region.
 
 IMPORTANT: Respond with ONLY a JSON object. No explanation, no markdown, no code fences. Just the raw JSON.
 
 Required JSON format:
-{"fishingGuides": [{"name": "Real guide/charter name", "description": "Brief description of services", "priceRange": "$100-200/trip", "specialty": "Species or technique specialty", "rating": 4.5, "reviewCount": 128}], "hotels": [{"name": "Real hotel name", "description": "Brief description", "priceRange": "$80-150/night", "distanceToWater": "5 min drive", "rating": 4.2, "reviewCount": 95}], "cabins": [{"name": "Real cabin/lodge name", "description": "Brief description", "priceRange": "$120-200/night", "amenities": "Key amenities", "rating": 4.7, "reviewCount": 64}], "camping": [{"name": "Real campground name", "description": "Brief description", "priceRange": "$20-40/night", "features": "Key features", "rating": 4.0, "reviewCount": 210}], "baitShops": [{"name": "Real shop name", "description": "Brief description", "priceRange": "$", "services": "Key services like live bait, tackle rental, etc.", "rating": 4.3, "reviewCount": 47}], "localTips": "2-3 sentences of local fishing tips for this area", "regulationsUrl": "https://example.com/state-fishing-regulations", "licenseUrl": "https://example.com/buy-fishing-license"}
+{"localTips": "2-3 sentences of local fishing tips for this area including best seasons, popular species, and techniques", "regulationsUrl": "https://example.com/state-fishing-regulations", "licenseUrl": "https://example.com/buy-fishing-license"}
 
-Provide 1-4 recommendations per category. ONLY include businesses you are confident actually exist. Do NOT include website URLs for individual businesses. Include an estimated Google rating (1-5) and approximate review count for each business. Include "regulationsUrl" (a URL to the state/region fishing regulations page) and "licenseUrl" (a URL to apply for or purchase a fishing license in that state/region) — these should be real official government URLs.`,
+"regulationsUrl" should be a real URL to the official state/region fishing regulations page. "licenseUrl" should be a real URL to apply for or purchase a fishing license in that state/region. These should be real official government URLs. If you are not sure of the exact URL, use the most likely official state wildlife agency URL.`,
           },
         ],
       },
@@ -119,6 +114,12 @@ Provide 1-4 recommendations per category. ONLY include businesses you are confid
     return buildFallback();
   }
 
-  setCache(cacheKey, parsed);
-  return parsed;
+  const result = {
+    localTips: parsed.localTips || '',
+    regulationsUrl: parsed.regulationsUrl || '',
+    licenseUrl: parsed.licenseUrl || '',
+  };
+
+  setCache(cacheKey, result);
+  return result;
 }

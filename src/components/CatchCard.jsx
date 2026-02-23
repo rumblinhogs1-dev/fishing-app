@@ -74,6 +74,9 @@ export default function CatchCard({ entry, onDelete }) {
         {entry.flowRate && (
           <span className={styles.waterTag}>Flow: {entry.flowRate} ft³/s</span>
         )}
+        {entry.aiEstimatedAge && (
+          <span className={styles.tag}>Age: {entry.aiEstimatedAge}</span>
+        )}
       </div>
 
       {entry.notes && <p className={styles.notes}>{entry.notes}</p>}

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { getLocalRecommendations } from '../utils/geminiLocal';
+import { getPlacesRecommendations, hasPlacesApiKey } from '../utils/googlePlaces';
 import { getGPSLocation, reverseGeocode } from '../utils/weather';
 import { SkeletonCard } from './Skeleton';
 import styles from './LocalGuide.module.css';
@@ -23,7 +24,7 @@ function StarRating({ rating, reviewCount }) {
     <span className={styles.cardRating}>
       {'★'.repeat(full)}{half ? '½' : ''}{'☆'.repeat(empty)}{' '}
       {rating.toFixed(1)}
-      {reviewCount != null && <span className={styles.reviewCount}>({reviewCount})</span>}
+      {reviewCount != null && <span className={styles.reviewCount}>({reviewCount.toLocaleString()})</span>}
     </span>
   );
 }
@@ -43,6 +44,37 @@ function CardMeta({ item, category }) {
   );
 }
 
+async function fetchAllData(loc) {
+  const usePlaces = hasPlacesApiKey();
+
+  if (usePlaces) {
+    const [placesResult, geminiResult] = await Promise.allSettled([
+      getPlacesRecommendations(loc),
+      getLocalRecommendations(loc),
+    ]);
+
+    const places = placesResult.status === 'fulfilled' ? placesResult.value : {};
+    const gemini = geminiResult.status === 'fulfilled' ? geminiResult.value : {};
+
+    return {
+      fishingGuides: places.fishingGuides || [],
+      hotels: places.hotels || [],
+      cabins: places.cabins || [],
+      camping: places.camping || [],
+      baitShops: places.baitShops || [],
+      localTips: gemini.localTips || '',
+      regulationsUrl: gemini.regulationsUrl || '',
+      licenseUrl: gemini.licenseUrl || '',
+      _source: 'places',
+      _placesError: placesResult.status === 'rejected' ? placesResult.reason?.message : '',
+    };
+  }
+
+  // Fallback: Gemini-only (no Places API key)
+  const gemini = await getLocalRecommendations(loc);
+  return { ...gemini, _source: 'gemini' };
+}
+
 export default function LocalGuide() {
   const [searchParams] = useSearchParams();
   const [location, setLocation] = useState('');
@@ -60,7 +92,7 @@ export default function LocalGuide() {
       setLocation(loc);
       setLoading(true);
       setError('');
-      getLocalRecommendations(loc)
+      fetchAllData(loc)
         .then((data) => { setResults(data); setActiveTab('all'); })
         .catch((err) => setError(err.message || 'Failed to get recommendations.'))
         .finally(() => setLoading(false));
@@ -87,7 +119,7 @@ export default function LocalGuide() {
     setError('');
     setResults(null);
     try {
-      const data = await getLocalRecommendations(location.trim());
+      const data = await fetchAllData(location.trim());
       setResults(data);
       setActiveTab('all');
     } catch (err) {
@@ -115,6 +147,7 @@ export default function LocalGuide() {
   }
 
   const items = getFilteredItems();
+  const isPlacesSource = results?._source === 'places';
 
   return (
     <div className={styles.container}>
@@ -147,6 +180,18 @@ export default function LocalGuide() {
 
       {results && !loading && (
         <>
+          {results._placesError && (
+            <p className={styles.placesNote}>
+              Google Places error: {results._placesError}. Business listings may be incomplete.
+            </p>
+          )}
+
+          {!isPlacesSource && (
+            <p className={styles.placesNote}>
+              Add a Google Places API key for verified business listings. Currently using AI-generated suggestions.
+            </p>
+          )}
+
           {results.localTips && (
             <div className={styles.tips}>
               <h4 className={styles.tipsTitle}>Local Tips</h4>
@@ -189,20 +234,48 @@ export default function LocalGuide() {
             <div key={i} className={styles.card}>
               <h4 className={styles.cardName}>{item.name}</h4>
               <p className={styles.cardDesc}>{item.description}</p>
-              <a
-                href={`https://www.google.com/search?q=${encodeURIComponent(item.name + ' ' + location)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.googleLink}
-              >
-                Search on Google
-              </a>
+              {item.address && item.address !== item.description && (
+                <p className={styles.cardAddress}>{item.address}</p>
+              )}
+              <div className={styles.cardLinks}>
+                {item.googleMapsUri ? (
+                  <a
+                    href={item.googleMapsUri}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.googleLink}
+                  >
+                    View on Google Maps
+                  </a>
+                ) : (
+                  <a
+                    href={`https://www.google.com/search?q=${encodeURIComponent(item.name + ' ' + location)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.googleLink}
+                  >
+                    Search on Google
+                  </a>
+                )}
+                {item.websiteUri && (
+                  <a
+                    href={item.websiteUri}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.cardWebsite}
+                  >
+                    Website
+                  </a>
+                )}
+              </div>
               <CardMeta item={item} category={item._category} />
             </div>
           ))}
 
           <p className={styles.disclaimer}>
-            Results are AI-suggested and may not be accurate. Use "Search on Google" to verify businesses before visiting.
+            {isPlacesSource
+              ? 'Business listings from Google. Tips are AI-generated. Verify details before visiting.'
+              : 'Results are AI-suggested and may not be accurate. Verify businesses before visiting.'}
           </p>
         </>
       )}

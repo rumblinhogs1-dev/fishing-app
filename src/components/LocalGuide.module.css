@@ -60,12 +60,24 @@
   color: #888; font-weight: 400; margin-left: 0.15rem; font-size: 0.75rem;
 }
 
+.cardAddress {
+  font-size: 0.78rem; color: #888; margin: 0 0 0.4rem; line-height: 1.3;
+}
+.cardLinks {
+  display: flex; gap: 0.75rem; margin-bottom: 0.5rem;
+}
 .cardWebsite {
-  display: inline-block; margin-bottom: 0.5rem;
+  display: inline-block;
   color: #1a73e8; font-size: 0.8rem; font-weight: 500; text-decoration: none;
   word-break: break-all;
 }
 .cardWebsite:hover { text-decoration: underline; }
+
+.placesNote {
+  text-align: center; font-size: 0.8rem; color: #666;
+  background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px;
+  padding: 0.5rem 0.75rem; margin-bottom: 1rem;
+}
 
 .tips {
   background: #f0f6ff; border-radius: 8px; padding: 0.75rem 1rem;
