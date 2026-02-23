@@ -209,6 +209,12 @@ export default function CatchDetail() {
                   {entry.aiConfidence != null && ` (${entry.aiConfidence}%)`}
                 </span>
               </div>
+              {entry.aiEstimatedAge && (
+                <div className={styles.detailItem}>
+                  <span className={styles.detailLabel}>Est. Age</span>
+                  <span className={styles.detailValue}>{entry.aiEstimatedAge}</span>
+                </div>
+              )}
               {entry.correctedSpecies && (
                 <div className={styles.detailItem}>
                   <span className={styles.detailLabel}>Corrected To</span>

@@ -255,6 +255,7 @@ export default function CatchForm({ existing, onSubmit }) {
       depth: form.depth ? Number(form.depth) : '',
       aiSpecies: fishIdResult?.species || '',
       aiConfidence: fishIdResult?.confidence ?? null,
+      aiEstimatedAge: fishIdResult?.estimatedAge || '',
       correctedSpecies: fishIdConfirmed === false && correctedSpecies.trim() ? correctedSpecies.trim() : '',
       speciesConfirmed: fishIdConfirmed,
     };
@@ -446,6 +447,7 @@ export default function CatchForm({ existing, onSubmit }) {
                 <span className={styles.fishIdTag}>{fishIdResult.species}</span>
                 {fishIdResult.estimatedWeight && <span className={styles.fishIdTag}>{fishIdResult.estimatedWeight}</span>}
                 {fishIdResult.estimatedLength && <span className={styles.fishIdTag}>{fishIdResult.estimatedLength}</span>}
+                {fishIdResult.estimatedAge && <span className={styles.fishIdTag}>Age: {fishIdResult.estimatedAge}</span>}
               </div>
             </div>
 

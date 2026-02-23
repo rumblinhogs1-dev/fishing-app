@@ -245,7 +245,7 @@ export default function FishIdentify() {
 
           {result.confidence > 0 && (
             <div className={styles.resultBody}>
-              {(result.estimatedLength || result.estimatedWeight) && (
+              {(result.estimatedLength || result.estimatedWeight || result.estimatedAge) && (
                 <div className={styles.estimateRow}>
                   {result.estimatedLength && (
                     <div className={styles.estimateCard}>
@@ -259,6 +259,13 @@ export default function FishIdentify() {
                       <span className={styles.estimateIcon}>&#9878;</span>
                       <span className={styles.estimateLabel}>Est. Weight</span>
                       <span className={styles.estimateValue}>{result.estimatedWeight}</span>
+                    </div>
+                  )}
+                  {result.estimatedAge && (
+                    <div className={styles.estimateCard}>
+                      <span className={styles.estimateIcon}>&#128337;</span>
+                      <span className={styles.estimateLabel}>Est. Age</span>
+                      <span className={styles.estimateValue}>{result.estimatedAge}</span>
                     </div>
                   )}
                 </div>

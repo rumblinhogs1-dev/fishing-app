@@ -117,6 +117,7 @@ export default function QuickIdentify() {
           <div className={styles.resultDetails}>
             {result.estimatedLength && <span className={styles.detailTag}>&#8596; {result.estimatedLength}</span>}
             {result.estimatedWeight && <span className={styles.detailTag}>&#9878; {result.estimatedWeight}</span>}
+            {result.estimatedAge && <span className={styles.detailTag}>&#128337; {result.estimatedAge}</span>}
             {result.weather && <span className={styles.detailTag}>&#9788; {result.weather}</span>}
             {result.location && <span className={styles.detailTag}>&#9906; {result.location}</span>}
           </div>
