@@ -111,7 +111,7 @@ function BiteScoreGauge({ biteScore }) {
   const pct = ((biteScore.score - 1) / 9) * 100;
   return (
     <div className={styles.section}>
-      <h3 className={styles.sectionTitle}>Bite Score: {biteScore.score}/10 - {biteScore.label}</h3>
+      <h3 className={`${styles.sectionTitle} ${styles.hasTooltip}`} data-tooltip="Bite Score combines moon phase, solunar periods, pressure trend, wind, cloud cover, and time of day into a single 1-10 rating. Scores 7+ mean conditions strongly favor feeding. Plan your trips around the highest scores.">Bite Score: {biteScore.score}/10 - {biteScore.label}</h3>
       <div className={styles.gaugeLabel}><span>Poor</span><span>Fair</span><span>Good</span><span>Excellent</span></div>
       <div className={styles.gauge}>
         <div className={styles.gaugeFill} style={{ width: `${pct}%` }} />
