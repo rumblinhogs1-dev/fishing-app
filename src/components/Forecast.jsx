@@ -192,7 +192,7 @@ function WaterTempSection({ waterData, manualTemp, onManualTemp }) {
   const temp = waterData?.waterTemp ?? manualTemp;
   return (
     <div className={styles.section}>
-      <h3 className={styles.sectionTitle}>Water Temperature</h3>
+      <h3 className={`${styles.sectionTitle} ${styles.hasTooltip}`} data-tooltip="Water temp is the #1 factor for fish activity. Each species has a sweet spot — trout: 50-65°F, bass: 65-80°F, walleye: 55-70°F. Fish slow down outside their range and move deeper to find comfort zones.">Water Temperature</h3>
       {waterData?.waterTemp != null ? (
         <div className={styles.waterTempDisplay}>
           <div className={styles.waterTempValue}>{waterData.waterTemp}&deg;F</div>
