@@ -140,13 +140,19 @@ export default function CatchList({ catches, onDelete }) {
 
   const handlePresetChange = (preset) => {
     setDatePreset(preset);
+    if (preset === 'all') {
+      setStartDate('');
+      setEndDate('');
+      return;
+    }
     if (preset === 'custom') return;
     setStartDate(getDatePreset(preset));
     setEndDate(getDatePresetEnd(preset));
   };
 
   const dateFiltered = useMemo(() => {
-    if (datePreset === 'all' && !startDate && !endDate) return catches;
+    if (datePreset === 'all') return catches;
+    if (!startDate && !endDate) return catches;
     return catches.filter((c) => {
       if (!c.date) return false;
       const d = c.date.slice(0, 10);
@@ -182,8 +188,6 @@ export default function CatchList({ catches, onDelete }) {
   return (
     <div className={styles.container}>
       <QuickIdentify />
-
-      <StatsDashboard catches={filtered} />
 
       <div className={styles.toolbar}>
         <h2 className={styles.heading}>My Catches</h2>
@@ -252,6 +256,8 @@ export default function CatchList({ catches, onDelete }) {
           </div>
         )}
       </div>
+
+      <StatsDashboard catches={filtered} />
 
       {sorted.length === 0 ? (
         <div className={styles.empty}>
