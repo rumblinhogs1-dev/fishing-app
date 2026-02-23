@@ -84,7 +84,7 @@ function ConditionsGrid({ current }) {
         <div className={styles.condValue}>{current.temp != null ? `${current.temp}\u00B0F` : '--'}</div>
         <div className={styles.condLabel}>Temperature</div>
       </div>
-      <div className={styles.condCard}>
+      <div className={`${styles.condCard} ${styles.hasTooltip}`} data-tooltip="Light wind (5-15 mph) is ideal — it breaks the surface, reducing fish wariness and pushing baitfish. Calm water makes fish spooky. Strong wind muddies water and makes casting difficult.">
         <div className={styles.condValue}>{current.windSpeed != null ? `${current.windSpeed} mph` : '--'}</div>
         <div className={styles.condLabel}>Wind</div>
         {current.windGusts != null && <div className={styles.condDetail}>Gusts {current.windGusts} mph</div>}
@@ -94,7 +94,7 @@ function ConditionsGrid({ current }) {
         <div className={styles.condLabel}>Pressure (hPa)</div>
         {current.pressureTrend && <div className={styles.condDetail}>{current.pressureTrend === 'rising' ? '\u2191' : current.pressureTrend === 'falling' ? '\u2193' : '\u2192'} {current.pressureTrend}</div>}
       </div>
-      <div className={styles.condCard}>
+      <div className={`${styles.condCard} ${styles.hasTooltip}`} data-tooltip="Overcast skies make fish feel safer and feed longer. Bright sun pushes fish to shade, deeper water, or cover. Cloudy days are often the best for topwater action.">
         <div className={styles.condValue}>{current.cloudCover != null ? `${current.cloudCover}%` : '--'}</div>
         <div className={styles.condLabel}>Cloud Cover</div>
       </div>
