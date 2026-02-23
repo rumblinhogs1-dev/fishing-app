@@ -122,13 +122,13 @@ export default function CatchDetail() {
               </div>
             )}
             {entry.waterTemp && show('waterTemp') && (
-              <div className={styles.detailItem}>
+              <div className={`${styles.detailItem} ${styles.hasTooltip}`} data-tooltip="Water temp drives fish activity. Trout prefer 50-65°F, bass 65-80°F. Fish slow down outside their comfort zone and move to deeper, cooler water in heat.">
                 <span className={styles.detailLabel}>Water Temp</span>
                 <span className={styles.detailValue}>{entry.waterTemp}°F</span>
               </div>
             )}
             {entry.flowRate && show('weather') && (
-              <div className={styles.detailItem}>
+              <div className={`${styles.detailItem} ${styles.hasTooltip}`} data-tooltip="Flow rate affects where fish hold. Higher flows push fish to sheltered areas like eddies and banks. Lower flows concentrate fish in deeper pools. Moderate, stable flows are generally best.">
                 <span className={styles.detailLabel}>Flow Rate</span>
                 <span className={styles.detailValue}>{entry.flowRate} ft³/s</span>
               </div>

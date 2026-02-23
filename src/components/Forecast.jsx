@@ -80,7 +80,7 @@ function ConditionsGrid({ current }) {
   if (!current) return null;
   return (
     <div className={styles.conditionsGrid}>
-      <div className={styles.condCard}>
+      <div className={`${styles.condCard} ${styles.hasTooltip}`} data-tooltip="Air temp affects fish metabolism and feeding. Fish are most active in their preferred range — trout: 50-65°F, bass: 65-80°F. Extreme temps push fish deeper.">
         <div className={styles.condValue}>{current.temp != null ? `${current.temp}\u00B0F` : '--'}</div>
         <div className={styles.condLabel}>Temperature</div>
       </div>
@@ -89,7 +89,7 @@ function ConditionsGrid({ current }) {
         <div className={styles.condLabel}>Wind</div>
         {current.windGusts != null && <div className={styles.condDetail}>Gusts {current.windGusts} mph</div>}
       </div>
-      <div className={styles.condCard}>
+      <div className={`${styles.condCard} ${styles.hasTooltip}`} data-tooltip="Falling pressure = fish feed aggressively before a storm. Steady pressure = normal activity. Rising pressure = slower bite as fish adjust. Rapid drops trigger the best feeding windows.">
         <div className={styles.condValue}>{current.pressure != null ? `${current.pressure}` : '--'}</div>
         <div className={styles.condLabel}>Pressure (hPa)</div>
         {current.pressureTrend && <div className={styles.condDetail}>{current.pressureTrend === 'rising' ? '\u2191' : current.pressureTrend === 'falling' ? '\u2193' : '\u2192'} {current.pressureTrend}</div>}
