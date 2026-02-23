@@ -251,7 +251,7 @@ function WindArrowSVG({ direction }) {
 function WindTideSection({ current, tideData, waterData, windDir }) {
   return (
     <div className={styles.section}>
-      <h3 className={styles.sectionTitle}>Wind & {tideData ? 'Tides' : 'Flow'}</h3>
+      <h3 className={`${styles.sectionTitle} ${styles.hasTooltip}`} data-tooltip="Moving tides are key — the best fishing is during incoming (flood) and outgoing (ebb) tides, especially the first 2 hours of each. Slack tide (high/low) slows the bite. Incoming tides bring baitfish closer to shore.">Wind & {tideData ? 'Tides' : 'Flow'}</h3>
       <div className={styles.windDisplay}>
         <WindArrowSVG direction={windDir} />
         <div className={styles.windValues}>
