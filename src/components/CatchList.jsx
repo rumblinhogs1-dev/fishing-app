@@ -183,7 +183,7 @@ export default function CatchList({ catches, onDelete }) {
     <div className={styles.container}>
       <QuickIdentify />
 
-      <StatsDashboard catches={catches} />
+      <StatsDashboard catches={filtered} />
 
       <div className={styles.toolbar}>
         <h2 className={styles.heading}>My Catches</h2>
