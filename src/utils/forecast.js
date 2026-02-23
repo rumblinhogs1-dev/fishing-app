@@ -65,7 +65,7 @@ function coordKey(lat, lng) {
 export async function fetchForecastData(lat, lng) {
   const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}` +
     `&daily=temperature_2m_max,temperature_2m_min,wind_speed_10m_max,wind_direction_10m_dominant,sunrise,sunset,precipitation_sum,weather_code` +
-    `&hourly=temperature_2m,pressure_msl,wind_speed_10m,wind_gusts_10m,cloud_cover` +
+    `&hourly=temperature_2m,relative_humidity_2m,pressure_msl,wind_speed_10m,wind_gusts_10m,cloud_cover` +
     `&temperature_unit=fahrenheit&wind_speed_unit=mph&forecast_days=5&timezone=auto`;
 
   const res = await fetch(url);
@@ -88,6 +88,7 @@ export async function fetchForecastData(lat, lng) {
     windSpeed: hourly.wind_speed_10m?.[idx] != null ? Math.round(hourly.wind_speed_10m[idx]) : null,
     windGusts: hourly.wind_gusts_10m?.[idx] != null ? Math.round(hourly.wind_gusts_10m[idx]) : null,
     cloudCover: hourly.cloud_cover?.[idx] != null ? Math.round(hourly.cloud_cover[idx]) : null,
+    humidity: hourly.relative_humidity_2m?.[idx] != null ? Math.round(hourly.relative_humidity_2m[idx]) : null,
     pressureTrend,
   };
 

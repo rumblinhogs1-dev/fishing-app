@@ -98,6 +98,10 @@ function ConditionsGrid({ current }) {
         <div className={styles.condValue}>{current.cloudCover != null ? `${current.cloudCover}%` : '--'}</div>
         <div className={styles.condLabel}>Cloud Cover</div>
       </div>
+      <div className={`${styles.condCard} ${styles.hasTooltip}`} data-tooltip="High humidity (70%+) often means insect hatches are more active, boosting fly fishing. It also signals incoming weather changes. Low humidity can slow surface feeding activity.">
+        <div className={styles.condValue}>{current.humidity != null ? `${current.humidity}%` : '--'}</div>
+        <div className={styles.condLabel}>Humidity</div>
+      </div>
     </div>
   );
 }
