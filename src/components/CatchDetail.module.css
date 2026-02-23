@@ -137,13 +137,36 @@
 
 @media (max-width: 600px) {
   .hasTooltip::after {
-    bottom: auto;
-    top: calc(100% + 8px);
-    left: auto;
-    right: 0;
-    transform: none;
-    width: min(220px, 70vw);
+    display: none;
   }
+}
+
+.mobileTooltip {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .mobileTooltip {
+    display: block;
+    position: fixed;
+    left: 5vw;
+    right: 5vw;
+    width: 90vw;
+    background: #333;
+    color: #fff;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    z-index: 1000;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    animation: tooltipFadeIn 0.15s ease;
+  }
+}
+
+@keyframes tooltipFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .aiSection {

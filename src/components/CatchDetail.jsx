@@ -28,14 +28,29 @@ export default function CatchDetail() {
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
+    const isMobile = () => window.matchMedia('(max-width: 600px)').matches;
+    const removeFloating = () => {
+      const existing = el.querySelector(`.${styles.mobileTooltip}`);
+      if (existing) existing.remove();
+    };
     const handler = (e) => {
       const tip = e.target.closest('[data-tooltip]');
+      el.querySelectorAll('.tooltipActive').forEach((t) => t.classList.remove('tooltipActive'));
+      removeFloating();
       if (tip) {
-        const wasActive = tip.classList.contains('tooltipActive');
-        el.querySelectorAll('.tooltipActive').forEach((t) => t.classList.remove('tooltipActive'));
-        if (!wasActive) tip.classList.add('tooltipActive');
-      } else {
-        el.querySelectorAll('.tooltipActive').forEach((t) => t.classList.remove('tooltipActive'));
+        if (isMobile()) {
+          const rect = tip.getBoundingClientRect();
+          const div = document.createElement('div');
+          div.className = styles.mobileTooltip;
+          div.textContent = tip.getAttribute('data-tooltip');
+          div.style.top = `${rect.bottom + 8}px`;
+          el.appendChild(div);
+          tip.classList.add('tooltipActive');
+        } else {
+          const wasActive = tip.dataset.wasActive === 'true';
+          tip.dataset.wasActive = wasActive ? 'false' : 'true';
+          if (!wasActive) tip.classList.add('tooltipActive');
+        }
       }
     };
     el.addEventListener('click', handler);
