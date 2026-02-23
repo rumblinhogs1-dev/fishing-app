@@ -77,6 +77,76 @@
   background: #1b5e20;
 }
 
+.dateFilter {
+  margin-bottom: 1rem;
+}
+
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.presetBtn {
+  padding: 0.35rem 0.7rem;
+  border: 1.5px solid #ccc;
+  border-radius: 20px;
+  background: #fff;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.presetBtn:hover {
+  border-color: #1a73e8;
+  color: #1a73e8;
+}
+
+.presetActive {
+  background: #1a73e8;
+  color: #fff;
+  border-color: #1a73e8;
+}
+
+.presetActive:hover {
+  background: #1557b0;
+  border-color: #1557b0;
+  color: #fff;
+}
+
+.dateInputs {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.6rem;
+  align-items: center;
+}
+
+.dateLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.dateInput {
+  padding: 0.4rem 0.6rem;
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.dateInput:focus {
+  outline: none;
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.12);
+}
+
 .statsRow {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));

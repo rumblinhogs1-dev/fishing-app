@@ -113,19 +113,58 @@ function exportCatchesCSV(catches) {
   URL.revokeObjectURL(url);
 }
 
+function getDatePreset(preset) {
+  const now = new Date();
+  switch (preset) {
+    case 'ytd': return new Date(now.getFullYear(), 0, 1).toISOString().slice(0, 10);
+    case 'month': return new Date(now.getFullYear(), now.getMonth(), 1).toISOString().slice(0, 10);
+    case '30d': { const d = new Date(now); d.setDate(d.getDate() - 30); return d.toISOString().slice(0, 10); }
+    case '90d': { const d = new Date(now); d.setDate(d.getDate() - 90); return d.toISOString().slice(0, 10); }
+    case 'ly': return `${now.getFullYear() - 1}-01-01`;
+    default: return '';
+  }
+}
+
+function getDatePresetEnd(preset) {
+  const now = new Date();
+  if (preset === 'ly') return `${now.getFullYear() - 1}-12-31`;
+  return '';
+}
+
 export default function CatchList({ catches, onDelete }) {
   const [query, setQuery] = useState('');
   const [sortBy, setSortBy] = useState('date');
+  const [datePreset, setDatePreset] = useState('all');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+
+  const handlePresetChange = (preset) => {
+    setDatePreset(preset);
+    if (preset === 'custom') return;
+    setStartDate(getDatePreset(preset));
+    setEndDate(getDatePresetEnd(preset));
+  };
+
+  const dateFiltered = useMemo(() => {
+    if (datePreset === 'all' && !startDate && !endDate) return catches;
+    return catches.filter((c) => {
+      if (!c.date) return false;
+      const d = c.date.slice(0, 10);
+      if (startDate && d < startDate) return false;
+      if (endDate && d > endDate) return false;
+      return true;
+    });
+  }, [catches, startDate, endDate, datePreset]);
 
   const filtered = useMemo(() => {
-    if (!query.trim()) return catches;
+    if (!query.trim()) return dateFiltered;
     const q = query.toLowerCase();
-    return catches.filter(
+    return dateFiltered.filter(
       (c) =>
         c.species?.toLowerCase().includes(q) ||
         c.location?.toLowerCase().includes(q)
     );
-  }, [catches, query]);
+  }, [dateFiltered, query]);
 
   const sorted = useMemo(() => {
     const arr = [...filtered];
@@ -165,10 +204,10 @@ export default function CatchList({ catches, onDelete }) {
             <option value="size">Sort: Size</option>
             <option value="species">Sort: Species</option>
           </select>
-          {catches.length > 0 && (
+          {sorted.length > 0 && (
             <button
               className={styles.exportBtn}
-              onClick={() => exportCatchesCSV(catches)}
+              onClick={() => exportCatchesCSV(sorted)}
               title="Download as CSV for Excel / Google Sheets"
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{ verticalAlign: -2 }}>
@@ -178,6 +217,40 @@ export default function CatchList({ catches, onDelete }) {
             </button>
           )}
         </div>
+      </div>
+
+      <div className={styles.dateFilter}>
+        <div className={styles.presets}>
+          {[
+            ['all', 'All Time'],
+            ['ytd', 'YTD'],
+            ['month', 'This Month'],
+            ['30d', 'Last 30 Days'],
+            ['90d', 'Last 90 Days'],
+            ['ly', 'Last Year'],
+            ['custom', 'Custom'],
+          ].map(([key, label]) => (
+            <button
+              key={key}
+              className={`${styles.presetBtn} ${datePreset === key ? styles.presetActive : ''}`}
+              onClick={() => handlePresetChange(key)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        {datePreset === 'custom' && (
+          <div className={styles.dateInputs}>
+            <label className={styles.dateLabel}>
+              From
+              <input type="date" className={styles.dateInput} value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+            </label>
+            <label className={styles.dateLabel}>
+              To
+              <input type="date" className={styles.dateInput} value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+            </label>
+          </div>
+        )}
       </div>
 
       {sorted.length === 0 ? (
