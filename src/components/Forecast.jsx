@@ -358,15 +358,15 @@ function DayDetail({ day, index }) {
     <div className={styles.dayDetail}>
       <h4 style={{ margin: '0 0 0.5rem', fontSize: '0.95rem' }}>{dayLabel(day.date, index)} Detail</h4>
       <div className={styles.dayDetailGrid}>
-        <div className={styles.dayDetailItem}>
+        <div className={`${styles.dayDetailItem} ${styles.hasTooltip}`} data-tooltip="Weather conditions set the stage — overcast and light rain are ideal. Stable, mild conditions keep fish active. Sudden changes can trigger short feeding bursts before fish adjust.">
           <span className={styles.dayDetailLabel}>Weather</span>
           <span className={styles.dayDetailValue}>{WEATHER_CODES[day.weatherCode] || 'Unknown'}</span>
         </div>
-        <div className={styles.dayDetailItem}>
+        <div className={`${styles.dayDetailItem} ${styles.hasTooltip}`} data-tooltip="Fish are most active in their preferred temp range. A narrow high/low spread means stable conditions and consistent feeding. Wide swings can make fish sluggish as they adjust.">
           <span className={styles.dayDetailLabel}>High / Low</span>
           <span className={styles.dayDetailValue}>{day.tempMax}&deg; / {day.tempMin}&deg;F</span>
         </div>
-        <div className={styles.dayDetailItem}>
+        <div className={`${styles.dayDetailItem} ${styles.hasTooltip}`} data-tooltip="Light wind (5-15 mph) is ideal — it breaks the surface, reducing fish wariness and pushing baitfish. Calm water makes fish spooky. Strong wind muddies water and makes casting difficult.">
           <span className={styles.dayDetailLabel}>Wind</span>
           <span className={styles.dayDetailValue}>{day.windMax ?? '--'} mph {windDirectionLabel(day.windDir)}</span>
         </div>
@@ -382,11 +382,11 @@ function DayDetail({ day, index }) {
           <span className={styles.dayDetailLabel}>Sunset</span>
           <span className={styles.dayDetailValue}>{formatShortTime(day.sunset)}</span>
         </div>
-        <div className={styles.dayDetailItem}>
+        <div className={`${styles.dayDetailItem} ${styles.hasTooltip}`} data-tooltip="New and full moons produce stronger tides and more fish activity. The 3 days around a full or new moon are peak feeding times. Quarter moons tend to have the slowest bite.">
           <span className={styles.dayDetailLabel}>Moon</span>
           <span className={styles.dayDetailValue}>{day.moonPhase?.emoji} {day.moonPhase?.name}</span>
         </div>
-        <div className={styles.dayDetailItem}>
+        <div className={`${styles.dayDetailItem} ${styles.hasTooltip}`} data-tooltip="Bite Score combines moon phase, solunar periods, pressure trend, wind, cloud cover, and time of day into a single 1-10 rating. Scores 7+ mean conditions strongly favor feeding.">
           <span className={styles.dayDetailLabel}>Bite Score</span>
           <span className={styles.dayDetailValue} style={{ color: day.biteScore?.color }}>{day.biteScore?.score}/10 {day.biteScore?.label}</span>
         </div>

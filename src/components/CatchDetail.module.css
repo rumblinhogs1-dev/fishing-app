@@ -135,6 +135,16 @@
   opacity: 1;
 }
 
+@media (max-width: 600px) {
+  .hasTooltip::after {
+    bottom: auto;
+    top: calc(100% + 8px);
+    left: 0;
+    transform: none;
+    width: min(220px, 70vw);
+  }
+}
+
 .aiSection {
   display: grid;
   grid-template-columns: 1fr 1fr;

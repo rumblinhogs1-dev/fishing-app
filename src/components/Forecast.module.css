@@ -225,6 +225,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
+  overflow: visible;
 }
 
 .condValue {
@@ -300,6 +301,16 @@
 .hasTooltip:hover::after,
 .hasTooltip.tooltipActive::after {
   opacity: 1;
+}
+
+@media (max-width: 600px) {
+  .hasTooltip::after {
+    bottom: auto;
+    top: calc(100% + 8px);
+    left: 0;
+    transform: none;
+    width: min(240px, 70vw);
+  }
 }
 
 /* Section Card */
