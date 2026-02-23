@@ -139,7 +139,8 @@
   .hasTooltip::after {
     bottom: auto;
     top: calc(100% + 8px);
-    left: 0;
+    left: auto;
+    right: 0;
     transform: none;
     width: min(220px, 70vw);
   }
