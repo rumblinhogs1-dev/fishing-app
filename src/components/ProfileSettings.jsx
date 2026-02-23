@@ -56,6 +56,7 @@ export default function ProfileSettings() {
     challenge_result: true,
     trip_invite: true,
   });
+  const [heatmapOptIn, setHeatmapOptIn] = useState(false);
   const [publicFields, setPublicFields] = useState({
     weight: true,
     length: true,
@@ -85,6 +86,9 @@ export default function ProfileSettings() {
         }
         if (data.publicCatchFields) {
           setPublicFields((prev) => ({ ...prev, ...data.publicCatchFields }));
+        }
+        if (data.heatmapOptIn != null) {
+          setHeatmapOptIn(data.heatmapOptIn);
         }
       } else {
         setForm({
@@ -133,6 +137,7 @@ export default function ProfileSettings() {
         defaultVisibility: form.defaultVisibility,
         notificationPreferences: notifPrefs,
         publicCatchFields: publicFields,
+        heatmapOptIn,
       }, { merge: true });
       toast.success('Settings saved!');
       navigate('/');
@@ -273,6 +278,22 @@ export default function ProfileSettings() {
               </button>
             </div>
           ))}
+        </div>
+
+        <div className={styles.notifSection}>
+          <h3 className={styles.sectionTitle}>Community Heatmap</h3>
+          <p className={styles.sectionHint}>Share your catch locations anonymously to help build a community fishing heatmap.</p>
+          <div className={styles.toggleRow}>
+            <span className={styles.toggleLabel}>Contribute to heatmap</span>
+            <button
+              type="button"
+              className={`${styles.toggleSwitch} ${heatmapOptIn ? styles.toggleOn : ''}`}
+              onClick={() => setHeatmapOptIn((prev) => !prev)}
+              aria-label="Toggle community heatmap sharing"
+            >
+              <span className={styles.toggleKnob} />
+            </button>
+          </div>
         </div>
 
         <div className={styles.actions}>

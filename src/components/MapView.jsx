@@ -9,6 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSpots } from '../hooks/useSpots';
 import { useMapLayers } from '../hooks/useMapLayers';
 import { useAuth } from '../contexts/AuthContext';
+import { fetchCommunityHeatmapPoints } from '../utils/firestore';
 import { getGPSLocation, geocodeLocation } from '../utils/weather';
 import { fetchUSGSStations } from '../utils/usgs';
 import SaveSpotModal from './SaveSpotModal';
@@ -179,7 +180,7 @@ function CatchClusterLayer({ catches, onSaveSpot }) {
   return null;
 }
 
-function HeatLayer({ catches }) {
+function HeatLayer({ catches, communityPoints }) {
   const map = useMap();
   const [pluginReady, setPluginReady] = useState(false);
 
@@ -194,6 +195,10 @@ function HeatLayer({ catches }) {
       .filter((c) => c.lat && c.lng)
       .map((c) => [c.lat, c.lng, 0.5]);
 
+    if (communityPoints?.length) {
+      communityPoints.forEach((p) => points.push([p.lat, p.lng, 0.3]));
+    }
+
     if (points.length === 0) return;
 
     const heat = L.heatLayer(points, {
@@ -204,7 +209,7 @@ function HeatLayer({ catches }) {
     });
     map.addLayer(heat);
     return () => map.removeLayer(heat);
-  }, [map, catches, pluginReady]);
+  }, [map, catches, communityPoints, pluginReady]);
 
   return null;
 }
@@ -409,12 +414,20 @@ export default function MapView({ catches = [] }) {
   const [showStructure, setShowStructure] = useState(false);
   const [showWaterInfo, setShowWaterInfo] = useState(false);
   const [mapCenter, setMapCenter] = useState({ lat: US_CENTER[0], lng: US_CENTER[1] });
+  const [communityPoints, setCommunityPoints] = useState([]);
   const mapInstanceRef = useRef(null);
 
   const catchesWithCoords = useMemo(
     () => catches.filter((c) => c.lat && c.lng),
     [catches]
   );
+
+  useEffect(() => {
+    if (!layers.heatmap) return;
+    fetchCommunityHeatmapPoints(user?.uid)
+      .then(setCommunityPoints)
+      .catch(() => setCommunityPoints([]));
+  }, [layers.heatmap, user?.uid]);
 
   useEffect(() => {
     getGPSLocation()
@@ -493,7 +506,7 @@ export default function MapView({ catches = [] }) {
         {layers.catchPins && (
           <CatchClusterLayer catches={catchesWithCoords} onSaveSpot={handleSaveSpot} />
         )}
-        {layers.heatmap && <HeatLayer catches={catchesWithCoords} />}
+        {layers.heatmap && <HeatLayer catches={catchesWithCoords} communityPoints={communityPoints} />}
 
         {layers.favoriteSpots && spots.map((spot) => (
           <Marker key={spot.id} position={[spot.lat, spot.lng]} icon={spotIcon}>

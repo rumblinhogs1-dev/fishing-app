@@ -7,6 +7,8 @@ import {
   query,
   where,
   orderBy,
+  limit,
+  getDocs,
   onSnapshot,
   serverTimestamp,
 } from 'firebase/firestore';
@@ -35,6 +37,39 @@ export async function updateCatch(catchId, updates) {
 export async function deleteCatch(catchId) {
   const ref = doc(db, CATCHES_COL, catchId);
   await deleteDoc(ref);
+}
+
+export async function fetchCommunityHeatmapPoints(excludeUserId) {
+  // Get users who opted in to heatmap sharing
+  const usersSnap = await getDocs(
+    query(collection(db, 'users'), where('heatmapOptIn', '==', true))
+  );
+  const userIds = usersSnap.docs
+    .map((d) => d.id)
+    .filter((id) => id !== excludeUserId);
+
+  if (!userIds.length) return [];
+
+  // Firestore 'in' supports up to 30 values; batch if needed
+  const points = [];
+  for (let i = 0; i < userIds.length; i += 30) {
+    const batch = userIds.slice(i, i + 30);
+    const snap = await getDocs(
+      query(
+        collection(db, CATCHES_COL),
+        where('userId', 'in', batch),
+        where('visibility', '==', 'public'),
+        limit(500)
+      )
+    );
+    snap.docs.forEach((d) => {
+      const data = d.data();
+      if (data.lat && data.lng) {
+        points.push({ lat: data.lat, lng: data.lng });
+      }
+    });
+  }
+  return points;
 }
 
 export function subscribeToCatches(userId, callback) {
