@@ -370,7 +370,7 @@ function DayDetail({ day, index }) {
           <span className={styles.dayDetailLabel}>Wind</span>
           <span className={styles.dayDetailValue}>{day.windMax ?? '--'} mph {windDirectionLabel(day.windDir)}</span>
         </div>
-        <div className={styles.dayDetailItem}>
+        <div className={`${styles.dayDetailItem} ${styles.hasTooltip}`} data-tooltip="Light rain is great — it breaks the surface, washes insects into the water, and reduces visibility so fish feel bolder. Heavy rain muddies water and can shut down the bite. Post-rain runoff often triggers excellent feeding.">
           <span className={styles.dayDetailLabel}>Precipitation</span>
           <span className={styles.dayDetailValue}>{day.precip}" </span>
         </div>
