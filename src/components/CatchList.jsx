@@ -61,6 +61,58 @@ function StatsDashboard({ catches }) {
   );
 }
 
+function exportCatchesCSV(catches) {
+  const headers = [
+    'Date', 'Time', 'Species', 'Weight (lbs)', 'Length (in)', 'Location',
+    'Latitude', 'Longitude', 'Bait/Lure', 'Lure Name', 'Lure Type', 'Lure Color',
+    'Weather', 'Water Temp (°F)', 'Flow Rate (ft³/s)', 'Depth (ft)',
+    'Released', 'Visibility', 'Notes',
+  ];
+
+  const escapeCSV = (val) => {
+    if (val == null || val === '') return '';
+    const str = String(val);
+    if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+      return `"${str.replace(/"/g, '""')}"`;
+    }
+    return str;
+  };
+
+  const rows = catches.map((c) => {
+    const d = c.date ? new Date(c.date) : null;
+    return [
+      d ? d.toLocaleDateString('en-US') : '',
+      d ? d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : '',
+      c.species || '',
+      c.weight || '',
+      c.length || '',
+      c.location || '',
+      c.lat || '',
+      c.lng || '',
+      c.bait || '',
+      c.lureName || '',
+      c.lureType || '',
+      c.lureColor || '',
+      c.weather || '',
+      c.waterTemp || '',
+      c.flowRate || '',
+      c.depth || '',
+      c.released != null ? (c.released ? 'Yes' : 'No') : '',
+      c.visibility || '',
+      c.notes || '',
+    ].map(escapeCSV).join(',');
+  });
+
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `my-catches-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 export default function CatchList({ catches, onDelete }) {
   const [query, setQuery] = useState('');
   const [sortBy, setSortBy] = useState('date');
@@ -113,6 +165,18 @@ export default function CatchList({ catches, onDelete }) {
             <option value="size">Sort: Size</option>
             <option value="species">Sort: Species</option>
           </select>
+          {catches.length > 0 && (
+            <button
+              className={styles.exportBtn}
+              onClick={() => exportCatchesCSV(catches)}
+              title="Download as CSV for Excel / Google Sheets"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{ verticalAlign: -2 }}>
+                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+              </svg>
+              {' '}Export CSV
+            </button>
+          )}
         </div>
       </div>
 

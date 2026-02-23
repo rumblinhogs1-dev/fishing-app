@@ -58,6 +58,25 @@
   box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.12);
 }
 
+.exportBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.5rem 0.85rem;
+  background: #2e7d32;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.exportBtn:hover {
+  background: #1b5e20;
+}
+
 .statsRow {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
