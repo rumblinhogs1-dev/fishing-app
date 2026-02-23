@@ -138,7 +138,7 @@ function MoonSolunarSection({ day }) {
   return (
     <div className={styles.section}>
       <h3 className={styles.sectionTitle}>Moon & Solunar</h3>
-      <div className={styles.moonHeader}>
+      <div className={`${styles.moonHeader} ${styles.hasTooltip}`} data-tooltip="New and full moons produce stronger tides and more fish activity. The 3 days around a full or new moon are peak feeding times. Quarter moons tend to have the slowest bite.">
         <span className={styles.moonEmoji}>{moonPhase.emoji}</span>
         <div className={styles.moonInfo}>
           <span className={styles.moonPhase}>{moonPhase.name}</span>
