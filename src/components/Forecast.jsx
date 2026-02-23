@@ -374,11 +374,11 @@ function DayDetail({ day, index }) {
           <span className={styles.dayDetailLabel}>Precipitation</span>
           <span className={styles.dayDetailValue}>{day.precip}" </span>
         </div>
-        <div className={styles.dayDetailItem}>
+        <div className={`${styles.dayDetailItem} ${styles.hasTooltip}`} data-tooltip="The hour around sunrise is prime time — fish feed aggressively as light levels rise and baitfish become active. Dawn is often the best bite window of the day.">
           <span className={styles.dayDetailLabel}>Sunrise</span>
           <span className={styles.dayDetailValue}>{formatShortTime(day.sunrise)}</span>
         </div>
-        <div className={styles.dayDetailItem}>
+        <div className={`${styles.dayDetailItem} ${styles.hasTooltip}`} data-tooltip="The last hour before sunset triggers another feeding spree as fish take advantage of fading light. Topwater action peaks during the golden hour before dark.">
           <span className={styles.dayDetailLabel}>Sunset</span>
           <span className={styles.dayDetailValue}>{formatShortTime(day.sunset)}</span>
         </div>
