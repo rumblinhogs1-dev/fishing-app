@@ -105,9 +105,21 @@
   border-bottom: none;
 }
 
+.toggleInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
 .toggleLabel {
   font-size: 0.9rem;
   color: #333;
+}
+
+.toggleDesc {
+  font-size: 0.72rem;
+  color: #999;
 }
 
 .toggleSwitch {

@@ -7,6 +7,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSpots } from '../hooks/useSpots';
+import { useDepthPoints } from '../hooks/useDepthPoints';
 import { useMapLayers } from '../hooks/useMapLayers';
 import { useAuth } from '../contexts/AuthContext';
 import { fetchCommunityHeatmapPoints } from '../utils/firestore';
@@ -233,6 +234,55 @@ function DepthContourLayer() {
   );
 }
 
+function NavionicsLayer() {
+  const map = useMap();
+  const overlayRef = useRef(null);
+
+  useEffect(() => {
+    const navKey = import.meta.env.VITE_NAVIONICS_KEY;
+    if (!navKey) return;
+
+    function createOverlay() {
+      if (!window.JNC) return;
+      const overlay = new window.JNC.Leaflet.NavionicsOverlay({
+        navKey,
+        chartType: window.JNC.NAVIONICS_CHARTS.SONAR,
+        isTransparent: true,
+        zIndex: 5,
+      });
+      overlay.addTo(map);
+      overlayRef.current = overlay;
+    }
+
+    if (window.JNC) {
+      createOverlay();
+      return () => {
+        if (overlayRef.current) map.removeLayer(overlayRef.current);
+      };
+    }
+
+    const existing = document.querySelector('script[src*="navionics"]');
+    if (existing) {
+      existing.addEventListener('load', createOverlay);
+      return () => {
+        if (overlayRef.current) map.removeLayer(overlayRef.current);
+      };
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://webapiv2.navionics.com/dist/webapi/webapi.min.no-dep.js';
+    script.async = true;
+    script.onload = createOverlay;
+    document.head.appendChild(script);
+
+    return () => {
+      if (overlayRef.current) map.removeLayer(overlayRef.current);
+    };
+  }, [map]);
+
+  return null;
+}
+
 function USGSGaugeLayer() {
   const map = useMap();
   const [stations, setStations] = useState([]);
@@ -302,6 +352,44 @@ function RecenterButton({ userLocation }) {
       </svg>
     </button>
   );
+}
+
+function depthColor(depth, minD, maxD) {
+  const range = maxD - minD || 1;
+  const t = Math.min(1, Math.max(0, (depth - minD) / range));
+  const r = Math.round(79 + (13 - 79) * t);
+  const g = Math.round(195 + (71 - 195) * t);
+  const b = Math.round(247 + (161 - 247) * t);
+  return `rgb(${r},${g},${b})`;
+}
+
+function SonarDataLayer({ depthPoints }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!depthPoints.length) return;
+
+    const depths = depthPoints.map((p) => p.depth);
+    const minD = Math.min(...depths);
+    const maxD = Math.max(...depths);
+
+    const markers = depthPoints.map((p) =>
+      L.circleMarker([p.lat, p.lng], {
+        radius: 4,
+        fillColor: depthColor(p.depth, minD, maxD),
+        fillOpacity: 0.8,
+        color: '#fff',
+        weight: 0.5,
+      }).bindPopup(
+        `<b>${p.depth} ft</b>${p.waterTemp != null ? `<br/>Temp: ${p.waterTemp}°F` : ''}`
+      )
+    );
+
+    const group = L.featureGroup(markers).addTo(map);
+    return () => map.removeLayer(group);
+  }, [map, depthPoints]);
+
+  return null;
 }
 
 function MapCenterTracker({ onCenterChange }) {
@@ -405,6 +493,7 @@ export default function MapView({ catches = [] }) {
   useEffect(() => { markStepComplete('exploredMap'); }, []);
   const { user } = useAuth();
   const { spots, addSpot } = useSpots();
+  const { depthPoints } = useDepthPoints();
   const { layers, toggleLayer, setBasemap } = useMapLayers();
   const [userLocation, setUserLocation] = useState(null);
   const [center, setCenter] = useState(US_CENTER);
@@ -476,6 +565,17 @@ export default function MapView({ catches = [] }) {
 
         {layers.depthContours && <DepthContourLayer />}
 
+        {layers.openSeaBathy && (
+          <TileLayer
+            url="https://depth.openseamap.org/tiles/{z}/{x}/{y}.png"
+            attribution="&copy; OpenSeaMap Bathymetry"
+            opacity={0.7}
+            zIndex={3}
+          />
+        )}
+
+        {layers.navionics && <NavionicsLayer />}
+
         {layers.noaaCharts && (
           <TileLayer
             url="https://gis.charttools.noaa.gov/arcgis/rest/services/MarineChart_Services/NOAACharts/MapServer/WMTS/tile/1.0.0/MarineChart_Services_NOAACharts/default/GoogleMapsCompatible/{z}/{y}/{x}.png"
@@ -521,6 +621,10 @@ export default function MapView({ catches = [] }) {
         ))}
 
         {layers.usgsGauges && <USGSGaugeLayer />}
+
+        {layers.sonarData && depthPoints.length > 0 && (
+          <SonarDataLayer depthPoints={depthPoints} />
+        )}
 
         <MapCenterTracker onCenterChange={setMapCenter} />
         <RecenterButton userLocation={userLocation} />

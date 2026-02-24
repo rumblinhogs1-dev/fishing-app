@@ -5,6 +5,8 @@ const STORAGE_KEY = 'fishing-app-map-layers';
 const DEFAULTS = {
   basemap: 'osm',
   depthContours: false,
+  openSeaBathy: false,
+  navionics: false,
   catchPins: true,
   heatmap: false,
   favoriteSpots: true,
@@ -12,6 +14,7 @@ const DEFAULTS = {
   noaaCharts: false,
   usgsTopo: false,
   publicLands: false,
+  sonarData: false,
 };
 
 function loadLayers() {

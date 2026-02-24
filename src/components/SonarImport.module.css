@@ -1,0 +1,263 @@
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+.heading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.subheading {
+  color: var(--text-secondary, #666);
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+/* Drop zone */
+.dropZone {
+  border: 2px dashed var(--border, #ccc);
+  border-radius: 12px;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  background: var(--bg-card, #fafafa);
+}
+
+.dropZone:hover,
+.dropZoneDragging {
+  border-color: var(--primary, #1a73e8);
+  background: rgba(26, 115, 232, 0.04);
+}
+
+.dropIcon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.dropLabel {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.dropHint {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #888);
+}
+
+.hiddenInput {
+  display: none;
+}
+
+/* Auth gate */
+.authGate {
+  text-align: center;
+  padding: 2rem;
+  background: var(--bg-card, #fafafa);
+  border-radius: 12px;
+  border: 1px solid var(--border, #e0e0e0);
+}
+
+.authGate p {
+  margin-bottom: 1rem;
+  color: var(--text-secondary, #666);
+}
+
+.authLink {
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  background: var(--primary, #1a73e8);
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* Stats card */
+.statsCard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.stat {
+  background: var(--bg-card, #f5f5f5);
+  border-radius: 10px;
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.statValue {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary, #1a73e8);
+}
+
+.statLabel {
+  font-size: 0.8rem;
+  color: var(--text-secondary, #888);
+}
+
+/* Column mapping */
+.mappingCard {
+  background: var(--bg-card, #f5f5f5);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+}
+
+.mappingCard summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--text-secondary, #555);
+}
+
+.mappingList {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.mappingTag {
+  background: var(--bg, #fff);
+  border: 1px solid var(--border, #ddd);
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+}
+
+/* Warnings */
+.warnings {
+  margin-top: 1rem;
+}
+
+.warnings summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #e65100;
+  font-size: 0.9rem;
+}
+
+.warningList {
+  list-style: none;
+  padding: 0;
+  margin-top: 0.5rem;
+  max-height: 150px;
+  overflow-y: auto;
+  font-size: 0.8rem;
+  color: var(--text-secondary, #888);
+}
+
+.warningList li {
+  padding: 0.15rem 0;
+}
+
+/* Buttons */
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.primaryBtn {
+  flex: 1;
+  padding: 0.65rem 1rem;
+  border: none;
+  border-radius: 10px;
+  background: var(--primary, #1a73e8);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.primaryBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.secondaryBtn {
+  flex: 1;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--border, #ccc);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text, #333);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+/* Progress */
+.progressWrap {
+  margin-top: 1rem;
+}
+
+.progressBar {
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--bg-card, #eee);
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--primary, #1a73e8);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progressText {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-secondary, #666);
+}
+
+/* Success */
+.successCard {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.successIcon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.successTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.successDetail {
+  color: var(--text-secondary, #666);
+  margin-bottom: 1.25rem;
+}
+
+/* Error */
+.errorMsg {
+  background: #fce4ec;
+  color: #c62828;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+/* Parsing indicator */
+.parsing {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary, #666);
+}

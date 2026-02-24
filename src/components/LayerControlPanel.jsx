@@ -6,8 +6,13 @@ const BASEMAPS = [
   { id: 'ocean', label: 'Ocean' },
 ];
 
+const BATHY_OVERLAYS = [
+  { key: 'depthContours', label: 'Depth Contours', desc: 'Esri Ocean + navigation marks' },
+  { key: 'openSeaBathy', label: 'OpenSeaMap Bathymetry', desc: 'Crowdsourced depth data' },
+  { key: 'navionics', label: 'Navionics SonarChart', desc: import.meta.env.VITE_NAVIONICS_KEY ? 'HD lake & ocean contours' : 'Requires VITE_NAVIONICS_KEY' },
+];
+
 const MAP_OVERLAYS = [
-  { key: 'depthContours', label: 'Depth Contours' },
   { key: 'noaaCharts', label: 'NOAA Nautical Charts' },
   { key: 'usgsTopo', label: 'USGS Topo' },
   { key: 'publicLands', label: 'Public/Private Land' },
@@ -18,6 +23,7 @@ const DATA_OVERLAYS = [
   { key: 'favoriteSpots', label: 'Favorite Spots' },
   { key: 'heatmap', label: 'Heatmap' },
   { key: 'usgsGauges', label: 'USGS Gauges' },
+  { key: 'sonarData', label: 'My Sonar Data' },
 ];
 
 export default function LayerControlPanel({ layers, onToggle, onBasemap, onClose }) {
@@ -46,6 +52,25 @@ export default function LayerControlPanel({ layers, onToggle, onBasemap, onClose
               </button>
             ))}
           </div>
+        </div>
+
+        <div className={styles.section}>
+          <span className={styles.sectionLabel}>Bathymetry & Depth</span>
+          {BATHY_OVERLAYS.map(({ key, label, desc }) => (
+            <div key={key} className={styles.toggleRow}>
+              <div className={styles.toggleInfo}>
+                <span className={styles.toggleLabel}>{label}</span>
+                {desc && <span className={styles.toggleDesc}>{desc}</span>}
+              </div>
+              <button
+                className={`${styles.toggleSwitch} ${layers[key] ? styles.toggleOn : ''}`}
+                onClick={() => onToggle(key)}
+                aria-label={`Toggle ${label}`}
+              >
+                <span className={styles.toggleKnob} />
+              </button>
+            </div>
+          ))}
         </div>
 
         <div className={styles.section}>

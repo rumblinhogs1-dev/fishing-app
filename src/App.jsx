@@ -58,6 +58,7 @@ const Notifications = lazyRetry(() => import('./components/Notifications'));
 const Challenges = lazyRetry(() => import('./components/Challenges'));
 const ChallengeDetail = lazyRetry(() => import('./components/ChallengeDetail'));
 const LocalGuide = lazyRetry(() => import('./components/LocalGuide'));
+const SonarImport = lazyRetry(() => import('./components/SonarImport'));
 const WelcomeModal = lazyRetry(() => import('./components/WelcomeModal'));
 
 function EditPage({ getCatch, updateCatch }) {
@@ -153,6 +154,7 @@ export default function App() {
                 <Route path="/challenges" element={<Challenges />} />
                 <Route path="/challenge/:id" element={<ChallengeDetail />} />
                 <Route path="/local-guide" element={<LocalGuide />} />
+                <Route path="/import-sonar" element={<SonarImport />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </Suspense>
