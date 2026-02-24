@@ -26,19 +26,21 @@ export default function FeedCatchCard({ entry }) {
   return (
     <div className={styles.card}>
       <div className={styles.author}>
-        {entry.authorPhotoURL ? (
-          <img src={entry.authorPhotoURL} alt="" className={styles.authorAvatar} referrerPolicy="no-referrer" />
-        ) : (
-          <span className={styles.authorInitial}>
-            {(entry.authorDisplayName || '?')[0].toUpperCase()}
-          </span>
-        )}
-        <div className={styles.authorInfo}>
-          <Link to={`/user/${entry.userId}`} className={styles.authorName}>
-            {entry.authorDisplayName || 'Angler'}
-          </Link>
-          <span className={styles.authorDate}>{relTime}</span>
-        </div>
+        <Link to={`/user/${entry.userId}`} className={styles.authorLink}>
+          {entry.authorPhotoURL ? (
+            <img src={entry.authorPhotoURL} alt="" className={styles.authorAvatar} referrerPolicy="no-referrer" />
+          ) : (
+            <span className={styles.authorInitial}>
+              {(entry.authorDisplayName || '?')[0].toUpperCase()}
+            </span>
+          )}
+          <div className={styles.authorInfo}>
+            <span className={styles.authorName}>
+              {entry.authorDisplayName || 'Angler'}
+            </span>
+            <span className={styles.authorDate}>{relTime}</span>
+          </div>
+        </Link>
         {entry.visibility && (
           <span className={styles.visibilityBadge}>{entry.visibility}</span>
         )}
