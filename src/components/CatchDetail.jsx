@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../contexts/AuthContext';
@@ -15,6 +15,7 @@ import styles from './CatchDetail.module.css';
 
 export default function CatchDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { addSpot } = useSpots();
   const toast = useToast();
@@ -101,7 +102,7 @@ export default function CatchDetail() {
 
   return (
     <div className={styles.container} ref={containerRef}>
-      <Link to="/" className={styles.backLink}>&#8592; Back</Link>
+      <button className={styles.backBtn} onClick={() => navigate(-1)}>&larr; Back</button>
 
       <div className={styles.card}>
         {entry.authorDisplayName && (
