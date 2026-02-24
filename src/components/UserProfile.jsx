@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { getUserProfile, sendFriendRequest } from '../utils/friends';
@@ -10,6 +10,7 @@ import styles from './UserProfile.module.css';
 
 export default function UserProfile() {
   const { userId } = useParams();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const [profile, setProfile] = useState(null);
   const [catches, setCatches] = useState([]);
@@ -93,6 +94,9 @@ export default function UserProfile() {
 
   return (
     <div className={styles.container}>
+      <button className={styles.backBtn} onClick={() => navigate(-1)}>
+        &larr; Back
+      </button>
       <div className={styles.header}>
         <div className={styles.avatarSection}>
           {profile.photoURL ? (
