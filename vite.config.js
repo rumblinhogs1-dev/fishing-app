@@ -112,9 +112,9 @@ export default defineConfig({
         ],
       },
       manifest: {
-        name: "Crawdaddy's Catch",
-        short_name: "Crawdaddy's",
-        description: 'Log catches, plan trips, and track your fishing adventures',
+        name: 'MyCatchBook',
+        short_name: 'MyCatchBook',
+        description: 'AI-Powered Fishing Community — Log catches, identify fish, discover spots, and connect with anglers.',
         theme_color: '#0d47a1',
         background_color: '#ffffff',
         display: 'standalone',

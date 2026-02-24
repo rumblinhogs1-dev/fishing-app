@@ -25,7 +25,8 @@ export default function Navbar({ onSearchOpen }) {
     <nav className={styles.nav}>
       <div className={styles.brand}>
         <img src={import.meta.env.BASE_URL + 'logo-192.png'} alt="" className={styles.icon} />
-        <span className={styles.title}>Crawdaddy's Catch</span>
+        <span className={styles.title}>MyCatchBook</span>
+        <span className={styles.tagline}>AI-Powered Fishing Community</span>
       </div>
 
       <div className={styles.navActions}>
@@ -96,6 +97,9 @@ export default function Navbar({ onSearchOpen }) {
           <>
             <NavLink to="/trips" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
               Trips
+            </NavLink>
+            <NavLink to="/import-sonar" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
+              Sonar Import
             </NavLink>
             <NavLink to="/challenges" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
               Challenges

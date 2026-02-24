@@ -60,7 +60,7 @@ export default function AuthPage() {
         <div className={styles.header}>
           <h2 className={styles.heading}>{isSignUp ? 'Create Account' : 'Welcome Back'}</h2>
           <p className={styles.subtext}>
-            {isSignUp ? 'Sign up to sync your catches across devices' : 'Sign in to access your fishing log'}
+            {isSignUp ? 'Sign up to sync your catches across devices' : 'Sign in to access MyCatchBook'}
           </p>
         </div>
 
