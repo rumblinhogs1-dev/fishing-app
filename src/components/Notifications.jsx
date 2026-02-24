@@ -54,6 +54,7 @@ export default function Notifications() {
 
   return (
     <div className={styles.container}>
+      <button className={styles.backBtn} onClick={() => navigate(-1)}>&larr; Back</button>
       <div className={styles.headerRow}>
         <h2 className={styles.heading}>Notifications</h2>
         {unreadCount > 0 && (

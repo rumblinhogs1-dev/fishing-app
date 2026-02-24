@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useSpots } from '../hooks/useSpots';
 import { useCatchesProvider } from '../hooks/useCatchesProvider';
@@ -30,6 +30,7 @@ function computeStats(spot, catches) {
 
 export default function SpotsList() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const { spots, loading, deleteSpot } = useSpots();
   const { catches } = useCatchesProvider();
   const [deleting, setDeleting] = useState(null);
@@ -68,6 +69,7 @@ export default function SpotsList() {
 
   return (
     <div className={styles.container}>
+      <button className={styles.backBtn} onClick={() => navigate(-1)}>&larr; Back</button>
       <div className={styles.header}>
         <h2 className={styles.title}>My Fishing Spots</h2>
         <Link to="/map" className={styles.mapLink}>View Map</Link>

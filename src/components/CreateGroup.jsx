@@ -36,6 +36,7 @@ export default function CreateGroup() {
 
   return (
     <div className={styles.container}>
+      <button className={styles.backBtn} onClick={() => navigate(-1)}>&larr; Back</button>
       <h2 className={styles.heading}>Create Group Chat</h2>
 
       <form onSubmit={handleCreate} className={styles.form}>
