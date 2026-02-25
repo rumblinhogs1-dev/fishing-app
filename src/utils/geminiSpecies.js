@@ -1,7 +1,7 @@
 import { getApiKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
 import { IDEAL_TEMP_RANGES } from './solunar';
 
-const CACHE_KEY = 'fishing-app-species-cache-v2';
+const CACHE_KEY = 'fishing-app-species-cache-v3';
 const CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 const DEFAULT_SPECIES_KEYS = ['largemouth_bass', 'rainbow_trout', 'walleye', 'crappie', 'channel_catfish'];
@@ -76,11 +76,11 @@ export async function getLocalSpecies({ waterBodyName, lat, lng }) {
       {
         parts: [
           {
-            text: `You are an expert fisheries biologist with deep knowledge of specific lakes, rivers, and reservoirs. Given the following water body, return the top 8 sport fish species that anglers target there.
+            text: `You are an expert fisheries biologist with deep knowledge of specific lakes, rivers, and reservoirs. Given the following water body, return the sport fish species present there ranked by estimated population size (highest population first).
 
 ${locationDesc}
 
-Return up to 8 species that are actually present and targeted by anglers at this specific water body. Consider ALL categories of sport fish: bass, trout, panfish (crappie, bluegill, sunfish), catfish, walleye/sauger, pike/musky, carp, striped/hybrid bass, and any other locally important species. Do not over-represent bass — if this water body is known for panfish or catfish, include them.
+Return up to 8 species that are actually present in this water body, ranked from highest population to lowest. Consider ALL categories: bass, trout, panfish (crappie, bluegill, sunfish), catfish, walleye/sauger, pike/musky, carp, striped/hybrid bass, and any other locally important species. Do not over-represent any single category — include the full diversity of what lives there.
 
 For each species provide its ideal and good water temperature ranges in Fahrenheit.
 
@@ -92,8 +92,8 @@ Rules:
 - label is the common display name
 - ideal is [min, max] in °F for peak feeding activity
 - good is [min, max] in °F for the broader active range
-- Only include species actually present and fishable in this water body
-- Rank by how popular/targeted they are by anglers at this location`,
+- Only include species actually present in this water body
+- Rank by estimated population in this water body, highest first`,
           },
         ],
       },
@@ -123,7 +123,7 @@ Rules:
     const valid = result.species.filter(validateSpecies);
     if (valid.length === 0) return getFallbackResult();
 
-    // Take up to 5
+    // Take up to 8
     const finalResult = valid.slice(0, 8);
     setCache(cacheKey, finalResult);
     return finalResult;
