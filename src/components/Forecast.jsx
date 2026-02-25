@@ -2,7 +2,8 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { getGPSLocation, geocodeLocation } from '../utils/weather';
 import { WEATHER_CODES } from '../utils/weather';
 import { getFullForecast, getShouldIFishScore } from '../utils/forecast';
-import { IDEAL_TEMP_RANGES, getSpeciesTempStatus } from '../utils/solunar';
+import { IDEAL_TEMP_RANGES, getSpeciesTempStatus, getMergedTempRanges } from '../utils/solunar';
+import { getLocalSpecies } from '../utils/geminiSpecies';
 import { getSeasonalCalendar } from '../utils/geminiSeasonalCalendar';
 import { getRecommendations } from '../utils/geminiRecommend';
 import { getInsectHatch } from '../utils/geminiHatch';
@@ -10,7 +11,7 @@ import { getFlyPatternImage } from '../utils/flyPatternImage';
 import SeasonalCalendar from './SeasonalCalendar';
 import styles from './Forecast.module.css';
 
-const DISPLAY_SPECIES = ['largemouth_bass', 'rainbow_trout', 'walleye', 'crappie', 'channel_catfish'];
+const DEFAULT_SPECIES = ['largemouth_bass', 'rainbow_trout', 'walleye', 'crappie', 'channel_catfish'];
 const TEMP_BAR_MIN = 30;
 const TEMP_BAR_MAX = 95;
 
@@ -188,8 +189,14 @@ function MoonSolunarSection({ day }) {
   );
 }
 
-function WaterTempSection({ waterData, manualTemp, onManualTemp }) {
+function WaterTempSection({ waterData, manualTemp, onManualTemp, localSpecies, speciesLoading }) {
   const temp = waterData?.waterTemp ?? manualTemp;
+  const speciesKeys = localSpecies?.species || DEFAULT_SPECIES;
+  const mergedRanges = localSpecies?.additional?.length
+    ? getMergedTempRanges(localSpecies.additional)
+    : IDEAL_TEMP_RANGES;
+  const allKeys = [...speciesKeys, ...(localSpecies?.additional?.map(a => a.key) || [])];
+
   return (
     <div className={styles.section}>
       <h3 className={`${styles.sectionTitle} ${styles.hasTooltip}`} data-tooltip="Water temp is the #1 factor for fish activity. Each species has a sweet spot — trout: 50-65°F, bass: 65-80°F, walleye: 55-70°F. Fish slow down outside their range and move deeper to find comfort zones.">Water Temperature</h3>
@@ -211,10 +218,13 @@ function WaterTempSection({ waterData, manualTemp, onManualTemp }) {
       {temp != null && (
         <>
           <h4 style={{ fontSize: '0.9rem', margin: '0.75rem 0 0.5rem', color: '#555' }}>Species Ranges</h4>
-          {DISPLAY_SPECIES.map(key => {
-            const range = IDEAL_TEMP_RANGES[key];
+          {speciesLoading && (
+            <p style={{ fontSize: '0.82rem', color: '#999', margin: '0 0 0.5rem' }}>Loading local species...</p>
+          )}
+          {allKeys.map(key => {
+            const range = mergedRanges[key];
             if (!range) return null;
-            const status = getSpeciesTempStatus(key, temp);
+            const status = getSpeciesTempStatus(key, temp, mergedRanges);
             const toPercent = v => ((v - TEMP_BAR_MIN) / (TEMP_BAR_MAX - TEMP_BAR_MIN)) * 100;
             return (
               <div key={key} className={styles.speciesBar}>
@@ -529,6 +539,8 @@ export default function Forecast() {
   const [manualTemp, setManualTemp] = useState(null);
   const [locationQuery, setLocationQuery] = useState('');
   const [forecastCoords, setForecastCoords] = useState(null);
+  const [localSpecies, setLocalSpecies] = useState(null);
+  const [speciesLoading, setSpeciesLoading] = useState(false);
 
   const containerRef = useRef(null);
   useEffect(() => {
@@ -592,6 +604,7 @@ export default function Forecast() {
     setFcRecsError('');
     setFcHatchData(null);
     setFcHatchError('');
+    setLocalSpecies(null);
     setForecastCoords({ lat, lng });
     try {
       const forecast = await getFullForecast(lat, lng);
@@ -715,6 +728,30 @@ export default function Forecast() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showFcHatch, fcHatchData, forecastCoords, data?.location, data?.waterData]);
 
+  // Fetch local species when forecast data + coords are available
+  useEffect(() => {
+    if (!data || !forecastCoords || localSpecies) return;
+    let cancelled = false;
+    async function load() {
+      setSpeciesLoading(true);
+      try {
+        const result = await getLocalSpecies({
+          waterBodyName: data.location || '',
+          lat: forecastCoords.lat,
+          lng: forecastCoords.lng,
+        });
+        if (!cancelled) setLocalSpecies(result);
+      } catch {
+        // fallback handled inside getLocalSpecies
+      } finally {
+        if (!cancelled) setSpeciesLoading(false);
+      }
+    }
+    load();
+    return () => { cancelled = true; };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, forecastCoords, localSpecies]);
+
   const fishScore = data ? getShouldIFishScore(data) : null;
   const today = data?.days?.[0] || null;
   const windDir = today?.windDir ?? data?.current?.windDir ?? null;
@@ -765,7 +802,7 @@ export default function Forecast() {
 
           <MoonSolunarSection day={today} />
 
-          <WaterTempSection waterData={data.waterData} manualTemp={manualTemp} onManualTemp={setManualTemp} />
+          <WaterTempSection waterData={data.waterData} manualTemp={manualTemp} onManualTemp={setManualTemp} localSpecies={localSpecies} speciesLoading={speciesLoading} />
 
           <WindTideSection current={data.current} tideData={data.tideData} waterData={data.waterData} windDir={windDir} />
 

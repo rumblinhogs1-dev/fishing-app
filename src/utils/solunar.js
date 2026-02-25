@@ -258,8 +258,8 @@ export const IDEAL_TEMP_RANGES = {
 /**
  * Check how current water temp compares to a species' ideal range.
  */
-export function getSpeciesTempStatus(speciesKey, waterTemp) {
-  const range = IDEAL_TEMP_RANGES[speciesKey];
+export function getSpeciesTempStatus(speciesKey, waterTemp, tempRanges = IDEAL_TEMP_RANGES) {
+  const range = tempRanges[speciesKey];
   if (!range || waterTemp == null) return { status: 'unknown', label: 'Unknown', range: null };
 
   if (waterTemp >= range.ideal[0] && waterTemp <= range.ideal[1]) {
@@ -269,6 +269,20 @@ export function getSpeciesTempStatus(speciesKey, waterTemp) {
     return { status: 'good', label: 'Good', range };
   }
   return { status: 'poor', label: waterTemp < range.good[0] ? 'Too Cold' : 'Too Warm', range };
+}
+
+/**
+ * Merge additional AI-returned species into IDEAL_TEMP_RANGES.
+ */
+export function getMergedTempRanges(additionalSpecies) {
+  if (!additionalSpecies?.length) return IDEAL_TEMP_RANGES;
+  const merged = { ...IDEAL_TEMP_RANGES };
+  for (const s of additionalSpecies) {
+    if (s.key && s.label && s.ideal && s.good) {
+      merged[s.key] = { ideal: s.ideal, good: s.good, label: s.label };
+    }
+  }
+  return merged;
 }
 
 // --- Helpers ---
