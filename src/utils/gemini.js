@@ -1,5 +1,5 @@
 const API_KEY_STORAGE = 'fishing-log-gemini-key';
-const GEMINI_MODEL = 'gemini-2.0-flash';
+const GEMINI_MODEL = 'gemini-2.5-flash';
 export const API_URL = `https://generativelanguage.googleapis.com/v1/models/${GEMINI_MODEL}:generateContent`;
 const MAX_SIZE = 512;
 const MAX_RETRIES = 1;
