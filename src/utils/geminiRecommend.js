@@ -118,10 +118,10 @@ Provide 3-5 recommendations sorted by confidence (highest first). Confidence sho
     const errData = await res.json().catch(() => null);
     const msg = errData?.error?.message || '';
     console.warn('[AI Recommendations] API error:', res.status, msg || errData);
-    if (res.status === 429) throw new Error('AI recommendations temporarily unavailable — rate limit reached. Please wait a minute and try again.');
+    if (res.status === 429) return buildFallback({ season });
     if (res.status === 400) throw new Error(msg || 'Bad request — the AI could not process this request.');
     if (res.status === 401 || res.status === 403) throw new Error('Invalid or unauthorized API key.');
-    if (res.status >= 500) throw new Error('AI recommendations temporarily unavailable. Please try again later.');
+    if (res.status >= 500) return buildFallback({ season });
     throw new Error(msg || `API request failed (${res.status}).`);
   }
 
