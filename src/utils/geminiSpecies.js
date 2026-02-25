@@ -1,12 +1,10 @@
 import { getApiKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
 import { IDEAL_TEMP_RANGES } from './solunar';
 
-const CACHE_KEY = 'fishing-app-species-cache';
+const CACHE_KEY = 'fishing-app-species-cache-v2';
 const CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
 
-const DEFAULT_SPECIES = ['largemouth_bass', 'rainbow_trout', 'walleye', 'crappie', 'channel_catfish'];
-
-const KNOWN_KEYS = Object.keys(IDEAL_TEMP_RANGES);
+const DEFAULT_SPECIES_KEYS = ['largemouth_bass', 'rainbow_trout', 'walleye', 'crappie', 'channel_catfish'];
 
 function getCacheKey(lat, lng) {
   return `${Math.round(lat * 100) / 100},${Math.round(lng * 100) / 100}`;
@@ -35,12 +33,29 @@ function setCache(key, data) {
 }
 
 function getFallbackResult() {
-  return { species: DEFAULT_SPECIES, additional: [] };
+  return DEFAULT_SPECIES_KEYS.map(k => ({
+    key: k,
+    label: IDEAL_TEMP_RANGES[k].label,
+    ideal: IDEAL_TEMP_RANGES[k].ideal,
+    good: IDEAL_TEMP_RANGES[k].good,
+  }));
+}
+
+function validateSpecies(entry) {
+  return (
+    entry &&
+    typeof entry.key === 'string' &&
+    typeof entry.label === 'string' &&
+    Array.isArray(entry.ideal) && entry.ideal.length === 2 &&
+    Array.isArray(entry.good) && entry.good.length === 2 &&
+    typeof entry.ideal[0] === 'number' && typeof entry.ideal[1] === 'number' &&
+    typeof entry.good[0] === 'number' && typeof entry.good[1] === 'number'
+  );
 }
 
 /**
- * Get the species that actually exist in a given water body using Gemini AI.
- * Returns { species: string[], additional: { key, label, ideal, good }[] }
+ * Get the top 5 sport fish species for a given water body using Gemini AI.
+ * Returns an array of { key, label, ideal, good } objects.
  */
 export async function getLocalSpecies({ waterBodyName, lat, lng }) {
   const cacheKey = getCacheKey(lat, lng);
@@ -61,21 +76,22 @@ export async function getLocalSpecies({ waterBodyName, lat, lng }) {
       {
         parts: [
           {
-            text: `You are an expert fisheries biologist. Given the following water body, identify which sport fish species are actually present there.
+            text: `You are an expert fisheries biologist. Given the following water body, return the top 5 most popular sport fish species that anglers target there.
 
 ${locationDesc}
 
-Here are the species keys I know about:
-${KNOWN_KEYS.join(', ')}
-
-From that list, return 3-8 keys for species that actually live in this water body. Do NOT include species that are not present — accuracy matters more than quantity.
-
-Also, if there are 1-3 additional important sport fish in this water body that are NOT in my list above, include them as "additional" entries with their temperature preferences in Fahrenheit.
+Return exactly 5 species, ranked by popularity/importance to anglers at this specific water body. For each species provide its ideal and good water temperature ranges in Fahrenheit.
 
 Respond ONLY with valid JSON in this exact format (no markdown, no code fences):
-{"species":["largemouth_bass","channel_catfish"],"additional":[{"key":"white_bass","label":"White Bass","ideal":[65,75],"good":[55,80]}]}
+{"species":[{"key":"rainbow_trout","label":"Rainbow Trout","ideal":[50,60],"good":[40,65]},{"key":"largemouth_bass","label":"Largemouth Bass","ideal":[65,80],"good":[55,85]}]}
 
-The "species" array must only contain keys from my list. The "additional" array can be empty. Each additional entry must have key (snake_case), label (display name), ideal ([min,max] in °F), and good ([min,max] in °F).`,
+Rules:
+- key must be snake_case (e.g. "rainbow_trout", "largemouth_bass")
+- label is the common display name
+- ideal is [min, max] in °F for peak feeding activity
+- good is [min, max] in °F for the broader active range
+- Only include species actually present in this water body
+- Rank by how popular/targeted they are by anglers at this location`,
           },
         ],
       },
@@ -102,22 +118,11 @@ The "species" array must only contain keys from my list. The "additional" array 
       return getFallbackResult();
     }
 
-    // Validate: only keep known keys
-    const validSpecies = result.species.filter(k => KNOWN_KEYS.includes(k));
-    if (validSpecies.length === 0) return getFallbackResult();
+    const valid = result.species.filter(validateSpecies);
+    if (valid.length === 0) return getFallbackResult();
 
-    // Validate additional species entries
-    const validAdditional = (Array.isArray(result.additional) ? result.additional : []).filter(a =>
-      a &&
-      typeof a.key === 'string' &&
-      typeof a.label === 'string' &&
-      Array.isArray(a.ideal) && a.ideal.length === 2 &&
-      Array.isArray(a.good) && a.good.length === 2 &&
-      typeof a.ideal[0] === 'number' && typeof a.ideal[1] === 'number' &&
-      typeof a.good[0] === 'number' && typeof a.good[1] === 'number'
-    );
-
-    const finalResult = { species: validSpecies, additional: validAdditional };
+    // Take up to 5
+    const finalResult = valid.slice(0, 5);
     setCache(cacheKey, finalResult);
     return finalResult;
   } catch {

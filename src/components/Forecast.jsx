@@ -2,7 +2,6 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { getGPSLocation, geocodeLocation } from '../utils/weather';
 import { WEATHER_CODES } from '../utils/weather';
 import { getFullForecast, getShouldIFishScore } from '../utils/forecast';
-import { IDEAL_TEMP_RANGES, getSpeciesTempStatus, getMergedTempRanges } from '../utils/solunar';
 import { getLocalSpecies } from '../utils/geminiSpecies';
 import { getSeasonalCalendar } from '../utils/geminiSeasonalCalendar';
 import { getRecommendations } from '../utils/geminiRecommend';
@@ -11,7 +10,13 @@ import { getFlyPatternImage } from '../utils/flyPatternImage';
 import SeasonalCalendar from './SeasonalCalendar';
 import styles from './Forecast.module.css';
 
-const DEFAULT_SPECIES = ['largemouth_bass', 'rainbow_trout', 'walleye', 'crappie', 'channel_catfish'];
+const DEFAULT_SPECIES = [
+  { key: 'largemouth_bass', label: 'Largemouth Bass', ideal: [65, 80], good: [55, 85] },
+  { key: 'rainbow_trout', label: 'Rainbow Trout', ideal: [50, 60], good: [40, 65] },
+  { key: 'walleye', label: 'Walleye', ideal: [55, 68], good: [45, 75] },
+  { key: 'crappie', label: 'Crappie', ideal: [60, 72], good: [50, 78] },
+  { key: 'channel_catfish', label: 'Channel Catfish', ideal: [75, 85], good: [65, 90] },
+];
 const TEMP_BAR_MIN = 30;
 const TEMP_BAR_MAX = 95;
 
@@ -189,13 +194,16 @@ function MoonSolunarSection({ day }) {
   );
 }
 
+function getSpeciesStatus(waterTemp, species) {
+  if (waterTemp == null) return { status: 'unknown', label: 'Unknown' };
+  if (waterTemp >= species.ideal[0] && waterTemp <= species.ideal[1]) return { status: 'ideal', label: 'Ideal' };
+  if (waterTemp >= species.good[0] && waterTemp <= species.good[1]) return { status: 'good', label: 'Good' };
+  return { status: 'poor', label: waterTemp < species.good[0] ? 'Too Cold' : 'Too Warm' };
+}
+
 function WaterTempSection({ waterData, manualTemp, onManualTemp, localSpecies, speciesLoading }) {
   const temp = waterData?.waterTemp ?? manualTemp;
-  const speciesKeys = localSpecies?.species || DEFAULT_SPECIES;
-  const mergedRanges = localSpecies?.additional?.length
-    ? getMergedTempRanges(localSpecies.additional)
-    : IDEAL_TEMP_RANGES;
-  const allKeys = [...speciesKeys, ...(localSpecies?.additional?.map(a => a.key) || [])];
+  const speciesList = localSpecies || DEFAULT_SPECIES;
 
   return (
     <div className={styles.section}>
@@ -221,21 +229,19 @@ function WaterTempSection({ waterData, manualTemp, onManualTemp, localSpecies, s
           {speciesLoading && (
             <p style={{ fontSize: '0.82rem', color: '#999', margin: '0 0 0.5rem' }}>Loading local species...</p>
           )}
-          {allKeys.map(key => {
-            const range = mergedRanges[key];
-            if (!range) return null;
-            const status = getSpeciesTempStatus(key, temp, mergedRanges);
+          {speciesList.map(s => {
+            const statusInfo = getSpeciesStatus(temp, s);
             const toPercent = v => ((v - TEMP_BAR_MIN) / (TEMP_BAR_MAX - TEMP_BAR_MIN)) * 100;
             return (
-              <div key={key} className={styles.speciesBar}>
-                <span className={styles.speciesName}>{range.label}</span>
+              <div key={s.key} className={styles.speciesBar}>
+                <span className={styles.speciesName}>{s.label}</span>
                 <div className={styles.speciesRange}>
-                  <div className={styles.speciesGood} style={{ left: `${toPercent(range.good[0])}%`, width: `${toPercent(range.good[1]) - toPercent(range.good[0])}%` }} />
-                  <div className={styles.speciesIdeal} style={{ left: `${toPercent(range.ideal[0])}%`, width: `${toPercent(range.ideal[1]) - toPercent(range.ideal[0])}%` }} />
+                  <div className={styles.speciesGood} style={{ left: `${toPercent(s.good[0])}%`, width: `${toPercent(s.good[1]) - toPercent(s.good[0])}%` }} />
+                  <div className={styles.speciesIdeal} style={{ left: `${toPercent(s.ideal[0])}%`, width: `${toPercent(s.ideal[1]) - toPercent(s.ideal[0])}%` }} />
                   <div className={styles.speciesMarker} style={{ left: `${Math.max(0, Math.min(100, toPercent(temp)))}%` }} />
                 </div>
-                <span className={styles.speciesStatus} style={{ color: status.status === 'ideal' ? '#2e7d32' : status.status === 'good' ? '#f9a825' : '#c62828' }}>
-                  {status.label}
+                <span className={styles.speciesStatus} style={{ color: statusInfo.status === 'ideal' ? '#2e7d32' : statusInfo.status === 'good' ? '#f9a825' : '#c62828' }}>
+                  {statusInfo.label}
                 </span>
               </div>
             );
