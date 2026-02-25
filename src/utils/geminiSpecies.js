@@ -76,11 +76,13 @@ export async function getLocalSpecies({ waterBodyName, lat, lng }) {
       {
         parts: [
           {
-            text: `You are an expert fisheries biologist. Given the following water body, return the top 5 most popular sport fish species that anglers target there.
+            text: `You are an expert fisheries biologist with deep knowledge of specific lakes, rivers, and reservoirs. Given the following water body, return the top 8 sport fish species that anglers target there.
 
 ${locationDesc}
 
-Return exactly 5 species, ranked by popularity/importance to anglers at this specific water body. For each species provide its ideal and good water temperature ranges in Fahrenheit.
+Return up to 8 species that are actually present and targeted by anglers at this specific water body. Consider ALL categories of sport fish: bass, trout, panfish (crappie, bluegill, sunfish), catfish, walleye/sauger, pike/musky, carp, striped/hybrid bass, and any other locally important species. Do not over-represent bass — if this water body is known for panfish or catfish, include them.
+
+For each species provide its ideal and good water temperature ranges in Fahrenheit.
 
 Respond ONLY with valid JSON in this exact format (no markdown, no code fences):
 {"species":[{"key":"rainbow_trout","label":"Rainbow Trout","ideal":[50,60],"good":[40,65]},{"key":"largemouth_bass","label":"Largemouth Bass","ideal":[65,80],"good":[55,85]}]}
@@ -90,7 +92,7 @@ Rules:
 - label is the common display name
 - ideal is [min, max] in °F for peak feeding activity
 - good is [min, max] in °F for the broader active range
-- Only include species actually present in this water body
+- Only include species actually present and fishable in this water body
 - Rank by how popular/targeted they are by anglers at this location`,
           },
         ],
@@ -122,7 +124,7 @@ Rules:
     if (valid.length === 0) return getFallbackResult();
 
     // Take up to 5
-    const finalResult = valid.slice(0, 5);
+    const finalResult = valid.slice(0, 8);
     setCache(cacheKey, finalResult);
     return finalResult;
   } catch {
