@@ -1,6 +1,7 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, useParams, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import OfflineBanner from './components/OfflineBanner';
 import ToastContainer from './components/Toast';
 import SearchModal from './components/SearchModal';
@@ -62,6 +63,9 @@ const ChallengeDetail = lazyRetry(() => import('./components/ChallengeDetail'));
 const LocalGuide = lazyRetry(() => import('./components/LocalGuide'));
 const SonarImport = lazyRetry(() => import('./components/SonarImport'));
 const WelcomeModal = lazyRetry(() => import('./components/WelcomeModal'));
+const TermsPage = lazyRetry(() => import('./components/TermsPage'));
+const PrivacyPolicy = lazyRetry(() => import('./components/PrivacyPolicy'));
+const PricingPage = lazyRetry(() => import('./components/PricingPage'));
 
 function EditPage({ getCatch, updateCatch }) {
   const { id } = useParams();
@@ -147,6 +151,9 @@ export default function App() {
                 <Route path="/challenges" element={<Challenges />} />
                 <Route path="/challenge/:id" element={<ChallengeDetail />} />
                 <Route path="/local-guide" element={<LocalGuide />} />
+                <Route path="/terms" element={<TermsPage />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/pricing" element={<PricingPage />} />
 
                 {/* Auth-only routes */}
                 <Route element={<ProtectedRoute />}>
@@ -168,6 +175,7 @@ export default function App() {
           </ErrorBoundary>
         )}
       </main>
+      <Footer />
       {showSearch && (
         <SearchModal
           catches={catches}

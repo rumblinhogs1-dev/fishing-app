@@ -1,0 +1,56 @@
+.container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem 3rem;
+}
+
+.heading {
+  color: #0d47a1;
+  margin: 0 0 0.25rem;
+}
+
+.updated {
+  color: #888;
+  font-size: 0.85rem;
+  margin: 0 0 1.5rem;
+}
+
+.section {
+  margin-bottom: 1.5rem;
+}
+
+.section h2 {
+  font-size: 1.05rem;
+  color: #333;
+  margin: 0 0 0.5rem;
+}
+
+.section h3 {
+  font-size: 0.95rem;
+  color: #444;
+  margin: 0.75rem 0 0.35rem;
+}
+
+.section p {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.65;
+  margin: 0 0 0.5rem;
+}
+
+.section ul {
+  margin: 0.5rem 0 0 1.5rem;
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.65;
+}
+
+.section li {
+  margin-bottom: 0.25rem;
+}
+
+@media (max-width: 600px) {
+  .container {
+    margin: 1rem auto;
+  }
+}

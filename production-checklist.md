@@ -51,11 +51,11 @@
 
 ## Phase 6: Revenue & Distribution
 
-- [ ] Define monetization strategy (ads, pro tier, subscriptions)
-- [ ] Google Play Store listing (TWA or React Native wrapper)
-- [ ] Apple App Store (Capacitor or React Native wrapper)
-- [ ] Landing page / marketing site
-- [ ] Terms of Service & Privacy Policy
+- [x] **Terms of Service & Privacy Policy** — Added `/terms` and `/privacy` routes with legal content pages covering data collection, AI features, user content, and fishing disclaimers.
+- [x] **Monetization tier structure** — Created config-driven tier system (Free/Angler/Pro Guide) with `useTier()` hook, `UpgradePrompt` component, and `/pricing` page. Payment integration deferred.
+- [x] **Landing page / marketing site** — Static HTML landing page at root `/` with hero, features, pricing table, and app store badges. App served at `/fishing-app/`.
+- [x] **Capacitor setup (Android + iOS)** — Initialized Capacitor with `com.mycatchbook.app` package ID, Android and iOS platforms added, build scripts configured.
+- [x] **Site-wide footer** — Added footer component with links to Terms, Privacy, and Pricing pages.
 
 ## Phase 7: Growth & Scale
 
