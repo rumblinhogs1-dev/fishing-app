@@ -45,7 +45,7 @@ export const TIERS = {
       'Unlimited catch logging',
       '50 AI identifications/month',
       'AI Local Guide access',
-      'Lure recommendations',
+      'Fly & lure recommendations',
       'Advanced stats & insights',
       'Trip planner',
       'Data export',
