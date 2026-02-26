@@ -135,23 +135,61 @@ function CatchClusterLayer({ catches, onSaveSpot }) {
 
       const popupContent = document.createElement('div');
       popupContent.className = styles.popup;
-      popupContent.innerHTML = `
-        ${img ? `<img src="${img}" class="${styles.popupImg}" alt="${c.species || 'Catch'}" />` : ''}
-        <div class="${styles.popupBody}">
-          <strong class="${styles.popupSpecies}">${c.species || 'Unknown'}</strong>
-          <div class="${styles.popupMeta}">
-            ${c.weight ? `<span>${c.weight} lbs</span>` : ''}
-            ${c.length ? `<span>${c.length} in</span>` : ''}
-            ${c.depth ? `<span>${c.depth} ft deep</span>` : ''}
-          </div>
-          ${dateStr ? `<div class="${styles.popupDate}">${dateStr}</div>` : ''}
-          ${c.weather ? `<div class="${styles.popupWeather}">${c.weather}</div>` : ''}
-          <div class="${styles.popupActions}">
-            <a href="/catch/${c.id}" class="${styles.popupLink}">View Full Entry</a>
-            <button class="${styles.popupSaveBtn}" data-lat="${c.lat}" data-lng="${c.lng}" data-species="${c.species || ''}">Save This Spot</button>
-          </div>
-        </div>
-      `;
+
+      if (img) {
+        const imgEl = document.createElement('img');
+        imgEl.src = img;
+        imgEl.className = styles.popupImg;
+        imgEl.alt = c.species || 'Catch';
+        popupContent.appendChild(imgEl);
+      }
+
+      const body = document.createElement('div');
+      body.className = styles.popupBody;
+
+      const speciesEl = document.createElement('strong');
+      speciesEl.className = styles.popupSpecies;
+      speciesEl.textContent = c.species || 'Unknown';
+      body.appendChild(speciesEl);
+
+      const meta = document.createElement('div');
+      meta.className = styles.popupMeta;
+      if (c.weight) { const s = document.createElement('span'); s.textContent = `${c.weight} lbs`; meta.appendChild(s); }
+      if (c.length) { const s = document.createElement('span'); s.textContent = `${c.length} in`; meta.appendChild(s); }
+      if (c.depth) { const s = document.createElement('span'); s.textContent = `${c.depth} ft deep`; meta.appendChild(s); }
+      body.appendChild(meta);
+
+      if (dateStr) {
+        const dateEl = document.createElement('div');
+        dateEl.className = styles.popupDate;
+        dateEl.textContent = dateStr;
+        body.appendChild(dateEl);
+      }
+
+      if (c.weather) {
+        const weatherEl = document.createElement('div');
+        weatherEl.className = styles.popupWeather;
+        weatherEl.textContent = c.weather;
+        body.appendChild(weatherEl);
+      }
+
+      const actions = document.createElement('div');
+      actions.className = styles.popupActions;
+      const link = document.createElement('a');
+      link.href = `/catch/${c.id}`;
+      link.className = styles.popupLink;
+      link.textContent = 'View Full Entry';
+      actions.appendChild(link);
+      const btn = document.createElement('button');
+      btn.className = styles.popupSaveBtn;
+      btn.dataset.lat = c.lat;
+      btn.dataset.lng = c.lng;
+      btn.dataset.species = c.species || '';
+      btn.textContent = 'Save This Spot';
+      actions.appendChild(btn);
+      body.appendChild(actions);
+
+      popupContent.appendChild(body);
 
       marker.bindPopup(popupContent, { maxWidth: 260, minWidth: 200 });
       cluster.addLayer(marker);

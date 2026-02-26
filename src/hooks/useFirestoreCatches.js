@@ -36,33 +36,6 @@ export function useFirestoreCatches(user) {
     return unsub;
   }, [userId]);
 
-  // One-time backfill: set visibility to public and add author info on old catches
-  useEffect(() => {
-    if (!userId || !catches.length || loading) return;
-    const migrateKey = `catches-backfill-v2-${userId}`;
-    if (sessionStorage.getItem(migrateKey)) return;
-    sessionStorage.setItem(migrateKey, '1');
-
-    const toUpdate = catches.filter(
-      (c) => c.visibility !== 'public' || !c.authorDisplayName
-    );
-    if (!toUpdate.length) return;
-
-    const displayName = user?.displayName || 'Angler';
-    const photoURL = user?.photoURL || null;
-    toUpdate.forEach((c) => {
-      const patch = {};
-      if (c.visibility !== 'public') patch.visibility = 'public';
-      if (!c.authorDisplayName) patch.authorDisplayName = displayName;
-      if (!c.authorPhotoURL && photoURL) patch.authorPhotoURL = photoURL;
-      if (Object.keys(patch).length) {
-        fsUpdateCatch(c.id, patch).catch((err) =>
-          console.error('Backfill failed for', c.id, err)
-        );
-      }
-    });
-  }, [userId, catches, loading, user]);
-
   // One-time repair: fix catches with missing imageUrl from DataMigration or offline sync
   useEffect(() => {
     if (!userId || !catches.length || loading) return;
