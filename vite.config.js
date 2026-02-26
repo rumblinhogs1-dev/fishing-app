@@ -57,56 +57,50 @@ export default defineConfig({
           },
           {
             urlPattern: /^https:\/\/[abc]\.tile\.openstreetmap\.org\/.*/i,
-            handler: 'CacheFirst',
+            handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'osm-tile-cache',
               expiration: { maxEntries: 2000, maxAgeSeconds: 7 * 24 * 60 * 60 },
-              cacheableResponse: { statuses: [0, 200] },
             },
           },
           {
             urlPattern: /^https:\/\/server\.arcgisonline\.com\/.*/i,
-            handler: 'CacheFirst',
+            handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'esri-tile-cache',
               expiration: { maxEntries: 2000, maxAgeSeconds: 7 * 24 * 60 * 60 },
-              cacheableResponse: { statuses: [0, 200] },
             },
           },
           {
             urlPattern: /^https:\/\/tiles\.openseamap\.org\/.*/i,
-            handler: 'CacheFirst',
+            handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'openseamap-tile-cache',
               expiration: { maxEntries: 2000, maxAgeSeconds: 7 * 24 * 60 * 60 },
-              cacheableResponse: { statuses: [0, 200] },
             },
           },
           {
             urlPattern: /^https:\/\/gis\.charttools\.noaa\.gov\/.*/i,
-            handler: 'CacheFirst',
+            handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'noaa-tile-cache',
               expiration: { maxEntries: 2000, maxAgeSeconds: 7 * 24 * 60 * 60 },
-              cacheableResponse: { statuses: [0, 200] },
             },
           },
           {
             urlPattern: /^https:\/\/basemap\.nationalmap\.gov\/.*/i,
-            handler: 'CacheFirst',
+            handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'usgs-tile-cache',
               expiration: { maxEntries: 2000, maxAgeSeconds: 7 * 24 * 60 * 60 },
-              cacheableResponse: { statuses: [0, 200] },
             },
           },
           {
             urlPattern: /^https:\/\/gis\.blm\.gov\/.*/i,
-            handler: 'CacheFirst',
+            handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'blm-lands-tile-cache',
               expiration: { maxEntries: 2000, maxAgeSeconds: 7 * 24 * 60 * 60 },
-              cacheableResponse: { statuses: [0, 200] },
             },
           },
         ],

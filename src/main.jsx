@@ -4,7 +4,18 @@ import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { ConfirmProvider } from './contexts/ConfirmContext';
+import * as Sentry from '@sentry/react';
 import App from './App.jsx';
+
+Sentry.init({
+  dsn: import.meta.env.VITE_SENTRY_DSN,
+  environment: import.meta.env.MODE,
+  enabled: import.meta.env.PROD,
+});
+
+window.addEventListener('unhandledrejection', (event) => {
+  Sentry.captureException(event.reason);
+});
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -13,6 +24,9 @@ class ErrorBoundary extends Component {
   }
   static getDerivedStateFromError(error) {
     return { error };
+  }
+  componentDidCatch(error, errorInfo) {
+    Sentry.captureException(error, { extra: errorInfo });
   }
   render() {
     if (this.state.error) {
