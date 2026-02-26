@@ -4,6 +4,7 @@ import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { getUserProfile, sendFriendRequest } from '../utils/friends';
 import { useAuth } from '../contexts/AuthContext';
+import { useToast } from '../contexts/ToastContext';
 import FeedCatchCard from './FeedCatchCard';
 import ConservationBadges from './ConservationBadges';
 import styles from './UserProfile.module.css';
@@ -17,6 +18,7 @@ export default function UserProfile() {
   const [loading, setLoading] = useState(true);
   const [requestSent, setRequestSent] = useState(false);
 
+  const toast = useToast();
   const isOwn = user?.uid === userId;
   const isFriend = profile?.friendIds?.includes(user?.uid);
 
@@ -80,7 +82,7 @@ export default function UserProfile() {
       await sendFriendRequest(user.uid, userId);
       setRequestSent(true);
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     }
   }
 

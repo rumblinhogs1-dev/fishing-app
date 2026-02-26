@@ -53,26 +53,34 @@ export function useFirestoreCatches(user) {
     localStorage.setItem(repairKey, '1');
     console.log(`Image repair: found ${needsRepair.length} catches with missing imageUrl`);
 
-    needsRepair.forEach(async (c) => {
-      try {
-        // Case 1: image field exists (from offline sync storing image instead of imageUrl)
-        if (c.image && typeof c.image === 'string' && c.image.startsWith('data:')) {
-          await fsUpdateCatch(c.id, { imageUrl: c.image });
-          console.log('Image repair: copied image→imageUrl for catch', c.id);
-          return;
-        }
+    let cancelled = false;
+    (async () => {
+      for (const c of needsRepair) {
+        if (cancelled) return;
+        try {
+          // Case 1: image field exists (from offline sync storing image instead of imageUrl)
+          if (c.image && typeof c.image === 'string' && c.image.startsWith('data:')) {
+            if (cancelled) return;
+            await fsUpdateCatch(c.id, { imageUrl: c.image });
+            console.log('Image repair: copied image→imageUrl for catch', c.id);
+            continue;
+          }
 
-        // Case 2: try to recover from Firebase Storage (DataMigration uploaded but failed to update doc)
-        const { getDownloadURL, ref } = await import('firebase/storage');
-        const { storage } = await import('../firebase');
-        const storageRef = ref(storage, `users/${userId}/catches/${c.id}/photo.jpg`);
-        const url = await getDownloadURL(storageRef);
-        await fsUpdateCatch(c.id, { imageUrl: url });
-        console.log('Image repair: recovered Storage URL for catch', c.id);
-      } catch {
-        // No image source found — nothing to recover
+          // Case 2: try to recover from Firebase Storage (DataMigration uploaded but failed to update doc)
+          const { getDownloadURL, ref } = await import('firebase/storage');
+          const { storage } = await import('../firebase');
+          const storageRef = ref(storage, `users/${userId}/catches/${c.id}/photo.jpg`);
+          const url = await getDownloadURL(storageRef);
+          if (cancelled) return;
+          await fsUpdateCatch(c.id, { imageUrl: url });
+          console.log('Image repair: recovered Storage URL for catch', c.id);
+        } catch {
+          // No image source found — nothing to recover
+        }
       }
-    });
+    })();
+
+    return () => { cancelled = true; };
   }, [userId, catches, loading]);
 
   const addCatch = useCallback(async (entry) => {

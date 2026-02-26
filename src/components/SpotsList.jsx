@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useSpots } from '../hooks/useSpots';
 import { useCatchesProvider } from '../hooks/useCatchesProvider';
+import { useConfirm } from '../contexts/ConfirmContext';
 import styles from './SpotsList.module.css';
 
 const PROXIMITY = 0.01; // ~1.1 km
@@ -33,6 +34,7 @@ export default function SpotsList() {
   const navigate = useNavigate();
   const { spots, loading, deleteSpot } = useSpots();
   const { catches } = useCatchesProvider();
+  const confirm = useConfirm();
   const [deleting, setDeleting] = useState(null);
 
   const spotsWithStats = useMemo(
@@ -41,7 +43,7 @@ export default function SpotsList() {
   );
 
   async function handleDelete(spotId) {
-    if (!window.confirm('Delete this spot? This cannot be undone.')) return;
+    if (!await confirm('Delete this spot? This cannot be undone.', { destructive: true })) return;
     setDeleting(spotId);
     try {
       await deleteSpot(spotId);

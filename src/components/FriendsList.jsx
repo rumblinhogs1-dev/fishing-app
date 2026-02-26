@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useFriends } from '../hooks/useFriends';
 import { searchUsers, sendFriendRequest, acceptFriendRequest, rejectFriendRequest, removeFriend } from '../utils/friends';
 import { useToast } from '../contexts/ToastContext';
+import { useConfirm } from '../contexts/ConfirmContext';
 import styles from './FriendsList.module.css';
 
 function timeAgo(dateVal) {
@@ -24,6 +25,7 @@ export default function FriendsList() {
   const { user } = useAuth();
   const { requests, friendProfiles, loading } = useFriends();
   const toast = useToast();
+  const confirm = useConfirm();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
@@ -52,7 +54,7 @@ export default function FriendsList() {
   }
 
   async function handleRemove(friendId) {
-    if (confirm('Remove this friend?')) {
+    if (await confirm('Remove this friend?')) {
       await removeFriend(user.uid, friendId);
       toast.info('Friend removed');
     }

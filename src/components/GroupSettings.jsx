@@ -6,6 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useFriends } from '../hooks/useFriends';
 import { addMemberToGroup, removeMemberFromGroup } from '../utils/chat';
 import { getUserProfile } from '../utils/friends';
+import { useConfirm } from '../contexts/ConfirmContext';
 import styles from './GroupSettings.module.css';
 
 export default function GroupSettings() {
@@ -13,6 +14,7 @@ export default function GroupSettings() {
   const { user } = useAuth();
   const { friendProfiles } = useFriends();
   const navigate = useNavigate();
+  const confirm = useConfirm();
   const [group, setGroup] = useState(null);
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -42,7 +44,7 @@ export default function GroupSettings() {
   }
 
   async function handleRemoveMember(memberId) {
-    if (!confirm('Remove this member?')) return;
+    if (!await confirm('Remove this member?')) return;
     await removeMemberFromGroup(groupId, memberId);
     setMembers((prev) => prev.filter((m) => m.id !== memberId));
   }

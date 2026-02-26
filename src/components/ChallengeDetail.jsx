@@ -10,6 +10,7 @@ import {
   computeChallengeLeaderboard,
 } from '../utils/challenges';
 import { useToast } from '../contexts/ToastContext';
+import { useConfirm } from '../contexts/ConfirmContext';
 import { SkeletonList } from './Skeleton';
 import styles from './ChallengeDetail.module.css';
 
@@ -83,6 +84,7 @@ export default function ChallengeDetail() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const toast = useToast();
+  const confirm = useConfirm();
   const [challenge, setChallenge] = useState(null);
   const [loading, setLoading] = useState(true);
   const [leaderboard, setLeaderboard] = useState([]);
@@ -186,7 +188,7 @@ export default function ChallengeDetail() {
   }
 
   async function handleDelete() {
-    if (!window.confirm('Delete this challenge? This cannot be undone.')) return;
+    if (!await confirm('Delete this challenge? This cannot be undone.', { destructive: true })) return;
     setActionLoading(true);
     try {
       await deleteChallenge(challenge.id);

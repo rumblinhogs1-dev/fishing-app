@@ -12,8 +12,14 @@ const STORES = {
   pendingCatches: 'pendingCatches',
 };
 
+let dbInstance = null;
+let dbPromise = null;
+
 function openDB() {
-  return new Promise((resolve, reject) => {
+  if (dbInstance) return Promise.resolve(dbInstance);
+  if (dbPromise) return dbPromise;
+
+  dbPromise = new Promise((resolve, reject) => {
     const req = indexedDB.open(DB_NAME, DB_VERSION);
     req.onupgradeneeded = (e) => {
       const db = e.target.result;
@@ -23,9 +29,19 @@ function openDB() {
         }
       });
     };
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
+    req.onsuccess = () => {
+      dbInstance = req.result;
+      dbInstance.onclose = () => { dbInstance = null; dbPromise = null; };
+      dbPromise = null;
+      resolve(dbInstance);
+    };
+    req.onerror = () => {
+      dbPromise = null;
+      reject(req.error);
+    };
   });
+
+  return dbPromise;
 }
 
 async function getAll(storeName) {
