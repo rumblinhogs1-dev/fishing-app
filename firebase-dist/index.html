@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyCatchBook — AI-Powered Fishing Community</title>
+  <meta name="description" content="Log catches, identify fish with AI, explore local guides, and connect with anglers worldwide. Free to start." />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="MyCatchBook — AI-Powered Fishing Community" />
+  <meta property="og:description" content="Log catches, identify fish with AI, explore local guides, and connect with anglers worldwide." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/fishing-app/logo-192.png" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="MyCatchBook" />
+  <meta name="twitter:description" content="AI-Powered Fishing Community" />
+
+  <link rel="icon" type="image/png" href="/fishing-app/logo-192.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #222;
+      background: #f0f4f8;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #0d47a1, #1a73e8);
+      color: #fff;
+      text-align: center;
+      padding: 5rem 1.5rem 4rem;
+    }
+    .hero-logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.5px;
+    }
+    .hero p {
+      font-size: 1.15rem;
+      opacity: 0.9;
+      max-width: 550px;
+      margin: 0 auto 2rem;
+      line-height: 1.6;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: #fff;
+      color: #0d47a1;
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding: 0.85rem 2.5rem;
+      border-radius: 12px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+    }
+
+    /* Features */
+    .features {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+    .features h2 {
+      text-align: center;
+      font-size: 1.75rem;
+      color: #0d47a1;
+      margin-bottom: 2.5rem;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    a.feature-card {
+      display: block;
+      color: inherit;
+      background: #fff;
+      border-radius: 14px;
+      padding: 1.75rem 1.5rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+    a.feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+    a.feature-card::after {
+      content: '\2192';
+      position: absolute;
+      top: 1.75rem;
+      right: 1.5rem;
+      font-size: 1.1rem;
+      color: #bbb;
+      transition: color 0.2s, transform 0.2s;
+    }
+    a.feature-card:hover::after {
+      color: #1a73e8;
+      transform: translateX(3px);
+    }
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .feature-icon svg { fill: #1a73e8; }
+    .feature-card h3 {
+      font-size: 1.05rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    .feature-card p {
+      font-size: 0.9rem;
+      color: #666;
+      line-height: 1.55;
+    }
+
+    /* Pricing */
+    .pricing {
+      background: #fff;
+      padding: 4rem 1.5rem;
+    }
+    .pricing h2 {
+      text-align: center;
+      font-size: 1.75rem;
+      color: #0d47a1;
+      margin-bottom: 0.5rem;
+    }
+    .pricing-sub {
+      text-align: center;
+      color: #888;
+      font-size: 0.95rem;
+      margin-bottom: 2.5rem;
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.25rem;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .price-card {
+      border: 2px solid #e0e0e0;
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+    .price-card:hover { transform: translateY(-2px); }
+    .price-card.highlight {
+      border-color: #1a73e8;
+      box-shadow: 0 4px 20px rgba(26,115,232,0.12);
+      position: relative;
+    }
+    .price-card.highlight::before {
+      content: 'Most Popular';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a73e8;
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.2rem 0.9rem;
+      border-radius: 20px;
+    }
+    .price-card h3 {
+      font-size: 1.25rem;
+      color: #333;
+      margin-bottom: 0.25rem;
+    }
+    .price-card .amount {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #333;
+    }
+    .price-card .period {
+      font-size: 0.85rem;
+      color: #888;
+    }
+    .price-card ul {
+      list-style: none;
+      margin: 1.25rem 0;
+      padding: 0;
+      text-align: left;
+    }
+    .price-card li {
+      font-size: 0.85rem;
+      color: #555;
+      padding: 0.3rem 0;
+      padding-left: 1.4rem;
+      position: relative;
+    }
+    .price-card li::before {
+      content: '\2713';
+      position: absolute;
+      left: 0;
+      color: #2e7d32;
+      font-weight: 700;
+    }
+    .price-cta {
+      display: inline-block;
+      padding: 0.65rem 2rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: 2px solid #e0e0e0;
+      color: #333;
+      background: #fff;
+      transition: border-color 0.2s;
+    }
+    .price-cta:hover { border-color: #1a73e8; color: #1a73e8; }
+    .price-cta.primary {
+      background: linear-gradient(135deg, #1a73e8, #0d47a1);
+      color: #fff;
+      border-color: transparent;
+    }
+    .price-cta.primary:hover { box-shadow: 0 4px 12px rgba(26,115,232,0.35); color: #fff; }
+
+    /* App Store badges */
+    .stores {
+      text-align: center;
+      padding: 3rem 1.5rem;
+    }
+    .stores h2 {
+      font-size: 1.5rem;
+      color: #0d47a1;
+      margin-bottom: 0.5rem;
+    }
+    .stores p {
+      color: #888;
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+    .store-badges {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .store-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #222;
+      color: #fff;
+      padding: 0.6rem 1.25rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+    .store-badge:hover { opacity: 0.85; }
+    .store-badge svg { fill: #fff; }
+
+    /* Footer */
+    .lp-footer {
+      text-align: center;
+      padding: 1.5rem 1rem;
+      border-top: 1px solid #ddd;
+      background: #f8f9fa;
+    }
+    .lp-footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.5rem;
+    }
+    .lp-footer-links a {
+      color: #1a73e8;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    .lp-footer-links a:hover { text-decoration: underline; }
+    .lp-footer-links .sep { color: #ccc; font-size: 0.8rem; }
+    .lp-footer p {
+      color: #888;
+      font-size: 0.78rem;
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 3rem 1.25rem 2.5rem; }
+      .hero h1 { font-size: 1.75rem; }
+      .hero p { font-size: 1rem; }
+      .features, .pricing, .stores { padding: 2.5rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <section class="hero">
+    <img src="/fishing-app/logo-192.png" alt="MyCatchBook logo" class="hero-logo" />
+    <h1>MyCatchBook</h1>
+    <p>
+      The AI-powered fishing community. Log your catches, identify fish and lures with AI, discover local hotspots, and connect with anglers worldwide.
+    </p>
+    <a href="/fishing-app/auth" class="cta-btn">Get Started Free</a>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <h2>Everything You Need on the Water</h2>
+    <div class="features-grid">
+      <a href="/features/ai-fish-id.html" class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        </div>
+        <h3>AI Fish Identification</h3>
+        <p>Snap a photo and let AI identify the species instantly. Works with freshwater and saltwater fish.</p>
+      </a>
+      <a href="/features/catch-logging.html" class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" width="24" height="24"><path d="M17.66 7.93L12 2.27 6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31A7.98 7.98 0 0012 21.58c2.05 0 4.1-.78 5.66-2.34 3.12-3.12 3.12-8.19 0-11.31zM12 19.59c-1.6 0-3.11-.62-4.24-1.76C6.62 16.69 6 15.19 6 13.59s.62-3.11 1.76-4.24L12 5.1v14.49z"/></svg>
+        </div>
+        <h3>Catch Logging</h3>
+        <p>Track species, weight, length, location, weather, and photos. Build your personal fishing journal.</p>
+      </a>
+      <a href="/features/community.html" class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" width="24" height="24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+        </div>
+        <h3>Fishing Community</h3>
+        <p>Share catches, compete on leaderboards, join challenges, and chat with fellow anglers.</p>
+      </a>
+      <a href="/features/maps.html" class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" width="24" height="24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
+        </div>
+        <h3>Interactive Maps</h3>
+        <p>See catches plotted on maps, discover hotspots with heatmaps, and save your favorite fishing spots.</p>
+      </a>
+      <a href="/features/local-guide.html" class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+        </div>
+        <h3>AI Local Guide</h3>
+        <p>Get AI-powered fishing recommendations for any location — best species, techniques, and regulations.</p>
+      </a>
+      <a href="/features/stats-insights.html" class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" width="24" height="24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+        </div>
+        <h3>Stats &amp; Insights</h3>
+        <p>Visualize your fishing data with charts, personal records, seasonal trends, and AI-powered insights.</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="pricing">
+    <h2>Simple, Transparent Pricing</h2>
+    <p class="pricing-sub">Start free. Upgrade when you're ready for more.</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <h3>Free</h3>
+        <div><span class="amount">Free</span></div>
+        <ul>
+          <li>20 catches/month</li>
+          <li>5 AI identifications/month</li>
+          <li>Community feed &amp; leaderboard</li>
+          <li>Basic catch stats</li>
+          <li>Map view</li>
+        </ul>
+        <a href="/fishing-app/auth" class="price-cta">Get Started</a>
+      </div>
+      <div class="price-card highlight">
+        <h3>Angler</h3>
+        <div><span class="amount">$4.99</span><span class="period">/month</span></div>
+        <ul>
+          <li>Unlimited catch logging</li>
+          <li>50 AI identifications/month</li>
+          <li>AI Local Guide</li>
+          <li>Fly &amp; lure recommendations</li>
+          <li>Advanced stats &amp; insights</li>
+          <li>Trip planner &amp; data export</li>
+        </ul>
+        <a href="/fishing-app/pricing" class="price-cta primary">Coming Soon</a>
+      </div>
+      <div class="price-card">
+        <h3>Pro Guide</h3>
+        <div><span class="amount">$14.99</span><span class="period">/month</span></div>
+        <ul>
+          <li>Everything in Angler, plus:</li>
+          <li>Unlimited AI identifications</li>
+          <li>Sonar data import</li>
+          <li>Priority support</li>
+          <li>Pro Guide badge</li>
+        </ul>
+        <a href="/fishing-app/pricing" class="price-cta">Coming Soon</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- App Stores -->
+  <section class="stores">
+    <h2>Take It With You</h2>
+    <p>MyCatchBook works as a web app on any device. Native apps coming soon.</p>
+    <div class="store-badges">
+      <span class="store-badge">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 20.5v-17c0-.59.34-1.11.84-1.35L13.69 12l-9.85 9.85c-.5-.24-.84-.76-.84-1.35zm13.81-5.38L6.05 21.34l8.49-8.49 2.27 2.27zm.91-.53l2.72-1.52c.5-.28.5-.98 0-1.26l-2.72-1.52-2.5 2.15 2.5 2.15zM6.05 2.66l10.76 6.22-2.27 2.27-8.49-8.49z"/></svg>
+        Google Play (Coming Soon)
+      </span>
+      <span class="store-badge">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        App Store (Coming Soon)
+      </span>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="lp-footer">
+    <div class="lp-footer-links">
+      <a href="/fishing-app/terms">Terms of Service</a>
+      <span class="sep">|</span>
+      <a href="/fishing-app/privacy">Privacy Policy</a>
+      <span class="sep">|</span>
+      <a href="/fishing-app/pricing">Pricing</a>
+    </div>
+    <p>&copy; 2026 MyCatchBook. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

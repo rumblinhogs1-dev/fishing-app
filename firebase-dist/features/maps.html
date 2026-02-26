@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Maps — MyCatchBook</title>
+  <meta name="description" content="See your catches on a map, discover hotspots with heatmaps, and save your favorite fishing locations." />
+  <link rel="icon" type="image/png" href="/fishing-app/logo-192.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #222;
+      background: #f0f4f8;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; }
+
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.5rem; background: #fff; border-bottom: 1px solid #e0e0e0;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 0.6rem; color: #0d47a1; font-weight: 800; font-size: 1.15rem; }
+    .nav-brand img { width: 36px; height: 36px; border-radius: 50%; }
+    .nav-cta {
+      background: linear-gradient(135deg, #1a73e8, #0d47a1); color: #fff;
+      font-weight: 600; font-size: 0.85rem; padding: 0.5rem 1.25rem; border-radius: 8px;
+      transition: box-shadow 0.15s;
+    }
+    .nav-cta:hover { box-shadow: 0 4px 12px rgba(26,115,232,0.35); }
+
+    .hero {
+      background: linear-gradient(135deg, #0d47a1, #1a73e8); color: #fff;
+      text-align: center; padding: 4rem 1.5rem 3rem;
+    }
+    .hero-icon {
+      width: 64px; height: 64px; background: rgba(255,255,255,0.15);
+      border-radius: 16px; display: inline-flex; align-items: center;
+      justify-content: center; margin-bottom: 1.25rem;
+    }
+    .hero-icon svg { fill: #fff; }
+    .hero h1 { font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
+    .hero .tagline { font-size: 1.15rem; opacity: 0.9; margin-bottom: 0.75rem; }
+    .hero .desc { font-size: 0.95rem; opacity: 0.8; max-width: 520px; margin: 0 auto; line-height: 1.6; }
+
+    .mockup-section { padding: 3rem 1.5rem; display: flex; justify-content: center; }
+    .phone-frame {
+      width: 300px; min-height: 560px; background: #1a1a2e;
+      border-radius: 36px; padding: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    }
+    .phone-screen { background: #f5f5f5; border-radius: 26px; overflow: hidden; min-height: 536px; }
+    .phone-status-bar {
+      background: #0d47a1; color: #fff; font-size: 0.65rem;
+      padding: 0.35rem 1rem; display: flex; justify-content: space-between;
+    }
+    .phone-header {
+      background: #0d47a1; color: #fff; font-weight: 700;
+      font-size: 0.95rem; padding: 0.6rem 1rem; text-align: center;
+    }
+    .phone-body { padding: 0; }
+
+    .details { max-width: 800px; margin: 0 auto; padding: 3rem 1.5rem; }
+    .details h2 { text-align: center; font-size: 1.5rem; color: #0d47a1; margin-bottom: 2rem; }
+    .details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; }
+    .detail-card { background: #fff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+    .detail-card h3 { font-size: 0.95rem; color: #333; margin-bottom: 0.4rem; }
+    .detail-card p { font-size: 0.85rem; color: #666; line-height: 1.5; }
+
+    .cta-section { text-align: center; padding: 3rem 1.5rem 4rem; background: #fff; }
+    .cta-section h2 { font-size: 1.5rem; color: #333; margin-bottom: 0.5rem; }
+    .cta-section p { color: #666; margin-bottom: 1.5rem; }
+    .cta-btn {
+      display: inline-block; background: linear-gradient(135deg, #1a73e8, #0d47a1);
+      color: #fff; font-size: 1.05rem; font-weight: 700; padding: 0.85rem 2.5rem;
+      border-radius: 12px; transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(26,115,232,0.35); }
+
+    .lp-footer { text-align: center; padding: 1.5rem 1rem; border-top: 1px solid #ddd; background: #f8f9fa; }
+    .lp-footer-links { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+    .lp-footer-links a { color: #1a73e8; font-size: 0.85rem; font-weight: 500; }
+    .lp-footer-links a:hover { text-decoration: underline; }
+    .lp-footer-links .sep { color: #ccc; font-size: 0.8rem; }
+    .lp-footer p { color: #888; font-size: 0.78rem; }
+
+    /* Map mockup */
+    .map-area {
+      position: relative;
+      height: 320px;
+      overflow: hidden;
+    }
+    .map-bg {
+      width: 100%;
+      height: 100%;
+    }
+    .map-pin {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    }
+    .heatmap-overlay {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.25;
+      filter: blur(12px);
+    }
+    .map-controls {
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .map-ctrl-btn {
+      width: 28px;
+      height: 28px;
+      background: #fff;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    }
+    .map-ctrl-btn svg { fill: #555; width: 14px; height: 14px; }
+    .map-popup {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      background: #fff;
+      border-radius: 10px;
+      padding: 0.6rem 0.75rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .map-popup h4 { font-size: 0.75rem; color: #333; margin-bottom: 0.15rem; }
+    .map-popup p { font-size: 0.6rem; color: #888; }
+
+    @media (max-width: 600px) {
+      .hero { padding: 3rem 1.25rem 2rem; }
+      .hero h1 { font-size: 1.6rem; }
+      .phone-frame { width: 270px; min-height: 500px; }
+      .phone-screen { min-height: 476px; }
+      .map-area { height: 280px; }
+      .details, .cta-section { padding: 2rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/" class="nav-brand">
+      <img src="/fishing-app/logo-192.png" alt="MyCatchBook" />
+      MyCatchBook
+    </a>
+    <a href="/fishing-app/auth" class="nav-cta">Get Started</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-icon">
+      <svg viewBox="0 0 24 24" width="32" height="32"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
+    </div>
+    <h1>Interactive Maps</h1>
+    <p class="tagline">See Where the Fish Are</p>
+    <p class="desc">Plot every catch on a beautiful map, discover hotspots with heatmaps, and save your favorite fishing locations.</p>
+  </section>
+
+  <section class="mockup-section">
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="phone-status-bar">
+          <span>9:41 AM</span>
+          <span>100%</span>
+        </div>
+        <div class="phone-header">Catch Map</div>
+        <div class="phone-body">
+          <div class="map-area">
+            <!-- Stylized map background -->
+            <svg class="map-bg" viewBox="0 0 300 320" preserveAspectRatio="none">
+              <rect width="300" height="320" fill="#c8e6c9"/>
+              <!-- Water bodies -->
+              <ellipse cx="150" cy="140" rx="100" ry="60" fill="#81d4fa"/>
+              <ellipse cx="80" cy="260" rx="50" ry="30" fill="#81d4fa"/>
+              <ellipse cx="250" cy="280" rx="40" ry="25" fill="#81d4fa"/>
+              <!-- Roads -->
+              <line x1="0" y1="200" x2="300" y2="180" stroke="#e0e0e0" stroke-width="3"/>
+              <line x1="140" y1="0" x2="160" y2="320" stroke="#e0e0e0" stroke-width="2"/>
+            </svg>
+
+            <!-- Heatmap overlays -->
+            <div class="heatmap-overlay" style="width:90px;height:90px;background:radial-gradient(circle,#f44336,transparent);left:95px;top:85px;"></div>
+            <div class="heatmap-overlay" style="width:50px;height:50px;background:radial-gradient(circle,#ff9800,transparent);left:45px;top:230px;"></div>
+
+            <!-- Catch pins -->
+            <div class="map-pin" style="background:#f44336;left:130px;top:110px;"></div>
+            <div class="map-pin" style="background:#f44336;left:155px;top:125px;"></div>
+            <div class="map-pin" style="background:#ff9800;left:110px;top:140px;"></div>
+            <div class="map-pin" style="background:#4caf50;left:170px;top:100px;"></div>
+            <div class="map-pin" style="background:#2196f3;left:60px;top:245px;"></div>
+            <div class="map-pin" style="background:#f44336;left:85px;top:252px;"></div>
+
+            <!-- Map controls -->
+            <div class="map-controls">
+              <div class="map-ctrl-btn">
+                <svg viewBox="0 0 24 24"><path d="M11.5 3C7.36 3 4 6.36 4 10.5c0 3.03 2.44 6.98 6.42 11.8.54.65 1.62.65 2.16 0C16.56 17.48 19 13.53 19 10.5 19 6.36 15.64 3 11.5 3z"/></svg>
+              </div>
+              <div class="map-ctrl-btn">
+                <svg viewBox="0 0 24 24"><path d="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16z"/></svg>
+              </div>
+            </div>
+
+            <!-- Info popup -->
+            <div class="map-popup">
+              <h4>Largemouth Bass &bull; 5.2 lbs</h4>
+              <p>Lake Fork, TX &bull; Feb 14, 2026 &bull; Caught by Jake_Angler92</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="details">
+    <h2>Map Your Fishing World</h2>
+    <div class="details-grid">
+      <div class="detail-card">
+        <h3>Catch Pins</h3>
+        <p>Every logged catch appears as a color-coded pin on the map. Tap any pin to see species, weight, and who caught it.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Heatmap View</h3>
+        <p>Toggle the heatmap overlay to instantly see fishing hotspots in any area based on community catch data.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Water Info</h3>
+        <p>View water temperature, flow rates, and conditions for lakes and rivers to plan your next trip.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Saved Spots</h3>
+        <p>Bookmark your best fishing locations. Add private notes and get notified when conditions are ideal.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>Explore the Map</h2>
+    <p>Discover where fish are biting right now.</p>
+    <a href="/fishing-app/auth" class="cta-btn">Get Started Free</a>
+  </section>
+
+  <footer class="lp-footer">
+    <div class="lp-footer-links">
+      <a href="/fishing-app/terms">Terms of Service</a>
+      <span class="sep">|</span>
+      <a href="/fishing-app/privacy">Privacy Policy</a>
+      <span class="sep">|</span>
+      <a href="/fishing-app/pricing">Pricing</a>
+    </div>
+    <p>&copy; 2026 MyCatchBook. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

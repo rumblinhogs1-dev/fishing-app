@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stats &amp; Insights — MyCatchBook</title>
+  <meta name="description" content="Visualize your fishing data with charts, personal records, seasonal trends, and AI-powered insights." />
+  <link rel="icon" type="image/png" href="/fishing-app/logo-192.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #222;
+      background: #f0f4f8;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; }
+
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.5rem; background: #fff; border-bottom: 1px solid #e0e0e0;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 0.6rem; color: #0d47a1; font-weight: 800; font-size: 1.15rem; }
+    .nav-brand img { width: 36px; height: 36px; border-radius: 50%; }
+    .nav-cta {
+      background: linear-gradient(135deg, #1a73e8, #0d47a1); color: #fff;
+      font-weight: 600; font-size: 0.85rem; padding: 0.5rem 1.25rem; border-radius: 8px;
+      transition: box-shadow 0.15s;
+    }
+    .nav-cta:hover { box-shadow: 0 4px 12px rgba(26,115,232,0.35); }
+
+    .hero {
+      background: linear-gradient(135deg, #0d47a1, #1a73e8); color: #fff;
+      text-align: center; padding: 4rem 1.5rem 3rem;
+    }
+    .hero-icon {
+      width: 64px; height: 64px; background: rgba(255,255,255,0.15);
+      border-radius: 16px; display: inline-flex; align-items: center;
+      justify-content: center; margin-bottom: 1.25rem;
+    }
+    .hero-icon svg { fill: #fff; }
+    .hero h1 { font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
+    .hero .tagline { font-size: 1.15rem; opacity: 0.9; margin-bottom: 0.75rem; }
+    .hero .desc { font-size: 0.95rem; opacity: 0.8; max-width: 520px; margin: 0 auto; line-height: 1.6; }
+
+    .mockup-section { padding: 3rem 1.5rem; display: flex; justify-content: center; }
+    .phone-frame {
+      width: 300px; min-height: 600px; background: #1a1a2e;
+      border-radius: 36px; padding: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    }
+    .phone-screen { background: #f5f5f5; border-radius: 26px; overflow: hidden; min-height: 576px; }
+    .phone-status-bar {
+      background: #0d47a1; color: #fff; font-size: 0.65rem;
+      padding: 0.35rem 1rem; display: flex; justify-content: space-between;
+    }
+    .phone-header {
+      background: #0d47a1; color: #fff; font-weight: 700;
+      font-size: 0.95rem; padding: 0.6rem 1rem; text-align: center;
+    }
+    .phone-body { padding: 0.75rem; }
+
+    .details { max-width: 800px; margin: 0 auto; padding: 3rem 1.5rem; }
+    .details h2 { text-align: center; font-size: 1.5rem; color: #0d47a1; margin-bottom: 2rem; }
+    .details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; }
+    .detail-card { background: #fff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+    .detail-card h3 { font-size: 0.95rem; color: #333; margin-bottom: 0.4rem; }
+    .detail-card p { font-size: 0.85rem; color: #666; line-height: 1.5; }
+
+    .cta-section { text-align: center; padding: 3rem 1.5rem 4rem; background: #fff; }
+    .cta-section h2 { font-size: 1.5rem; color: #333; margin-bottom: 0.5rem; }
+    .cta-section p { color: #666; margin-bottom: 1.5rem; }
+    .cta-btn {
+      display: inline-block; background: linear-gradient(135deg, #1a73e8, #0d47a1);
+      color: #fff; font-size: 1.05rem; font-weight: 700; padding: 0.85rem 2.5rem;
+      border-radius: 12px; transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(26,115,232,0.35); }
+
+    .lp-footer { text-align: center; padding: 1.5rem 1rem; border-top: 1px solid #ddd; background: #f8f9fa; }
+    .lp-footer-links { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+    .lp-footer-links a { color: #1a73e8; font-size: 0.85rem; font-weight: 500; }
+    .lp-footer-links a:hover { text-decoration: underline; }
+    .lp-footer-links .sep { color: #ccc; font-size: 0.8rem; }
+    .lp-footer p { color: #888; font-size: 0.78rem; }
+
+    /* Stats mockup */
+    .stat-cards {
+      display: flex;
+      gap: 0.35rem;
+      margin-bottom: 0.65rem;
+    }
+    .stat-card {
+      flex: 1;
+      background: #fff;
+      border-radius: 10px;
+      padding: 0.5rem;
+      text-align: center;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .stat-card .stat-val {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #1a73e8;
+    }
+    .stat-card .stat-label {
+      font-size: 0.5rem;
+      color: #888;
+      margin-top: 0.1rem;
+    }
+    .stat-card .stat-sub {
+      font-size: 0.48rem;
+      color: #aaa;
+    }
+    .chart-container {
+      background: #fff;
+      border-radius: 10px;
+      padding: 0.6rem;
+      margin-bottom: 0.65rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .chart-title {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 0.45rem;
+    }
+    .bar-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 0.3rem;
+      height: 80px;
+    }
+    .bar-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .bar {
+      width: 100%;
+      border-radius: 4px 4px 0 0;
+      background: linear-gradient(180deg, #1a73e8, #42a5f5);
+    }
+    .bar-label {
+      font-size: 0.5rem;
+      color: #888;
+      margin-top: 0.2rem;
+    }
+    .species-list {
+      background: #fff;
+      border-radius: 10px;
+      padding: 0.6rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .species-title {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 0.4rem;
+    }
+    .species-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.3rem 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .species-row:last-child { border-bottom: none; }
+    .species-name { font-size: 0.68rem; color: #333; }
+    .species-badge {
+      background: #e3f2fd;
+      color: #1565c0;
+      font-size: 0.55rem;
+      font-weight: 700;
+      padding: 0.15rem 0.45rem;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 3rem 1.25rem 2rem; }
+      .hero h1 { font-size: 1.6rem; }
+      .phone-frame { width: 270px; min-height: 540px; }
+      .phone-screen { min-height: 516px; }
+      .details, .cta-section { padding: 2rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/" class="nav-brand">
+      <img src="/fishing-app/logo-192.png" alt="MyCatchBook" />
+      MyCatchBook
+    </a>
+    <a href="/fishing-app/auth" class="nav-cta">Get Started</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-icon">
+      <svg viewBox="0 0 24 24" width="32" height="32"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+    </div>
+    <h1>Stats &amp; Insights</h1>
+    <p class="tagline">Know Your Fishing Data</p>
+    <p class="desc">Turn every catch into insight. Track personal records, visualize trends, and discover patterns in your fishing data.</p>
+  </section>
+
+  <section class="mockup-section">
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="phone-status-bar">
+          <span>9:41 AM</span>
+          <span>100%</span>
+        </div>
+        <div class="phone-header">My Stats</div>
+        <div class="phone-body">
+          <div class="stat-cards">
+            <div class="stat-card">
+              <div class="stat-val">47</div>
+              <div class="stat-label">Total Catches</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val">8.3</div>
+              <div class="stat-label">Biggest (lbs)</div>
+              <div class="stat-sub">Largemouth Bass</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val">12</div>
+              <div class="stat-label">Most Common</div>
+              <div class="stat-sub">Rainbow Trout</div>
+            </div>
+          </div>
+
+          <div class="chart-container">
+            <div class="chart-title">Catches Per Month</div>
+            <div class="bar-chart">
+              <div class="bar-group">
+                <div class="bar" style="height:30px;"></div>
+                <span class="bar-label">Sep</span>
+              </div>
+              <div class="bar-group">
+                <div class="bar" style="height:50px;"></div>
+                <span class="bar-label">Oct</span>
+              </div>
+              <div class="bar-group">
+                <div class="bar" style="height:35px;"></div>
+                <span class="bar-label">Nov</span>
+              </div>
+              <div class="bar-group">
+                <div class="bar" style="height:20px;"></div>
+                <span class="bar-label">Dec</span>
+              </div>
+              <div class="bar-group">
+                <div class="bar" style="height:55px;"></div>
+                <span class="bar-label">Jan</span>
+              </div>
+              <div class="bar-group">
+                <div class="bar" style="height:70px;"></div>
+                <span class="bar-label">Feb</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="species-list">
+            <div class="species-title">Species Breakdown</div>
+            <div class="species-row">
+              <span class="species-name">Rainbow Trout</span>
+              <span class="species-badge">12</span>
+            </div>
+            <div class="species-row">
+              <span class="species-name">Largemouth Bass</span>
+              <span class="species-badge">10</span>
+            </div>
+            <div class="species-row">
+              <span class="species-name">Striped Bass</span>
+              <span class="species-badge">8</span>
+            </div>
+            <div class="species-row">
+              <span class="species-name">Catfish</span>
+              <span class="species-badge">7</span>
+            </div>
+            <div class="species-row">
+              <span class="species-name">Bluegill</span>
+              <span class="species-badge">6</span>
+            </div>
+            <div class="species-row">
+              <span class="species-name">Crappie</span>
+              <span class="species-badge">4</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="details">
+    <h2>Data-Driven Fishing</h2>
+    <div class="details-grid">
+      <div class="detail-card">
+        <h3>Personal Records</h3>
+        <p>Track your biggest catch per species, longest streak, and personal bests automatically as you log catches.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Trend Charts</h3>
+        <p>Visualize catches over time with monthly, seasonal, and yearly charts. Spot your peak fishing periods.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Species Breakdown</h3>
+        <p>See exactly what you're catching most. Compare species distribution across different locations and seasons.</p>
+      </div>
+      <div class="detail-card">
+        <h3>AI Insights</h3>
+        <p>Get personalized tips based on your data — optimal times, best lures for your style, and improvement suggestions.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>See Your Stats</h2>
+    <p>Start logging catches and watch your insights grow.</p>
+    <a href="/fishing-app/auth" class="cta-btn">Get Started Free</a>
+  </section>
+
+  <footer class="lp-footer">
+    <div class="lp-footer-links">
+      <a href="/fishing-app/terms">Terms of Service</a>
+      <span class="sep">|</span>
+      <a href="/fishing-app/privacy">Privacy Policy</a>
+      <span class="sep">|</span>
+      <a href="/fishing-app/pricing">Pricing</a>
+    </div>
+    <p>&copy; 2026 MyCatchBook. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

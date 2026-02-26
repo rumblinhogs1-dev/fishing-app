@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Fish Identification — MyCatchBook</title>
+  <meta name="description" content="Snap a photo and instantly identify any fish species with AI. Get species details, size estimates, and fun facts." />
+  <link rel="icon" type="image/png" href="/fishing-app/logo-192.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #222;
+      background: #f0f4f8;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; }
+
+    /* Nav */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      background: #fff;
+      border-bottom: 1px solid #e0e0e0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #0d47a1;
+      font-weight: 800;
+      font-size: 1.15rem;
+    }
+    .nav-brand img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+    }
+    .nav-cta {
+      background: linear-gradient(135deg, #1a73e8, #0d47a1);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      transition: box-shadow 0.15s;
+    }
+    .nav-cta:hover { box-shadow: 0 4px 12px rgba(26,115,232,0.35); }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #0d47a1, #1a73e8);
+      color: #fff;
+      text-align: center;
+      padding: 4rem 1.5rem 3rem;
+    }
+    .hero-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+    }
+    .hero-icon svg { fill: #fff; }
+    .hero h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.5px;
+    }
+    .hero .tagline {
+      font-size: 1.15rem;
+      opacity: 0.9;
+      margin-bottom: 0.75rem;
+    }
+    .hero .desc {
+      font-size: 0.95rem;
+      opacity: 0.8;
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Phone Mockup */
+    .mockup-section {
+      padding: 3rem 1.5rem;
+      display: flex;
+      justify-content: center;
+    }
+    .phone-frame {
+      width: 300px;
+      min-height: 540px;
+      background: #1a1a2e;
+      border-radius: 36px;
+      padding: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    }
+    .phone-screen {
+      background: #f5f5f5;
+      border-radius: 26px;
+      overflow: hidden;
+      min-height: 516px;
+    }
+    .phone-status-bar {
+      background: #0d47a1;
+      color: #fff;
+      font-size: 0.65rem;
+      padding: 0.35rem 1rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    .phone-header {
+      background: #0d47a1;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.6rem 1rem;
+      text-align: center;
+    }
+    .phone-body {
+      padding: 0.75rem;
+    }
+
+    /* Feature Details */
+    .details {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+    .details h2 {
+      text-align: center;
+      font-size: 1.5rem;
+      color: #0d47a1;
+      margin-bottom: 2rem;
+    }
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+    .detail-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+    .detail-card h3 {
+      font-size: 0.95rem;
+      color: #333;
+      margin-bottom: 0.4rem;
+    }
+    .detail-card p {
+      font-size: 0.85rem;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* CTA */
+    .cta-section {
+      text-align: center;
+      padding: 3rem 1.5rem 4rem;
+      background: #fff;
+    }
+    .cta-section h2 {
+      font-size: 1.5rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    .cta-section p {
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #1a73e8, #0d47a1);
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 700;
+      padding: 0.85rem 2.5rem;
+      border-radius: 12px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(26,115,232,0.35);
+    }
+
+    /* Footer */
+    .lp-footer {
+      text-align: center;
+      padding: 1.5rem 1rem;
+      border-top: 1px solid #ddd;
+      background: #f8f9fa;
+    }
+    .lp-footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.5rem;
+    }
+    .lp-footer-links a { color: #1a73e8; font-size: 0.85rem; font-weight: 500; }
+    .lp-footer-links a:hover { text-decoration: underline; }
+    .lp-footer-links .sep { color: #ccc; font-size: 0.8rem; }
+    .lp-footer p { color: #888; font-size: 0.78rem; }
+
+    /* Page-specific mockup styles */
+    .upload-area {
+      background: #fff;
+      border: 2px dashed #bbdefb;
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-align: center;
+      margin-bottom: 0.75rem;
+    }
+    .upload-area svg { fill: #1a73e8; margin-bottom: 0.3rem; }
+    .upload-area p { font-size: 0.7rem; color: #888; }
+    .result-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 0.85rem;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+      margin-bottom: 0.6rem;
+    }
+    .result-card h4 {
+      font-size: 0.85rem;
+      color: #333;
+      margin-bottom: 0.1rem;
+    }
+    .result-card .sci-name {
+      font-size: 0.65rem;
+      color: #888;
+      font-style: italic;
+      margin-bottom: 0.5rem;
+    }
+    .confidence-bar {
+      background: #e8f5e9;
+      border-radius: 6px;
+      height: 18px;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+      position: relative;
+    }
+    .confidence-fill {
+      background: linear-gradient(90deg, #43a047, #66bb6a);
+      height: 100%;
+      width: 94%;
+      border-radius: 6px;
+    }
+    .confidence-label {
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: #2e7d32;
+    }
+    .est-stats {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .est-stat {
+      flex: 1;
+      background: #f5f5f5;
+      border-radius: 8px;
+      padding: 0.4rem;
+      text-align: center;
+    }
+    .est-stat .val {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #333;
+    }
+    .est-stat .lbl {
+      font-size: 0.55rem;
+      color: #888;
+    }
+    .fun-fact {
+      background: #e3f2fd;
+      border-radius: 8px;
+      padding: 0.5rem 0.65rem;
+      font-size: 0.65rem;
+      color: #0d47a1;
+      line-height: 1.4;
+    }
+    .fun-fact strong { font-size: 0.6rem; }
+
+    @media (max-width: 600px) {
+      .hero { padding: 3rem 1.25rem 2rem; }
+      .hero h1 { font-size: 1.6rem; }
+      .phone-frame { width: 270px; min-height: 480px; }
+      .phone-screen { min-height: 456px; }
+      .details, .cta-section { padding: 2rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <a href="/" class="nav-brand">
+      <img src="/fishing-app/logo-192.png" alt="MyCatchBook" />
+      MyCatchBook
+    </a>
+    <a href="/fishing-app/auth" class="nav-cta">Get Started</a>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-icon">
+      <svg viewBox="0 0 24 24" width="32" height="32"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+    </div>
+    <h1>AI Fish Identification</h1>
+    <p class="tagline">Snap. Identify. Learn.</p>
+    <p class="desc">Take a photo of any catch and our AI instantly identifies the species, estimates size, and shares fascinating facts — all in seconds.</p>
+  </section>
+
+  <!-- Phone Mockup -->
+  <section class="mockup-section">
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="phone-status-bar">
+          <span>9:41 AM</span>
+          <span>100%</span>
+        </div>
+        <div class="phone-header">AI Fish ID</div>
+        <div class="phone-body">
+          <div class="upload-area">
+            <svg viewBox="0 0 24 24" width="28" height="28"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0-6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm6 8.39c0-.77-.63-1.39-1.39-1.39h-1.72l-.85-.85A.996.996 0 0013.34 12h-2.68c-.26 0-.52.1-.71.29l-.85.85H7.39C6.63 13.14 6 13.77 6 14.53v4.93c0 .77.63 1.39 1.39 1.39h9.22c.77 0 1.39-.63 1.39-1.39v-4.93z"/></svg>
+            <p>Tap to upload a photo</p>
+          </div>
+          <div class="result-card">
+            <h4>Largemouth Bass</h4>
+            <div class="sci-name">Micropterus salmoides</div>
+            <div class="confidence-bar">
+              <div class="confidence-fill"></div>
+              <span class="confidence-label">94%</span>
+            </div>
+            <div class="est-stats">
+              <div class="est-stat">
+                <div class="val">22"</div>
+                <div class="lbl">Length</div>
+              </div>
+              <div class="est-stat">
+                <div class="val">5.2 lbs</div>
+                <div class="lbl">Weight</div>
+              </div>
+              <div class="est-stat">
+                <div class="val">~3 yrs</div>
+                <div class="lbl">Age</div>
+              </div>
+            </div>
+            <div class="fun-fact">
+              <strong>Fun fact:</strong> Largemouth bass can eat prey up to 50% of their own body length in a single strike!
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature Details -->
+  <section class="details">
+    <h2>How It Works</h2>
+    <div class="details-grid">
+      <div class="detail-card">
+        <h3>Instant Recognition</h3>
+        <p>Our AI model recognizes hundreds of freshwater and saltwater species from a single photo, even at odd angles or in low light.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Size Estimates</h3>
+        <p>Get estimated length, weight, and age for your catch based on visual analysis — perfect when you don't have a scale handy.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Species Details</h3>
+        <p>Learn about habitat, diet, seasonal behavior, and regional regulations for every identified species.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Lure ID Too</h3>
+        <p>Not just fish — snap a photo of any lure or fly and get brand, type, recommended use, and similar alternatives.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2>Ready to try AI Fish ID?</h2>
+    <p>Start identifying your catches for free today.</p>
+    <a href="/fishing-app/auth" class="cta-btn">Get Started Free</a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="lp-footer">
+    <div class="lp-footer-links">
+      <a href="/fishing-app/terms">Terms of Service</a>
+      <span class="sep">|</span>
+      <a href="/fishing-app/privacy">Privacy Policy</a>
+      <span class="sep">|</span>
+      <a href="/fishing-app/pricing">Pricing</a>
+    </div>
+    <p>&copy; 2026 MyCatchBook. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

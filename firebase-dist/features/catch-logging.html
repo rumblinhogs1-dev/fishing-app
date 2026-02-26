@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catch Logging — MyCatchBook</title>
+  <meta name="description" content="Track every catch with species, weight, length, GPS location, weather, and photos. Build your personal fishing journal." />
+  <link rel="icon" type="image/png" href="/fishing-app/logo-192.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #222;
+      background: #f0f4f8;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      background: #fff;
+      border-bottom: 1px solid #e0e0e0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #0d47a1;
+      font-weight: 800;
+      font-size: 1.15rem;
+    }
+    .nav-brand img { width: 36px; height: 36px; border-radius: 50%; }
+    .nav-cta {
+      background: linear-gradient(135deg, #1a73e8, #0d47a1);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      transition: box-shadow 0.15s;
+    }
+    .nav-cta:hover { box-shadow: 0 4px 12px rgba(26,115,232,0.35); }
+
+    .hero {
+      background: linear-gradient(135deg, #0d47a1, #1a73e8);
+      color: #fff;
+      text-align: center;
+      padding: 4rem 1.5rem 3rem;
+    }
+    .hero-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+    }
+    .hero-icon svg { fill: #fff; }
+    .hero h1 { font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
+    .hero .tagline { font-size: 1.15rem; opacity: 0.9; margin-bottom: 0.75rem; }
+    .hero .desc { font-size: 0.95rem; opacity: 0.8; max-width: 520px; margin: 0 auto; line-height: 1.6; }
+
+    .mockup-section { padding: 3rem 1.5rem; display: flex; justify-content: center; }
+    .phone-frame {
+      width: 300px;
+      min-height: 580px;
+      background: #1a1a2e;
+      border-radius: 36px;
+      padding: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    }
+    .phone-screen {
+      background: #f5f5f5;
+      border-radius: 26px;
+      overflow: hidden;
+      min-height: 556px;
+    }
+    .phone-status-bar {
+      background: #0d47a1;
+      color: #fff;
+      font-size: 0.65rem;
+      padding: 0.35rem 1rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    .phone-header {
+      background: #0d47a1;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.6rem 1rem;
+      text-align: center;
+    }
+    .phone-body { padding: 0.75rem; }
+
+    .details {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+    .details h2 { text-align: center; font-size: 1.5rem; color: #0d47a1; margin-bottom: 2rem; }
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+    .detail-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+    .detail-card h3 { font-size: 0.95rem; color: #333; margin-bottom: 0.4rem; }
+    .detail-card p { font-size: 0.85rem; color: #666; line-height: 1.5; }
+
+    .cta-section { text-align: center; padding: 3rem 1.5rem 4rem; background: #fff; }
+    .cta-section h2 { font-size: 1.5rem; color: #333; margin-bottom: 0.5rem; }
+    .cta-section p { color: #666; margin-bottom: 1.5rem; }
+    .cta-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #1a73e8, #0d47a1);
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 700;
+      padding: 0.85rem 2.5rem;
+      border-radius: 12px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(26,115,232,0.35); }
+
+    .lp-footer { text-align: center; padding: 1.5rem 1rem; border-top: 1px solid #ddd; background: #f8f9fa; }
+    .lp-footer-links { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+    .lp-footer-links a { color: #1a73e8; font-size: 0.85rem; font-weight: 500; }
+    .lp-footer-links a:hover { text-decoration: underline; }
+    .lp-footer-links .sep { color: #ccc; font-size: 0.8rem; }
+    .lp-footer p { color: #888; font-size: 0.78rem; }
+
+    /* Catch form mockup */
+    .form-field {
+      background: #fff;
+      border-radius: 10px;
+      padding: 0.55rem 0.7rem;
+      margin-bottom: 0.45rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .form-field .label {
+      font-size: 0.55rem;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.15rem;
+    }
+    .form-field .value {
+      font-size: 0.78rem;
+      color: #333;
+      font-weight: 600;
+    }
+    .form-row {
+      display: flex;
+      gap: 0.4rem;
+    }
+    .form-row .form-field { flex: 1; }
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fff;
+      border-radius: 10px;
+      padding: 0.55rem 0.7rem;
+      margin-bottom: 0.45rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .toggle-row .label { font-size: 0.72rem; color: #333; font-weight: 500; }
+    .toggle {
+      width: 36px;
+      height: 20px;
+      background: #43a047;
+      border-radius: 10px;
+      position: relative;
+    }
+    .toggle::after {
+      content: '';
+      width: 16px;
+      height: 16px;
+      background: #fff;
+      border-radius: 50%;
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .photo-thumb {
+      width: 100%;
+      height: 50px;
+      background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.45rem;
+    }
+    .photo-thumb svg { fill: #2e7d32; }
+    .gps-bar {
+      background: #e3f2fd;
+      border-radius: 8px;
+      padding: 0.35rem 0.6rem;
+      font-size: 0.6rem;
+      color: #1565c0;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-bottom: 0.45rem;
+    }
+    .gps-bar svg { fill: #1565c0; width: 12px; height: 12px; }
+
+    @media (max-width: 600px) {
+      .hero { padding: 3rem 1.25rem 2rem; }
+      .hero h1 { font-size: 1.6rem; }
+      .phone-frame { width: 270px; min-height: 520px; }
+      .phone-screen { min-height: 496px; }
+      .details, .cta-section { padding: 2rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/" class="nav-brand">
+      <img src="/fishing-app/logo-192.png" alt="MyCatchBook" />
+      MyCatchBook
+    </a>
+    <a href="/fishing-app/auth" class="nav-cta">Get Started</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-icon">
+      <svg viewBox="0 0 24 24" width="32" height="32"><path d="M17.66 7.93L12 2.27 6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31A7.98 7.98 0 0012 21.58c2.05 0 4.1-.78 5.66-2.34 3.12-3.12 3.12-8.19 0-11.31zM12 19.59c-1.6 0-3.11-.62-4.24-1.76C6.62 16.69 6 15.19 6 13.59s.62-3.11 1.76-4.24L12 5.1v14.49z"/></svg>
+    </div>
+    <h1>Catch Logging</h1>
+    <p class="tagline">Your Personal Fishing Journal</p>
+    <p class="desc">Record every detail of every catch — species, size, location, weather, and photos — all in one beautiful, searchable log.</p>
+  </section>
+
+  <section class="mockup-section">
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="phone-status-bar">
+          <span>9:41 AM</span>
+          <span>100%</span>
+        </div>
+        <div class="phone-header">Log a Catch</div>
+        <div class="phone-body">
+          <div class="photo-thumb">
+            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+          </div>
+          <div class="form-field">
+            <div class="label">Species</div>
+            <div class="value">Rainbow Trout</div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <div class="label">Weight</div>
+              <div class="value">3.4 lbs</div>
+            </div>
+            <div class="form-field">
+              <div class="label">Length</div>
+              <div class="value">18 in</div>
+            </div>
+          </div>
+          <div class="gps-bar">
+            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/></svg>
+            36.1234, -94.5678
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <div class="label">Date</div>
+              <div class="value">Feb 26, 2026</div>
+            </div>
+            <div class="form-field">
+              <div class="label">Weather</div>
+              <div class="value">Partly Cloudy 62&deg;F</div>
+            </div>
+          </div>
+          <div class="toggle-row">
+            <span class="label">Catch &amp; Release</span>
+            <div class="toggle"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="details">
+    <h2>Built for Anglers</h2>
+    <div class="details-grid">
+      <div class="detail-card">
+        <h3>Auto-Fill Details</h3>
+        <p>GPS coordinates, date, time, and weather conditions are captured automatically — just focus on fishing.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Photo Gallery</h3>
+        <p>Attach multiple photos per catch. Browse your history as a beautiful timeline of trophy moments.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Catch &amp; Release Tracking</h3>
+        <p>Tag each catch as kept or released. See your conservation stats and release percentage over time.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Export Your Data</h3>
+        <p>Download your entire catch log as CSV or PDF. Your data is always yours to keep and share.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>Start Logging Your Catches</h2>
+    <p>Build your fishing journal — it only takes a few taps per catch.</p>
+    <a href="/fishing-app/auth" class="cta-btn">Get Started Free</a>
+  </section>
+
+  <footer class="lp-footer">
+    <div class="lp-footer-links">
+      <a href="/fishing-app/terms">Terms of Service</a>
+      <span class="sep">|</span>
+      <a href="/fishing-app/privacy">Privacy Policy</a>
+      <span class="sep">|</span>
+      <a href="/fishing-app/pricing">Pricing</a>
+    </div>
+    <p>&copy; 2026 MyCatchBook. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

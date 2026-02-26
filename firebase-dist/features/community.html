@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fishing Community — MyCatchBook</title>
+  <meta name="description" content="Share catches, compete on leaderboards, join challenges, and connect with anglers worldwide." />
+  <link rel="icon" type="image/png" href="/fishing-app/logo-192.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #222;
+      background: #f0f4f8;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; }
+
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.5rem; background: #fff; border-bottom: 1px solid #e0e0e0;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 0.6rem; color: #0d47a1; font-weight: 800; font-size: 1.15rem; }
+    .nav-brand img { width: 36px; height: 36px; border-radius: 50%; }
+    .nav-cta {
+      background: linear-gradient(135deg, #1a73e8, #0d47a1); color: #fff;
+      font-weight: 600; font-size: 0.85rem; padding: 0.5rem 1.25rem; border-radius: 8px;
+      transition: box-shadow 0.15s;
+    }
+    .nav-cta:hover { box-shadow: 0 4px 12px rgba(26,115,232,0.35); }
+
+    .hero {
+      background: linear-gradient(135deg, #0d47a1, #1a73e8); color: #fff;
+      text-align: center; padding: 4rem 1.5rem 3rem;
+    }
+    .hero-icon {
+      width: 64px; height: 64px; background: rgba(255,255,255,0.15);
+      border-radius: 16px; display: inline-flex; align-items: center;
+      justify-content: center; margin-bottom: 1.25rem;
+    }
+    .hero-icon svg { fill: #fff; }
+    .hero h1 { font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
+    .hero .tagline { font-size: 1.15rem; opacity: 0.9; margin-bottom: 0.75rem; }
+    .hero .desc { font-size: 0.95rem; opacity: 0.8; max-width: 520px; margin: 0 auto; line-height: 1.6; }
+
+    .mockup-section { padding: 3rem 1.5rem; display: flex; justify-content: center; }
+    .phone-frame {
+      width: 300px; min-height: 560px; background: #1a1a2e;
+      border-radius: 36px; padding: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    }
+    .phone-screen { background: #f5f5f5; border-radius: 26px; overflow: hidden; min-height: 536px; }
+    .phone-status-bar {
+      background: #0d47a1; color: #fff; font-size: 0.65rem;
+      padding: 0.35rem 1rem; display: flex; justify-content: space-between;
+    }
+    .phone-header {
+      background: #0d47a1; color: #fff; font-weight: 700;
+      font-size: 0.95rem; padding: 0.6rem 1rem; text-align: center;
+    }
+    .phone-body { padding: 0.75rem; }
+
+    .details { max-width: 800px; margin: 0 auto; padding: 3rem 1.5rem; }
+    .details h2 { text-align: center; font-size: 1.5rem; color: #0d47a1; margin-bottom: 2rem; }
+    .details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; }
+    .detail-card { background: #fff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+    .detail-card h3 { font-size: 0.95rem; color: #333; margin-bottom: 0.4rem; }
+    .detail-card p { font-size: 0.85rem; color: #666; line-height: 1.5; }
+
+    .cta-section { text-align: center; padding: 3rem 1.5rem 4rem; background: #fff; }
+    .cta-section h2 { font-size: 1.5rem; color: #333; margin-bottom: 0.5rem; }
+    .cta-section p { color: #666; margin-bottom: 1.5rem; }
+    .cta-btn {
+      display: inline-block; background: linear-gradient(135deg, #1a73e8, #0d47a1);
+      color: #fff; font-size: 1.05rem; font-weight: 700; padding: 0.85rem 2.5rem;
+      border-radius: 12px; transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(26,115,232,0.35); }
+
+    .lp-footer { text-align: center; padding: 1.5rem 1rem; border-top: 1px solid #ddd; background: #f8f9fa; }
+    .lp-footer-links { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+    .lp-footer-links a { color: #1a73e8; font-size: 0.85rem; font-weight: 500; }
+    .lp-footer-links a:hover { text-decoration: underline; }
+    .lp-footer-links .sep { color: #ccc; font-size: 0.8rem; }
+    .lp-footer p { color: #888; font-size: 0.78rem; }
+
+    /* Community mockup */
+    .tab-bar {
+      display: flex;
+      border-bottom: 2px solid #e0e0e0;
+      margin-bottom: 0.6rem;
+    }
+    .tab {
+      flex: 1;
+      text-align: center;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.45rem 0;
+      color: #888;
+    }
+    .tab.active {
+      color: #1a73e8;
+      border-bottom: 2px solid #1a73e8;
+      margin-bottom: -2px;
+    }
+    .feed-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 0.6rem;
+      margin-bottom: 0.5rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .feed-header {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.35rem;
+    }
+    .avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .feed-user {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #333;
+    }
+    .feed-time {
+      font-size: 0.55rem;
+      color: #aaa;
+      margin-left: auto;
+    }
+    .feed-species {
+      font-size: 0.68rem;
+      color: #555;
+      margin-bottom: 0.3rem;
+    }
+    .feed-photo {
+      width: 100%;
+      height: 55px;
+      border-radius: 8px;
+      margin-bottom: 0.3rem;
+    }
+    .feed-actions {
+      display: flex;
+      gap: 0.75rem;
+      font-size: 0.6rem;
+      color: #888;
+    }
+    .feed-actions span { display: flex; align-items: center; gap: 0.2rem; }
+    .feed-actions svg { fill: #aaa; width: 12px; height: 12px; }
+
+    @media (max-width: 600px) {
+      .hero { padding: 3rem 1.25rem 2rem; }
+      .hero h1 { font-size: 1.6rem; }
+      .phone-frame { width: 270px; min-height: 500px; }
+      .phone-screen { min-height: 476px; }
+      .details, .cta-section { padding: 2rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/" class="nav-brand">
+      <img src="/fishing-app/logo-192.png" alt="MyCatchBook" />
+      MyCatchBook
+    </a>
+    <a href="/fishing-app/auth" class="nav-cta">Get Started</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-icon">
+      <svg viewBox="0 0 24 24" width="32" height="32"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+    </div>
+    <h1>Fishing Community</h1>
+    <p class="tagline">Connect. Share. Compete.</p>
+    <p class="desc">Join a thriving community of anglers. Share your catches, compete on leaderboards, and discover what's biting near you.</p>
+  </section>
+
+  <section class="mockup-section">
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="phone-status-bar">
+          <span>9:41 AM</span>
+          <span>100%</span>
+        </div>
+        <div class="phone-header">Community Feed</div>
+        <div class="phone-body">
+          <div class="tab-bar">
+            <div class="tab active">Public</div>
+            <div class="tab">Friends</div>
+          </div>
+
+          <div class="feed-card">
+            <div class="feed-header">
+              <div class="avatar" style="background:#e3f2fd;"></div>
+              <span class="feed-user">Jake_Angler92</span>
+              <span class="feed-time">12 min ago</span>
+            </div>
+            <div class="feed-species">Largemouth Bass &bull; 5.2 lbs &bull; Lake Fork, TX</div>
+            <div class="feed-photo" style="background: linear-gradient(135deg, #81c784, #4caf50);"></div>
+            <div class="feed-actions">
+              <span><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> 24</span>
+              <span><svg viewBox="0 0 24 24"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"/></svg> 8</span>
+            </div>
+          </div>
+
+          <div class="feed-card">
+            <div class="feed-header">
+              <div class="avatar" style="background:#fce4ec;"></div>
+              <span class="feed-user">TroutWhisperer</span>
+              <span class="feed-time">45 min ago</span>
+            </div>
+            <div class="feed-species">Rainbow Trout &bull; 3.1 lbs &bull; White River, AR</div>
+            <div class="feed-photo" style="background: linear-gradient(135deg, #90caf9, #42a5f5);"></div>
+            <div class="feed-actions">
+              <span><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> 17</span>
+              <span><svg viewBox="0 0 24 24"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"/></svg> 5</span>
+            </div>
+          </div>
+
+          <div class="feed-card">
+            <div class="feed-header">
+              <div class="avatar" style="background:#fff3e0;"></div>
+              <span class="feed-user">BassKing_TX</span>
+              <span class="feed-time">2 hr ago</span>
+            </div>
+            <div class="feed-species">Striped Bass &bull; 8.7 lbs &bull; Lake Texoma, OK</div>
+            <div class="feed-photo" style="background: linear-gradient(135deg, #ffcc80, #ffa726);"></div>
+            <div class="feed-actions">
+              <span><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> 42</span>
+              <span><svg viewBox="0 0 24 24"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"/></svg> 13</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="details">
+    <h2>A Community That Gets It</h2>
+    <div class="details-grid">
+      <div class="detail-card">
+        <h3>Activity Feed</h3>
+        <p>See real-time catches from anglers around the world, or filter to just your friends and local area.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Leaderboards</h3>
+        <p>Compete for biggest catch, most species, and monthly records. Regional and global rankings updated live.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Challenges</h3>
+        <p>Join weekly and seasonal challenges — species slams, catch-and-release marathons, and community events.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Privacy Controls</h3>
+        <p>Share publicly or with friends only. Hide exact GPS locations to protect your secret spots.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>Join the Community</h2>
+    <p>Connect with anglers who share your passion.</p>
+    <a href="/fishing-app/auth" class="cta-btn">Get Started Free</a>
+  </section>
+
+  <footer class="lp-footer">
+    <div class="lp-footer-links">
+      <a href="/fishing-app/terms">Terms of Service</a>
+      <span class="sep">|</span>
+      <a href="/fishing-app/privacy">Privacy Policy</a>
+      <span class="sep">|</span>
+      <a href="/fishing-app/pricing">Pricing</a>
+    </div>
+    <p>&copy; 2026 MyCatchBook. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

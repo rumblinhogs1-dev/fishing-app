@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Local Guide — MyCatchBook</title>
+  <meta name="description" content="Get AI-powered fishing recommendations for any location — best species, techniques, regulations, and nearby businesses." />
+  <link rel="icon" type="image/png" href="/fishing-app/logo-192.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #222;
+      background: #f0f4f8;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; }
+
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.5rem; background: #fff; border-bottom: 1px solid #e0e0e0;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 0.6rem; color: #0d47a1; font-weight: 800; font-size: 1.15rem; }
+    .nav-brand img { width: 36px; height: 36px; border-radius: 50%; }
+    .nav-cta {
+      background: linear-gradient(135deg, #1a73e8, #0d47a1); color: #fff;
+      font-weight: 600; font-size: 0.85rem; padding: 0.5rem 1.25rem; border-radius: 8px;
+      transition: box-shadow 0.15s;
+    }
+    .nav-cta:hover { box-shadow: 0 4px 12px rgba(26,115,232,0.35); }
+
+    .hero {
+      background: linear-gradient(135deg, #0d47a1, #1a73e8); color: #fff;
+      text-align: center; padding: 4rem 1.5rem 3rem;
+    }
+    .hero-icon {
+      width: 64px; height: 64px; background: rgba(255,255,255,0.15);
+      border-radius: 16px; display: inline-flex; align-items: center;
+      justify-content: center; margin-bottom: 1.25rem;
+    }
+    .hero-icon svg { fill: #fff; }
+    .hero h1 { font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
+    .hero .tagline { font-size: 1.15rem; opacity: 0.9; margin-bottom: 0.75rem; }
+    .hero .desc { font-size: 0.95rem; opacity: 0.8; max-width: 520px; margin: 0 auto; line-height: 1.6; }
+
+    .mockup-section { padding: 3rem 1.5rem; display: flex; justify-content: center; }
+    .phone-frame {
+      width: 300px; min-height: 580px; background: #1a1a2e;
+      border-radius: 36px; padding: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    }
+    .phone-screen { background: #f5f5f5; border-radius: 26px; overflow: hidden; min-height: 556px; }
+    .phone-status-bar {
+      background: #0d47a1; color: #fff; font-size: 0.65rem;
+      padding: 0.35rem 1rem; display: flex; justify-content: space-between;
+    }
+    .phone-header {
+      background: #0d47a1; color: #fff; font-weight: 700;
+      font-size: 0.95rem; padding: 0.6rem 1rem; text-align: center;
+    }
+    .phone-body { padding: 0.75rem; }
+
+    .details { max-width: 800px; margin: 0 auto; padding: 3rem 1.5rem; }
+    .details h2 { text-align: center; font-size: 1.5rem; color: #0d47a1; margin-bottom: 2rem; }
+    .details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; }
+    .detail-card { background: #fff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+    .detail-card h3 { font-size: 0.95rem; color: #333; margin-bottom: 0.4rem; }
+    .detail-card p { font-size: 0.85rem; color: #666; line-height: 1.5; }
+
+    .cta-section { text-align: center; padding: 3rem 1.5rem 4rem; background: #fff; }
+    .cta-section h2 { font-size: 1.5rem; color: #333; margin-bottom: 0.5rem; }
+    .cta-section p { color: #666; margin-bottom: 1.5rem; }
+    .cta-btn {
+      display: inline-block; background: linear-gradient(135deg, #1a73e8, #0d47a1);
+      color: #fff; font-size: 1.05rem; font-weight: 700; padding: 0.85rem 2.5rem;
+      border-radius: 12px; transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(26,115,232,0.35); }
+
+    .lp-footer { text-align: center; padding: 1.5rem 1rem; border-top: 1px solid #ddd; background: #f8f9fa; }
+    .lp-footer-links { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+    .lp-footer-links a { color: #1a73e8; font-size: 0.85rem; font-weight: 500; }
+    .lp-footer-links a:hover { text-decoration: underline; }
+    .lp-footer-links .sep { color: #ccc; font-size: 0.8rem; }
+    .lp-footer p { color: #888; font-size: 0.78rem; }
+
+    /* Local guide mockup */
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #fff;
+      border-radius: 10px;
+      padding: 0.5rem 0.7rem;
+      margin-bottom: 0.6rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .search-bar svg { fill: #aaa; width: 14px; height: 14px; flex-shrink: 0; }
+    .search-bar span { font-size: 0.75rem; color: #333; font-weight: 500; }
+    .guide-tabs {
+      display: flex;
+      gap: 0.3rem;
+      margin-bottom: 0.6rem;
+    }
+    .guide-tab {
+      flex: 1;
+      text-align: center;
+      font-size: 0.6rem;
+      font-weight: 600;
+      padding: 0.35rem 0;
+      border-radius: 8px;
+      background: #e8e8e8;
+      color: #888;
+    }
+    .guide-tab.active {
+      background: #1a73e8;
+      color: #fff;
+    }
+    .tips-card {
+      background: #e8f5e9;
+      border-radius: 10px;
+      padding: 0.6rem 0.7rem;
+      margin-bottom: 0.6rem;
+    }
+    .tips-card h4 {
+      font-size: 0.7rem;
+      color: #2e7d32;
+      margin-bottom: 0.25rem;
+    }
+    .tips-card p {
+      font-size: 0.62rem;
+      color: #555;
+      line-height: 1.45;
+    }
+    .biz-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 0.6rem 0.7rem;
+      margin-bottom: 0.45rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .biz-card h4 {
+      font-size: 0.72rem;
+      color: #333;
+      margin-bottom: 0.1rem;
+    }
+    .biz-stars {
+      display: flex;
+      align-items: center;
+      gap: 0.15rem;
+      margin-bottom: 0.2rem;
+    }
+    .star { color: #ffb300; font-size: 0.65rem; }
+    .star.empty { color: #ddd; }
+    .biz-rating { font-size: 0.58rem; color: #888; margin-left: 0.2rem; }
+    .biz-addr {
+      font-size: 0.58rem;
+      color: #888;
+    }
+    .biz-type {
+      display: inline-block;
+      font-size: 0.5rem;
+      font-weight: 600;
+      background: #e3f2fd;
+      color: #1565c0;
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      margin-top: 0.2rem;
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 3rem 1.25rem 2rem; }
+      .hero h1 { font-size: 1.6rem; }
+      .phone-frame { width: 270px; min-height: 520px; }
+      .phone-screen { min-height: 496px; }
+      .details, .cta-section { padding: 2rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/" class="nav-brand">
+      <img src="/fishing-app/logo-192.png" alt="MyCatchBook" />
+      MyCatchBook
+    </a>
+    <a href="/fishing-app/auth" class="nav-cta">Get Started</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-icon">
+      <svg viewBox="0 0 24 24" width="32" height="32"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+    </div>
+    <h1>AI Local Guide</h1>
+    <p class="tagline">Your AI Fishing Expert, Anywhere</p>
+    <p class="desc">Get personalized fishing recommendations, local tips, regulations, and nearby businesses for any location — powered by AI.</p>
+  </section>
+
+  <section class="mockup-section">
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="phone-status-bar">
+          <span>9:41 AM</span>
+          <span>100%</span>
+        </div>
+        <div class="phone-header">Local Guide</div>
+        <div class="phone-body">
+          <div class="search-bar">
+            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14z M9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            <span>Lake Fork, TX</span>
+          </div>
+          <div class="guide-tabs">
+            <div class="guide-tab active">All</div>
+            <div class="guide-tab">Guides</div>
+            <div class="guide-tab">Hotels</div>
+            <div class="guide-tab">Bait Shops</div>
+          </div>
+          <div class="tips-card">
+            <h4>Fishing Tips for Lake Fork</h4>
+            <p>Target largemouth bass near submerged timber and creek channels. Use Texas-rigged soft plastics in natural colors. February is pre-spawn season — fish are moving shallow. Fishing license required; check TPWD for slot limits (16-24" must be released).</p>
+          </div>
+          <div class="biz-card">
+            <h4>Lake Fork Marina</h4>
+            <div class="biz-stars">
+              <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star empty">&#9733;</span>
+              <span class="biz-rating">4.3 (127 reviews)</span>
+            </div>
+            <div class="biz-addr">1234 FM 515, Yantis, TX 75497</div>
+            <span class="biz-type">Marina</span>
+          </div>
+          <div class="biz-card">
+            <h4>Big Bass Resort</h4>
+            <div class="biz-stars">
+              <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span>
+              <span class="biz-rating">4.8 (89 reviews)</span>
+            </div>
+            <div class="biz-addr">5678 Lake Fork Dr, Alba, TX 75410</div>
+            <span class="biz-type">Lodging</span>
+          </div>
+          <div class="biz-card">
+            <h4>Fork Tackle &amp; Bait</h4>
+            <div class="biz-stars">
+              <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star empty">&#9733;</span>
+              <span class="biz-rating">4.1 (54 reviews)</span>
+            </div>
+            <div class="biz-addr">910 Hwy 154, Quitman, TX 75783</div>
+            <span class="biz-type">Bait Shop</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="details">
+    <h2>AI-Powered Local Intelligence</h2>
+    <div class="details-grid">
+      <div class="detail-card">
+        <h3>Fishing Tips</h3>
+        <p>Get species-specific advice for your exact location, including techniques, best times, and seasonal patterns.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Regulations</h3>
+        <p>Stay legal with up-to-date fishing regulations, license requirements, and slot limits for your area.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Local Businesses</h3>
+        <p>Find marinas, bait shops, guide services, lodging, and restaurants — all rated by the fishing community.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Fly &amp; Lure Recs</h3>
+        <p>AI suggests the best lures, flies, and presentations for current conditions and target species at your location.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>Get Your Local Guide</h2>
+    <p>Search any lake, river, or coast for AI-powered recommendations.</p>
+    <a href="/fishing-app/auth" class="cta-btn">Get Started Free</a>
+  </section>
+
+  <footer class="lp-footer">
+    <div class="lp-footer-links">
+      <a href="/fishing-app/terms">Terms of Service</a>
+      <span class="sep">|</span>
+      <a href="/fishing-app/privacy">Privacy Policy</a>
+      <span class="sep">|</span>
+      <a href="/fishing-app/pricing">Pricing</a>
+    </div>
+    <p>&copy; 2026 MyCatchBook. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
