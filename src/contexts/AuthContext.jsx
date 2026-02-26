@@ -7,6 +7,7 @@ import {
   createUserWithEmailAndPassword,
   signOut as firebaseSignOut,
   updateProfile,
+  sendPasswordResetEmail,
 } from 'firebase/auth';
 import { auth, firebaseConfigured } from '../firebase';
 
@@ -52,6 +53,10 @@ export function AuthProvider({ children }) {
     return firebaseSignOut(auth);
   }
 
+  async function resetPassword(email) {
+    return sendPasswordResetEmail(auth, email);
+  }
+
   const value = {
     user,
     loading,
@@ -59,6 +64,7 @@ export function AuthProvider({ children }) {
     signInWithEmail,
     signUpWithEmail,
     signOut,
+    resetPassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

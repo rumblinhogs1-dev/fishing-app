@@ -11,13 +11,16 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../firebase';
+import { validateComment } from './validate';
 
 export async function addComment(catchId, userId, displayName, text) {
+  const cleanText = validateComment(text);
+  if (!cleanText) throw new Error('Comment cannot be empty');
   await addDoc(collection(db, 'comments'), {
     catchId,
     userId,
     displayName,
-    text,
+    text: cleanText,
     createdAt: serverTimestamp(),
   });
   await updateDoc(doc(db, 'catches', catchId), {

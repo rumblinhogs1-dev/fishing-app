@@ -9,9 +9,31 @@ export default function AuthPage() {
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [error, setError] = useState('');
+  const [resetSent, setResetSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { signInWithGoogle, signInWithEmail, signUpWithEmail } = useAuth();
+  const { signInWithGoogle, signInWithEmail, signUpWithEmail, resetPassword } = useAuth();
+
+  async function handleForgotPassword() {
+    if (!email) {
+      setError('Please enter your email address first.');
+      return;
+    }
+    setError('');
+    setLoading(true);
+    try {
+      await resetPassword(email);
+      setResetSent(true);
+    } catch (err) {
+      const messages = {
+        'auth/user-not-found': 'No account found with this email.',
+        'auth/invalid-email': 'Please enter a valid email address.',
+      };
+      setError(messages[err.code] || err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   async function handleGoogle() {
     setError('');
@@ -119,7 +141,24 @@ export default function AuthPage() {
             />
           </label>
 
+          {!isSignUp && (
+            <button
+              type="button"
+              className={styles.switchBtn}
+              onClick={handleForgotPassword}
+              disabled={loading}
+              style={{ alignSelf: 'flex-end', fontSize: '0.8rem' }}
+            >
+              Forgot password?
+            </button>
+          )}
+
           {error && <div className={styles.error}>{error}</div>}
+          {resetSent && (
+            <div className={styles.success}>
+              Password reset email sent! Check your inbox.
+            </div>
+          )}
 
           <button type="submit" className={styles.submitBtn} disabled={loading}>
             {loading ? 'Please wait...' : isSignUp ? 'Create Account' : 'Sign In'}
@@ -131,7 +170,7 @@ export default function AuthPage() {
           <button
             type="button"
             className={styles.switchBtn}
-            onClick={() => { setIsSignUp(!isSignUp); setError(''); }}
+            onClick={() => { setIsSignUp(!isSignUp); setError(''); setResetSent(false); }}
           >
             {isSignUp ? 'Sign In' : 'Sign Up'}
           </button>

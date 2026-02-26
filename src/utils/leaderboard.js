@@ -11,11 +11,12 @@ import { db } from '../firebase';
 
 export async function getRegionUserIds(region) {
   if (!region) return [];
-  const snap = await getDocs(collection(db, 'users'));
-  const regionLower = region.toLowerCase();
-  return snap.docs
-    .filter((d) => (d.data().region || '').toLowerCase() === regionLower)
-    .map((d) => d.id);
+  const q = query(
+    collection(db, 'users'),
+    where('region', '==', region)
+  );
+  const snap = await getDocs(q);
+  return snap.docs.map((d) => d.id);
 }
 
 export async function getMonthlyRegionCatches(region) {

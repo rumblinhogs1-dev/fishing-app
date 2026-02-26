@@ -11,12 +11,14 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../firebase';
+import { validateSpot } from './validate';
 
 const SPOTS_COL = 'spots';
 
 export async function addSpot(userId, data) {
+  const clean = validateSpot(data);
   const docRef = await addDoc(collection(db, SPOTS_COL), {
-    ...data,
+    ...clean,
     userId,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
@@ -25,9 +27,10 @@ export async function addSpot(userId, data) {
 }
 
 export async function updateSpot(spotId, updates) {
+  const clean = validateSpot(updates);
   const ref = doc(db, SPOTS_COL, spotId);
   await updateDoc(ref, {
-    ...updates,
+    ...clean,
     updatedAt: serverTimestamp(),
   });
 }

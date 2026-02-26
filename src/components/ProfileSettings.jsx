@@ -131,6 +131,7 @@ export default function ProfileSettings() {
       });
       await setDoc(doc(db, 'users', user.uid), {
         displayName: form.displayName,
+        displayNameLower: form.displayName.toLowerCase(),
         bio: form.bio.slice(0, MAX_BIO),
         region: form.region,
         photoURL,

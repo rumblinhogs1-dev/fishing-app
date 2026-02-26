@@ -5,6 +5,7 @@ import {
   updateCatch as fsUpdateCatch,
   deleteCatch as fsDeleteCatch,
 } from '../utils/firestore';
+import { uploadCatchImage } from '../utils/firebaseStorage';
 import { notifyFriendCatch } from '../utils/notifications';
 import { cacheCatches, getCachedCatches } from '../utils/offlineStorage';
 
@@ -79,31 +80,62 @@ export function useFirestoreCatches(user) {
     data.authorDisplayName = user?.displayName || 'Angler';
     data.authorPhotoURL = user?.photoURL || null;
 
-    // Store image data URL directly in Firestore (already compressed by ImageUpload)
-    if (image && image.startsWith('data:')) {
-      data.imageUrl = image;
-    }
-    if (lureImage && lureImage.startsWith('data:')) {
-      data.lureImage = lureImage;
+    // Create doc first, then upload images to Storage
+    const catchId = await fsAddCatch(userId, data);
+
+    try {
+      const updates = {};
+      if (image && image.startsWith('data:')) {
+        const url = await uploadCatchImage(userId, catchId, image);
+        if (url) updates.imageUrl = url;
+      }
+      if (lureImage && lureImage.startsWith('data:')) {
+        const lureRef = (await import('firebase/storage')).ref;
+        const { storage } = await import('../firebase');
+        const { uploadString, getDownloadURL } = await import('firebase/storage');
+        const storageRef = lureRef(storage, `users/${userId}/catches/${catchId}/lure.jpg`);
+        const snap = await uploadString(storageRef, lureImage, 'data_url');
+        updates.lureImage = await getDownloadURL(snap.ref);
+      }
+      if (Object.keys(updates).length) {
+        await fsUpdateCatch(catchId, updates);
+      }
+    } catch (err) {
+      console.error('Image upload failed, catch saved without image:', err);
     }
 
-    const catchId = await fsAddCatch(userId, data);
     notifyFriendCatch(userId, user?.displayName, catchId, data.species).catch(() => {});
     return catchId;
   }, [userId, user]);
 
   const updateCatch = useCallback(async (id, updates) => {
     const { image, lureImage, ...data } = updates;
+
     if (image && image.startsWith('data:')) {
-      data.imageUrl = image;
+      try {
+        const url = await uploadCatchImage(userId, id, image);
+        if (url) data.imageUrl = url;
+      } catch (err) {
+        console.error('Image upload failed:', err);
+      }
     } else if (image === '') {
       data.imageUrl = '';
     }
     if (lureImage && lureImage.startsWith('data:')) {
-      data.lureImage = lureImage;
+      try {
+        const lureRef = (await import('firebase/storage')).ref;
+        const { storage } = await import('../firebase');
+        const { uploadString, getDownloadURL } = await import('firebase/storage');
+        const storageRef = lureRef(storage, `users/${userId}/catches/${id}/lure.jpg`);
+        const snap = await uploadString(storageRef, lureImage, 'data_url');
+        data.lureImage = await getDownloadURL(snap.ref);
+      } catch (err) {
+        console.error('Lure image upload failed:', err);
+      }
     }
+
     await fsUpdateCatch(id, data);
-  }, []);
+  }, [userId]);
 
   const deleteCatch = useCallback(async (id) => {
     await fsDeleteCatch(id);

@@ -9,6 +9,7 @@ import {
   query,
   where,
   orderBy,
+  limit,
   onSnapshot,
   arrayUnion,
   arrayRemove,
@@ -75,15 +76,15 @@ export async function removeFriend(userId, friendId) {
 
 export async function searchUsers(queryStr) {
   if (!queryStr || queryStr.length < 2) return [];
-  const q = queryStr.toLowerCase();
-  const snapshot = await getDocs(collection(db, 'users'));
-  return snapshot.docs
-    .map((d) => ({ id: d.id, ...d.data() }))
-    .filter((u) =>
-      u.displayName?.toLowerCase().includes(q) ||
-      u.email?.toLowerCase().includes(q)
-    )
-    .slice(0, 20);
+  const prefix = queryStr.toLowerCase();
+  const q = query(
+    collection(db, 'users'),
+    where('displayNameLower', '>=', prefix),
+    where('displayNameLower', '<=', prefix + '\uf8ff'),
+    limit(20)
+  );
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
 }
 
 export function subscribeToFriendRequests(userId, callback) {
@@ -114,6 +115,7 @@ export async function ensureUserDoc(user) {
     const { setDoc } = await import('firebase/firestore');
     await setDoc(ref, {
       displayName: user.displayName || '',
+      displayNameLower: (user.displayName || '').toLowerCase(),
       email: user.email || '',
       photoURL: user.photoURL || '',
       friendIds: [],

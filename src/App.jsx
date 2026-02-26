@@ -12,6 +12,8 @@ import { useSpots } from './hooks/useSpots';
 import { useAuth } from './contexts/AuthContext';
 import styles from './App.module.css';
 
+const ProtectedRoute = lazyRetry(() => import('./components/ProtectedRoute'));
+
 // Retry dynamic imports once, then reload page to bust stale service worker cache
 function lazyRetry(importFn) {
   return lazy(() =>
@@ -137,24 +139,29 @@ export default function App() {
                 <Route path="/feed" element={<ActivityFeed />} />
                 <Route path="/catch/:id" element={<CatchDetail />} />
                 <Route path="/user/:userId" element={<UserProfile />} />
-                <Route path="/friends" element={<FriendsList />} />
-                <Route path="/settings" element={<ProfileSettings />} />
-                <Route path="/chat" element={<ChatPage />} />
-                <Route path="/chat/new" element={<CreateGroup />} />
-                <Route path="/chat/:groupId" element={<ChatRoom />} />
-                <Route path="/chat/:groupId/settings" element={<GroupSettings />} />
                 <Route path="/map" element={<MapView catches={catches} />} />
-                <Route path="/spots" element={<SpotsList />} />
                 <Route path="/forecast" element={<Forecast />} />
                 <Route path="/regulations" element={<Regulations />} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
-                <Route path="/trips" element={<TripPlanner catches={catches} />} />
                 <Route path="/conservation" element={<ConservationGuide />} />
-                <Route path="/notifications" element={<Notifications />} />
                 <Route path="/challenges" element={<Challenges />} />
                 <Route path="/challenge/:id" element={<ChallengeDetail />} />
                 <Route path="/local-guide" element={<LocalGuide />} />
-                <Route path="/import-sonar" element={<SonarImport />} />
+
+                {/* Auth-only routes */}
+                <Route element={<ProtectedRoute />}>
+                  <Route path="/friends" element={<FriendsList />} />
+                  <Route path="/settings" element={<ProfileSettings />} />
+                  <Route path="/chat" element={<ChatPage />} />
+                  <Route path="/chat/new" element={<CreateGroup />} />
+                  <Route path="/chat/:groupId" element={<ChatRoom />} />
+                  <Route path="/chat/:groupId/settings" element={<GroupSettings />} />
+                  <Route path="/trips" element={<TripPlanner catches={catches} />} />
+                  <Route path="/notifications" element={<Notifications />} />
+                  <Route path="/import-sonar" element={<SonarImport />} />
+                  <Route path="/spots" element={<SpotsList />} />
+                </Route>
+
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </Suspense>

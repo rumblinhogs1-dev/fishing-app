@@ -13,12 +13,14 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../firebase';
+import { validateCatch } from './validate';
 
 const CATCHES_COL = 'catches';
 
 export async function addCatch(userId, data) {
+  const clean = validateCatch(data);
   const docRef = await addDoc(collection(db, CATCHES_COL), {
-    ...data,
+    ...clean,
     userId,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
@@ -27,9 +29,10 @@ export async function addCatch(userId, data) {
 }
 
 export async function updateCatch(catchId, updates) {
+  const clean = validateCatch(updates);
   const ref = doc(db, CATCHES_COL, catchId);
   await updateDoc(ref, {
-    ...updates,
+    ...clean,
     updatedAt: serverTimestamp(),
   });
 }

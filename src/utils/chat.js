@@ -13,6 +13,7 @@ import {
   arrayRemove,
 } from 'firebase/firestore';
 import { db } from '../firebase';
+import { validateMessage } from './validate';
 
 export async function createGroup(name, memberIds, adminId) {
   const docRef = await addDoc(collection(db, 'groups'), {
@@ -26,16 +27,18 @@ export async function createGroup(name, memberIds, adminId) {
 }
 
 export async function sendMessage(groupId, userId, displayName, text, imageUrl = '') {
+  const cleanText = validateMessage(text);
+  if (!cleanText && !imageUrl) throw new Error('Message cannot be empty');
   await addDoc(collection(db, 'messages'), {
     groupId,
     userId,
     displayName,
-    text,
+    text: cleanText,
     imageUrl,
     createdAt: serverTimestamp(),
   });
   await updateDoc(doc(db, 'groups', groupId), {
-    lastMessage: text.slice(0, 100),
+    lastMessage: cleanText.slice(0, 100),
   });
 }
 

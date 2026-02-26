@@ -123,27 +123,60 @@ export function subscribeToPublicChallenges(callback) {
 }
 
 export function subscribeToChallenges(userId, callback) {
-  // Firestore doesn't support OR across different fields with array-contains,
-  // so we query public challenges + challenges where user is a participant
+  // Two separate queries: public challenges + user's own challenges
   const publicQ = query(
     collection(db, 'challenges'),
+    where('visibility', '==', 'public'),
     orderBy('startDate', 'desc')
   );
-  return onSnapshot(publicQ, (snap) => {
-    const all = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    // Filter: public, or user is creator, or user is participant/invited
-    const filtered = all.filter((c) => {
-      if (c.visibility === 'public') return true;
-      if (c.createdBy === userId) return true;
-      if (c.participants?.some((p) => p.userId === userId)) return true;
-      if (c.invited?.some((inv) => inv.userId === userId)) return true;
-      return false;
+  const ownQ = query(
+    collection(db, 'challenges'),
+    where('createdBy', '==', userId),
+    orderBy('startDate', 'desc')
+  );
+
+  let publicResults = [];
+  let ownResults = [];
+  let initialPublic = false;
+  let initialOwn = false;
+
+  function merge() {
+    const map = new Map();
+    publicResults.forEach((c) => map.set(c.id, c));
+    ownResults.forEach((c) => map.set(c.id, c));
+    const merged = Array.from(map.values());
+    merged.sort((a, b) => {
+      const aTime = a.startDate?.seconds || 0;
+      const bTime = b.startDate?.seconds || 0;
+      return bTime - aTime;
     });
-    callback(filtered);
+    callback(merged);
+  }
+
+  const unsubPublic = onSnapshot(publicQ, (snap) => {
+    publicResults = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    initialPublic = true;
+    if (initialOwn) merge();
   }, (error) => {
-    console.error('Firestore subscription error:', error);
-    callback([]);
+    console.error('Firestore subscription error (public):', error);
+    publicResults = [];
+    if (initialOwn) merge();
   });
+
+  const unsubOwn = onSnapshot(ownQ, (snap) => {
+    ownResults = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    initialOwn = true;
+    if (initialPublic) merge();
+  }, (error) => {
+    console.error('Firestore subscription error (own):', error);
+    ownResults = [];
+    if (initialPublic) merge();
+  });
+
+  return () => {
+    unsubPublic();
+    unsubOwn();
+  };
 }
 
 export async function getChallengeParticipantCatches(participantIds, startDate, endDate, targetSpecies) {

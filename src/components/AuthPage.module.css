@@ -116,6 +116,14 @@
   font-size: 0.85rem;
 }
 
+.success {
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
 .submitBtn {
   padding: 0.7rem;
   background: #1a73e8;
