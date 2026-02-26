@@ -199,15 +199,17 @@
     }
     .photo-thumb {
       width: 100%;
-      height: 50px;
-      background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+      height: 80px;
       border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      overflow: hidden;
       margin-bottom: 0.45rem;
     }
-    .photo-thumb svg { fill: #2e7d32; }
+    .photo-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
     .gps-bar {
       background: #e3f2fd;
       border-radius: 8px;
@@ -259,7 +261,7 @@
         <div class="phone-header">Log a Catch</div>
         <div class="phone-body">
           <div class="photo-thumb">
-            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+            <img src="/features/images/rainbow-trout.jpg" alt="Rainbow Trout in net" />
           </div>
           <div class="form-field">
             <div class="label">Species</div>
