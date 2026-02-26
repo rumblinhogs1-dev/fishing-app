@@ -36,18 +36,18 @@
 
 ## Phase 4: Code Quality & Polish
 
-- [ ] **Replace `alert()`/`confirm()`** — `GroupSettings.jsx:45` uses `confirm()`, `UserProfile.jsx:82` uses `alert()`. Use custom modal and toast system instead.
-- [ ] **Optimize logo.png** — `public/logo.png` is 984KB. Convert to WebP or remove if unused (app uses `logo-192.png`).
-- [ ] **Move `vite-plugin-pwa` to devDependencies** — Listed in `dependencies` but is build-time only.
-- [ ] **Fix IndexedDB connection leaks** — `src/utils/offlineStorage.js:15-29` opens new connections per operation without closing. Use singleton pattern.
-- [ ] **Fix image repair memory leak** — `src/hooks/useFirestoreCatches.js:67-102` runs async operations without cancellation on unmount.
+- [x] **Replace `alert()`/`confirm()`** — `GroupSettings.jsx:45` uses `confirm()`, `UserProfile.jsx:82` uses `alert()`. Use custom modal and toast system instead.
+- [x] **Optimize logo.png** — `public/logo.png` is 984KB. Convert to WebP or remove if unused (app uses `logo-192.png`).
+- [x] **Move `vite-plugin-pwa` to devDependencies** — Listed in `dependencies` but is build-time only.
+- [x] **Fix IndexedDB connection leaks** — `src/utils/offlineStorage.js:15-29` opens new connections per operation without closing. Use singleton pattern.
+- [x] **Fix image repair memory leak** — `src/hooks/useFirestoreCatches.js:67-102` runs async operations without cancellation on unmount.
 
 ## Phase 5: Production Infrastructure
 
-- [ ] **Add error tracking** — Integrate Sentry or similar. Currently only `console.error`.
-- [ ] **Add analytics** — Firebase Analytics (SDK already present) or similar.
-- [ ] **Add social meta tags** — Missing `og:image`, `og:url`, Twitter card tags, `apple-touch-icon`.
-- [ ] **Review service worker caching** — Multiple rules cache opaque responses (status 0) which could silently serve errors.
+- [x] **Add error tracking** — Integrated @sentry/react with ErrorBoundary and unhandled rejection capture. DSN configured via `VITE_SENTRY_DSN` env var, disabled in non-prod.
+- [x] **Add analytics** — Firebase Analytics initialized with `isSupported()` guard. Automatic pageviews/engagement only.
+- [x] **Add social meta tags** — Added `og:image`, `og:url`, Twitter card tags, and `apple-touch-icon` to `index.html`.
+- [x] **Review service worker caching** — Changed 6 tile cache rules from CacheFirst to StaleWhileRevalidate, removed opaque response caching (`statuses: [0, 200]`).
 
 ## Phase 6: Revenue & Distribution
 
