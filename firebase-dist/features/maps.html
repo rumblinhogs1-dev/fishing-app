@@ -90,9 +90,18 @@
       height: 320px;
       overflow: hidden;
     }
-    .map-bg {
+    .map-tiles {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
       width: 100%;
       height: 100%;
+    }
+    .map-tiles img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
     .map-pin {
       position: absolute;
@@ -179,29 +188,27 @@
         <div class="phone-header">Catch Map</div>
         <div class="phone-body">
           <div class="map-area">
-            <!-- Stylized map background -->
-            <svg class="map-bg" viewBox="0 0 300 320" preserveAspectRatio="none">
-              <rect width="300" height="320" fill="#c8e6c9"/>
-              <!-- Water bodies -->
-              <ellipse cx="150" cy="140" rx="100" ry="60" fill="#81d4fa"/>
-              <ellipse cx="80" cy="260" rx="50" ry="30" fill="#81d4fa"/>
-              <ellipse cx="250" cy="280" rx="40" ry="25" fill="#81d4fa"/>
-              <!-- Roads -->
-              <line x1="0" y1="200" x2="300" y2="180" stroke="#e0e0e0" stroke-width="3"/>
-              <line x1="140" y1="0" x2="160" y2="320" stroke="#e0e0e0" stroke-width="2"/>
-            </svg>
+            <!-- Real OpenStreetMap tiles — Lake Fork, TX -->
+            <div class="map-tiles">
+              <img src="/features/images/map-t1.png" alt="" />
+              <img src="/features/images/map-t2.png" alt="" />
+              <img src="/features/images/map-t3.png" alt="" />
+              <img src="/features/images/map-t4.png" alt="" />
+            </div>
 
-            <!-- Heatmap overlays -->
-            <div class="heatmap-overlay" style="width:90px;height:90px;background:radial-gradient(circle,#f44336,transparent);left:95px;top:85px;"></div>
-            <div class="heatmap-overlay" style="width:50px;height:50px;background:radial-gradient(circle,#ff9800,transparent);left:45px;top:230px;"></div>
+            <!-- Heatmap overlays — positioned over water -->
+            <div class="heatmap-overlay" style="width:80px;height:80px;background:radial-gradient(circle,#f44336,transparent);left:60px;top:40px;"></div>
+            <div class="heatmap-overlay" style="width:60px;height:60px;background:radial-gradient(circle,#ff9800,transparent);left:30px;top:190px;"></div>
+            <div class="heatmap-overlay" style="width:50px;height:50px;background:radial-gradient(circle,#ff9800,transparent);left:100px;top:120px;"></div>
 
-            <!-- Catch pins -->
-            <div class="map-pin" style="background:#f44336;left:130px;top:110px;"></div>
-            <div class="map-pin" style="background:#f44336;left:155px;top:125px;"></div>
-            <div class="map-pin" style="background:#ff9800;left:110px;top:140px;"></div>
-            <div class="map-pin" style="background:#4caf50;left:170px;top:100px;"></div>
-            <div class="map-pin" style="background:#2196f3;left:60px;top:245px;"></div>
-            <div class="map-pin" style="background:#f44336;left:85px;top:252px;"></div>
+            <!-- Catch pins — over lake water -->
+            <div class="map-pin" style="background:#f44336;left:75px;top:55px;"></div>
+            <div class="map-pin" style="background:#f44336;left:95px;top:70px;"></div>
+            <div class="map-pin" style="background:#ff9800;left:55px;top:80px;"></div>
+            <div class="map-pin" style="background:#4caf50;left:110px;top:45px;"></div>
+            <div class="map-pin" style="background:#2196f3;left:40px;top:200px;"></div>
+            <div class="map-pin" style="background:#f44336;left:60px;top:215px;"></div>
+            <div class="map-pin" style="background:#ff9800;left:95px;top:140px;"></div>
 
             <!-- Map controls -->
             <div class="map-controls">
