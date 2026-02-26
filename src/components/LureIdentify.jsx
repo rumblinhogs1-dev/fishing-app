@@ -1,7 +1,10 @@
 import { useState, useRef } from 'react';
 import { getApiKey, hasEnvKey, saveApiKey, resizeImage } from '../utils/gemini';
 import { identifyLure } from '../utils/geminiLure';
+import { createCooldown } from '../utils/rateLimit';
 import styles from './LureIdentify.module.css';
+
+const cooldown = createCooldown();
 
 export default function LureIdentify() {
   const [image, setImage] = useState('');
@@ -42,6 +45,8 @@ export default function LureIdentify() {
       setError('Please enter your Gemini API key first.');
       return;
     }
+
+    try { cooldown.check(); } catch (e) { setError(e.message); return; }
 
     setLoading(true);
     setError('');

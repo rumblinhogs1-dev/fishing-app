@@ -26,8 +26,9 @@ export default function UserProfile() {
         const p = await getUserProfile(userId);
         setProfile(p);
 
+        const fetchedIsFriend = p?.friendIds?.includes(user?.uid);
         const visFilters = ['public'];
-        if (isFriend || isOwn) visFilters.push('friends');
+        if (fetchedIsFriend || isOwn) visFilters.push('friends');
         if (isOwn) visFilters.push('private');
 
         const q = query(

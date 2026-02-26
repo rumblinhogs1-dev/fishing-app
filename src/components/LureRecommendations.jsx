@@ -2,7 +2,10 @@ import { useState } from 'react';
 import { getApiKey } from '../utils/gemini';
 import { getRecommendations } from '../utils/geminiRecommend';
 import { getGPSLocation, reverseGeocode, fetchWeather, fetchWaterData } from '../utils/weather';
+import { createCooldown } from '../utils/rateLimit';
 import styles from './LureRecommendations.module.css';
+
+const cooldown = createCooldown();
 
 function getCurrentSeason() {
   const month = new Date().getMonth();
@@ -61,6 +64,9 @@ export default function LureRecommendations() {
       setError('No API key configured. Go to Fish ID page to set your Gemini API key.');
       return;
     }
+
+    try { cooldown.check(); } catch (err) { setError(err.message); return; }
+
     setLoading(true);
     setError('');
     setResult(null);

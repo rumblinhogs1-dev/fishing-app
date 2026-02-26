@@ -37,7 +37,7 @@ export default class ErrorBoundary extends Component {
             <p className={styles.message}>
               This feature ran into an error. The rest of the app should still work fine.
             </p>
-            {this.state.error && (
+            {import.meta.env.DEV && this.state.error && (
               <pre className={styles.detail}>{this.state.error.message}</pre>
             )}
             <div className={styles.actions}>

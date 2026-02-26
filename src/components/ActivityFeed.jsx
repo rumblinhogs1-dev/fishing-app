@@ -12,7 +12,6 @@ export default function ActivityFeed() {
   const { userProfile } = useFriends();
   const [tab, setTab] = useState('public');
   const [catches, setCatches] = useState([]);
-  const [lastDoc, setLastDoc] = useState(null);
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(true);
   const [speciesFilter, setSpeciesFilter] = useState('');
@@ -20,6 +19,7 @@ export default function ActivityFeed() {
   const [speciesList, setSpeciesList] = useState([]);
   const sentinelRef = useRef(null);
   const loadingRef = useRef(false);
+  const lastDocRef = useRef(null);
 
   useEffect(() => {
     getPopularSpecies().then(setSpeciesList).catch(() => {});
@@ -30,16 +30,17 @@ export default function ActivityFeed() {
     loadingRef.current = true;
     setLoading(true);
     try {
+      const cursor = reset ? null : lastDocRef.current;
       let result;
       if (tab === 'friends' && userProfile?.friendIds?.length) {
-        result = await getFriendsFeed(userProfile.friendIds, reset ? null : lastDoc);
+        result = await getFriendsFeed(userProfile.friendIds, cursor);
       } else if (speciesFilter) {
-        result = await getPublicFeedFiltered(reset ? null : lastDoc, 20, speciesFilter);
+        result = await getPublicFeedFiltered(cursor, 20, speciesFilter);
       } else {
-        result = await getPublicFeed(reset ? null : lastDoc);
+        result = await getPublicFeed(cursor);
       }
       setCatches((prev) => reset ? result.catches : [...prev, ...result.catches]);
-      setLastDoc(result.lastDoc);
+      lastDocRef.current = result.lastDoc;
       setHasMore(result.hasMore);
     } catch (err) {
       console.error('Failed to load feed:', err);
@@ -47,11 +48,11 @@ export default function ActivityFeed() {
       setLoading(false);
       loadingRef.current = false;
     }
-  }, [tab, lastDoc, userProfile, speciesFilter]);
+  }, [tab, userProfile, speciesFilter]);
 
   useEffect(() => {
     setCatches([]);
-    setLastDoc(null);
+    lastDocRef.current = null;
     setHasMore(false);
     loadFeed(true);
   }, [tab, speciesFilter]);

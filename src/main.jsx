@@ -17,9 +17,13 @@ class ErrorBoundary extends Component {
     if (this.state.error) {
       return (
         <div style={{ padding: '2rem', color: 'red', fontFamily: 'monospace' }}>
-          <h2>App crashed:</h2>
-          <pre>{this.state.error.message}</pre>
-          <pre>{this.state.error.stack}</pre>
+          <h2>Something went wrong</h2>
+          {import.meta.env.DEV && (
+            <>
+              <pre>{this.state.error.message}</pre>
+              <pre>{this.state.error.stack}</pre>
+            </>
+          )}
         </div>
       );
     }

@@ -3,8 +3,11 @@ import { useSearchParams } from 'react-router-dom';
 import { getLocalRecommendations } from '../utils/geminiLocal';
 import { getPlacesRecommendations, hasPlacesApiKey } from '../utils/googlePlaces';
 import { getGPSLocation, reverseGeocode } from '../utils/weather';
+import { createCooldown } from '../utils/rateLimit';
 import { SkeletonCard } from './Skeleton';
 import styles from './LocalGuide.module.css';
+
+const cooldown = createCooldown();
 
 const CATEGORIES = [
   { key: 'all', label: 'All' },
@@ -115,6 +118,9 @@ export default function LocalGuide() {
   async function handleSearch(e) {
     e.preventDefault();
     if (!location.trim()) return;
+
+    try { cooldown.check(); } catch (err) { setError(err.message); return; }
+
     setLoading(true);
     setError('');
     setResults(null);
