@@ -135,10 +135,17 @@ export async function fetchWaterData(lat, lng) {
     stations[siteCode].params[paramCode] = val;
   }
 
-  // Pick the closest station that has flow or temp data
-  let best = null;
-  for (const s of Object.values(stations)) {
-    if (!best || s.dist < best.dist) best = s;
+  // Pick the best station: prefer closest with non-zero flow, fall back to closest overall
+  const stationList = Object.values(stations).sort((a, b) => a.dist - b.dist);
+  let best = stationList[0] || null;
+  // If the closest station has zero/no flow, try to find a nearby one with actual flow
+  const hasGoodFlow = (s) => {
+    const f = parseFloat(s.params['00060']);
+    return !isNaN(f) && f > 0;
+  };
+  if (best && !hasGoodFlow(best)) {
+    const withFlow = stationList.find(hasGoodFlow);
+    if (withFlow) best = withFlow;
   }
 
   if (!best) return null;

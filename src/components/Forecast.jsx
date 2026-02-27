@@ -678,8 +678,8 @@ export default function Forecast() {
       try {
         const result = await getRecommendations({
           location: data?.location || `${forecastCoords.lat.toFixed(4)}, ${forecastCoords.lng.toFixed(4)}`,
-          waterTemp: data?.waterData?.waterTemp || undefined,
-          flowRate: data?.waterData?.flowRate || undefined,
+          waterTemp: data?.waterData?.waterTemp ?? undefined,
+          flowRate: data?.waterData?.flowRate ?? undefined,
           season: getSeason(),
         });
         if (!cancelled) setFcRecsData(result);
