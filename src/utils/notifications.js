@@ -155,6 +155,18 @@ export async function notifyTripInvite(fromUserId, fromDisplayName, toUserId, tr
   });
 }
 
+export async function notifyChallengeJoined(fromUserId, fromDisplayName, toUserId, challengeId, challengeName) {
+  if (fromUserId === toUserId) return;
+  const prefs = await getUserNotifPrefs(toUserId);
+  if (prefs && prefs.challenge_joined === false) return;
+  return createNotification(toUserId, {
+    type: 'challenge_joined',
+    fromUserId,
+    message: `${fromDisplayName || 'Someone'} joined your challenge "${challengeName || 'Untitled'}"`,
+    link: `/challenge/${challengeId}`,
+  });
+}
+
 export async function notifyChallengeResult(toUserId, challengeId, resultMessage) {
   const prefs = await getUserNotifPrefs(toUserId);
   if (prefs && prefs.challenge_result === false) return;
@@ -199,6 +211,19 @@ export async function markAllNotificationsRead(userId) {
   const snap = await getDocs(q);
   const batch = writeBatch(db);
   snap.docs.forEach((d) => batch.update(d.ref, { read: true }));
+  await batch.commit();
+}
+
+export async function deleteReadNotifications(userId) {
+  const q = query(
+    collection(db, 'notifications'),
+    where('toUserId', '==', userId),
+    where('read', '==', true)
+  );
+  const snap = await getDocs(q);
+  if (snap.empty) return;
+  const batch = writeBatch(db);
+  snap.docs.forEach((d) => batch.delete(d.ref));
   await batch.commit();
 }
 

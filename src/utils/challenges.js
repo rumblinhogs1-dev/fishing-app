@@ -23,7 +23,7 @@ import {
   rankMostSpecies,
   rankLongestFish,
 } from './leaderboard';
-import { notifyChallengeInvite, notifyChallengeResult } from './notifications';
+import { notifyChallengeInvite, notifyChallengeResult, notifyChallengeJoined } from './notifications';
 
 export async function createChallenge(userId, data) {
   const now = new Date();
@@ -87,6 +87,10 @@ export async function joinChallenge(challengeId, userId, profile) {
     participantCount: increment(1),
     updatedAt: serverTimestamp(),
   });
+  // Fire-and-forget notification to challenge creator
+  getChallenge(challengeId).then((c) => {
+    if (c) notifyChallengeJoined(userId, profile.displayName, c.createdBy, challengeId, c.name);
+  }).catch(() => {});
 }
 
 export async function leaveChallenge(challengeId, userId, participants) {
