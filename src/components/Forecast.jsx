@@ -251,6 +251,14 @@ function WindArrowSVG({ direction }) {
   );
 }
 
+function getWadingRating(flowRate) {
+  if (flowRate == null) return null;
+  if (flowRate <= 150) return { label: 'Easy Wading', color: '#2e7d32', bg: '#e8f5e9' };
+  if (flowRate <= 400) return { label: 'Use Caution', color: '#e65100', bg: '#fff3e0' };
+  if (flowRate <= 800) return { label: 'Difficult', color: '#d84315', bg: '#fbe9e7' };
+  return { label: 'Dangerous', color: '#b71c1c', bg: '#fdecea' };
+}
+
 function WindTideSection({ current, tideData, waterData, windDir }) {
   return (
     <div className={styles.section}>
@@ -275,10 +283,16 @@ function WindTideSection({ current, tideData, waterData, windDir }) {
             <div className={styles.flowValue}>{waterData.flowRate.toLocaleString()}</div>
             <div className={styles.flowUnit}>ft&sup3;/s flow rate</div>
           </div>
+          {(() => { const w = getWadingRating(waterData.flowRate); return w ? (
+            <div className={styles.wadingBadge} style={{ background: w.bg, color: w.color }}>{w.label}</div>
+          ) : null; })()}
           <div className={styles.waterTempMeta}>{waterData.stationName}</div>
         </div>
       ) : (
         <p style={{ fontSize: '0.85rem', color: '#888' }}>No tide or flow data available for this area.</p>
+      )}
+      {waterData?.flowRate != null && getWadingRating(waterData.flowRate)?.label !== 'Easy Wading' && (
+        <p style={{ fontSize: '0.65rem', color: '#999', marginTop: '0.25rem' }}>Wading safety is general guidance — conditions vary by river width, depth, and bottom type.</p>
       )}
     </div>
   );
@@ -824,13 +838,19 @@ export default function Forecast() {
                     </div>
                   )}
                   {data.waterData.flowRate != null && (
-                    <div className={styles.condCard}>
+                    <div className={`${styles.condCard} ${styles.hasTooltip}`} data-tooltip="Flow rate (cubic feet per second) measures how much water is moving. Lower flow means calmer water and easier wading. Higher flow pushes bait into eddies and current seams — great spots to target feeding fish.">
                       <div className={styles.condValue}>{data.waterData.flowRate.toLocaleString()}</div>
                       <div className={styles.condLabel}>Flow (ft&sup3;/s)</div>
                     </div>
                   )}
-                  {data.waterData.gaugeHeight != null && (
+                  {data.waterData.flowRate != null && (() => { const w = getWadingRating(data.waterData.flowRate); return w ? (
                     <div className={styles.condCard}>
+                      <div className={styles.condValue} style={{ color: w.color }}>{w.label}</div>
+                      <div className={styles.condLabel}>Wading Safety</div>
+                    </div>
+                  ) : null; })()}
+                  {data.waterData.gaugeHeight != null && (
+                    <div className={`${styles.condCard} ${styles.hasTooltip}`} data-tooltip="Gauge height is the water level at the station in feet. Rising levels often trigger feeding as new water pushes insects and baitfish downstream. Falling levels concentrate fish in deeper pools.">
                       <div className={styles.condValue}>{data.waterData.gaugeHeight} ft</div>
                       <div className={styles.condLabel}>Gauge Height</div>
                     </div>

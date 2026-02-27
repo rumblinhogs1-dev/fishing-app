@@ -683,6 +683,14 @@
   color: #888;
 }
 
+.wadingBadge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.3rem 0.65rem;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
 /* 5-Day Forecast */
 .dayRow {
   display: flex;
