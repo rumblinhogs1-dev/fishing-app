@@ -142,6 +142,62 @@ export async function removeItineraryItem(tripId, itemId) {
   });
 }
 
+// ── Expenses (array on trip document) ──
+
+export async function addExpense(tripId, expense) {
+  const ref = doc(db, TRIPS_COL, tripId);
+  await updateDoc(ref, {
+    expenses: arrayUnion(expense),
+    updatedAt: serverTimestamp(),
+  });
+}
+
+export async function removeExpense(tripId, expenseId) {
+  const ref = doc(db, TRIPS_COL, tripId);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) return;
+  const data = snap.data();
+  const filtered = (data.expenses || []).filter((e) => e.id !== expenseId);
+  await updateDoc(ref, {
+    expenses: filtered,
+    updatedAt: serverTimestamp(),
+  });
+}
+
+// ── Trip Photos (subcollection) ──
+
+export function subscribeToTripPhotos(tripId, callback) {
+  const q = query(
+    collection(db, TRIPS_COL, tripId, 'photos'),
+    orderBy('createdAt', 'desc')
+  );
+  return onSnapshot(q, (snapshot) => {
+    const photos = snapshot.docs.map((d) => ({
+      id: d.id,
+      ...d.data(),
+      createdAt: d.data().createdAt?.toDate?.()?.toISOString() || null,
+    }));
+    callback(photos);
+  }, (error) => {
+    console.error('Trip photos subscription error:', error);
+    callback([]);
+  });
+}
+
+export async function addTripPhoto(tripId, photoData) {
+  const colRef = collection(db, TRIPS_COL, tripId, 'photos');
+  const docRef = await addDoc(colRef, {
+    ...photoData,
+    createdAt: serverTimestamp(),
+  });
+  return docRef.id;
+}
+
+export async function deleteTripPhoto(tripId, photoId) {
+  const ref = doc(db, TRIPS_COL, tripId, 'photos', photoId);
+  await deleteDoc(ref);
+}
+
 export async function getTripCatches(memberIds, startDate, endDate) {
   if (!memberIds?.length || !startDate || !endDate) return [];
   const start = Timestamp.fromDate(new Date(startDate));

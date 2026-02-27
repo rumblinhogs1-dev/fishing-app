@@ -90,6 +90,17 @@ service cloud.firestore {
                         || request.auth.uid in resource.data.memberIds);
       allow delete: if isSignedIn()
                     && resource.data.userId == request.auth.uid;
+
+      // ── trip photos subcollection ──
+      match /photos/{photoId} {
+        allow read: if isSignedIn()
+                    && request.auth.uid in get(/databases/$(database)/documents/trips/$(tripId)).data.memberIds;
+        allow create: if isSignedIn()
+                      && request.auth.uid in get(/databases/$(database)/documents/trips/$(tripId)).data.memberIds;
+        allow delete: if isSignedIn()
+                      && (resource.data.uploadedByUserId == request.auth.uid
+                          || get(/databases/$(database)/documents/trips/$(tripId)).data.userId == request.auth.uid);
+      }
     }
 
     // ── groups ──

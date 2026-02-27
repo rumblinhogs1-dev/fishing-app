@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useFriends } from '../hooks/useFriends';
 import { useSpots } from '../hooks/useSpots';
-import { addTrip, updateTrip, deleteTrip, subscribeToTrips, backfillMemberIds, addMemberToTrip, removeMemberFromTrip, getTripCatches, addItineraryItem, removeItineraryItem } from '../utils/trips';
+import { addTrip, updateTrip, deleteTrip, subscribeToTrips, backfillMemberIds, addMemberToTrip, removeMemberFromTrip, getTripCatches, addItineraryItem, removeItineraryItem, addExpense, removeExpense, subscribeToTripPhotos, addTripPhoto, deleteTripPhoto } from '../utils/trips';
+import { uploadTripPhoto, deleteTripPhotoFile } from '../utils/firebaseStorage';
 import { notifyTripInvite } from '../utils/notifications';
 import { createTripChat, addMemberToGroup, removeMemberFromGroup } from '../utils/chat';
 import { fetchForecastData } from '../utils/forecast';
@@ -11,6 +12,8 @@ import { useNavigate } from 'react-router-dom';
 import { getGPSLocation, reverseGeocode, weatherEmoji } from '../utils/weather';
 import { SkeletonCard } from './Skeleton';
 import { useToast } from '../contexts/ToastContext';
+import { useConfirm } from '../contexts/ConfirmContext';
+import ImageUpload from './ImageUpload';
 import styles from './TripPlanner.module.css';
 
 const EMPTY_TRIP = {
@@ -23,11 +26,20 @@ const EMPTY_TRIP = {
   targetSpecies: '',
 };
 
+const EXPENSE_CATEGORIES = ['gas', 'lodging', 'bait', 'food', 'guide', 'gear', 'other'];
+
+const EMPTY_EXPENSE = {
+  description: '',
+  amount: '',
+  category: 'other',
+};
+
 export default function TripPlanner({ catches = [] }) {
   const { user } = useAuth();
   const { friendProfiles } = useFriends();
   const { spots } = useSpots();
   const toast = useToast();
+  const confirm = useConfirm();
   const navigate = useNavigate();
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -44,6 +56,16 @@ export default function TripPlanner({ catches = [] }) {
   const [itineraryForm, setItineraryForm] = useState({ time: '', description: '' });
   const [tripWeather, setTripWeather] = useState({});
   const [loadingWeather, setLoadingWeather] = useState({});
+  // Expenses
+  const [expenseForm, setExpenseForm] = useState(EMPTY_EXPENSE);
+  const [expenseSplitIds, setExpenseSplitIds] = useState([]);
+  // Photos
+  const [tripPhotos, setTripPhotos] = useState({});
+  const [photoUnsubs, setPhotoUnsubs] = useState({});
+  const [photoImage, setPhotoImage] = useState('');
+  const [photoCaption, setPhotoCaption] = useState('');
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [lightboxPhoto, setLightboxPhoto] = useState(null);
   const backfilled = useRef(false);
 
   // Backfill existing trips that lack memberIds
@@ -137,6 +159,8 @@ export default function TripPlanner({ catches = [] }) {
   }
 
   async function handleCompleteTrip(trip) {
+    const ok = await confirm(`Move "${trip.name}" to Past Trips?`);
+    if (!ok) return;
     await updateTrip(trip.id, { status: 'completed' });
   }
 
@@ -285,6 +309,152 @@ export default function TripPlanner({ catches = [] }) {
       setTripWeather((prev) => ({ ...prev, [trip.id]: [] }));
     } finally {
       setLoadingWeather((prev) => ({ ...prev, [trip.id]: false }));
+    }
+  }
+
+  // ── Expense handlers ──
+
+  async function handleAddExpense(tripId, trip, e) {
+    e.preventDefault();
+    if (!expenseForm.description.trim() || !expenseForm.amount) return;
+    const amount = parseFloat(expenseForm.amount);
+    if (isNaN(amount) || amount <= 0) { toast.error('Enter a valid amount'); return; }
+    const splitWith = expenseSplitIds.length > 0 ? expenseSplitIds : [user.uid];
+    const expense = {
+      id: `exp_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+      description: expenseForm.description.trim(),
+      amount: Math.round(amount * 100) / 100,
+      category: expenseForm.category,
+      paidByUserId: user.uid,
+      paidByName: user.displayName || 'You',
+      splitWithUserIds: splitWith,
+      createdAt: new Date().toISOString(),
+    };
+    try {
+      await addExpense(tripId, expense);
+      setExpenseForm(EMPTY_EXPENSE);
+      setExpenseSplitIds([]);
+      toast.success('Expense added');
+    } catch (err) {
+      console.error('Failed to add expense:', err);
+      toast.error('Failed to add expense');
+    }
+  }
+
+  async function handleRemoveExpense(tripId, expenseId) {
+    const ok = await confirm('Remove this expense?', { destructive: true });
+    if (!ok) return;
+    try {
+      await removeExpense(tripId, expenseId);
+    } catch (err) {
+      console.error('Failed to remove expense:', err);
+      toast.error('Failed to remove expense');
+    }
+  }
+
+  function computeBalances(expenses, members) {
+    const balances = {};
+    (members || []).forEach((m) => { balances[m.userId] = 0; });
+    (expenses || []).forEach((exp) => {
+      const splitCount = exp.splitWithUserIds?.length || 1;
+      const perPerson = exp.amount / splitCount;
+      // Payer gets credit
+      balances[exp.paidByUserId] = (balances[exp.paidByUserId] || 0) + exp.amount;
+      // Everyone in the split owes their share
+      (exp.splitWithUserIds || []).forEach((uid) => {
+        balances[uid] = (balances[uid] || 0) - perPerson;
+      });
+    });
+    return balances;
+  }
+
+  function computeSettlements(balances, members) {
+    const memberMap = {};
+    (members || []).forEach((m) => { memberMap[m.userId] = m.displayName || 'Angler'; });
+    const debtors = []; // owe money (negative balance)
+    const creditors = []; // are owed (positive balance)
+    Object.entries(balances).forEach(([uid, bal]) => {
+      const rounded = Math.round(bal * 100) / 100;
+      if (rounded < -0.01) debtors.push({ uid, amount: -rounded });
+      else if (rounded > 0.01) creditors.push({ uid, amount: rounded });
+    });
+    debtors.sort((a, b) => b.amount - a.amount);
+    creditors.sort((a, b) => b.amount - a.amount);
+    const settlements = [];
+    let i = 0, j = 0;
+    while (i < debtors.length && j < creditors.length) {
+      const pay = Math.min(debtors[i].amount, creditors[j].amount);
+      if (pay > 0.01) {
+        settlements.push({
+          from: memberMap[debtors[i].uid] || debtors[i].uid,
+          to: memberMap[creditors[j].uid] || creditors[j].uid,
+          amount: Math.round(pay * 100) / 100,
+        });
+      }
+      debtors[i].amount -= pay;
+      creditors[j].amount -= pay;
+      if (debtors[i].amount < 0.01) i++;
+      if (creditors[j].amount < 0.01) j++;
+    }
+    return settlements;
+  }
+
+  // ── Photo handlers ──
+
+  function loadTripPhotos(tripId) {
+    if (tripPhotos[tripId] !== undefined) return; // already loaded / loading
+    setTripPhotos((prev) => ({ ...prev, [tripId]: [] }));
+    const unsub = subscribeToTripPhotos(tripId, (photos) => {
+      setTripPhotos((prev) => ({ ...prev, [tripId]: photos }));
+    });
+    setPhotoUnsubs((prev) => ({ ...prev, [tripId]: unsub }));
+  }
+
+  // Cleanup photo subscriptions on unmount
+  useEffect(() => {
+    return () => {
+      Object.values(photoUnsubs).forEach((unsub) => { if (unsub) unsub(); });
+    };
+  }, []);
+
+  async function handleUploadPhoto(tripId) {
+    if (!photoImage) return;
+    setUploadingPhoto(true);
+    try {
+      const tempId = `photo_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+      const imageUrl = await uploadTripPhoto(tripId, tempId, photoImage);
+      await addTripPhoto(tripId, {
+        imageUrl,
+        caption: photoCaption.trim(),
+        uploadedByUserId: user.uid,
+        uploadedByName: user.displayName || 'Anonymous',
+        uploadedByPhotoURL: user.photoURL || null,
+        storageId: tempId,
+      });
+      setPhotoImage('');
+      setPhotoCaption('');
+      toast.success('Photo uploaded!');
+    } catch (err) {
+      console.error('Failed to upload photo:', err);
+      toast.error('Failed to upload photo');
+    } finally {
+      setUploadingPhoto(false);
+    }
+  }
+
+  async function handleDeletePhoto(tripId, photo) {
+    const ok = await confirm('Delete this photo?', { destructive: true });
+    if (!ok) return;
+    try {
+      await deleteTripPhoto(tripId, photo.id);
+      if (photo.storageId) {
+        deleteTripPhotoFile(tripId, photo.storageId).catch(() => {});
+      }
+      setLightboxPhoto(null);
+      toast.success('Photo deleted');
+    } catch (err) {
+      console.error('Failed to delete photo:', err);
+      toast.error('Failed to delete photo');
     }
   }
 
@@ -535,8 +705,8 @@ export default function TripPlanner({ catches = [] }) {
                             {managingMembers === trip.id ? 'Close' : 'Manage Members'}
                           </button>
                         )}
-                        <button className={styles.completeBtn} onClick={() => handleCompleteTrip(trip)} title="Mark complete">
-                          Done
+                        <button className={styles.completeBtn} onClick={() => handleCompleteTrip(trip)} title="Mark trip as completed">
+                          Complete Trip
                         </button>
                         <button className={styles.tripDeleteBtn} onClick={() => deleteTrip(trip.id)} title="Delete">
                           &times;
@@ -675,6 +845,138 @@ export default function TripPlanner({ catches = [] }) {
                           )}
                         </div>
                       )}
+
+                      {/* Expenses */}
+                      <div className={styles.expensesSection}>
+                        <h5 className={styles.panelTitle}>Shared Expenses</h5>
+                        {(trip.expenses || []).length > 0 && (
+                          <>
+                            {trip.expenses.map((exp) => (
+                              <div key={exp.id} className={styles.expenseItem}>
+                                <span className={styles.expenseCategoryTag}>{exp.category}</span>
+                                <span className={styles.expenseDesc}>{exp.description}</span>
+                                <span className={styles.expenseAmount}>${exp.amount.toFixed(2)}</span>
+                                <span className={styles.expensePaidBy}>{exp.paidByName}</span>
+                                <button className={styles.expenseRemoveBtn} onClick={() => handleRemoveExpense(trip.id, exp.id)}>&times;</button>
+                              </div>
+                            ))}
+                            {(() => {
+                              const balances = computeBalances(trip.expenses, trip.members);
+                              const settlements = computeSettlements(balances, trip.members);
+                              const total = trip.expenses.reduce((s, e) => s + e.amount, 0);
+                              return (
+                                <div className={styles.balanceSummary}>
+                                  <h6 className={styles.balanceSummaryTitle}>Settlement</h6>
+                                  {settlements.length > 0 ? settlements.map((s, i) => (
+                                    <div key={i} className={styles.settlementRow}>
+                                      <span>{s.from}</span>
+                                      <span>owes</span>
+                                      <span>{s.to}</span>
+                                      <span className={styles.settlementAmount}>${s.amount.toFixed(2)}</span>
+                                    </div>
+                                  )) : (
+                                    <p className={styles.noSettlements}>All settled up!</p>
+                                  )}
+                                  <p className={styles.expenseTotal}>Total: ${total.toFixed(2)}</p>
+                                </div>
+                              );
+                            })()}
+                          </>
+                        )}
+                        <form className={styles.expenseForm} onSubmit={(e) => handleAddExpense(trip.id, trip, e)}>
+                          <div className={styles.expenseFormRow}>
+                            <input
+                              className={styles.expenseFormInput}
+                              placeholder="Description"
+                              value={expenseForm.description}
+                              onChange={(e) => setExpenseForm((f) => ({ ...f, description: e.target.value }))}
+                            />
+                            <input
+                              className={styles.expenseFormInput}
+                              type="number"
+                              step="0.01"
+                              min="0"
+                              placeholder="Amount"
+                              value={expenseForm.amount}
+                              onChange={(e) => setExpenseForm((f) => ({ ...f, amount: e.target.value }))}
+                            />
+                          </div>
+                          <div className={styles.expenseFormRow}>
+                            <select
+                              className={styles.expenseFormSelect}
+                              value={expenseForm.category}
+                              onChange={(e) => setExpenseForm((f) => ({ ...f, category: e.target.value }))}
+                            >
+                              {EXPENSE_CATEGORIES.map((c) => (
+                                <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>
+                              ))}
+                            </select>
+                          </div>
+                          {trip.members && trip.members.length > 1 && (
+                            <div className={styles.splitCheckboxes}>
+                              <span>Split with:</span>
+                              {trip.members.map((m) => (
+                                <label key={m.userId}>
+                                  <input
+                                    type="checkbox"
+                                    checked={expenseSplitIds.includes(m.userId)}
+                                    onChange={() => setExpenseSplitIds((prev) =>
+                                      prev.includes(m.userId) ? prev.filter((id) => id !== m.userId) : [...prev, m.userId]
+                                    )}
+                                  />
+                                  {m.displayName || 'Angler'}
+                                </label>
+                              ))}
+                            </div>
+                          )}
+                          <button type="submit" className={styles.expenseAddBtn} disabled={!expenseForm.description.trim() || !expenseForm.amount}>
+                            Add Expense
+                          </button>
+                        </form>
+                      </div>
+
+                      {/* Photos */}
+                      <div className={styles.photosSection}>
+                        <h5 className={styles.panelTitle}>Photos</h5>
+                        {tripPhotos[trip.id] !== undefined ? (
+                          <>
+                            {tripPhotos[trip.id].length > 0 && (
+                              <div className={styles.photoGrid}>
+                                {tripPhotos[trip.id].map((photo) => (
+                                  <div key={photo.id} className={styles.photoTile} onClick={() => setLightboxPhoto({ ...photo, tripId: trip.id })}>
+                                    <img src={photo.imageUrl} alt={photo.caption || 'Trip photo'} loading="lazy" />
+                                    {photo.caption && <span className={styles.photoTileCaption}>{photo.caption}</span>}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                            <div className={styles.photoUploadForm}>
+                              <ImageUpload image={photoImage} onChange={setPhotoImage} />
+                              {photoImage && (
+                                <>
+                                  <input
+                                    className={styles.photoCaptionInput}
+                                    placeholder="Caption (optional)"
+                                    value={photoCaption}
+                                    onChange={(e) => setPhotoCaption(e.target.value)}
+                                  />
+                                  <button
+                                    className={styles.photoUploadBtn}
+                                    onClick={() => handleUploadPhoto(trip.id)}
+                                    disabled={uploadingPhoto}
+                                  >
+                                    {uploadingPhoto ? 'Uploading...' : 'Upload Photo'}
+                                  </button>
+                                </>
+                              )}
+                            </div>
+                          </>
+                        ) : (
+                          <button className={styles.loadPhotosBtn} onClick={() => loadTripPhotos(trip.id)}>
+                            Load Photos
+                          </button>
+                        )}
+                      </div>
                     </div>
                   )}
                 </>
@@ -797,6 +1099,138 @@ export default function TripPlanner({ catches = [] }) {
                     ) : null}
                   </div>
                   <Link to="/add" className={styles.logLink}>Log catches from this trip</Link>
+
+                  {/* Expenses */}
+                  <div className={styles.expensesSection}>
+                    <h5 className={styles.panelTitle}>Shared Expenses</h5>
+                    {(trip.expenses || []).length > 0 && (
+                      <>
+                        {trip.expenses.map((exp) => (
+                          <div key={exp.id} className={styles.expenseItem}>
+                            <span className={styles.expenseCategoryTag}>{exp.category}</span>
+                            <span className={styles.expenseDesc}>{exp.description}</span>
+                            <span className={styles.expenseAmount}>${exp.amount.toFixed(2)}</span>
+                            <span className={styles.expensePaidBy}>{exp.paidByName}</span>
+                            <button className={styles.expenseRemoveBtn} onClick={() => handleRemoveExpense(trip.id, exp.id)}>&times;</button>
+                          </div>
+                        ))}
+                        {(() => {
+                          const balances = computeBalances(trip.expenses, trip.members);
+                          const settlements = computeSettlements(balances, trip.members);
+                          const total = trip.expenses.reduce((s, e) => s + e.amount, 0);
+                          return (
+                            <div className={styles.balanceSummary}>
+                              <h6 className={styles.balanceSummaryTitle}>Settlement</h6>
+                              {settlements.length > 0 ? settlements.map((s, i) => (
+                                <div key={i} className={styles.settlementRow}>
+                                  <span>{s.from}</span>
+                                  <span>owes</span>
+                                  <span>{s.to}</span>
+                                  <span className={styles.settlementAmount}>${s.amount.toFixed(2)}</span>
+                                </div>
+                              )) : (
+                                <p className={styles.noSettlements}>All settled up!</p>
+                              )}
+                              <p className={styles.expenseTotal}>Total: ${total.toFixed(2)}</p>
+                            </div>
+                          );
+                        })()}
+                      </>
+                    )}
+                    <form className={styles.expenseForm} onSubmit={(e) => handleAddExpense(trip.id, trip, e)}>
+                      <div className={styles.expenseFormRow}>
+                        <input
+                          className={styles.expenseFormInput}
+                          placeholder="Description"
+                          value={expenseForm.description}
+                          onChange={(e) => setExpenseForm((f) => ({ ...f, description: e.target.value }))}
+                        />
+                        <input
+                          className={styles.expenseFormInput}
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          placeholder="Amount"
+                          value={expenseForm.amount}
+                          onChange={(e) => setExpenseForm((f) => ({ ...f, amount: e.target.value }))}
+                        />
+                      </div>
+                      <div className={styles.expenseFormRow}>
+                        <select
+                          className={styles.expenseFormSelect}
+                          value={expenseForm.category}
+                          onChange={(e) => setExpenseForm((f) => ({ ...f, category: e.target.value }))}
+                        >
+                          {EXPENSE_CATEGORIES.map((c) => (
+                            <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>
+                          ))}
+                        </select>
+                      </div>
+                      {trip.members && trip.members.length > 1 && (
+                        <div className={styles.splitCheckboxes}>
+                          <span>Split with:</span>
+                          {trip.members.map((m) => (
+                            <label key={m.userId}>
+                              <input
+                                type="checkbox"
+                                checked={expenseSplitIds.includes(m.userId)}
+                                onChange={() => setExpenseSplitIds((prev) =>
+                                  prev.includes(m.userId) ? prev.filter((id) => id !== m.userId) : [...prev, m.userId]
+                                )}
+                              />
+                              {m.displayName || 'Angler'}
+                            </label>
+                          ))}
+                        </div>
+                      )}
+                      <button type="submit" className={styles.expenseAddBtn} disabled={!expenseForm.description.trim() || !expenseForm.amount}>
+                        Add Expense
+                      </button>
+                    </form>
+                  </div>
+
+                  {/* Photos */}
+                  <div className={styles.photosSection}>
+                    <h5 className={styles.panelTitle}>Photos</h5>
+                    {tripPhotos[trip.id] !== undefined ? (
+                      <>
+                        {tripPhotos[trip.id].length > 0 && (
+                          <div className={styles.photoGrid}>
+                            {tripPhotos[trip.id].map((photo) => (
+                              <div key={photo.id} className={styles.photoTile} onClick={() => setLightboxPhoto({ ...photo, tripId: trip.id })}>
+                                <img src={photo.imageUrl} alt={photo.caption || 'Trip photo'} loading="lazy" />
+                                {photo.caption && <span className={styles.photoTileCaption}>{photo.caption}</span>}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        <div className={styles.photoUploadForm}>
+                          <ImageUpload image={photoImage} onChange={setPhotoImage} />
+                          {photoImage && (
+                            <>
+                              <input
+                                className={styles.photoCaptionInput}
+                                placeholder="Caption (optional)"
+                                value={photoCaption}
+                                onChange={(e) => setPhotoCaption(e.target.value)}
+                              />
+                              <button
+                                className={styles.photoUploadBtn}
+                                onClick={() => handleUploadPhoto(trip.id)}
+                                disabled={uploadingPhoto}
+                              >
+                                {uploadingPhoto ? 'Uploading...' : 'Upload Photo'}
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <button className={styles.loadPhotosBtn} onClick={() => loadTripPhotos(trip.id)}>
+                        Load Photos
+                      </button>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
@@ -806,6 +1240,36 @@ export default function TripPlanner({ catches = [] }) {
 
       {trips.length === 0 && !showForm && (
         <p className={styles.empty}>No trips planned yet. Tap above to plan one!</p>
+      )}
+
+      {/* Lightbox */}
+      {lightboxPhoto && (
+        <div className={styles.lightboxOverlay} onClick={() => setLightboxPhoto(null)}>
+          <button className={styles.lightboxClose} onClick={() => setLightboxPhoto(null)}>&times;</button>
+          <img
+            className={styles.lightboxImg}
+            src={lightboxPhoto.imageUrl}
+            alt={lightboxPhoto.caption || 'Trip photo'}
+            onClick={(e) => e.stopPropagation()}
+          />
+          <div className={styles.lightboxInfo} onClick={(e) => e.stopPropagation()}>
+            {lightboxPhoto.caption && <span className={styles.lightboxCaption}>{lightboxPhoto.caption}</span>}
+            <span className={styles.lightboxUploader}>
+              {lightboxPhoto.uploadedByPhotoURL && (
+                <img src={lightboxPhoto.uploadedByPhotoURL} alt="" className={styles.lightboxUploaderAvatar} referrerPolicy="no-referrer" />
+              )}
+              {lightboxPhoto.uploadedByName}
+            </span>
+            {lightboxPhoto.uploadedByUserId === user.uid && (
+              <button
+                className={styles.lightboxDeleteBtn}
+                onClick={() => handleDeletePhoto(lightboxPhoto.tripId, lightboxPhoto)}
+              >
+                Delete Photo
+              </button>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );

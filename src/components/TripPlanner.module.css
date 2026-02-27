@@ -325,8 +325,159 @@
 .loadWeatherBtn:hover { background: #e8f5e9; }
 .loadWeatherBtn:disabled { opacity: 0.5; cursor: not-allowed; }
 
+/* ── Expenses ── */
+.expensesSection {
+  margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #f0f0f0;
+}
+.expenseItem {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.5rem; background: #f8fafd; border-radius: 8px;
+  margin-bottom: 0.35rem; font-size: 0.85rem;
+}
+.expenseCategoryTag {
+  padding: 0.1rem 0.45rem; border-radius: 10px;
+  font-size: 0.65rem; font-weight: 600; text-transform: uppercase;
+  background: #e8f5e9; color: #2d6a4f; white-space: nowrap;
+}
+.expenseDesc { flex: 1; color: #333; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.expenseAmount { font-weight: 700; color: #2d6a4f; white-space: nowrap; }
+.expensePaidBy { font-size: 0.75rem; color: #888; white-space: nowrap; }
+.expenseRemoveBtn {
+  background: none; border: none; color: #d32f2f; font-size: 1.1rem;
+  cursor: pointer; padding: 0 0.25rem; line-height: 1; flex-shrink: 0;
+}
+.expenseRemoveBtn:hover { opacity: 0.7; }
+
+.expenseForm {
+  display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.5rem;
+  padding: 0.6rem; background: #f8fafd; border-radius: 8px; border: 1px solid #e0e7f0;
+}
+.expenseFormRow { display: flex; gap: 0.35rem; }
+.expenseFormRow > * { flex: 1; }
+.expenseFormInput {
+  padding: 0.35rem 0.5rem; border: 1px solid #ddd; border-radius: 6px;
+  font-size: 0.8rem; font-family: inherit;
+}
+.expenseFormInput:focus { outline: none; border-color: #2d6a4f; }
+.expenseFormSelect {
+  padding: 0.35rem 0.5rem; border: 1px solid #ddd; border-radius: 6px;
+  font-size: 0.8rem; font-family: inherit; background: #fff;
+}
+.expenseFormSelect:focus { outline: none; border-color: #2d6a4f; }
+.expenseAddBtn {
+  padding: 0.4rem 0.75rem; background: #2d6a4f; color: #fff;
+  border: none; border-radius: 6px; font-size: 0.8rem; font-weight: 600;
+  cursor: pointer; align-self: flex-start;
+}
+.expenseAddBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+.expenseAddBtn:hover:not(:disabled) { background: #1b4332; }
+
+.splitCheckboxes {
+  display: flex; flex-wrap: wrap; gap: 0.25rem 0.6rem;
+  font-size: 0.8rem; color: #555;
+}
+.splitCheckboxes label { display: flex; align-items: center; gap: 0.25rem; cursor: pointer; }
+.splitCheckboxes input { accent-color: #2d6a4f; }
+
+.balanceSummary {
+  margin-top: 0.5rem; padding: 0.6rem;
+  background: #f8fafd; border-radius: 8px; border: 1px solid #e0e7f0;
+}
+.balanceSummaryTitle { font-size: 0.8rem; font-weight: 600; color: #555; margin: 0 0 0.35rem; }
+.settlementRow {
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.2rem 0; font-size: 0.8rem; color: #333;
+}
+.settlementAmount { font-weight: 700; color: #2d6a4f; }
+.noSettlements { font-size: 0.8rem; color: #888; margin: 0; }
+.expenseTotal { font-size: 0.75rem; color: #888; margin: 0.35rem 0 0; }
+
+/* ── Photos ── */
+.photosSection {
+  margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #f0f0f0;
+}
+.photoGrid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.35rem;
+  margin-top: 0.5rem;
+}
+.photoTile {
+  position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden;
+  cursor: pointer; background: #eee;
+}
+.photoTile img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.15s;
+}
+.photoTile:hover img { transform: scale(1.05); }
+.photoTileCaption {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.6));
+  color: #fff; font-size: 0.65rem; padding: 1rem 0.3rem 0.25rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.photoUploadForm {
+  display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.5rem;
+}
+.photoCaptionInput {
+  padding: 0.35rem 0.5rem; border: 1px solid #ddd; border-radius: 6px;
+  font-size: 0.8rem; font-family: inherit;
+}
+.photoCaptionInput:focus { outline: none; border-color: #2d6a4f; }
+.photoUploadBtn {
+  padding: 0.4rem 0.75rem; background: #2d6a4f; color: #fff;
+  border: none; border-radius: 6px; font-size: 0.8rem; font-weight: 600;
+  cursor: pointer; align-self: flex-start;
+}
+.photoUploadBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+.photoUploadBtn:hover:not(:disabled) { background: #1b4332; }
+.loadPhotosBtn {
+  padding: 0.35rem 0.75rem; border: 1px solid #2d6a4f; border-radius: 6px;
+  background: #fff; color: #2d6a4f; font-size: 0.8rem; font-weight: 600;
+  cursor: pointer; transition: all 0.15s;
+}
+.loadPhotosBtn:hover { background: #e8f5e9; }
+
+/* ── Lightbox ── */
+.lightboxOverlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.92); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; padding: 1rem;
+}
+.lightboxClose {
+  position: absolute; top: 0.75rem; right: 1rem;
+  background: none; border: none; color: #fff; font-size: 2rem;
+  cursor: pointer; line-height: 1; z-index: 1;
+}
+.lightboxClose:hover { opacity: 0.7; }
+.lightboxImg {
+  max-width: 95vw; max-height: 75vh; object-fit: contain; border-radius: 8px;
+}
+.lightboxInfo {
+  margin-top: 0.75rem; text-align: center; color: #ccc;
+  display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+}
+.lightboxCaption { font-size: 0.95rem; color: #fff; }
+.lightboxUploader {
+  display: flex; align-items: center; gap: 0.35rem;
+  font-size: 0.8rem; color: #aaa;
+}
+.lightboxUploaderAvatar {
+  width: 20px; height: 20px; border-radius: 50%; object-fit: cover;
+}
+.lightboxDeleteBtn {
+  margin-top: 0.3rem; padding: 0.3rem 0.75rem;
+  border: 1px solid #d32f2f; border-radius: 6px;
+  background: transparent; color: #d32f2f; font-size: 0.75rem; font-weight: 600;
+  cursor: pointer;
+}
+.lightboxDeleteBtn:hover { background: rgba(211,47,47,0.15); }
+
 @media (max-width: 600px) {
   .row { flex-direction: column; }
   .itineraryForm { flex-wrap: wrap; }
   .itineraryTimeInput { width: 100%; }
+  .photoGrid { grid-template-columns: repeat(2, 1fr); }
+  .expenseItem { flex-wrap: wrap; }
+  .expenseFormRow { flex-direction: column; }
 }

@@ -16,3 +16,19 @@ export async function deleteCatchImage(userId, catchId) {
     if (err.code !== 'storage/object-not-found') throw err;
   }
 }
+
+export async function uploadTripPhoto(tripId, photoId, dataUrl) {
+  if (!dataUrl || !dataUrl.startsWith('data:')) return null;
+  const storageRef = ref(storage, `trips/${tripId}/photos/${photoId}.jpg`);
+  const snapshot = await uploadString(storageRef, dataUrl, 'data_url');
+  return getDownloadURL(snapshot.ref);
+}
+
+export async function deleteTripPhotoFile(tripId, photoId) {
+  const storageRef = ref(storage, `trips/${tripId}/photos/${photoId}.jpg`);
+  try {
+    await deleteObject(storageRef);
+  } catch (err) {
+    if (err.code !== 'storage/object-not-found') throw err;
+  }
+}
