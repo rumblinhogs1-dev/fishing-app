@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useRef, useEffect, useMemo, Fragment } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useMessages } from '../hooks/useChat';
@@ -165,7 +165,7 @@ export default function ChatRoom() {
 
       <div className={styles.messages}>
         {groupedMessages.map((msg) => (
-          <div key={msg.id}>
+          <Fragment key={msg.id}>
             {msg.showDateSeparator && (
               <div className={styles.dateSeparator}>
                 <span>{formatDateSeparator(msg.createdAt)}</span>
@@ -187,7 +187,7 @@ export default function ChatRoom() {
                 </span>
               )}
             </div>
-          </div>
+          </Fragment>
         ))}
         <div ref={endRef} />
       </div>
