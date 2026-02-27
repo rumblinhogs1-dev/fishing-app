@@ -152,21 +152,29 @@ export async function fetchWaterData(lat, lng) {
 
   if (!best) return null;
 
-  const { params } = best;
+  // Fill in missing params from nearby stations (e.g. temp from a different gauge)
+  const merged = { ...best.params };
+  for (const code of ['00010', '00060', '00065']) {
+    if (!merged[code]) {
+      const donor = stationList.find(s => s.params[code]);
+      if (donor) merged[code] = donor.params[code];
+    }
+  }
+
   let waterTemp = null;
   let flowRate = null;
   let gaugeHeight = null;
 
-  if (params['00010']) {
-    const tempC = parseFloat(params['00010']);
+  if (merged['00010']) {
+    const tempC = parseFloat(merged['00010']);
     if (!isNaN(tempC)) waterTemp = Math.round(tempC * 9 / 5 + 32);
   }
-  if (params['00060']) {
-    const flow = parseFloat(params['00060']);
+  if (merged['00060']) {
+    const flow = parseFloat(merged['00060']);
     if (!isNaN(flow)) flowRate = Math.round(flow);
   }
-  if (params['00065']) {
-    const gh = parseFloat(params['00065']);
+  if (merged['00065']) {
+    const gh = parseFloat(merged['00065']);
     if (!isNaN(gh)) gaugeHeight = Math.round(gh * 100) / 100;
   }
 
