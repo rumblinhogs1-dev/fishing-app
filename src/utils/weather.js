@@ -109,13 +109,8 @@ export async function fetchWaterData(lat, lng) {
   const timeSeries = data.value?.timeSeries;
   if (!timeSeries || timeSeries.length === 0) return null;
 
-  let waterTemp = null;
-  let flowRate = null;
-  let gaugeHeight = null;
-  let stationName = null;
-
-  // Find the closest station with data
-  let bestDist = Infinity;
+  // Group timeSeries data by station site code
+  const stations = {};
 
   for (const ts of timeSeries) {
     const site = ts.sourceInfo;
@@ -123,32 +118,47 @@ export async function fetchWaterData(lat, lng) {
     const sLng = site?.geoLocation?.geogLocation?.longitude;
     if (!sLat || !sLng) continue;
 
-    const dist = haversine(lat, lng, sLat, sLng);
     const val = ts.values?.[0]?.value?.[0]?.value;
     if (!val || val === '-999999') continue;
 
+    const siteCode = site.siteCode?.[0]?.value || `${sLat},${sLng}`;
     const paramCode = ts.variable?.variableCode?.[0]?.value;
 
-    if (dist < bestDist || (dist === bestDist && paramCode === '00010')) {
-      bestDist = dist;
-      stationName = site.siteName;
+    if (!stations[siteCode]) {
+      stations[siteCode] = {
+        name: site.siteName,
+        dist: haversine(lat, lng, sLat, sLng),
+        params: {},
+      };
     }
 
-    if (paramCode === '00010') {
-      // Water temp in Celsius, convert to Fahrenheit
-      const tempC = parseFloat(val);
-      if (!isNaN(tempC)) waterTemp = Math.round(tempC * 9 / 5 + 32);
-    }
+    stations[siteCode].params[paramCode] = val;
+  }
 
-    if (paramCode === '00060') {
-      const flow = parseFloat(val);
-      if (!isNaN(flow)) flowRate = Math.round(flow);
-    }
+  // Pick the closest station that has flow or temp data
+  let best = null;
+  for (const s of Object.values(stations)) {
+    if (!best || s.dist < best.dist) best = s;
+  }
 
-    if (paramCode === '00065') {
-      const gh = parseFloat(val);
-      if (!isNaN(gh)) gaugeHeight = Math.round(gh * 100) / 100;
-    }
+  if (!best) return null;
+
+  const { params } = best;
+  let waterTemp = null;
+  let flowRate = null;
+  let gaugeHeight = null;
+
+  if (params['00010']) {
+    const tempC = parseFloat(params['00010']);
+    if (!isNaN(tempC)) waterTemp = Math.round(tempC * 9 / 5 + 32);
+  }
+  if (params['00060']) {
+    const flow = parseFloat(params['00060']);
+    if (!isNaN(flow)) flowRate = Math.round(flow);
+  }
+  if (params['00065']) {
+    const gh = parseFloat(params['00065']);
+    if (!isNaN(gh)) gaugeHeight = Math.round(gh * 100) / 100;
   }
 
   if (waterTemp === null && flowRate === null && gaugeHeight === null) return null;
@@ -157,7 +167,7 @@ export async function fetchWaterData(lat, lng) {
     waterTemp,
     flowRate,
     gaugeHeight,
-    stationName: stationName || 'Nearby USGS station',
+    stationName: best.name || 'Nearby USGS station',
   };
 }
 
