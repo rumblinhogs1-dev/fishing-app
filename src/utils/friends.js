@@ -94,11 +94,13 @@ export async function searchUsers(queryStr) {
     limit(20)
   );
 
-  const [nameSnap, emailSnap] = await Promise.all([getDocs(nameQ), getDocs(emailQ)]);
+  const [nameResult, emailResult] = await Promise.allSettled([getDocs(nameQ), getDocs(emailQ)]);
 
   const seen = new Set();
   const results = [];
-  [...nameSnap.docs, ...emailSnap.docs].forEach((d) => {
+  const nameDocs = nameResult.status === 'fulfilled' ? nameResult.value.docs : [];
+  const emailDocs = emailResult.status === 'fulfilled' ? emailResult.value.docs : [];
+  [...nameDocs, ...emailDocs].forEach((d) => {
     if (!seen.has(d.id)) {
       seen.add(d.id);
       results.push({ id: d.id, ...d.data() });

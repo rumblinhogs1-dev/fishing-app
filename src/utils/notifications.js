@@ -120,6 +120,24 @@ export async function notifyFriendCatch(fromUserId, fromDisplayName, catchId, sp
   );
 }
 
+export async function notifyChatMessage(fromUserId, fromDisplayName, groupId, groupName, text, memberIds) {
+  const preview = text ? (text.length > 80 ? text.slice(0, 80) + '...' : text) : '[Photo]';
+  await Promise.all(
+    memberIds
+      .filter((id) => id !== fromUserId)
+      .map(async (memberId) => {
+        const prefs = await getUserNotifPrefs(memberId);
+        if (prefs && prefs.chat_message === false) return;
+        return createNotification(memberId, {
+          type: 'chat_message',
+          fromUserId,
+          message: `${fromDisplayName || 'Someone'}: ${preview}`,
+          link: `/chat/${groupId}`,
+        });
+      })
+  );
+}
+
 export async function notifyTripInvite(fromUserId, fromDisplayName, toUserId, tripName) {
   const prefs = await getUserNotifPrefs(toUserId);
   if (prefs && prefs.trip_invite === false) return;

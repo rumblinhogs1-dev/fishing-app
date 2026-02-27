@@ -55,6 +55,7 @@ export default function ProfileSettings() {
     challenge_invite: true,
     challenge_result: true,
     trip_invite: true,
+    chat_message: true,
   });
   const [heatmapOptIn, setHeatmapOptIn] = useState(false);
   const [publicFields, setPublicFields] = useState({
@@ -240,6 +241,7 @@ export default function ProfileSettings() {
             { key: 'challenge_invite', label: 'Challenge Invites' },
             { key: 'challenge_result', label: 'Challenge Results' },
             { key: 'trip_invite', label: 'Trip Invites' },
+            { key: 'chat_message', label: 'Chat Messages' },
           ].map(({ key, label }) => (
             <div key={key} className={styles.toggleRow}>
               <span className={styles.toggleLabel}>{label}</span>

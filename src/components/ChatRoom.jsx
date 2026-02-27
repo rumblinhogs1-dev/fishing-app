@@ -1,10 +1,29 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useMessages } from '../hooks/useChat';
 import { sendMessage, sendMessageWithImage, getGroupDoc } from '../utils/chat';
 import { getUserProfile } from '../utils/friends';
 import styles from './ChatRoom.module.css';
+
+function isSameDay(a, b) {
+  if (!a || !b) return false;
+  const da = new Date(a);
+  const db = new Date(b);
+  return da.getFullYear() === db.getFullYear() && da.getMonth() === db.getMonth() && da.getDate() === db.getDate();
+}
+
+function formatDateSeparator(dateStr) {
+  const d = new Date(dateStr);
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const target = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const diff = (today - target) / 86400000;
+  if (diff === 0) return 'Today';
+  if (diff === 1) return 'Yesterday';
+  if (diff < 7) return d.toLocaleDateString('en-US', { weekday: 'long' });
+  return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+}
 
 const MAX_SIZE = 800;
 
@@ -50,6 +69,26 @@ export default function ChatRoom() {
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const groupedMessages = useMemo(() => {
+    const GROUP_GAP_MS = 5 * 60 * 1000;
+    return messages.map((msg, i) => {
+      const prev = i > 0 ? messages[i - 1] : null;
+      const next = i < messages.length - 1 ? messages[i + 1] : null;
+      const showDateSeparator = !prev || !isSameDay(prev.createdAt, msg.createdAt);
+      const sameSenderAsPrev = prev && prev.userId === msg.userId && isSameDay(prev.createdAt, msg.createdAt)
+        && msg.createdAt && prev.createdAt && (new Date(msg.createdAt) - new Date(prev.createdAt) < GROUP_GAP_MS);
+      const sameSenderAsNext = next && next.userId === msg.userId && isSameDay(next.createdAt, msg.createdAt)
+        && next.createdAt && msg.createdAt && (new Date(next.createdAt) - new Date(msg.createdAt) < GROUP_GAP_MS);
+      return {
+        ...msg,
+        showDateSeparator,
+        showSender: !sameSenderAsPrev,
+        showTime: !sameSenderAsNext,
+        grouped: sameSenderAsPrev,
+      };
+    });
   }, [messages]);
 
   useEffect(() => {
@@ -125,21 +164,29 @@ export default function ChatRoom() {
       </div>
 
       <div className={styles.messages}>
-        {messages.map((msg) => (
-          <div
-            key={msg.id}
-            className={`${styles.bubble} ${msg.userId === user.uid ? styles.own : styles.other}`}
-          >
-            {msg.userId !== user.uid && (
-              <span className={styles.sender}>{msg.displayName}</span>
+        {groupedMessages.map((msg) => (
+          <div key={msg.id}>
+            {msg.showDateSeparator && (
+              <div className={styles.dateSeparator}>
+                <span>{formatDateSeparator(msg.createdAt)}</span>
+              </div>
             )}
-            {msg.imageUrl && (
-              <img src={msg.imageUrl} alt="Shared photo" className={styles.msgImage} loading="lazy" />
-            )}
-            {msg.text && <p className={styles.msgText}>{msg.text}</p>}
-            <span className={styles.msgTime}>
-              {msg.createdAt ? new Date(msg.createdAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : ''}
-            </span>
+            <div
+              className={`${styles.bubble} ${msg.userId === user.uid ? styles.own : styles.other}${msg.grouped ? ` ${styles.grouped}` : ''}${!msg.showTime ? ` ${styles.noTail}` : ''}`}
+            >
+              {msg.userId !== user.uid && msg.showSender && (
+                <span className={styles.sender}>{msg.displayName}</span>
+              )}
+              {msg.imageUrl && (
+                <img src={msg.imageUrl} alt="Shared photo" className={styles.msgImage} loading="lazy" />
+              )}
+              {msg.text && <p className={styles.msgText}>{msg.text}</p>}
+              {msg.showTime && (
+                <span className={styles.msgTime}>
+                  {msg.createdAt ? new Date(msg.createdAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : ''}
+                </span>
+              )}
+            </div>
           </div>
         ))}
         <div ref={endRef} />

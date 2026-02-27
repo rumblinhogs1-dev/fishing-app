@@ -16,6 +16,7 @@ import {
 import { db } from '../firebase';
 import { validateMessage } from './validate';
 import { uploadChatImage } from './chatStorage';
+import { notifyChatMessage } from './notifications';
 
 export async function createGroup(name, memberIds, adminId, options = {}) {
   const { type = 'group', tripId = null } = options;
@@ -45,6 +46,10 @@ export async function sendMessage(groupId, userId, displayName, text, imageUrl =
   await updateDoc(doc(db, 'groups', groupId), {
     lastMessage: cleanText ? cleanText.slice(0, 100) : (imageUrl ? '[Photo]' : ''),
   });
+  // Fire-and-forget notification
+  getGroupDoc(groupId).then((g) => {
+    if (g) notifyChatMessage(userId, displayName, groupId, g.name, cleanText, g.memberIds);
+  }).catch(() => {});
 }
 
 export async function sendMessageWithImage(groupId, userId, displayName, text, imageDataUrl) {
@@ -62,6 +67,10 @@ export async function sendMessageWithImage(groupId, userId, displayName, text, i
   await updateDoc(doc(db, 'groups', groupId), {
     lastMessage: cleanText ? cleanText.slice(0, 100) : '[Photo]',
   });
+  // Fire-and-forget notification
+  getGroupDoc(groupId).then((g) => {
+    if (g) notifyChatMessage(userId, displayName, groupId, g.name, cleanText, g.memberIds);
+  }).catch(() => {});
 }
 
 export function subscribeToMessages(groupId, callback) {
