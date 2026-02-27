@@ -213,12 +213,23 @@ export function buildBBox(lat, lng, delta) {
  */
 export async function geocodeLocation(query) {
   const res = await fetch(
-    `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1`
+    `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=10`
   );
   if (!res.ok) throw new Error('Geocoding request failed. Please try again.');
   const results = await res.json();
   if (!results.length) throw new Error(`No results found for "${query}". Try a different search.`);
-  const top = results[0];
+  // Prefer water features (lakes, rivers, reservoirs) when the query suggests one
+  const waterTypes = ['water', 'reservoir', 'lake', 'river', 'stream', 'wetland', 'bay'];
+  const waterKeywords = ['lake', 'river', 'creek', 'reservoir', 'pond', 'bay', 'stream'];
+  const queryLower = query.toLowerCase();
+  const isWaterQuery = waterKeywords.some((w) => queryLower.includes(w));
+  let top = results[0];
+  if (isWaterQuery) {
+    const waterResult = results.find(
+      (r) => waterTypes.includes(r.type) || waterTypes.includes(r.class)
+    );
+    if (waterResult) top = waterResult;
+  }
   return {
     lat: parseFloat(top.lat),
     lng: parseFloat(top.lon),
