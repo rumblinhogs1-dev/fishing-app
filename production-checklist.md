@@ -57,6 +57,14 @@
 - [x] **Capacitor setup (Android + iOS)** — Initialized Capacitor with `com.mycatchbook.app` package ID, Android and iOS platforms added, build scripts configured.
 - [x] **Site-wide footer** — Added footer component with links to Terms, Privacy, and Pricing pages.
 
+## Phase 6b: Marketing & Analytics
+
+- [x] **Feature detail pages** — Created 6 dedicated feature pages (`/features/*.html`) with CSS phone mockups, real fish photos (Wikimedia Commons), and real OpenStreetMap tiles. Linked from landing page feature cards.
+- [x] **Real fish photos in mockups** — Replaced placeholder gradients with real largemouth bass, rainbow trout, and striped bass photos in AI Fish ID, Catch Logging, and Community feature pages.
+- [x] **Real map tiles** — Replaced SVG map with OpenStreetMap tiles of Lake Fork, TX in the Interactive Maps feature page.
+- [x] **Logo rebrand** — Replaced "Crawdaddy's Catch" text on fish logo with "MYCATCHBOOK" across all sizes (192px, 512px, 1024px).
+- [x] **Google Analytics** — Added GA4 tracking (G-B13DLREYV9) to landing page and all 6 feature detail pages.
+
 ## Phase 7: Growth & Scale
 
 - [ ] Server-side search (Algolia/Typesense) to replace full collection scans
