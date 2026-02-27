@@ -90,6 +90,10 @@ export default function Regulations() {
       <h2 className={styles.heading}>Fishing Regulations</h2>
       <p className={styles.subtitle}>Check size limits, daily bags, and seasons by state</p>
 
+      <div className={styles.topDisclaimer}>
+        <strong>Disclaimer:</strong> The information provided here is for reference only and may not reflect the most current regulations. It is your responsibility to verify all rules with your local fish and wildlife agency before fishing. MyCatchBook is not liable for any violations.
+      </div>
+
       <div className={styles.modeToggle}>
         <button
           className={`${styles.modeBtn} ${mode === 'gps' ? styles.modeBtnActive : ''}`}

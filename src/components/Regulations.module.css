@@ -16,6 +16,21 @@
   margin: 0 0 1.25rem;
 }
 
+.topDisclaimer {
+  padding: 0.65rem 0.85rem;
+  margin-bottom: 1.25rem;
+  border-radius: 8px;
+  background: #fff8e1;
+  border: 1px solid #ffe0b2;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: #6d4c00;
+}
+
+.topDisclaimer strong {
+  color: #e65100;
+}
+
 .modeToggle {
   display: flex;
   gap: 0.5rem;
