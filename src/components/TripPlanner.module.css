@@ -235,6 +235,98 @@
   font-size: 0.8rem; color: #888; margin: 0.25rem 0 0;
 }
 
+.tripChatBtn {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  padding: 0.3rem 0.75rem; background: #1a73e8; color: #fff;
+  border-radius: 6px; font-size: 0.8rem; font-weight: 600;
+  text-decoration: none; transition: background 0.15s;
+  margin-bottom: 0.4rem;
+}
+.tripChatBtn:hover { background: #0d47a1; }
+
+/* Itinerary */
+.itinerarySection {
+  margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #f0f0f0;
+}
+.itineraryItem {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.3rem 0; font-size: 0.85rem;
+}
+.itineraryTime {
+  font-size: 0.75rem; color: #1a73e8; font-weight: 600;
+  white-space: nowrap; min-width: 100px;
+}
+.itineraryDesc { flex: 1; color: #333; }
+.itineraryRemoveBtn {
+  background: none; border: none; color: #d32f2f; font-size: 1.1rem;
+  cursor: pointer; padding: 0 0.25rem; line-height: 1;
+}
+.itineraryRemoveBtn:hover { opacity: 0.7; }
+
+.itineraryForm {
+  display: flex; gap: 0.35rem; margin-top: 0.5rem; align-items: center;
+}
+.itineraryTimeInput {
+  padding: 0.35rem 0.5rem; border: 1px solid #ddd; border-radius: 6px;
+  font-size: 0.8rem; font-family: inherit;
+}
+.itineraryDescInput {
+  flex: 1; padding: 0.35rem 0.5rem; border: 1px solid #ddd; border-radius: 6px;
+  font-size: 0.8rem; font-family: inherit;
+}
+.itineraryTimeInput:focus, .itineraryDescInput:focus {
+  outline: none; border-color: #1a73e8;
+}
+.itineraryAddBtn {
+  padding: 0.3rem 0.6rem; background: #1a73e8; color: #fff;
+  border: none; border-radius: 6px; font-size: 0.9rem; font-weight: 700;
+  cursor: pointer;
+}
+.itineraryAddBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+.itineraryAddBtn:hover:not(:disabled) { background: #0d47a1; }
+
+/* Trip Stats */
+.statsGrid {
+  display: flex; gap: 0.75rem; flex-wrap: wrap;
+  margin: 0.75rem 0; padding: 0.75rem;
+  background: #f8fafd; border-radius: 8px; border: 1px solid #e0e7f0;
+}
+.statItem {
+  display: flex; flex-direction: column; align-items: center;
+  min-width: 60px;
+}
+.statValue { font-size: 1.1rem; font-weight: 700; color: #1a73e8; }
+.statLabel { font-size: 0.7rem; color: #888; }
+
+/* Weather */
+.weatherSection {
+  margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #f0f0f0;
+}
+.weatherCards {
+  display: flex; gap: 0.5rem; overflow-x: auto; padding: 0.25rem 0;
+}
+.weatherCard {
+  display: flex; flex-direction: column; align-items: center;
+  min-width: 90px; padding: 0.5rem;
+  background: #f8fafd; border-radius: 8px; border: 1px solid #e0e7f0;
+  font-size: 0.75rem; gap: 0.15rem;
+}
+.weatherEmoji { font-size: 1.3rem; }
+.weatherDate { font-weight: 600; color: #333; }
+.weatherTemp { color: #1a73e8; font-weight: 600; }
+.weatherWind { color: #888; }
+.weatherPrecip { color: #1976d2; }
+
+.loadWeatherBtn {
+  padding: 0.35rem 0.75rem; border: 1px solid #1a73e8; border-radius: 6px;
+  background: #fff; color: #1a73e8; font-size: 0.8rem; font-weight: 600;
+  cursor: pointer; transition: all 0.15s;
+}
+.loadWeatherBtn:hover { background: #e8f0fe; }
+.loadWeatherBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
 @media (max-width: 600px) {
   .row { flex-direction: column; }
+  .itineraryForm { flex-wrap: wrap; }
+  .itineraryTimeInput { width: 100%; }
 }

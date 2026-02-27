@@ -121,6 +121,27 @@ export async function removeMemberFromTrip(tripId, userId) {
   });
 }
 
+export async function addItineraryItem(tripId, { time, description }) {
+  const ref = doc(db, TRIPS_COL, tripId);
+  const id = `itin_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+  await updateDoc(ref, {
+    itinerary: arrayUnion({ id, time, description }),
+    updatedAt: serverTimestamp(),
+  });
+}
+
+export async function removeItineraryItem(tripId, itemId) {
+  const ref = doc(db, TRIPS_COL, tripId);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) return;
+  const data = snap.data();
+  const filtered = (data.itinerary || []).filter((item) => item.id !== itemId);
+  await updateDoc(ref, {
+    itinerary: filtered,
+    updatedAt: serverTimestamp(),
+  });
+}
+
 export async function getTripCatches(memberIds, startDate, endDate) {
   if (!memberIds?.length || !startDate || !endDate) return [];
   const start = Timestamp.fromDate(new Date(startDate));

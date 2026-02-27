@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { getGPSLocation, geocodeLocation } from '../utils/weather';
-import { WEATHER_CODES } from '../utils/weather';
+import { getGPSLocation, geocodeLocation, WEATHER_CODES, weatherEmoji } from '../utils/weather';
 import { getFullForecast, getShouldIFishScore } from '../utils/forecast';
 import { getLocalSpecies } from '../utils/geminiSpecies';
 import { getSeasonalCalendar } from '../utils/geminiSeasonalCalendar';
@@ -19,18 +18,6 @@ const DEFAULT_SPECIES = [
 ];
 const TEMP_BAR_MIN = 30;
 const TEMP_BAR_MAX = 95;
-
-function weatherEmoji(code) {
-  if (code <= 1) return '\u2600\uFE0F';
-  if (code <= 3) return '\u26C5';
-  if (code <= 48) return '\uD83C\uDF2B\uFE0F';
-  if (code <= 55) return '\uD83C\uDF26\uFE0F';
-  if (code <= 67) return '\uD83C\uDF27\uFE0F';
-  if (code <= 77) return '\u2744\uFE0F';
-  if (code <= 82) return '\uD83C\uDF26\uFE0F';
-  if (code <= 86) return '\uD83C\uDF28\uFE0F';
-  return '\u26C8\uFE0F';
-}
 
 function windDirectionLabel(deg) {
   if (deg == null) return '';

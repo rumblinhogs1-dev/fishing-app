@@ -49,6 +49,7 @@ const ProfileSettings = lazyRetry(() => import('./components/ProfileSettings'));
 const ChatPage = lazyRetry(() => import('./components/ChatPage'));
 const ChatRoom = lazyRetry(() => import('./components/ChatRoom'));
 const CreateGroup = lazyRetry(() => import('./components/CreateGroup'));
+const CreateDM = lazyRetry(() => import('./components/CreateDM'));
 const GroupSettings = lazyRetry(() => import('./components/GroupSettings'));
 const Regulations = lazyRetry(() => import('./components/Regulations'));
 const MapView = lazyRetry(() => import('./components/MapView'));
@@ -161,6 +162,7 @@ export default function App() {
                   <Route path="/settings" element={<ProfileSettings />} />
                   <Route path="/chat" element={<ChatPage />} />
                   <Route path="/chat/new" element={<CreateGroup />} />
+                  <Route path="/chat/new-dm" element={<CreateDM />} />
                   <Route path="/chat/:groupId" element={<ChatRoom />} />
                   <Route path="/chat/:groupId/settings" element={<GroupSettings />} />
                   <Route path="/trips" element={<TripPlanner catches={catches} />} />

@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useFriends } from '../hooks/useFriends';
 import { searchUsers, sendFriendRequest, acceptFriendRequest, rejectFriendRequest, removeFriend } from '../utils/friends';
+import { findOrCreateDM } from '../utils/chat';
 import { useToast } from '../contexts/ToastContext';
 import { useConfirm } from '../contexts/ConfirmContext';
 import styles from './FriendsList.module.css';
@@ -26,6 +27,7 @@ export default function FriendsList() {
   const { requests, friendProfiles, loading } = useFriends();
   const toast = useToast();
   const confirm = useConfirm();
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
@@ -57,6 +59,19 @@ export default function FriendsList() {
     if (await confirm('Remove this friend?')) {
       await removeFriend(user.uid, friendId);
       toast.info('Friend removed');
+    }
+  }
+
+  async function handleStartDM(friend) {
+    try {
+      const dmId = await findOrCreateDM(
+        user.uid, friend.id,
+        user.displayName || 'Angler',
+        friend.displayName || 'Angler'
+      );
+      navigate(`/chat/${dmId}`);
+    } catch (err) {
+      console.error('Failed to start DM:', err);
     }
   }
 
@@ -166,6 +181,9 @@ export default function FriendsList() {
                   <Link to={`/user/${f.id}`} className={styles.userName}>{f.displayName || 'Angler'}</Link>
                   <span className={styles.userSub}>{timeAgo(f.lastActive)}</span>
                 </div>
+                <button className={styles.chatBtn} onClick={() => handleStartDM(f)} title="Message">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+                </button>
                 <button className={styles.removeBtn} onClick={() => handleRemove(f.id)}>Remove</button>
               </div>
             ))}

@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useFriends } from '../hooks/useFriends';
 import { useSpots } from '../hooks/useSpots';
-import { addTrip, updateTrip, deleteTrip, subscribeToTrips, backfillMemberIds, addMemberToTrip, removeMemberFromTrip, getTripCatches } from '../utils/trips';
+import { addTrip, updateTrip, deleteTrip, subscribeToTrips, backfillMemberIds, addMemberToTrip, removeMemberFromTrip, getTripCatches, addItineraryItem, removeItineraryItem } from '../utils/trips';
 import { notifyTripInvite } from '../utils/notifications';
+import { createTripChat, addMemberToGroup, removeMemberFromGroup } from '../utils/chat';
+import { fetchForecastData } from '../utils/forecast';
 import { useNavigate } from 'react-router-dom';
-import { getGPSLocation, reverseGeocode } from '../utils/weather';
+import { getGPSLocation, reverseGeocode, weatherEmoji } from '../utils/weather';
 import { SkeletonCard } from './Skeleton';
 import { useToast } from '../contexts/ToastContext';
 import styles from './TripPlanner.module.css';
@@ -39,6 +41,9 @@ export default function TripPlanner({ catches = [] }) {
   const [managingMembers, setManagingMembers] = useState(null);
   const [tripCatches, setTripCatches] = useState({});
   const [loadingCatches, setLoadingCatches] = useState({});
+  const [itineraryForm, setItineraryForm] = useState({ time: '', description: '' });
+  const [tripWeather, setTripWeather] = useState({});
+  const [loadingWeather, setLoadingWeather] = useState({});
   const backfilled = useRef(false);
 
   // Backfill existing trips that lack memberIds
@@ -106,6 +111,13 @@ export default function TripPlanner({ catches = [] }) {
         invitedIds,
         members,
       });
+      // Create trip chat group
+      try {
+        const chatGroupId = await createTripChat(newId, form.name.trim(), invitedIds, user.uid);
+        await updateTrip(newId, { chatGroupId });
+      } catch (err) {
+        console.error('Failed to create trip chat:', err);
+      }
       // Notify invited friends
       const tripName = form.name.trim();
       invitedIds.forEach((id) => {
@@ -154,6 +166,9 @@ export default function TripPlanner({ catches = [] }) {
         photoURL: friendProfile.photoURL || null,
       };
       await addMemberToTrip(trip.id, memberObj);
+      if (trip.chatGroupId) {
+        addMemberToGroup(trip.chatGroupId, friendProfile.id).catch(() => {});
+      }
       notifyTripInvite(user.uid, user.displayName, friendProfile.id, trip.name).catch(() => {});
       toast.success(`${friendProfile.displayName || 'Friend'} added!`);
     } catch (err) {
@@ -165,6 +180,9 @@ export default function TripPlanner({ catches = [] }) {
   async function handleRemoveMember(trip, memberId) {
     try {
       await removeMemberFromTrip(trip.id, memberId);
+      if (trip.chatGroupId) {
+        removeMemberFromGroup(trip.chatGroupId, memberId).catch(() => {});
+      }
       toast.success('Member removed');
     } catch (err) {
       console.error('Failed to remove member:', err);
@@ -199,6 +217,74 @@ export default function TripPlanner({ catches = [] }) {
       setTripCatches((prev) => ({ ...prev, [trip.id]: [] }));
     } finally {
       setLoadingCatches((prev) => ({ ...prev, [trip.id]: false }));
+    }
+  }
+
+  async function handleAddItineraryItem(tripId, e) {
+    e.preventDefault();
+    if (!itineraryForm.description.trim()) return;
+    try {
+      await addItineraryItem(tripId, {
+        time: itineraryForm.time || null,
+        description: itineraryForm.description.trim(),
+      });
+      setItineraryForm({ time: '', description: '' });
+      toast.success('Item added');
+    } catch (err) {
+      console.error('Failed to add itinerary item:', err);
+      toast.error('Failed to add item');
+    }
+  }
+
+  async function handleRemoveItineraryItem(tripId, itemId) {
+    try {
+      await removeItineraryItem(tripId, itemId);
+    } catch (err) {
+      console.error('Failed to remove itinerary item:', err);
+    }
+  }
+
+  function computeTripStats(catches) {
+    if (!catches || catches.length === 0) return null;
+    const speciesMap = {};
+    let totalWeight = 0;
+    let biggest = null;
+    catches.forEach((c) => {
+      if (c.species) {
+        speciesMap[c.species] = (speciesMap[c.species] || 0) + 1;
+      }
+      if (c.weight) {
+        totalWeight += Number(c.weight) || 0;
+        if (!biggest || Number(c.weight) > Number(biggest.weight)) biggest = c;
+      }
+    });
+    return {
+      totalCatches: catches.length,
+      speciesCount: Object.keys(speciesMap).length,
+      biggest,
+      totalWeight: Math.round(totalWeight * 100) / 100,
+      speciesBreakdown: speciesMap,
+    };
+  }
+
+  async function loadTripWeather(trip) {
+    if (!trip.lat || !trip.lng || loadingWeather[trip.id]) return;
+    setLoadingWeather((prev) => ({ ...prev, [trip.id]: true }));
+    try {
+      const data = await fetchForecastData(trip.lat, trip.lng);
+      // Filter forecast days to trip date range
+      let days = data.days || [];
+      if (trip.date) {
+        const start = trip.date.slice(0, 10);
+        const end = trip.endDate ? trip.endDate.slice(0, 10) : start;
+        days = days.filter((d) => d.date >= start && d.date <= end);
+      }
+      setTripWeather((prev) => ({ ...prev, [trip.id]: days }));
+    } catch (err) {
+      console.error('Failed to load weather:', err);
+      setTripWeather((prev) => ({ ...prev, [trip.id]: [] }));
+    } finally {
+      setLoadingWeather((prev) => ({ ...prev, [trip.id]: false }));
     }
   }
 
@@ -456,6 +542,11 @@ export default function TripPlanner({ catches = [] }) {
                           &times;
                         </button>
                       </div>
+                      {trip.chatGroupId && (
+                        <Link to={`/chat/${trip.chatGroupId}`} className={styles.tripChatBtn}>
+                          Trip Chat
+                        </Link>
+                      )}
                       {trip.destination && (
                         <Link to={`/local-guide?location=${encodeURIComponent(trip.destination)}`} className={styles.guideLink}>
                           Find Guides & Lodging
@@ -514,8 +605,75 @@ export default function TripPlanner({ catches = [] }) {
                           )}
                         </div>
                       )}
-                      {trip.status === 'completed' && (
-                        <Link to="/add" className={styles.logLink}>Log catches from this trip</Link>
+                      {/* Itinerary */}
+                      <div className={styles.itinerarySection}>
+                        <h5 className={styles.panelTitle}>Itinerary</h5>
+                        {(trip.itinerary || [])
+                          .sort((a, b) => (a.time || '').localeCompare(b.time || ''))
+                          .map((item) => (
+                            <div key={item.id} className={styles.itineraryItem}>
+                              {item.time && (
+                                <span className={styles.itineraryTime}>
+                                  {new Date(item.time).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                                </span>
+                              )}
+                              <span className={styles.itineraryDesc}>{item.description}</span>
+                              {trip.userId === user.uid && (
+                                <button className={styles.itineraryRemoveBtn} onClick={() => handleRemoveItineraryItem(trip.id, item.id)}>&times;</button>
+                              )}
+                            </div>
+                          ))}
+                        {trip.userId === user.uid && (
+                          <form className={styles.itineraryForm} onSubmit={(e) => handleAddItineraryItem(trip.id, e)}>
+                            <input
+                              type="datetime-local"
+                              className={styles.itineraryTimeInput}
+                              value={itineraryForm.time}
+                              onChange={(e) => setItineraryForm((f) => ({ ...f, time: e.target.value }))}
+                            />
+                            <input
+                              className={styles.itineraryDescInput}
+                              placeholder="Add activity..."
+                              value={itineraryForm.description}
+                              onChange={(e) => setItineraryForm((f) => ({ ...f, description: e.target.value }))}
+                            />
+                            <button type="submit" className={styles.itineraryAddBtn} disabled={!itineraryForm.description.trim()}>+</button>
+                          </form>
+                        )}
+                      </div>
+
+                      {/* Weather */}
+                      {trip.lat && trip.lng && (
+                        <div className={styles.weatherSection}>
+                          <h5 className={styles.panelTitle}>Weather Forecast</h5>
+                          {tripWeather[trip.id] ? (
+                            tripWeather[trip.id].length > 0 ? (
+                              <div className={styles.weatherCards}>
+                                {tripWeather[trip.id].map((day) => (
+                                  <div key={day.date} className={styles.weatherCard}>
+                                    <span className={styles.weatherEmoji}>{weatherEmoji(day.weatherCode)}</span>
+                                    <span className={styles.weatherDate}>
+                                      {new Date(day.date + 'T12:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                                    </span>
+                                    <span className={styles.weatherTemp}>{day.tempMin}&deg; - {day.tempMax}&deg;F</span>
+                                    {day.windMax != null && <span className={styles.weatherWind}>Wind: {day.windMax} mph</span>}
+                                    {day.precip > 0 && <span className={styles.weatherPrecip}>Precip: {day.precip}&Prime;</span>}
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className={styles.noCatches}>No forecast data for trip dates (only available within 5 days).</p>
+                            )
+                          ) : (
+                            <button
+                              className={styles.loadWeatherBtn}
+                              onClick={() => loadTripWeather(trip)}
+                              disabled={loadingWeather[trip.id]}
+                            >
+                              {loadingWeather[trip.id] ? 'Loading...' : 'Load Forecast'}
+                            </button>
+                          )}
+                        </div>
                       )}
                     </div>
                   )}
@@ -572,6 +730,36 @@ export default function TripPlanner({ catches = [] }) {
                       ))}
                     </div>
                   )}
+                  {/* Trip Stats */}
+                  {tripCatches[trip.id] && tripCatches[trip.id].length > 0 && (() => {
+                    const stats = computeTripStats(tripCatches[trip.id]);
+                    if (!stats) return null;
+                    return (
+                      <div className={styles.statsGrid}>
+                        <div className={styles.statItem}>
+                          <span className={styles.statValue}>{stats.totalCatches}</span>
+                          <span className={styles.statLabel}>Catches</span>
+                        </div>
+                        <div className={styles.statItem}>
+                          <span className={styles.statValue}>{stats.speciesCount}</span>
+                          <span className={styles.statLabel}>Species</span>
+                        </div>
+                        {stats.biggest && (
+                          <div className={styles.statItem}>
+                            <span className={styles.statValue}>{stats.biggest.weight} lbs</span>
+                            <span className={styles.statLabel}>Biggest</span>
+                          </div>
+                        )}
+                        {stats.totalWeight > 0 && (
+                          <div className={styles.statItem}>
+                            <span className={styles.statValue}>{stats.totalWeight} lbs</span>
+                            <span className={styles.statLabel}>Total Weight</span>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
+
                   <div className={styles.tripCatchesSection}>
                     <h5 className={styles.panelTitle}>Catches</h5>
                     {!trip.date || !trip.endDate ? (

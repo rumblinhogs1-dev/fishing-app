@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { getUserProfile, sendFriendRequest } from '../utils/friends';
+import { findOrCreateDM } from '../utils/chat';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
 import FeedCatchCard from './FeedCatchCard';
@@ -154,7 +155,24 @@ export default function UserProfile() {
             {requestSent ? 'Request Sent' : 'Add Friend'}
           </button>
         )}
-        {isFriend && <span className={styles.friendBadge}>Friends</span>}
+        {isFriend && (
+          <>
+            <span className={styles.friendBadge}>Friends</span>
+            <button
+              className={styles.messageBtn}
+              onClick={async () => {
+                const dmId = await findOrCreateDM(
+                  user.uid, userId,
+                  user.displayName || 'Angler',
+                  profile.displayName || 'Angler'
+                );
+                navigate(`/chat/${dmId}`);
+              }}
+            >
+              Message
+            </button>
+          </>
+        )}
         {isOwn && (
           <Link to="/settings" className={styles.editBtn}>Edit Profile</Link>
         )}

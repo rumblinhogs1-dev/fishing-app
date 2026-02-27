@@ -36,5 +36,11 @@
 .rejectBtn { padding: 0.35rem 0.75rem; background: transparent; color: #d32f2f; border: 1px solid #d32f2f; border-radius: 6px; font-size: 0.8rem; cursor: pointer; }
 .rejectBtn:hover { background: #fdecea; }
 
+.chatBtn {
+  background: none; border: none; color: #1a73e8; cursor: pointer; padding: 0.3rem;
+  display: flex; align-items: center; border-radius: 50%; transition: background 0.15s;
+}
+.chatBtn:hover { background: #e8f0fe; }
+
 .removeBtn { padding: 0.35rem 0.75rem; background: transparent; color: #d32f2f; border: 1px solid #d32f2f; border-radius: 6px; font-size: 0.8rem; cursor: pointer; }
 .removeBtn:hover { background: #fdecea; }

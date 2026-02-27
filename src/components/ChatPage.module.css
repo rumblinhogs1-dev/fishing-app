@@ -6,7 +6,9 @@
 .createLink { color: #1a73e8; font-weight: 600; text-decoration: none; }
 .createLink:hover { text-decoration: underline; }
 
-.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.5rem; }
+
+.headerActions { display: flex; gap: 0.5rem; }
 
 .newBtn {
   padding: 0.5rem 1rem;
@@ -14,11 +16,21 @@
   color: #fff;
   border-radius: 8px;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   transition: background 0.2s;
+  white-space: nowrap;
 }
 .newBtn:hover { background: #0d47a1; }
+
+.sectionLabel {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 1.25rem 0 0.5rem;
+}
 
 .groupList { display: flex; flex-direction: column; gap: 0.5rem; }
 
@@ -50,7 +62,39 @@
   flex-shrink: 0;
 }
 
+.dmAvatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #1a73e8;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.dmAvatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .groupInfo { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-.groupName { font-weight: 600; color: #222; font-size: 0.95rem; }
+.groupName { font-weight: 600; color: #222; font-size: 0.95rem; display: flex; align-items: center; gap: 0.4rem; }
 .groupPreview { font-size: 0.8rem; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .groupMembers { font-size: 0.75rem; color: #999; flex-shrink: 0; }
+
+.tripBadge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #fff;
+  background: #4caf50;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}

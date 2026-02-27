@@ -13,8 +13,11 @@
 
 .backBtn { color: #1a73e8; text-decoration: none; font-size: 1.2rem; font-weight: 600; }
 .heading { flex: 1; margin: 0; font-size: 1.1rem; color: #222; }
+.headerRight { display: flex; align-items: center; gap: 0.5rem; }
 .settingsBtn { color: #888; display: flex; }
 .settingsBtn:hover { color: #1a73e8; }
+.tripLink { font-size: 0.75rem; font-weight: 600; color: #1a73e8; text-decoration: none; white-space: nowrap; }
+.tripLink:hover { text-decoration: underline; }
 
 .messages {
   flex: 1;
@@ -50,13 +53,70 @@
 .msgText { margin: 0; font-size: 0.9rem; line-height: 1.4; }
 .msgTime { display: block; font-size: 0.65rem; opacity: 0.7; margin-top: 0.2rem; text-align: right; }
 
+.msgImage {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 8px;
+  margin-bottom: 0.25rem;
+  cursor: pointer;
+  display: block;
+}
+
+.imagePreviewRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #f8f8f8;
+  border-top: 1px solid #eee;
+}
+
+.imagePreviewThumb {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #1a73e8;
+}
+
+.removeImageBtn {
+  background: #d32f2f;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .inputRow {
   display: flex;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
   background: #fff;
   border-top: 1px solid #eee;
+  align-items: center;
 }
+
+.photoBtn {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0.25rem;
+  border-radius: 50%;
+  transition: color 0.15s;
+}
+.photoBtn:hover { color: #1a73e8; }
+
+.hiddenInput { display: none; }
 
 .input {
   flex: 1;
