@@ -251,6 +251,12 @@ function WindArrowSVG({ direction }) {
   );
 }
 
+function TrendArrow({ trend }) {
+  if (!trend || trend === 'stable') return <span className={styles.trendStable}>&#8594;</span>;
+  if (trend === 'rising') return <span className={styles.trendRising}>&#8593;</span>;
+  return <span className={styles.trendFalling}>&#8595;</span>;
+}
+
 function getWadingRating(flowRate) {
   if (flowRate == null) return null;
   if (flowRate <= 150) return { label: 'Easy Wading', color: '#2e7d32', bg: '#e8f5e9' };
@@ -280,7 +286,7 @@ function WindTideSection({ current, tideData, waterData, windDir }) {
       ) : waterData?.flowRate != null ? (
         <div className={styles.flowDisplay}>
           <div>
-            <div className={styles.flowValue}>{waterData.flowRate.toLocaleString()}</div>
+            <div className={styles.flowValue}>{waterData.flowRate.toLocaleString()} <TrendArrow trend={waterData.flowTrend} /></div>
             <div className={styles.flowUnit}>ft&sup3;/s flow rate</div>
           </div>
           {(() => { const w = getWadingRating(waterData.flowRate); return w ? (
@@ -839,7 +845,7 @@ export default function Forecast() {
                   )}
                   {data.waterData.flowRate != null && (
                     <div className={`${styles.condCard} ${styles.hasTooltip}`} data-tooltip="Flow rate (cubic feet per second) measures how much water is moving. Lower flow means calmer water and easier wading. Higher flow pushes bait into eddies and current seams — great spots to target feeding fish.">
-                      <div className={styles.condValue}>{data.waterData.flowRate.toLocaleString()}</div>
+                      <div className={styles.condValue}>{data.waterData.flowRate.toLocaleString()} <TrendArrow trend={data.waterData.flowTrend} /></div>
                       <div className={styles.condLabel}>Flow (ft&sup3;/s)</div>
                     </div>
                   )}
@@ -851,7 +857,7 @@ export default function Forecast() {
                   ) : null; })()}
                   {data.waterData.gaugeHeight != null && (
                     <div className={`${styles.condCard} ${styles.hasTooltip}`} data-tooltip="Gauge height is the water level at the station in feet. Rising levels often trigger feeding as new water pushes insects and baitfish downstream. Falling levels concentrate fish in deeper pools.">
-                      <div className={styles.condValue}>{data.waterData.gaugeHeight} ft</div>
+                      <div className={styles.condValue}>{data.waterData.gaugeHeight} ft <TrendArrow trend={data.waterData.gaugeTrend} /></div>
                       <div className={styles.condLabel}>Gauge Height</div>
                     </div>
                   )}

@@ -683,6 +683,24 @@
   color: #888;
 }
 
+.trendRising {
+  color: #d84315;
+  font-weight: 800;
+  font-size: 0.85em;
+}
+
+.trendFalling {
+  color: #2e7d32;
+  font-weight: 800;
+  font-size: 0.85em;
+}
+
+.trendStable {
+  color: #888;
+  font-weight: 800;
+  font-size: 0.85em;
+}
+
 .wadingBadge {
   font-size: 0.75rem;
   font-weight: 700;

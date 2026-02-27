@@ -5,7 +5,7 @@ import { getMoonPhase, getSolunarPeriods, calculateBiteScore, getPressureTrend, 
 import { fetchWaterData, reverseGeocode, haversine } from './weather.js';
 
 // --- Cache ---
-const FORECAST_CACHE_KEY = 'fishing-forecast-cache-v2';
+const FORECAST_CACHE_KEY = 'fishing-forecast-cache-v3';
 const FORECAST_TTL = 30 * 60 * 1000; // 30 minutes
 const MAX_FORECAST_CACHE = 10;
 

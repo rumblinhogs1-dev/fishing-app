@@ -100,7 +100,7 @@ export async function fetchWeather(lat, lng) {
 export async function fetchWaterData(lat, lng) {
   // USGS site search: find nearest sites within ~30 miles that have recent data
   const bbox = buildBBox(lat, lng, 0.5); // ~30 mile radius
-  const url = `https://waterservices.usgs.gov/nwis/iv/?format=json&bBox=${bbox}&parameterCd=00010,00060,00065&siteStatus=active`;
+  const url = `https://waterservices.usgs.gov/nwis/iv/?format=json&bBox=${bbox}&parameterCd=00010,00060,00065&siteStatus=active&period=PT6H`;
 
   const res = await fetch(url);
   if (!res.ok) return null;
@@ -118,8 +118,8 @@ export async function fetchWaterData(lat, lng) {
     const sLng = site?.geoLocation?.geogLocation?.longitude;
     if (!sLat || !sLng) continue;
 
-    const val = ts.values?.[0]?.value?.[0]?.value;
-    if (!val || val === '-999999') continue;
+    const allVals = ts.values?.[0]?.value?.filter(v => v.value && v.value !== '-999999') || [];
+    if (allVals.length === 0) continue;
 
     const siteCode = site.siteCode?.[0]?.value || `${sLat},${sLng}`;
     const paramCode = ts.variable?.variableCode?.[0]?.value;
@@ -129,10 +129,12 @@ export async function fetchWaterData(lat, lng) {
         name: site.siteName,
         dist: haversine(lat, lng, sLat, sLng),
         params: {},
+        readings: {},
       };
     }
 
-    stations[siteCode].params[paramCode] = val;
+    stations[siteCode].params[paramCode] = allVals[allVals.length - 1].value;
+    stations[siteCode].readings[paramCode] = allVals.map(v => parseFloat(v.value));
   }
 
   // Pick the best station: prefer closest with non-zero flow, fall back to closest overall
@@ -170,10 +172,25 @@ export async function fetchWaterData(lat, lng) {
 
   if (waterTemp === null && flowRate === null && gaugeHeight === null) return null;
 
+  // Compute trends by comparing first vs last reading over the period
+  const { readings } = best;
+  const getTrend = (paramCode) => {
+    const r = readings[paramCode];
+    if (!r || r.length < 2) return 'stable';
+    const first = r[0];
+    const last = r[r.length - 1];
+    const pctChange = ((last - first) / (Math.abs(first) || 1)) * 100;
+    if (pctChange > 3) return 'rising';
+    if (pctChange < -3) return 'falling';
+    return 'stable';
+  };
+
   return {
     waterTemp,
     flowRate,
+    flowTrend: getTrend('00060'),
     gaugeHeight,
+    gaugeTrend: getTrend('00065'),
     stationName: best.name || 'Nearby USGS station',
   };
 }
