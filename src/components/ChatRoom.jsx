@@ -58,7 +58,7 @@ function resizeImage(file) {
 export default function ChatRoom() {
   const { groupId } = useParams();
   const { user } = useAuth();
-  const { messages, loading } = useMessages(groupId);
+  const { messages, loading, error } = useMessages(groupId);
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
@@ -139,6 +139,7 @@ export default function ChatRoom() {
 
   if (!user) return <p className={styles.empty}>Please sign in to chat.</p>;
   if (loading) return <p className={styles.loading}>Loading messages...</p>;
+  if (error) return <p className={styles.empty} style={{ color: '#d32f2f' }}>Error: {error}</p>;
 
   const isDM = group?.type === 'dm';
   const isTrip = group?.type === 'trip';

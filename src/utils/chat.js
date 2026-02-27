@@ -84,10 +84,10 @@ export function subscribeToMessages(groupId, callback) {
       id: d.id,
       ...d.data(),
       createdAt: d.data().createdAt?.toDate?.()?.toISOString() || null,
-    })));
+    })), null);
   }, (error) => {
     console.error('Firestore subscription error:', error);
-    callback([]);
+    callback([], error.message || 'Failed to load messages');
   });
 }
 

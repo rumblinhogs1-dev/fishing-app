@@ -21,16 +21,19 @@ export function useGroups(userId) {
 export function useMessages(groupId) {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!groupId) { setMessages([]); setLoading(false); return; }
     setLoading(true);
-    const unsub = subscribeToMessages(groupId, (data) => {
+    setError(null);
+    const unsub = subscribeToMessages(groupId, (data, err) => {
       setMessages(data);
       setLoading(false);
+      if (err) setError(err);
     });
     return unsub;
   }, [groupId]);
 
-  return { messages, loading };
+  return { messages, loading, error };
 }
