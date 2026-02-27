@@ -77,14 +77,34 @@ export async function removeFriend(userId, friendId) {
 export async function searchUsers(queryStr) {
   if (!queryStr || queryStr.length < 2) return [];
   const prefix = queryStr.toLowerCase();
-  const q = query(
+
+  // Search by display name
+  const nameQ = query(
     collection(db, 'users'),
     where('displayNameLower', '>=', prefix),
     where('displayNameLower', '<=', prefix + '\uf8ff'),
     limit(20)
   );
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+
+  // Search by email
+  const emailQ = query(
+    collection(db, 'users'),
+    where('emailLower', '>=', prefix),
+    where('emailLower', '<=', prefix + '\uf8ff'),
+    limit(20)
+  );
+
+  const [nameSnap, emailSnap] = await Promise.all([getDocs(nameQ), getDocs(emailQ)]);
+
+  const seen = new Set();
+  const results = [];
+  [...nameSnap.docs, ...emailSnap.docs].forEach((d) => {
+    if (!seen.has(d.id)) {
+      seen.add(d.id);
+      results.push({ id: d.id, ...d.data() });
+    }
+  });
+  return results;
 }
 
 export function subscribeToFriendRequests(userId, callback) {
@@ -117,6 +137,7 @@ export async function ensureUserDoc(user) {
       displayName: user.displayName || '',
       displayNameLower: (user.displayName || '').toLowerCase(),
       email: user.email || '',
+      emailLower: (user.email || '').toLowerCase(),
       photoURL: user.photoURL || '',
       friendIds: [],
       friendCount: 0,
@@ -128,7 +149,12 @@ export async function ensureUserDoc(user) {
       lastActive: serverTimestamp(),
     });
   } else {
-    await updateDoc(ref, { lastActive: serverTimestamp() });
+    const data = snap.data();
+    const updates = { lastActive: serverTimestamp() };
+    if (!data.emailLower && user.email) {
+      updates.emailLower = user.email.toLowerCase();
+    }
+    await updateDoc(ref, updates);
   }
 }
 
