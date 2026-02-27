@@ -160,6 +160,7 @@ export function subscribeToChallenges(userId, callback) {
   }, (error) => {
     console.error('Firestore subscription error (public):', error);
     publicResults = [];
+    initialPublic = true;
     if (initialOwn) merge();
   });
 
@@ -170,6 +171,7 @@ export function subscribeToChallenges(userId, callback) {
   }, (error) => {
     console.error('Firestore subscription error (own):', error);
     ownResults = [];
+    initialOwn = true;
     if (initialPublic) merge();
   });
 
