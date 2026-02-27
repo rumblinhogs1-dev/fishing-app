@@ -3,7 +3,7 @@ const TEMPLATES = {
     name: 'Clean White',
     bg: '#ffffff',
     textColor: '#222222',
-    accentColor: '#1a73e8',
+    accentColor: '#2d6a4f',
     overlayColor: 'rgba(255,255,255,0.85)',
   },
   dark: {

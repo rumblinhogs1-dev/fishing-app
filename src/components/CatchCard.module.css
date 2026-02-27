@@ -29,7 +29,7 @@
 
 .species {
   margin: 0;
-  color: #0d47a1;
+  color: #1b4332;
   font-size: 1.15rem;
 }
 
@@ -51,11 +51,11 @@
 }
 
 .editBtn {
-  color: #1a73e8;
+  color: #2d6a4f;
 }
 
 .editBtn:hover {
-  background: rgba(26, 115, 232, 0.1);
+  background: rgba(45, 106, 79, 0.1);
 }
 
 .deleteBtn {
@@ -75,8 +75,8 @@
 }
 
 .tag {
-  background: #e8f0fe;
-  color: #1a73e8;
+  background: #e8f5e9;
+  color: #2d6a4f;
   padding: 0.2rem 0.6rem;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -166,7 +166,7 @@
 }
 
 .toggleInput:checked + .toggleSlider {
-  background: #1a73e8;
+  background: #2d6a4f;
 }
 
 .toggleInput:checked + .toggleSlider::after {

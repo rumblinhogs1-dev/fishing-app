@@ -4,7 +4,7 @@ import { SkeletonStats } from './Skeleton';
 import styles from './Insights.module.css';
 
 const TABS = ['Records', 'Best Conditions', 'Species', 'Trends', 'Lures', 'Locations', 'Time of Day', 'Conservation'];
-const COLORS = ['#1a73e8', '#4caf50', '#ff9800', '#e91e63', '#9c27b0', '#00bcd4', '#ff5722', '#607d8b', '#795548', '#3f51b5'];
+const COLORS = ['#2d6a4f', '#4caf50', '#ff9800', '#e91e63', '#9c27b0', '#00bcd4', '#ff5722', '#607d8b', '#795548', '#3f51b5'];
 
 function drawBar(ctx, data, width, height) {
   if (!data.length) return;
@@ -24,7 +24,7 @@ function drawBar(ctx, data, width, height) {
     const y = padding.top + chartH - barH;
 
     const grad = ctx.createLinearGradient(x, y, x, y + barH);
-    grad.addColorStop(0, '#1a73e8');
+    grad.addColorStop(0, '#2d6a4f');
     grad.addColorStop(1, '#4caf50');
     ctx.fillStyle = grad;
     ctx.beginPath();
@@ -34,7 +34,7 @@ function drawBar(ctx, data, width, height) {
     ctx.fillStyle = '#888';
     ctx.fillText(d.label, x + barW / 2, height - 8);
 
-    ctx.fillStyle = '#1a73e8';
+    ctx.fillStyle = '#2d6a4f';
     ctx.fillText(d.value, x + barW / 2, y - 4);
   });
 }

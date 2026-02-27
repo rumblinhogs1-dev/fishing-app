@@ -83,14 +83,14 @@
 }
 
 .basemapBtn:hover {
-  border-color: #1a73e8;
-  color: #1a73e8;
+  border-color: #2d6a4f;
+  color: #2d6a4f;
 }
 
 .basemapActive {
-  background: #e8f0fe;
-  border-color: #1a73e8;
-  color: #1a73e8;
+  background: #e8f5e9;
+  border-color: #2d6a4f;
+  color: #2d6a4f;
 }
 
 .toggleRow {
@@ -136,7 +136,7 @@
 }
 
 .toggleOn {
-  background: #1a73e8;
+  background: #2d6a4f;
 }
 
 .toggleKnob {

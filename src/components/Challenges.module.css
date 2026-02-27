@@ -1,5 +1,5 @@
 .container { max-width: 700px; margin: 2rem auto; padding: 0 1rem; }
-.heading { color: #0d47a1; margin: 0 0 1rem; }
+.heading { color: #1b4332; margin: 0 0 1rem; }
 
 .tabs {
   display: flex;
@@ -20,20 +20,20 @@
   transition: all 0.2s;
 }
 
-.tab:hover { border-color: #1a73e8; color: #1a73e8; }
+.tab:hover { border-color: #2d6a4f; color: #2d6a4f; }
 
 .tabActive {
-  background: #1a73e8 !important;
+  background: #2d6a4f !important;
   color: #fff !important;
-  border-color: #1a73e8 !important;
+  border-color: #2d6a4f !important;
 }
 
 .createBtn {
-  display: block; width: 100%; padding: 0.6rem; border: 1.5px dashed #1a73e8;
-  border-radius: 8px; background: #fff; color: #1a73e8; font-size: 0.9rem;
+  display: block; width: 100%; padding: 0.6rem; border: 1.5px dashed #2d6a4f;
+  border-radius: 8px; background: #fff; color: #2d6a4f; font-size: 0.9rem;
   font-weight: 600; cursor: pointer; transition: background 0.2s; margin-bottom: 1.25rem;
 }
-.createBtn:hover { background: #e8f0fe; }
+.createBtn:hover { background: #e8f5e9; }
 
 .challengeList {
   display: flex;
@@ -88,7 +88,7 @@
   letter-spacing: 0.02em;
 }
 
-.typeMostCatches { background: #e3f2fd; color: #1976d2; }
+.typeMostCatches { background: #d8f3dc; color: #1976d2; }
 .typeBiggestCatch { background: #fff3e0; color: #f57c00; }
 .typeMostSpecies { background: #f3e5f5; color: #7b1fa2; }
 .typeTotalWeight { background: #e8f5e9; color: #388e3c; }
@@ -132,7 +132,7 @@
 }
 .textarea { resize: vertical; min-height: 60px; }
 .input:focus, .select:focus, .textarea:focus {
-  outline: none; border-color: #1a73e8; box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+  outline: none; border-color: #2d6a4f; box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
 }
 
 .row { display: flex; gap: 0.75rem; }
@@ -164,7 +164,7 @@
 
 .friendAvatarInitial {
   width: 28px; height: 28px; border-radius: 50%;
-  background: #1a73e8; color: #fff; display: flex;
+  background: #2d6a4f; color: #fff; display: flex;
   align-items: center; justify-content: center;
   font-weight: 700; font-size: 0.75rem; flex-shrink: 0;
 }
@@ -173,10 +173,10 @@
 
 .submitBtn {
   padding: 0.6rem 1.5rem; border: none; border-radius: 8px;
-  background: #1a73e8; color: #fff; font-size: 0.9rem; font-weight: 600;
+  background: #2d6a4f; color: #fff; font-size: 0.9rem; font-weight: 600;
   cursor: pointer; transition: background 0.2s;
 }
-.submitBtn:hover { background: #1557b0; }
+.submitBtn:hover { background: #245c3e; }
 .submitBtn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .cancelBtn {

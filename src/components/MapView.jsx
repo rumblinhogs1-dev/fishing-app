@@ -48,12 +48,12 @@ const SPECIES_COLORS = {
 };
 
 function getSpeciesColor(species) {
-  if (!species) return '#1a73e8';
+  if (!species) return '#2d6a4f';
   const lower = species.toLowerCase();
   for (const [key, color] of Object.entries(SPECIES_COLORS)) {
     if (lower.includes(key)) return color;
   }
-  return '#1a73e8';
+  return '#2d6a4f';
 }
 
 function createCatchIcon(species) {
@@ -244,7 +244,7 @@ function HeatLayer({ catches, communityPoints }) {
       radius: 25,
       blur: 15,
       maxZoom: 17,
-      gradient: { 0.2: '#0d47a1', 0.4: '#1a73e8', 0.6: '#43a047', 0.8: '#f9a825', 1.0: '#d32f2f' },
+      gradient: { 0.2: '#1b4332', 0.4: '#2d6a4f', 0.6: '#43a047', 0.8: '#f9a825', 1.0: '#d32f2f' },
     });
     map.addLayer(heat);
     return () => map.removeLayer(heat);

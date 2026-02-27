@@ -5,7 +5,7 @@
 }
 
 .heading {
-  color: #0d47a1;
+  color: #1b4332;
   margin: 0 0 0.25rem;
 }
 
@@ -38,7 +38,7 @@
 .keyToggle {
   background: none;
   border: none;
-  color: #1a73e8;
+  color: #2d6a4f;
   font-size: 0.85rem;
   cursor: pointer;
   padding: 0;
@@ -76,13 +76,13 @@
 
 .keyField:focus {
   outline: none;
-  border-color: #1a73e8;
-  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.12);
+  border-color: #2d6a4f;
+  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
 }
 
 .keyDone {
   padding: 0.5rem 1rem;
-  background: #1a73e8;
+  background: #2d6a4f;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -92,12 +92,12 @@
 }
 
 .keyDone:hover {
-  background: #0d47a1;
+  background: #1b4332;
 }
 
 .keyHelp {
   font-size: 0.8rem;
-  color: #1a73e8;
+  color: #2d6a4f;
 }
 
 /* Upload Area */
@@ -127,9 +127,9 @@
 
 .cameraBtn:hover,
 .uploadBtn:hover {
-  border-color: #1a73e8;
-  background: #e8f0fe;
-  color: #1a73e8;
+  border-color: #2d6a4f;
+  background: #e8f5e9;
+  color: #2d6a4f;
 }
 
 .hiddenInput {
@@ -186,7 +186,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 2rem;
-  background: linear-gradient(135deg, #1a73e8, #4caf50);
+  background: linear-gradient(135deg, #2d6a4f, #4caf50);
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -242,13 +242,13 @@
   justify-content: space-between;
   align-items: flex-start;
   padding: 1.25rem;
-  background: linear-gradient(135deg, #e8f0fe, #e8f5e9);
+  background: linear-gradient(135deg, #e8f5e9, #e8f5e9);
 }
 
 .speciesName {
   margin: 0;
   font-size: 1.3rem;
-  color: #0d47a1;
+  color: #1b4332;
 }
 
 .sciName {
@@ -306,7 +306,7 @@
 
 .estimateIcon {
   font-size: 1.4rem;
-  color: #1a73e8;
+  color: #2d6a4f;
   line-height: 1;
 }
 
@@ -341,7 +341,7 @@
 
 .contextIcon {
   font-size: 1.3rem;
-  color: #1a73e8;
+  color: #2d6a4f;
   flex-shrink: 0;
   line-height: 1.2;
 }
@@ -372,7 +372,7 @@
 .resultSection h4 {
   margin: 0 0 0.3rem;
   font-size: 0.85rem;
-  color: #0d47a1;
+  color: #1b4332;
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
@@ -454,13 +454,13 @@
 }
 
 .suggestionCard:hover {
-  border-color: #1a73e8;
-  background: #e8f0fe;
+  border-color: #2d6a4f;
+  background: #e8f5e9;
 }
 
 .suggestionActive {
-  border-color: #1a73e8;
-  background: #e8f0fe;
+  border-color: #2d6a4f;
+  background: #e8f5e9;
 }
 
 .suggestionSpecies {

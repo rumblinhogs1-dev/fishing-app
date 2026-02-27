@@ -22,7 +22,7 @@
 
 .fullLink {
   font-size: 0.8rem;
-  color: #1a73e8;
+  color: #2d6a4f;
   text-decoration: none;
 }
 
@@ -54,9 +54,9 @@
 }
 
 .btn:hover {
-  border-color: #1a73e8;
-  background: #e8f0fe;
-  color: #1a73e8;
+  border-color: #2d6a4f;
+  background: #e8f5e9;
+  color: #2d6a4f;
 }
 
 .hidden {
@@ -90,7 +90,7 @@
   align-items: center;
   gap: 0.35rem;
   padding: 0.45rem 1rem;
-  background: linear-gradient(135deg, #1a73e8, #4caf50);
+  background: linear-gradient(135deg, #2d6a4f, #4caf50);
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -148,7 +148,7 @@
 }
 
 .errorLink {
-  color: #1a73e8;
+  color: #2d6a4f;
   font-weight: 600;
 }
 
@@ -156,7 +156,7 @@
 .result {
   margin-top: 0.75rem;
   padding: 0.6rem 0.75rem;
-  background: linear-gradient(135deg, #e8f0fe, #e8f5e9);
+  background: linear-gradient(135deg, #e8f5e9, #e8f5e9);
   border-radius: 8px;
 }
 
@@ -191,7 +191,7 @@
 
 .species {
   font-weight: 700;
-  color: #0d47a1;
+  color: #1b4332;
   font-size: 0.95rem;
 }
 

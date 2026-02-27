@@ -11,7 +11,7 @@ export const BADGES = [
     name: 'Guardian',
     description: 'Release 10 fish back to the water',
     icon: 'M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 2.18l7 3.12v4.7c0 4.83-3.4 9.36-7 10.58-3.6-1.22-7-5.75-7-10.58V6.3l7-3.12z',
-    color: '#1a73e8',
+    color: '#2d6a4f',
   },
   {
     id: 'conservationist',

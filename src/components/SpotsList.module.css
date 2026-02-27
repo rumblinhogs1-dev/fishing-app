@@ -7,7 +7,7 @@
 .backBtn {
   background: none;
   border: none;
-  color: #1a73e8;
+  color: #2d6a4f;
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
@@ -17,7 +17,7 @@
   align-items: center;
   gap: 0.25rem;
 }
-.backBtn:hover { color: #0d47a1; }
+.backBtn:hover { color: #1b4332; }
 
 .loading {
   text-align: center;
@@ -34,12 +34,12 @@
 
 .title {
   margin: 0;
-  color: #0d47a1;
+  color: #1b4332;
   font-size: 1.4rem;
 }
 
 .mapLink {
-  color: #1a73e8;
+  color: #2d6a4f;
   text-decoration: none;
   font-weight: 500;
   font-size: 0.9rem;
@@ -56,7 +56,7 @@
 }
 
 .signIn h2 {
-  color: #0d47a1;
+  color: #1b4332;
   margin-bottom: 0.5rem;
 }
 
@@ -68,7 +68,7 @@
 .signInBtn {
   display: inline-block;
   padding: 0.6rem 2rem;
-  background: #1a73e8;
+  background: #2d6a4f;
   color: #fff;
   border-radius: 8px;
   text-decoration: none;
@@ -88,7 +88,7 @@
 }
 
 .emptyHint a {
-  color: #1a73e8;
+  color: #2d6a4f;
 }
 
 /* Spot cards */
@@ -199,7 +199,7 @@
   display: inline-block;
   margin-top: 0.75rem;
   font-size: 0.8rem;
-  color: #1a73e8;
+  color: #2d6a4f;
   text-decoration: none;
   font-weight: 500;
 }

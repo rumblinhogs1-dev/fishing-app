@@ -22,7 +22,7 @@
 
 .title {
   margin: 0 0 1rem;
-  color: #0d47a1;
+  color: #1b4332;
   font-size: 1.2rem;
 }
 
@@ -46,14 +46,14 @@
 }
 
 .templateBtn:hover {
-  border-color: #1a73e8;
-  color: #1a73e8;
+  border-color: #2d6a4f;
+  color: #2d6a4f;
 }
 
 .templateActive {
-  background: #1a73e8 !important;
+  background: #2d6a4f !important;
   color: #fff !important;
-  border-color: #1a73e8 !important;
+  border-color: #2d6a4f !important;
 }
 
 .previewArea {
@@ -92,10 +92,10 @@
   justify-content: center;
   gap: 0.35rem;
   padding: 0.55rem 0.75rem;
-  border: 1.5px solid #1a73e8;
+  border: 1.5px solid #2d6a4f;
   border-radius: 8px;
   background: #fff;
-  color: #1a73e8;
+  color: #2d6a4f;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
@@ -103,7 +103,7 @@
 }
 
 .actionBtn:hover {
-  background: #e8f0fe;
+  background: #e8f5e9;
 }
 
 .actionBtn:disabled {

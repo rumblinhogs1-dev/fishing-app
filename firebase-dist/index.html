@@ -30,86 +30,214 @@
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 60px; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       color: #222;
-      background: #f0f4f8;
+      background: #fefae0;
       -webkit-font-smoothing: antialiased;
     }
     a { text-decoration: none; }
 
-    /* Hero */
+    /* ── Sticky Nav ── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #14213d;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.6rem 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #fefae0;
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+    .nav-brand img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+    .nav-cta {
+      background: #e9c46a;
+      color: #14213d;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .nav-cta:hover {
+      background: #d4a373;
+      transform: translateY(-1px);
+    }
+
+    /* ── Hero ── */
     .hero {
-      background: linear-gradient(135deg, #0d47a1, #1a73e8);
-      color: #fff;
+      background: linear-gradient(145deg, #1b4332, #2d6a4f 50%, #14213d);
+      color: #fefae0;
       text-align: center;
-      padding: 5rem 1.5rem 4rem;
+      padding: 5rem 1.5rem 4.5rem;
     }
     .hero-logo {
-      width: 80px;
-      height: 80px;
+      width: 90px;
+      height: 90px;
       border-radius: 50%;
       margin-bottom: 1.5rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+      border: 3px solid rgba(233,196,106,0.4);
     }
     .hero h1 {
-      font-size: 2.5rem;
-      font-weight: 800;
+      font-size: 2.75rem;
+      font-weight: 900;
       margin-bottom: 0.75rem;
       letter-spacing: -0.5px;
     }
     .hero p {
       font-size: 1.15rem;
       opacity: 0.9;
-      max-width: 550px;
-      margin: 0 auto 2rem;
-      line-height: 1.6;
+      max-width: 560px;
+      margin: 0 auto 2.25rem;
+      line-height: 1.65;
     }
     .cta-btn {
       display: inline-block;
-      background: #fff;
-      color: #0d47a1;
+      background: #e9c46a;
+      color: #14213d;
       font-size: 1.1rem;
-      font-weight: 700;
-      padding: 0.85rem 2.5rem;
+      font-weight: 800;
+      padding: 0.9rem 2.75rem;
       border-radius: 12px;
-      transition: transform 0.15s, box-shadow 0.15s;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
     }
     .cta-btn:hover {
+      background: #d4a373;
       transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.25);
     }
 
-    /* Features */
+    /* ── How It Works ── */
+    .how-it-works {
+      padding: 4rem 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .how-it-works h2 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #1b4332;
+      margin-bottom: 0.5rem;
+    }
+    .how-it-works .subtitle {
+      color: #666;
+      font-size: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .steps {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      position: relative;
+    }
+    .step {
+      flex: 1;
+      min-width: 200px;
+      max-width: 260px;
+      position: relative;
+    }
+    .step-number {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, #2d6a4f, #1b4332);
+      color: #e9c46a;
+      font-size: 1.4rem;
+      font-weight: 900;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      box-shadow: 0 3px 12px rgba(27,67,50,0.3);
+    }
+    .step h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #1b4332;
+      margin-bottom: 0.4rem;
+    }
+    .step p {
+      font-size: 0.9rem;
+      color: #555;
+      line-height: 1.5;
+    }
+    .step-connector {
+      display: none;
+    }
+    @media (min-width: 601px) {
+      .step-connector {
+        display: block;
+        position: absolute;
+        top: 26px;
+        right: -1rem;
+        width: 1.5rem;
+        height: 2px;
+        background: #d4a373;
+      }
+      .step-connector::after {
+        content: '';
+        position: absolute;
+        right: -4px;
+        top: -3px;
+        border: solid #d4a373;
+        border-width: 0 2px 2px 0;
+        padding: 3px;
+        transform: rotate(-45deg);
+      }
+    }
+
+    /* ── Features ── */
     .features {
+      background: #f5f0e1;
+      padding: 4rem 1.5rem;
+    }
+    .features-inner {
       max-width: 960px;
       margin: 0 auto;
-      padding: 4rem 1.5rem;
     }
     .features h2 {
       text-align: center;
-      font-size: 1.75rem;
-      color: #0d47a1;
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #1b4332;
       margin-bottom: 2.5rem;
     }
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 1.25rem;
     }
     a.feature-card {
       display: block;
       color: inherit;
-      background: #fff;
+      background: #fefae0;
       border-radius: 14px;
       padding: 1.75rem 1.5rem;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
       transition: transform 0.2s, box-shadow 0.2s;
       position: relative;
+      border: 1px solid rgba(212,163,115,0.2);
     }
     a.feature-card:hover {
       transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 24px rgba(27,67,50,0.12);
     }
     a.feature-card::after {
       content: '\2192';
@@ -117,70 +245,351 @@
       top: 1.75rem;
       right: 1.5rem;
       font-size: 1.1rem;
-      color: #bbb;
+      color: #c4b99a;
       transition: color 0.2s, transform 0.2s;
     }
     a.feature-card:hover::after {
-      color: #1a73e8;
+      color: #2d6a4f;
       transform: translateX(3px);
     }
     .feature-icon {
-      width: 44px;
-      height: 44px;
-      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+      width: 46px;
+      height: 46px;
+      background: linear-gradient(135deg, #d8f3dc, #b7e4c7);
       border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 1rem;
     }
-    .feature-icon svg { fill: #1a73e8; }
+    .feature-icon svg { fill: #1b4332; }
     .feature-card h3 {
       font-size: 1.05rem;
-      color: #333;
+      font-weight: 700;
+      color: #1b4332;
       margin-bottom: 0.5rem;
     }
     .feature-card p {
       font-size: 0.9rem;
-      color: #666;
+      color: #555;
       line-height: 1.55;
     }
 
-    /* Pricing */
-    .pricing {
+    /* ── App Screenshots ── */
+    .screenshots {
+      padding: 4rem 1.5rem;
+      text-align: center;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .screenshots h2 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #1b4332;
+      margin-bottom: 0.5rem;
+    }
+    .screenshots .subtitle {
+      color: #666;
+      font-size: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .phone-row {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+    .phone-mockup {
+      width: 220px;
+      flex-shrink: 0;
+    }
+    .phone-frame {
+      background: #14213d;
+      border-radius: 28px;
+      padding: 14px 10px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+    }
+    .phone-notch {
+      width: 60px;
+      height: 6px;
+      background: #222;
+      border-radius: 3px;
+      margin: 0 auto 8px;
+    }
+    .phone-screen {
+      background: #f5f5f5;
+      border-radius: 16px;
+      height: 380px;
+      text-align: left;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .phone-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #555;
+      margin-top: 0.75rem;
+    }
+    /* Shared screen header */
+    .screen-header {
+      background: #2d6a4f;
+      color: #fefae0;
+      font-weight: 700;
+      font-size: 0.8rem;
+      padding: 0.5rem 0.75rem;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .screen-body {
+      padding: 0.6rem;
+      flex: 1;
+      overflow: hidden;
+    }
+    /* Screen 1: Catch Form */
+    .screen-catch .fish-photo {
+      width: 100%;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+    }
+    .screen-catch .form-field {
       background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 0.35rem 0.5rem;
+      margin-bottom: 0.35rem;
+      font-size: 0.6rem;
+      color: #555;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .screen-catch .form-field .label { font-weight: 600; color: #333; }
+    .screen-catch .save-btn {
+      background: #2d6a4f;
+      color: #fefae0;
+      border-radius: 6px;
+      text-align: center;
+      padding: 0.4rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      margin-top: 0.35rem;
+    }
+    /* Screen 2: Community Feed */
+    .feed-post {
+      background: #fff;
+      border-radius: 8px;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      border: 1px solid #eee;
+    }
+    .feed-post .post-user {
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: #1b4332;
+      margin-bottom: 0.25rem;
+    }
+    .feed-post .post-img {
+      width: 100%;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 0.25rem;
+      display: block;
+    }
+    .feed-post .post-text {
+      font-size: 0.55rem;
+      color: #555;
+      line-height: 1.4;
+    }
+    .feed-post .post-stats {
+      font-size: 0.5rem;
+      color: #999;
+      margin-top: 0.15rem;
+    }
+    /* Screen 3: Map View */
+    .map-area {
+      border-radius: 8px;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+    }
+    .map-area img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .map-pins-overlay {
+      position: absolute;
+      inset: 0;
+    }
+    .map-pin {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+    }
+    .map-pin::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 14px;
+      height: 14px;
+      background: #e76f51;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+    .map-pin::after {
+      content: '';
+      position: absolute;
+      top: 12px;
+      left: 4px;
+      width: 0;
+      height: 0;
+      border-left: 3px solid transparent;
+      border-right: 3px solid transparent;
+      border-top: 6px solid #e76f51;
+    }
+    .map-pin-1 { top: 18%; left: 22%; }
+    .map-pin-2 { top: 50%; left: 58%; }
+    .map-pin-3 { top: 12%; left: 68%; }
+    .map-pin-4 { top: 65%; left: 30%; }
+    .map-pin-5 { top: 38%; left: 44%; }
+    .map-btn {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: #fff;
+      border-radius: 6px;
+      padding: 3px 6px;
+      font-size: 0.5rem;
+      font-weight: 700;
+      color: #1b4332;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+    .map-legend {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 0.5rem;
+      color: #333;
+      font-weight: 600;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    }
+    .map-legend span {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: #e76f51;
+      border-radius: 50%;
+      margin-right: 3px;
+      vertical-align: middle;
+    }
+
+    /* ── FAQ ── */
+    .faq {
+      background: #f5f0e1;
+      padding: 4rem 1.5rem;
+    }
+    .faq-inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .faq h2 {
+      text-align: center;
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #1b4332;
+      margin-bottom: 0.5rem;
+    }
+    .faq .subtitle {
+      text-align: center;
+      color: #666;
+      font-size: 1rem;
+      margin-bottom: 2rem;
+    }
+    .faq details {
+      background: #fefae0;
+      border-radius: 10px;
+      margin-bottom: 0.75rem;
+      border: 1px solid rgba(212,163,115,0.2);
+      overflow: hidden;
+    }
+    .faq summary {
+      padding: 1rem 1.25rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #1b4332;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after {
+      content: '+';
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #d4a373;
+      transition: transform 0.2s;
+    }
+    .faq details[open] summary::after {
+      content: '\2212';
+    }
+    .faq details p {
+      padding: 0 1.25rem 1rem;
+      font-size: 0.9rem;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    /* ── Pricing ── */
+    .pricing {
       padding: 4rem 1.5rem;
     }
     .pricing h2 {
       text-align: center;
-      font-size: 1.75rem;
-      color: #0d47a1;
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #1b4332;
       margin-bottom: 0.5rem;
     }
     .pricing-sub {
       text-align: center;
-      color: #888;
+      color: #666;
       font-size: 0.95rem;
       margin-bottom: 2.5rem;
     }
     .pricing-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 1.25rem;
       max-width: 960px;
       margin: 0 auto;
     }
     .price-card {
-      border: 2px solid #e0e0e0;
+      border: 2px solid rgba(212,163,115,0.3);
       border-radius: 16px;
       padding: 2rem 1.5rem;
       text-align: center;
+      background: #fff;
       transition: transform 0.2s;
     }
     .price-card:hover { transform: translateY(-2px); }
     .price-card.highlight {
-      border-color: #1a73e8;
-      box-shadow: 0 4px 20px rgba(26,115,232,0.12);
+      border-color: #2d6a4f;
+      box-shadow: 0 4px 20px rgba(45,106,79,0.15);
       position: relative;
     }
     .price-card.highlight::before {
@@ -189,22 +598,23 @@
       top: -12px;
       left: 50%;
       transform: translateX(-50%);
-      background: #1a73e8;
-      color: #fff;
+      background: #2d6a4f;
+      color: #fefae0;
       font-size: 0.72rem;
-      font-weight: 600;
+      font-weight: 700;
       padding: 0.2rem 0.9rem;
       border-radius: 20px;
     }
     .price-card h3 {
       font-size: 1.25rem;
-      color: #333;
+      font-weight: 700;
+      color: #1b4332;
       margin-bottom: 0.25rem;
     }
     .price-card .amount {
       font-size: 2rem;
-      font-weight: 800;
-      color: #333;
+      font-weight: 900;
+      color: #1b4332;
     }
     .price-card .period {
       font-size: 0.85rem;
@@ -227,40 +637,42 @@
       content: '\2713';
       position: absolute;
       left: 0;
-      color: #2e7d32;
+      color: #2d6a4f;
       font-weight: 700;
     }
     .price-cta {
       display: inline-block;
       padding: 0.65rem 2rem;
       border-radius: 10px;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 0.9rem;
-      border: 2px solid #e0e0e0;
-      color: #333;
+      border: 2px solid rgba(212,163,115,0.3);
+      color: #1b4332;
       background: #fff;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, background 0.2s;
     }
-    .price-cta:hover { border-color: #1a73e8; color: #1a73e8; }
+    .price-cta:hover { border-color: #2d6a4f; color: #2d6a4f; }
     .price-cta.primary {
-      background: linear-gradient(135deg, #1a73e8, #0d47a1);
-      color: #fff;
+      background: linear-gradient(135deg, #2d6a4f, #1b4332);
+      color: #fefae0;
       border-color: transparent;
     }
-    .price-cta.primary:hover { box-shadow: 0 4px 12px rgba(26,115,232,0.35); color: #fff; }
+    .price-cta.primary:hover { box-shadow: 0 4px 12px rgba(45,106,79,0.35); color: #fefae0; }
 
-    /* App Store badges */
+    /* ── App Stores ── */
     .stores {
       text-align: center;
-      padding: 3rem 1.5rem;
+      padding: 3.5rem 1.5rem;
+      background: #f5f0e1;
     }
     .stores h2 {
       font-size: 1.5rem;
-      color: #0d47a1;
+      font-weight: 800;
+      color: #1b4332;
       margin-bottom: 0.5rem;
     }
     .stores p {
-      color: #888;
+      color: #666;
       font-size: 0.9rem;
       margin-bottom: 1.5rem;
     }
@@ -274,52 +686,69 @@
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: #222;
-      color: #fff;
-      padding: 0.6rem 1.25rem;
+      background: #14213d;
+      color: #fefae0;
+      padding: 0.65rem 1.35rem;
       border-radius: 10px;
       font-size: 0.85rem;
-      font-weight: 600;
+      font-weight: 700;
       transition: opacity 0.2s;
     }
     .store-badge:hover { opacity: 0.85; }
-    .store-badge svg { fill: #fff; }
+    .store-badge svg { fill: #fefae0; }
 
-    /* Footer */
+    /* ── Footer ── */
     .lp-footer {
       text-align: center;
-      padding: 1.5rem 1rem;
-      border-top: 1px solid #ddd;
-      background: #f8f9fa;
+      padding: 2rem 1rem;
+      background: #1b4332;
+      color: #b7e4c7;
     }
     .lp-footer-links {
       display: flex;
       justify-content: center;
       gap: 0.5rem;
       flex-wrap: wrap;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
     }
     .lp-footer-links a {
-      color: #1a73e8;
+      color: #e9c46a;
       font-size: 0.85rem;
-      font-weight: 500;
+      font-weight: 600;
     }
     .lp-footer-links a:hover { text-decoration: underline; }
-    .lp-footer-links .sep { color: #ccc; font-size: 0.8rem; }
+    .lp-footer-links .sep { color: #52796f; font-size: 0.8rem; }
     .lp-footer p {
-      color: #888;
+      color: #95d5b2;
       font-size: 0.78rem;
     }
 
+    /* ── Mobile ── */
     @media (max-width: 600px) {
-      .hero { padding: 3rem 1.25rem 2.5rem; }
-      .hero h1 { font-size: 1.75rem; }
+      .hero { padding: 3.5rem 1.25rem 3rem; }
+      .hero h1 { font-size: 1.85rem; }
       .hero p { font-size: 1rem; }
-      .features, .pricing, .stores { padding: 2.5rem 1rem; }
+      .how-it-works, .features, .faq, .pricing, .stores, .screenshots { padding: 2.5rem 1rem; }
+      .steps { flex-direction: column; align-items: center; }
+      .step-connector { display: none; }
+      .phone-row { gap: 1.5rem; }
+      .phone-mockup { width: 200px; }
+      .phone-screen { height: 340px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
+
+  <!-- Sticky Nav -->
+  <nav class="nav">
+    <a href="/" class="nav-brand">
+      <img src="/fishing-app/logo-192.png" alt="MyCatchBook" />
+      MyCatchBook
+    </a>
+    <a href="/fishing-app/auth" class="nav-cta">Get Started</a>
+  </nav>
 
   <!-- Hero -->
   <section class="hero">
@@ -331,52 +760,192 @@
     <a href="/fishing-app/auth" class="cta-btn">Get Started Free</a>
   </section>
 
+  <!-- How It Works -->
+  <section class="how-it-works">
+    <h2>How It Works</h2>
+    <p class="subtitle">Get on the water in minutes</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Sign Up Free</h3>
+        <p>Create your account in seconds with email or Google. No credit card needed.</p>
+        <span class="step-connector"></span>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>Log Your Catches</h3>
+        <p>Snap a photo, add details, and let AI identify the species. Build your fishing journal.</p>
+        <span class="step-connector"></span>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Connect &amp; Compete</h3>
+        <p>Share with the community, climb leaderboards, and join fishing challenges.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- Features -->
   <section class="features">
-    <h2>Everything You Need on the Water</h2>
-    <div class="features-grid">
-      <a href="/features/ai-fish-id.html" class="feature-card">
-        <div class="feature-icon">
-          <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+    <div class="features-inner">
+      <h2>Everything You Need on the Water</h2>
+      <div class="features-grid">
+        <a href="/features/ai-fish-id.html" class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          </div>
+          <h3>AI Fish Identification</h3>
+          <p>Snap a photo and let AI identify the species instantly. Works with freshwater and saltwater fish.</p>
+        </a>
+        <a href="/features/catch-logging.html" class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24"><path d="M17.66 7.93L12 2.27 6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31A7.98 7.98 0 0012 21.58c2.05 0 4.1-.78 5.66-2.34 3.12-3.12 3.12-8.19 0-11.31zM12 19.59c-1.6 0-3.11-.62-4.24-1.76C6.62 16.69 6 15.19 6 13.59s.62-3.11 1.76-4.24L12 5.1v14.49z"/></svg>
+          </div>
+          <h3>Catch Logging</h3>
+          <p>Track species, weight, length, location, weather, and photos. Build your personal fishing journal.</p>
+        </a>
+        <a href="/features/community.html" class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+          </div>
+          <h3>Fishing Community</h3>
+          <p>Share catches, compete on leaderboards, join challenges, and chat with fellow anglers.</p>
+        </a>
+        <a href="/features/maps.html" class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
+          </div>
+          <h3>Interactive Maps</h3>
+          <p>See catches plotted on maps, discover hotspots with heatmaps, and save your favorite fishing spots.</p>
+        </a>
+        <a href="/features/local-guide.html" class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+          </div>
+          <h3>AI Local Guide</h3>
+          <p>Get AI-powered fishing recommendations for any location — best species, techniques, and regulations.</p>
+        </a>
+        <a href="/features/stats-insights.html" class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+          </div>
+          <h3>Stats &amp; Insights</h3>
+          <p>Visualize your fishing data with charts, personal records, seasonal trends, and AI-powered insights.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- App Screenshots -->
+  <section class="screenshots">
+    <h2>See It In Action</h2>
+    <p class="subtitle">A fishing companion built for the field</p>
+    <div class="phone-row">
+      <!-- Phone 1: Catch Form -->
+      <div class="phone-mockup">
+        <div class="phone-frame">
+          <div class="phone-notch"></div>
+          <div class="phone-screen screen-catch">
+            <div class="screen-header">Log a Catch</div>
+            <div class="screen-body">
+              <img class="fish-photo" src="/features/images/largemouth-bass.jpg" alt="Largemouth Bass" />
+              <div class="form-field"><span class="label">Species</span><span>Largemouth Bass</span></div>
+              <div class="form-field"><span class="label">Weight</span><span>4.2 lbs</span></div>
+              <div class="form-field"><span class="label">Length</span><span>18 in</span></div>
+              <div class="form-field"><span class="label">Location</span><span>Lake Travis, TX</span></div>
+              <div class="save-btn">Save Catch</div>
+            </div>
+          </div>
         </div>
-        <h3>AI Fish Identification</h3>
-        <p>Snap a photo and let AI identify the species instantly. Works with freshwater and saltwater fish.</p>
-      </a>
-      <a href="/features/catch-logging.html" class="feature-card">
-        <div class="feature-icon">
-          <svg viewBox="0 0 24 24" width="24" height="24"><path d="M17.66 7.93L12 2.27 6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31A7.98 7.98 0 0012 21.58c2.05 0 4.1-.78 5.66-2.34 3.12-3.12 3.12-8.19 0-11.31zM12 19.59c-1.6 0-3.11-.62-4.24-1.76C6.62 16.69 6 15.19 6 13.59s.62-3.11 1.76-4.24L12 5.1v14.49z"/></svg>
+        <p class="phone-label">Catch Logging</p>
+      </div>
+      <!-- Phone 2: Community Feed -->
+      <div class="phone-mockup">
+        <div class="phone-frame">
+          <div class="phone-notch"></div>
+          <div class="phone-screen screen-feed">
+            <div class="screen-header">Community Feed</div>
+            <div class="screen-body">
+              <div class="feed-post">
+                <div class="post-user">JakeAngler23</div>
+                <img class="post-img" src="/features/images/rainbow-trout.jpg" alt="Rainbow Trout catch" />
+                <div class="post-text">Caught a 6lb rainbow trout on the Frio River!</div>
+                <div class="post-stats">12 likes &middot; 3 comments</div>
+              </div>
+              <div class="feed-post">
+                <div class="post-user">ReelDealFishing</div>
+                <img class="post-img" src="/features/images/largemouth-bass.jpg" alt="Largemouth Bass catch" />
+                <div class="post-text">New PB largemouth! AI ID'd it in seconds.</div>
+                <div class="post-stats">24 likes &middot; 8 comments</div>
+              </div>
+            </div>
+          </div>
         </div>
-        <h3>Catch Logging</h3>
-        <p>Track species, weight, length, location, weather, and photos. Build your personal fishing journal.</p>
-      </a>
-      <a href="/features/community.html" class="feature-card">
-        <div class="feature-icon">
-          <svg viewBox="0 0 24 24" width="24" height="24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+        <p class="phone-label">Community</p>
+      </div>
+      <!-- Phone 3: Map View -->
+      <div class="phone-mockup">
+        <div class="phone-frame">
+          <div class="phone-notch"></div>
+          <div class="phone-screen screen-map">
+            <div class="screen-header">Catch Map</div>
+            <div class="map-area">
+              <img src="/features/images/map-t1.png" alt="" />
+              <img src="/features/images/map-t2.png" alt="" />
+              <img src="/features/images/map-t3.png" alt="" />
+              <img src="/features/images/map-t4.png" alt="" />
+              <div class="map-pins-overlay">
+                <span class="map-pin map-pin-1"></span>
+                <span class="map-pin map-pin-2"></span>
+                <span class="map-pin map-pin-3"></span>
+                <span class="map-pin map-pin-4"></span>
+                <span class="map-pin map-pin-5"></span>
+                <div class="map-legend"><span></span> My Catches</div>
+                <div class="map-btn">5 catches</div>
+              </div>
+            </div>
+          </div>
         </div>
-        <h3>Fishing Community</h3>
-        <p>Share catches, compete on leaderboards, join challenges, and chat with fellow anglers.</p>
-      </a>
-      <a href="/features/maps.html" class="feature-card">
-        <div class="feature-icon">
-          <svg viewBox="0 0 24 24" width="24" height="24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
-        </div>
-        <h3>Interactive Maps</h3>
-        <p>See catches plotted on maps, discover hotspots with heatmaps, and save your favorite fishing spots.</p>
-      </a>
-      <a href="/features/local-guide.html" class="feature-card">
-        <div class="feature-icon">
-          <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
-        </div>
-        <h3>AI Local Guide</h3>
-        <p>Get AI-powered fishing recommendations for any location — best species, techniques, and regulations.</p>
-      </a>
-      <a href="/features/stats-insights.html" class="feature-card">
-        <div class="feature-icon">
-          <svg viewBox="0 0 24 24" width="24" height="24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
-        </div>
-        <h3>Stats &amp; Insights</h3>
-        <p>Visualize your fishing data with charts, personal records, seasonal trends, and AI-powered insights.</p>
-      </a>
+        <p class="phone-label">Map View</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq">
+    <div class="faq-inner">
+      <h2>Frequently Asked Questions</h2>
+      <p class="subtitle">Got questions? We've got answers.</p>
+
+      <details>
+        <summary>Is MyCatchBook really free?</summary>
+        <p>Yes! The free tier lets you log up to 20 catches per month, use 5 AI identifications, access the community feed, leaderboard, and map view. No credit card required.</p>
+      </details>
+
+      <details>
+        <summary>What devices does it work on?</summary>
+        <p>MyCatchBook is a progressive web app that works on any device with a modern browser — phones, tablets, and desktops. Native Android and iOS apps are coming soon.</p>
+      </details>
+
+      <details>
+        <summary>How does AI fish identification work?</summary>
+        <p>Just snap a photo of your catch and our AI analyzes it to identify the species. It works with both freshwater and saltwater fish and gets smarter over time.</p>
+      </details>
+
+      <details>
+        <summary>Can I use MyCatchBook offline?</summary>
+        <p>The app caches data for offline browsing. You can view your logged catches without an internet connection. New catches sync automatically when you're back online.</p>
+      </details>
+
+      <details>
+        <summary>Is my data private and secure?</summary>
+        <p>Absolutely. Your catch data and photos are stored securely with Firebase. You control what you share publicly and what stays private. See our <a href="/fishing-app/privacy" style="color:#2d6a4f;font-weight:600;">Privacy Policy</a> for details.</p>
+      </details>
+
+      <details>
+        <summary>What are fishing challenges?</summary>
+        <p>Challenges are community competitions where you compete with other anglers — biggest catch, most species, seasonal derbies, and more. Create your own or join public and invite-only challenges.</p>
+      </details>
     </div>
   </section>
 

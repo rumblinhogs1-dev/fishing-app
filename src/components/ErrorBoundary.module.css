@@ -55,7 +55,7 @@
 
 .retryBtn {
   padding: 0.5rem 1.25rem;
-  background: #1a73e8;
+  background: #2d6a4f;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -66,7 +66,7 @@
 }
 
 .retryBtn:hover {
-  background: #1557b0;
+  background: #245c3e;
 }
 
 .homeBtn {

@@ -150,7 +150,7 @@ function MoonSolunarSection({ day }) {
               style={{
                 left: `${startPct}%`,
                 width: `${Math.max(widthPct, 2)}%`,
-                background: p.type === 'major' ? '#1a73e8' : '#90caf9',
+                background: p.type === 'major' ? '#2d6a4f' : '#90caf9',
               }}
               title={`${p.label}: ${p.start} - ${p.end}`}
             >
@@ -246,7 +246,7 @@ function WindArrowSVG({ direction }) {
   return (
     <svg className={styles.windArrow} viewBox="0 0 60 60" style={{ transform: `rotate(${direction || 0}deg)` }}>
       <circle cx="30" cy="30" r="28" fill="none" stroke="#ddd" strokeWidth="2" />
-      <polygon points="30,6 24,38 30,32 36,38" fill="#1a73e8" />
+      <polygon points="30,6 24,38 30,32 36,38" fill="#2d6a4f" />
     </svg>
   );
 }
@@ -314,7 +314,7 @@ function TideChart({ predictions }) {
 
   return (
     <svg className={styles.tideChart} viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="xMidYMid meet">
-      <path d={pathD} fill="none" stroke="#1a73e8" strokeWidth="2" />
+      <path d={pathD} fill="none" stroke="#2d6a4f" strokeWidth="2" />
       {points.map((p, i) => (
         <g key={i}>
           <circle cx={p.x} cy={p.y} r="3" fill={p.type === 'High' ? '#2e7d32' : '#c62828'} />
@@ -494,7 +494,7 @@ function HatchChart({ data }) {
               <div key={i} className={styles.hatchTimeRow}>
                 <span className={styles.hatchTimePeriod}>{slot.period}</span>
                 <div className={styles.hatchTimeBar}>
-                  <div style={{ width: `${intensityPct(slot.intensity)}%`, height: '100%', borderRadius: 4, background: '#1a73e8', transition: 'width 0.3s' }} />
+                  <div style={{ width: `${intensityPct(slot.intensity)}%`, height: '100%', borderRadius: 4, background: '#2d6a4f', transition: 'width 0.3s' }} />
                 </div>
                 <span className={styles.hatchTimeInsects}>{(slot.insects || []).join(', ')}</span>
               </div>

@@ -6,7 +6,7 @@
 
 .heading {
   text-align: center;
-  color: #0d47a1;
+  color: #1b4332;
   margin: 0 0 0.5rem;
 }
 
@@ -44,8 +44,8 @@
 }
 
 .popular {
-  border-color: #1a73e8;
-  box-shadow: 0 4px 20px rgba(26, 115, 232, 0.15);
+  border-color: #2d6a4f;
+  box-shadow: 0 4px 20px rgba(45, 106, 79, 0.15);
 }
 
 .current {
@@ -57,7 +57,7 @@
   top: -12px;
   left: 50%;
   transform: translateX(-50%);
-  background: #1a73e8;
+  background: #2d6a4f;
   color: #fff;
   font-size: 0.75rem;
   font-weight: 600;
@@ -155,8 +155,8 @@
 }
 
 .selectBtn:hover:not(:disabled) {
-  border-color: #1a73e8;
-  color: #1a73e8;
+  border-color: #2d6a4f;
+  color: #2d6a4f;
 }
 
 .selectBtn:disabled {
@@ -165,7 +165,7 @@
 }
 
 .selectBtnPopular {
-  background: linear-gradient(135deg, #1a73e8, #0d47a1);
+  background: linear-gradient(135deg, #2d6a4f, #1b4332);
   color: #fff;
   border-color: transparent;
 }
@@ -173,7 +173,7 @@
 .selectBtnPopular:hover:not(:disabled) {
   border-color: transparent;
   color: #fff;
-  box-shadow: 0 4px 12px rgba(26, 115, 232, 0.35);
+  box-shadow: 0 4px 12px rgba(45, 106, 79, 0.35);
 }
 
 .note {

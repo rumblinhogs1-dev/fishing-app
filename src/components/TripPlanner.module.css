@@ -1,14 +1,14 @@
 .container { max-width: 700px; margin: 2rem auto; padding: 0 1rem; }
-.heading { color: #0d47a1; margin: 0 0 1rem; }
+.heading { color: #1b4332; margin: 0 0 1rem; }
 .loadingText { text-align: center; color: #888; padding: 2rem; }
 .empty { text-align: center; color: #888; padding: 3rem 1rem; }
 
 .addBtn {
-  display: block; width: 100%; padding: 0.6rem; border: 1.5px dashed #1a73e8;
-  border-radius: 8px; background: #fff; color: #1a73e8; font-size: 0.9rem;
+  display: block; width: 100%; padding: 0.6rem; border: 1.5px dashed #2d6a4f;
+  border-radius: 8px; background: #fff; color: #2d6a4f; font-size: 0.9rem;
   font-weight: 600; cursor: pointer; transition: background 0.2s; margin-bottom: 1.25rem;
 }
-.addBtn:hover { background: #e8f0fe; }
+.addBtn:hover { background: #e8f5e9; }
 
 .form {
   background: #fff; border-radius: 12px; padding: 1.25rem;
@@ -22,7 +22,7 @@
   padding: 0.6rem 0.75rem; border: 1px solid #ddd; border-radius: 8px;
   font-size: 0.95rem; font-family: inherit;
 }
-.input:focus, .select:focus { outline: none; border-color: #1a73e8; box-shadow: 0 0 0 3px rgba(26,115,232,0.1); }
+.input:focus, .select:focus { outline: none; border-color: #2d6a4f; box-shadow: 0 0 0 3px rgba(45,106,79,0.1); }
 
 .row { display: flex; gap: 0.75rem; }
 .row > * { flex: 1; }
@@ -30,15 +30,15 @@
 
 
 .submitBtn {
-  padding: 0.65rem; border: none; border-radius: 8px; background: #1a73e8;
+  padding: 0.65rem; border: none; border-radius: 8px; background: #2d6a4f;
   color: #fff; font-weight: 600; font-size: 0.95rem; cursor: pointer;
   transition: background 0.2s;
 }
-.submitBtn:hover { background: #1557b0; }
+.submitBtn:hover { background: #245c3e; }
 .submitBtn:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .section { margin-bottom: 1.5rem; }
-.sectionTitle { color: #0d47a1; font-size: 1rem; margin: 0 0 0.75rem; }
+.sectionTitle { color: #1b4332; font-size: 1rem; margin: 0 0 0.75rem; }
 
 .tripCard {
   background: #fff; border-radius: 12px; padding: 1rem;
@@ -46,7 +46,7 @@
 }
 .tripCompleted { opacity: 0.7; }
 .tripClickable { cursor: pointer; }
-.tripClickable:hover .tripName { color: #1a73e8; }
+.tripClickable:hover .tripName { color: #2d6a4f; }
 .tripHeader { display: flex; justify-content: space-between; align-items: flex-start; }
 .tripName { margin: 0; font-size: 1rem; color: #222; transition: color 0.15s; }
 .expandIcon { color: #aaa; font-size: 0.7rem; margin-top: 0.2rem; }
@@ -71,14 +71,14 @@
   margin-top: 0.35rem; font-size: 0.8rem; color: #888;
 }
 .speciesTag {
-  background: #e8f0fe; color: #1a73e8; padding: 0.1rem 0.5rem;
+  background: #e8f5e9; color: #2d6a4f; padding: 0.1rem 0.5rem;
   border-radius: 12px; font-size: 0.75rem; font-weight: 500;
 }
 
 
 .logLink {
   display: inline-block; margin-top: 0.5rem;
-  color: #1a73e8; font-size: 0.8rem; font-weight: 600; text-decoration: none;
+  color: #2d6a4f; font-size: 0.8rem; font-weight: 600; text-decoration: none;
 }
 .logLink:hover { text-decoration: underline; }
 
@@ -98,13 +98,13 @@
   transition: background 0.15s;
 }
 .inviteItem:hover { background: #f5f5f5; }
-.inviteSelected { background: #e8f0fe; }
-.inviteCheckbox { width: 16px; height: 16px; accent-color: #1a73e8; cursor: pointer; }
+.inviteSelected { background: #e8f5e9; }
+.inviteCheckbox { width: 16px; height: 16px; accent-color: #2d6a4f; cursor: pointer; }
 .inviteAvatar {
   width: 28px; height: 28px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
 }
 .inviteInitial {
-  width: 28px; height: 28px; border-radius: 50%; background: #1a73e8; color: #fff;
+  width: 28px; height: 28px; border-radius: 50%; background: #2d6a4f; color: #fff;
   display: flex; align-items: center; justify-content: center;
   font-weight: 700; font-size: 0.75rem; flex-shrink: 0;
 }
@@ -118,7 +118,7 @@
   border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 .memberInitial {
-  width: 26px; height: 26px; border-radius: 50%; background: #1a73e8; color: #fff;
+  width: 26px; height: 26px; border-radius: 50%; background: #2d6a4f; color: #fff;
   display: flex; align-items: center; justify-content: center;
   font-weight: 700; font-size: 0.7rem;
   border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
@@ -129,16 +129,16 @@
   font-size: 0.8rem; color: #888; margin: 0.25rem 0 0;
 }
 .noFriendsLink {
-  color: #1a73e8; font-weight: 600; text-decoration: none;
+  color: #2d6a4f; font-weight: 600; text-decoration: none;
 }
 .noFriendsLink:hover { text-decoration: underline; }
 
 .editBtn {
-  padding: 0.25rem 0.6rem; border: 1px solid #1a73e8; border-radius: 6px;
-  background: #fff; color: #1a73e8; font-size: 0.75rem; font-weight: 600;
+  padding: 0.25rem 0.6rem; border: 1px solid #2d6a4f; border-radius: 6px;
+  background: #fff; color: #2d6a4f; font-size: 0.75rem; font-weight: 600;
   cursor: pointer; transition: all 0.15s;
 }
-.editBtn:hover { background: #e8f0fe; }
+.editBtn:hover { background: #e8f5e9; }
 
 .editForm {
   display: flex; flex-direction: column; gap: 0.75rem;
@@ -147,11 +147,11 @@
   display: flex; gap: 0.5rem;
 }
 .saveBtn {
-  padding: 0.45rem 1rem; border: none; border-radius: 8px; background: #1a73e8;
+  padding: 0.45rem 1rem; border: none; border-radius: 8px; background: #2d6a4f;
   color: #fff; font-weight: 600; font-size: 0.85rem; cursor: pointer;
   transition: background 0.2s;
 }
-.saveBtn:hover { background: #1557b0; }
+.saveBtn:hover { background: #245c3e; }
 .saveBtn:disabled { opacity: 0.6; cursor: not-allowed; }
 .cancelBtn {
   padding: 0.45rem 1rem; border: 1px solid #ddd; border-radius: 8px;
@@ -162,16 +162,16 @@
 
 .guideLink {
   display: inline-block; margin-top: 0.4rem;
-  color: #0d47a1; font-size: 0.8rem; font-weight: 600; text-decoration: none;
+  color: #1b4332; font-size: 0.8rem; font-weight: 600; text-decoration: none;
 }
 .guideLink:hover { text-decoration: underline; }
 
 .manageMembersBtn {
-  padding: 0.25rem 0.6rem; border: 1px solid #1a73e8; border-radius: 6px;
-  background: #fff; color: #1a73e8; font-size: 0.75rem; font-weight: 600;
+  padding: 0.25rem 0.6rem; border: 1px solid #2d6a4f; border-radius: 6px;
+  background: #fff; color: #2d6a4f; font-size: 0.75rem; font-weight: 600;
   cursor: pointer; transition: all 0.15s;
 }
-.manageMembersBtn:hover { background: #e8f0fe; }
+.manageMembersBtn:hover { background: #e8f5e9; }
 
 .manageMembersPanel {
   margin-top: 0.75rem; padding: 0.75rem;
@@ -217,7 +217,7 @@
   width: 40px; height: 40px; border-radius: 6px; object-fit: cover; flex-shrink: 0;
 }
 .tripCatchThumbPlaceholder {
-  width: 40px; height: 40px; border-radius: 6px; background: #e8f0fe;
+  width: 40px; height: 40px; border-radius: 6px; background: #e8f5e9;
   display: flex; align-items: center; justify-content: center;
   font-size: 1.1rem; flex-shrink: 0;
 }
@@ -237,12 +237,12 @@
 
 .tripChatBtn {
   display: inline-flex; align-items: center; gap: 0.3rem;
-  padding: 0.3rem 0.75rem; background: #1a73e8; color: #fff;
+  padding: 0.3rem 0.75rem; background: #2d6a4f; color: #fff;
   border-radius: 6px; font-size: 0.8rem; font-weight: 600;
   text-decoration: none; transition: background 0.15s;
   margin-bottom: 0.4rem;
 }
-.tripChatBtn:hover { background: #0d47a1; }
+.tripChatBtn:hover { background: #1b4332; }
 
 /* Itinerary */
 .itinerarySection {
@@ -253,7 +253,7 @@
   padding: 0.3rem 0; font-size: 0.85rem;
 }
 .itineraryTime {
-  font-size: 0.75rem; color: #1a73e8; font-weight: 600;
+  font-size: 0.75rem; color: #2d6a4f; font-weight: 600;
   white-space: nowrap; min-width: 100px;
 }
 .itineraryDesc { flex: 1; color: #333; }
@@ -275,15 +275,15 @@
   font-size: 0.8rem; font-family: inherit;
 }
 .itineraryTimeInput:focus, .itineraryDescInput:focus {
-  outline: none; border-color: #1a73e8;
+  outline: none; border-color: #2d6a4f;
 }
 .itineraryAddBtn {
-  padding: 0.3rem 0.6rem; background: #1a73e8; color: #fff;
+  padding: 0.3rem 0.6rem; background: #2d6a4f; color: #fff;
   border: none; border-radius: 6px; font-size: 0.9rem; font-weight: 700;
   cursor: pointer;
 }
 .itineraryAddBtn:disabled { opacity: 0.5; cursor: not-allowed; }
-.itineraryAddBtn:hover:not(:disabled) { background: #0d47a1; }
+.itineraryAddBtn:hover:not(:disabled) { background: #1b4332; }
 
 /* Trip Stats */
 .statsGrid {
@@ -295,7 +295,7 @@
   display: flex; flex-direction: column; align-items: center;
   min-width: 60px;
 }
-.statValue { font-size: 1.1rem; font-weight: 700; color: #1a73e8; }
+.statValue { font-size: 1.1rem; font-weight: 700; color: #2d6a4f; }
 .statLabel { font-size: 0.7rem; color: #888; }
 
 /* Weather */
@@ -313,16 +313,16 @@
 }
 .weatherEmoji { font-size: 1.3rem; }
 .weatherDate { font-weight: 600; color: #333; }
-.weatherTemp { color: #1a73e8; font-weight: 600; }
+.weatherTemp { color: #2d6a4f; font-weight: 600; }
 .weatherWind { color: #888; }
 .weatherPrecip { color: #1976d2; }
 
 .loadWeatherBtn {
-  padding: 0.35rem 0.75rem; border: 1px solid #1a73e8; border-radius: 6px;
-  background: #fff; color: #1a73e8; font-size: 0.8rem; font-weight: 600;
+  padding: 0.35rem 0.75rem; border: 1px solid #2d6a4f; border-radius: 6px;
+  background: #fff; color: #2d6a4f; font-size: 0.8rem; font-weight: 600;
   cursor: pointer; transition: all 0.15s;
 }
-.loadWeatherBtn:hover { background: #e8f0fe; }
+.loadWeatherBtn:hover { background: #e8f5e9; }
 .loadWeatherBtn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 @media (max-width: 600px) {

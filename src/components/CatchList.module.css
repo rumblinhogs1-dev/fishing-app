@@ -15,7 +15,7 @@
 
 .heading {
   margin: 0;
-  color: #0d47a1;
+  color: #1b4332;
 }
 
 .controls {
@@ -37,8 +37,8 @@
 
 .search:focus {
   outline: none;
-  border-color: #1a73e8;
-  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.12);
+  border-color: #2d6a4f;
+  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
 }
 
 .sortSelect {
@@ -54,8 +54,8 @@
 
 .sortSelect:focus {
   outline: none;
-  border-color: #1a73e8;
-  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.12);
+  border-color: #2d6a4f;
+  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
 }
 
 .exportBtn {
@@ -100,19 +100,19 @@
 }
 
 .presetBtn:hover {
-  border-color: #1a73e8;
-  color: #1a73e8;
+  border-color: #2d6a4f;
+  color: #2d6a4f;
 }
 
 .presetActive {
-  background: #1a73e8;
+  background: #2d6a4f;
   color: #fff;
-  border-color: #1a73e8;
+  border-color: #2d6a4f;
 }
 
 .presetActive:hover {
-  background: #1557b0;
-  border-color: #1557b0;
+  background: #245c3e;
+  border-color: #245c3e;
   color: #fff;
 }
 
@@ -143,8 +143,8 @@
 
 .dateInput:focus {
   outline: none;
-  border-color: #1a73e8;
-  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.12);
+  border-color: #2d6a4f;
+  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
 }
 
 .statsRow {
@@ -168,7 +168,7 @@
 .statValue {
   font-size: 1.3rem;
   font-weight: 700;
-  color: #1a73e8;
+  color: #2d6a4f;
 }
 
 .statLabel {
@@ -193,7 +193,7 @@
 }
 
 .addLink {
-  color: #1a73e8;
+  color: #2d6a4f;
   font-weight: 600;
   text-decoration: none;
 }

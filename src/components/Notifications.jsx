@@ -91,7 +91,7 @@ export default function Notifications() {
                 className={styles.iconWrap}
                 style={{
                   background: notif.read ? '#e0e0e0' : '#e8f0fe',
-                  color: notif.read ? '#888' : '#1a73e8',
+                  color: notif.read ? '#888' : '#2d6a4f',
                 }}
               >
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">

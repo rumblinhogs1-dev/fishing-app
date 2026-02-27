@@ -5,7 +5,7 @@
 }
 
 .heading {
-  color: #0d47a1;
+  color: #1b4332;
   margin: 0 0 0.25rem;
 }
 
@@ -18,16 +18,16 @@
 .keySection { margin-bottom: 1.5rem; }
 .keyStatus { display: flex; align-items: center; gap: 0.75rem; }
 .keyBadge { background: #e8f5e9; color: #2e7d32; padding: 0.25rem 0.7rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
-.keyToggle { background: none; border: none; color: #1a73e8; font-size: 0.85rem; cursor: pointer; padding: 0; }
+.keyToggle { background: none; border: none; color: #2d6a4f; font-size: 0.85rem; cursor: pointer; padding: 0; }
 .keyToggle:hover { text-decoration: underline; }
 .keyInput { display: flex; flex-direction: column; gap: 0.4rem; }
 .keyLabel { font-size: 0.85rem; font-weight: 600; color: #444; }
 .keyRow { display: flex; gap: 0.5rem; }
 .keyField { flex: 1; padding: 0.5rem 0.75rem; border: 1.5px solid #ccc; border-radius: 8px; font-size: 0.9rem; font-family: inherit; }
-.keyField:focus { outline: none; border-color: #1a73e8; box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.12); }
-.keyDone { padding: 0.5rem 1rem; background: #1a73e8; color: #fff; border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
-.keyDone:hover { background: #0d47a1; }
-.keyHelp { font-size: 0.8rem; color: #1a73e8; }
+.keyField:focus { outline: none; border-color: #2d6a4f; box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12); }
+.keyDone { padding: 0.5rem 1rem; background: #2d6a4f; color: #fff; border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+.keyDone:hover { background: #1b4332; }
+.keyHelp { font-size: 0.8rem; color: #2d6a4f; }
 
 .uploadArea {
   display: flex;

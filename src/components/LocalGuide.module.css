@@ -1,5 +1,5 @@
 .container { max-width: 700px; margin: 2rem auto; padding: 0 1rem; }
-.heading { color: #0d47a1; margin: 0 0 1rem; }
+.heading { color: #1b4332; margin: 0 0 1rem; }
 
 .searchRow {
   display: flex; gap: 0.5rem; margin-bottom: 1rem;
@@ -8,22 +8,22 @@
   flex: 1; padding: 0.6rem 0.75rem; border: 1px solid #ddd; border-radius: 8px;
   font-size: 0.95rem; font-family: inherit;
 }
-.searchInput:focus { outline: none; border-color: #1a73e8; box-shadow: 0 0 0 3px rgba(26,115,232,0.1); }
+.searchInput:focus { outline: none; border-color: #2d6a4f; box-shadow: 0 0 0 3px rgba(45,106,79,0.1); }
 
 .gpsBtn {
-  padding: 0.5rem 0.75rem; border: 1.5px solid #1a73e8; border-radius: 8px;
-  background: #fff; color: #1a73e8; font-size: 0.85rem; font-weight: 600;
+  padding: 0.5rem 0.75rem; border: 1.5px solid #2d6a4f; border-radius: 8px;
+  background: #fff; color: #2d6a4f; font-size: 0.85rem; font-weight: 600;
   cursor: pointer; transition: background 0.2s; white-space: nowrap;
 }
-.gpsBtn:hover { background: #e8f0fe; }
+.gpsBtn:hover { background: #e8f5e9; }
 .gpsBtn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .searchBtn {
-  padding: 0.5rem 1rem; border: none; border-radius: 8px; background: #1a73e8;
+  padding: 0.5rem 1rem; border: none; border-radius: 8px; background: #2d6a4f;
   color: #fff; font-weight: 600; font-size: 0.9rem; cursor: pointer;
   transition: background 0.2s;
 }
-.searchBtn:hover { background: #1557b0; }
+.searchBtn:hover { background: #245c3e; }
 .searchBtn:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .tabs {
@@ -34,9 +34,9 @@
   background: #fff; color: #555; font-size: 0.8rem; font-weight: 600;
   cursor: pointer; transition: all 0.2s;
 }
-.tab:hover { border-color: #1a73e8; color: #1a73e8; }
+.tab:hover { border-color: #2d6a4f; color: #2d6a4f; }
 .tabActive {
-  background: #1a73e8 !important; color: #fff !important; border-color: #1a73e8 !important;
+  background: #2d6a4f !important; color: #fff !important; border-color: #2d6a4f !important;
 }
 
 .card {
@@ -50,7 +50,7 @@
   font-size: 0.78rem; color: #888;
 }
 .cardTag {
-  background: #e8f0fe; color: #1a73e8; padding: 0.1rem 0.5rem;
+  background: #e8f5e9; color: #2d6a4f; padding: 0.1rem 0.5rem;
   border-radius: 12px; font-size: 0.72rem; font-weight: 500;
 }
 .cardRating {
@@ -68,7 +68,7 @@
 }
 .cardWebsite {
   display: inline-block;
-  color: #1a73e8; font-size: 0.8rem; font-weight: 500; text-decoration: none;
+  color: #2d6a4f; font-size: 0.8rem; font-weight: 500; text-decoration: none;
   word-break: break-all;
 }
 .cardWebsite:hover { text-decoration: underline; }
@@ -83,12 +83,12 @@
   background: #f0f6ff; border-radius: 8px; padding: 0.75rem 1rem;
   border: 1px solid #c5d8f8; margin-bottom: 1rem;
 }
-.tipsTitle { margin: 0 0 0.3rem; font-size: 0.85rem; color: #0d47a1; }
+.tipsTitle { margin: 0 0 0.3rem; font-size: 0.85rem; color: #1b4332; }
 .tipsText { margin: 0; font-size: 0.85rem; color: #333; }
 
 .googleLink {
   display: inline-block; margin-bottom: 0.5rem;
-  color: #1a73e8; font-size: 0.8rem; font-weight: 500; text-decoration: none;
+  color: #2d6a4f; font-size: 0.8rem; font-weight: 500; text-decoration: none;
 }
 .googleLink:hover { text-decoration: underline; }
 
@@ -96,11 +96,11 @@
   display: flex; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap;
 }
 .regsLink {
-  display: inline-block; padding: 0.45rem 0.9rem; border: 1.5px solid #0d47a1;
-  border-radius: 8px; background: #fff; color: #0d47a1; font-size: 0.82rem;
+  display: inline-block; padding: 0.45rem 0.9rem; border: 1.5px solid #1b4332;
+  border-radius: 8px; background: #fff; color: #1b4332; font-size: 0.82rem;
   font-weight: 600; text-decoration: none; transition: background 0.2s;
 }
-.regsLink:hover { background: #e8f0fe; }
+.regsLink:hover { background: #e8f5e9; }
 
 .disclaimer {
   text-align: center; font-size: 0.75rem; color: #aaa; margin-top: 1.5rem;

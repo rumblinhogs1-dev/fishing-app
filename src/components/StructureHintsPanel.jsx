@@ -21,7 +21,7 @@ function getStructureColor(type) {
   for (const [key, color] of Object.entries(STRUCTURE_COLORS)) {
     if (lower.includes(key)) return color;
   }
-  return '#1a73e8';
+  return '#2d6a4f';
 }
 
 export default function StructureHintsPanel({ lat, lng, onClose }) {

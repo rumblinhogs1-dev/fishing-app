@@ -18,8 +18,8 @@
 }
 
 .reaction:hover:not(:disabled) {
-  border-color: #1a73e8;
-  background: #e8f0fe;
+  border-color: #2d6a4f;
+  background: #e8f5e9;
 }
 
 .reaction:disabled {
@@ -28,8 +28,8 @@
 }
 
 .active {
-  border-color: #1a73e8 !important;
-  background: #e8f0fe !important;
+  border-color: #2d6a4f !important;
+  background: #e8f5e9 !important;
 }
 
 .emoji { font-size: 1rem; line-height: 1; }

@@ -16,14 +16,14 @@
   cursor: pointer;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #1a73e8;
+  color: #2d6a4f;
   font-family: inherit;
   text-align: left;
   transition: background 0.2s;
 }
 
 .toggle:hover {
-  background: #e8f0fe;
+  background: #e8f5e9;
 }
 
 .toggleIcon {
@@ -41,7 +41,7 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.85rem;
-  color: #1a73e8;
+  color: #2d6a4f;
   font-weight: 500;
 }
 
@@ -49,8 +49,8 @@
   display: inline-block;
   width: 16px;
   height: 16px;
-  border: 2px solid rgba(26, 115, 232, 0.3);
-  border-top-color: #1a73e8;
+  border: 2px solid rgba(45, 106, 79, 0.3);
+  border-top-color: #2d6a4f;
   border-radius: 50%;
   animation: speciesSpin 0.7s linear infinite;
 }

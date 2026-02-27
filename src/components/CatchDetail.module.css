@@ -7,7 +7,7 @@
 .backBtn {
   background: none;
   border: none;
-  color: #1a73e8;
+  color: #2d6a4f;
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
@@ -17,7 +17,7 @@
   align-items: center;
   gap: 0.25rem;
 }
-.backBtn:hover { color: #0d47a1; }
+.backBtn:hover { color: #1b4332; }
 
 .loading { text-align: center; padding: 3rem; color: #888; }
 
@@ -37,9 +37,9 @@
 }
 
 .authorAvatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
-.authorInitial { width: 36px; height: 36px; border-radius: 50%; background: #1a73e8; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+.authorInitial { width: 36px; height: 36px; border-radius: 50%; background: #2d6a4f; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
 .authorName { font-weight: 600; color: #222; text-decoration: none; font-size: 0.95rem; }
-.authorName:hover { color: #1a73e8; }
+.authorName:hover { color: #2d6a4f; }
 
 .photo {
   width: 100%;
@@ -51,7 +51,7 @@
 
 .body { padding: 1.25rem; }
 
-.species { margin: 0 0 0.25rem; color: #0d47a1; font-size: 1.4rem; }
+.species { margin: 0 0 0.25rem; color: #1b4332; font-size: 1.4rem; }
 
 .meta {
   display: flex;
@@ -94,7 +94,7 @@
   height: 16px;
   border-radius: 50%;
   background: #90caf9;
-  color: #0d47a1;
+  color: #1b4332;
   font-size: 10px;
   font-weight: 700;
   font-style: italic;
@@ -109,7 +109,7 @@
 .hasTooltip:hover::before,
 .hasTooltip.tooltipActive::before {
   opacity: 1;
-  background: #1a73e8;
+  background: #2d6a4f;
   color: #fff;
 }
 
@@ -179,7 +179,7 @@
   gap: 0.75rem;
   margin-bottom: 1rem;
   padding: 0.75rem;
-  background: #e8f0fe;
+  background: #e8f5e9;
   border-radius: 8px;
   border: 1px solid #c5d8f8;
 }
@@ -190,7 +190,7 @@
 
 .lureSectionTitle {
   margin: 0 0 0.5rem;
-  color: #0d47a1;
+  color: #1b4332;
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.3px;
@@ -213,7 +213,7 @@
 }
 
 .notes { margin-top: 1rem; }
-.notes h4 { margin: 0 0 0.3rem; color: #0d47a1; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.3px; }
+.notes h4 { margin: 0 0 0.3rem; color: #1b4332; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.3px; }
 .notes p { margin: 0; color: #444; font-size: 0.9rem; line-height: 1.5; }
 
 .saveSpotBtn {
@@ -242,7 +242,7 @@
   gap: 0.4rem;
   margin: 0.75rem 0 0.75rem 0.5rem;
   padding: 0.5rem 1rem;
-  background: #1a73e8;
+  background: #2d6a4f;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -253,7 +253,7 @@
 }
 
 .shareBtn:hover {
-  background: #1557b0;
+  background: #245c3e;
 }
 
 @media (max-width: 600px) {

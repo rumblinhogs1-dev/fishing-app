@@ -5,7 +5,7 @@
 }
 
 .heading {
-  color: #0d47a1;
+  color: #1b4332;
   margin: 0 0 1.5rem;
 }
 
@@ -17,7 +17,7 @@
   gap: 0.5rem;
   width: 100%;
   padding: 1rem 1.5rem;
-  background: linear-gradient(135deg, #1a73e8, #0d47a1);
+  background: linear-gradient(135deg, #2d6a4f, #1b4332);
   color: #fff;
   border: none;
   border-radius: 12px;
@@ -79,7 +79,7 @@
 }
 
 .searchInput:focus {
-  border-color: #1a73e8;
+  border-color: #2d6a4f;
 }
 
 .searchInput:disabled {
@@ -88,7 +88,7 @@
 
 .searchBtn {
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #1a73e8, #0d47a1);
+  background: linear-gradient(135deg, #2d6a4f, #1b4332);
   color: #fff;
   border: none;
   border-radius: 12px;
@@ -120,7 +120,7 @@
   width: 32px;
   height: 32px;
   border: 3px solid #e0e0e0;
-  border-top-color: #1a73e8;
+  border-top-color: #2d6a4f;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin-bottom: 1rem;
@@ -196,8 +196,8 @@
 }
 
 .heroReason {
-  background: #e8f0fe;
-  color: #1a73e8;
+  background: #e8f5e9;
+  color: #2d6a4f;
   padding: 0.2rem 0.6rem;
   border-radius: 12px;
   font-size: 0.8rem;
@@ -231,7 +231,7 @@
 .condValue {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1a73e8;
+  color: #2d6a4f;
 }
 
 .condLabel {
@@ -258,7 +258,7 @@
   height: 16px;
   border-radius: 50%;
   background: #90caf9;
-  color: #0d47a1;
+  color: #1b4332;
   font-size: 10px;
   font-weight: 700;
   font-style: italic;
@@ -273,7 +273,7 @@
 .hasTooltip:hover::before,
 .hasTooltip.tooltipActive::before {
   opacity: 1;
-  background: #1a73e8;
+  background: #2d6a4f;
   color: #fff;
 }
 
@@ -413,7 +413,7 @@
 .factorBarFill {
   height: 100%;
   border-radius: 3px;
-  background: #1a73e8;
+  background: #2d6a4f;
   transition: width 0.3s;
 }
 
@@ -530,7 +530,7 @@
 .waterTempValue {
   font-size: 2.5rem;
   font-weight: 800;
-  color: #1a73e8;
+  color: #2d6a4f;
 }
 
 .waterTempMeta {
@@ -555,7 +555,7 @@
 
 .manualInput button {
   padding: 0.4rem 0.8rem;
-  background: #1a73e8;
+  background: #2d6a4f;
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -641,7 +641,7 @@
 .windSpeed {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1a73e8;
+  color: #2d6a4f;
 }
 
 .windGust {
@@ -675,7 +675,7 @@
 .flowValue {
   font-size: 2rem;
   font-weight: 800;
-  color: #1a73e8;
+  color: #2d6a4f;
 }
 
 .flowUnit {
@@ -709,13 +709,13 @@
 }
 
 .dayCard:hover {
-  background: #e8f0fe;
+  background: #e8f5e9;
 }
 
 .dayCardActive {
-  border-color: #1a73e8;
-  background: #e8f0fe;
-  box-shadow: 0 2px 8px rgba(26, 115, 232, 0.2);
+  border-color: #2d6a4f;
+  background: #e8f5e9;
+  box-shadow: 0 2px 8px rgba(45, 106, 79, 0.2);
 }
 
 .dayName {
@@ -804,7 +804,7 @@
 }
 
 .toggleOn {
-  background: #1a73e8;
+  background: #2d6a4f;
 }
 
 .toggleKnob {
@@ -826,7 +826,7 @@
 /* Recommendation cards */
 .recCard {
   border: 1px solid #e8e8e8;
-  border-left: 3px solid #1a73e8;
+  border-left: 3px solid #2d6a4f;
   border-radius: 8px;
   padding: 0.6rem 0.75rem;
   margin-bottom: 0.5rem;
@@ -845,7 +845,7 @@
 
 .recCardType {
   font-size: 0.75rem;
-  color: #1a73e8;
+  color: #2d6a4f;
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 0.3px;
@@ -891,7 +891,7 @@
 
 .hatchPattern {
   font-size: 0.82rem;
-  color: #1a73e8;
+  color: #2d6a4f;
   font-weight: 500;
   margin: 0.15rem 0;
 }
@@ -982,8 +982,8 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 .hatchCardExpanded {
-  border-color: #1a73e8;
-  border-left-color: #1a73e8;
+  border-color: #2d6a4f;
+  border-left-color: #2d6a4f;
 }
 
 .hatchExpandIcon {
@@ -1025,7 +1025,7 @@
   align-items: center;
   gap: 0.3rem;
   font-size: 0.82rem;
-  color: #1a73e8;
+  color: #2d6a4f;
   text-decoration: none;
   padding: 0.5rem 0.75rem;
   border: 1px solid #e8e8e8;
@@ -1033,7 +1033,7 @@
   transition: background 0.2s;
 }
 .hatchFlyLink:hover {
-  background: #e8f0fe;
+  background: #e8f5e9;
 }
 
 .hatchFlyCaption {

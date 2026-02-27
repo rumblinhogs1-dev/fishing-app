@@ -4,7 +4,7 @@
   padding: 0 1rem;
 }
 
-.heading { color: #0d47a1; margin: 0 0 1rem; }
+.heading { color: #1b4332; margin: 0 0 1rem; }
 
 .tabs {
   display: flex;
@@ -24,12 +24,12 @@
   transition: all 0.2s;
 }
 
-.tab:hover { border-color: #1a73e8; color: #1a73e8; }
+.tab:hover { border-color: #2d6a4f; color: #2d6a4f; }
 
 .tabActive {
-  background: #1a73e8 !important;
+  background: #2d6a4f !important;
   color: #fff !important;
-  border-color: #1a73e8 !important;
+  border-color: #2d6a4f !important;
 }
 
 .categories {
@@ -52,19 +52,19 @@
 }
 
 .categoryBtn:hover {
-  border-color: #1a73e8;
-  color: #1a73e8;
+  border-color: #2d6a4f;
+  color: #2d6a4f;
 }
 
 .categoryActive {
-  background: #e8f0fe !important;
-  color: #1a73e8 !important;
-  border-color: #1a73e8 !important;
+  background: #e8f5e9 !important;
+  color: #2d6a4f !important;
+  border-color: #2d6a4f !important;
 }
 
 .regionLabel {
   font-size: 0.85rem;
-  color: #1a73e8;
+  color: #2d6a4f;
   font-weight: 500;
   margin: -0.5rem 0 1rem;
 }
@@ -92,7 +92,7 @@
 }
 
 .rankHighlight {
-  border-left: 3px solid #1a73e8;
+  border-left: 3px solid #2d6a4f;
   background: #f0f6ff;
 }
 
@@ -117,7 +117,7 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #1a73e8;
+  background: #2d6a4f;
   color: #fff;
   display: flex;
   align-items: center;
@@ -142,10 +142,10 @@
   gap: 0.4rem;
 }
 
-.rankName:hover { color: #1a73e8; }
+.rankName:hover { color: #2d6a4f; }
 
 .youBadge {
-  background: #1a73e8;
+  background: #2d6a4f;
   color: #fff;
   font-size: 0.65rem;
   font-weight: 700;
@@ -161,7 +161,7 @@
 .rankValue {
   font-weight: 700;
   font-size: 0.95rem;
-  color: #0d47a1;
+  color: #1b4332;
   white-space: nowrap;
 }
 

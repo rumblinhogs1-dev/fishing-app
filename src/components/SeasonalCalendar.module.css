@@ -22,7 +22,7 @@
 }
 
 .barCurrent {
-  box-shadow: 0 0 8px rgba(26, 115, 232, 0.5);
+  box-shadow: 0 0 8px rgba(45, 106, 79, 0.5);
 }
 
 .barLabel {
@@ -36,7 +36,7 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: #1a73e8;
+  background: #2d6a4f;
   margin-top: 2px;
 }
 

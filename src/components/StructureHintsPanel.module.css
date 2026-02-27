@@ -70,7 +70,7 @@
   width: 22px;
   height: 22px;
   border: 3px solid #e0e0e0;
-  border-top-color: #1a73e8;
+  border-top-color: #2d6a4f;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -96,8 +96,8 @@
 }
 
 .tag {
-  background: #e8f0fe;
-  color: #1a73e8;
+  background: #e8f5e9;
+  color: #2d6a4f;
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -113,7 +113,7 @@
 
 .card {
   border: 1px solid #e8e8e8;
-  border-left: 4px solid #1a73e8;
+  border-left: 4px solid #2d6a4f;
   border-radius: 8px;
   padding: 0.75rem 1rem;
 }
@@ -181,7 +181,7 @@
 }
 
 .cardTip strong {
-  color: #1a73e8;
+  color: #2d6a4f;
 }
 
 @media (max-width: 600px) {

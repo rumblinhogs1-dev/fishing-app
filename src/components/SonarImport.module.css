@@ -29,8 +29,8 @@
 
 .dropZone:hover,
 .dropZoneDragging {
-  border-color: var(--primary, #1a73e8);
-  background: rgba(26, 115, 232, 0.04);
+  border-color: var(--primary, #2d6a4f);
+  background: rgba(45, 106, 79, 0.04);
 }
 
 .dropIcon {
@@ -70,7 +70,7 @@
 .authLink {
   display: inline-block;
   padding: 0.5rem 1.5rem;
-  background: var(--primary, #1a73e8);
+  background: var(--primary, #2d6a4f);
   color: #fff;
   border-radius: 8px;
   text-decoration: none;
@@ -95,7 +95,7 @@
 .statValue {
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--primary, #1a73e8);
+  color: var(--primary, #2d6a4f);
 }
 
 .statLabel {
@@ -171,7 +171,7 @@
   padding: 0.65rem 1rem;
   border: none;
   border-radius: 10px;
-  background: var(--primary, #1a73e8);
+  background: var(--primary, #2d6a4f);
   color: #fff;
   font-weight: 600;
   font-size: 0.95rem;
@@ -211,7 +211,7 @@
 
 .progressFill {
   height: 100%;
-  background: var(--primary, #1a73e8);
+  background: var(--primary, #2d6a4f);
   border-radius: 4px;
   transition: width 0.3s ease;
 }

@@ -9,7 +9,7 @@
 
 .heading {
   margin: 0 0 1.5rem;
-  color: #0d47a1;
+  color: #1b4332;
 }
 
 .gpsSection {
@@ -24,7 +24,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.6rem 1rem;
-  background: linear-gradient(135deg, #1a73e8, #0d47a1);
+  background: linear-gradient(135deg, #2d6a4f, #1b4332);
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -100,13 +100,13 @@
 
 .gpsFallbackInput:focus {
   outline: none;
-  border-color: #1a73e8;
-  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.12);
+  border-color: #2d6a4f;
+  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
 }
 
 .gpsFallbackBtn {
   padding: 0.45rem 0.85rem;
-  background: #1a73e8;
+  background: #2d6a4f;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -118,7 +118,7 @@
 }
 
 .gpsFallbackBtn:hover:not(:disabled) {
-  background: #0d47a1;
+  background: #1b4332;
 }
 
 .gpsFallbackBtn:disabled {
@@ -226,8 +226,8 @@
 .field input:focus,
 .field textarea:focus {
   outline: none;
-  border-color: #1a73e8;
-  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.12);
+  border-color: #2d6a4f;
+  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
 }
 
 .field textarea {
@@ -242,7 +242,7 @@
 
 .submitBtn {
   padding: 0.65rem 1.5rem;
-  background: #1a73e8;
+  background: #2d6a4f;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -253,7 +253,7 @@
 }
 
 .submitBtn:hover {
-  background: #0d47a1;
+  background: #1b4332;
 }
 
 .cancelBtn {
@@ -322,7 +322,7 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.85rem;
-  color: #1a73e8;
+  color: #2d6a4f;
   font-weight: 500;
 }
 
@@ -360,7 +360,7 @@
 }
 
 .fishIdConfidence {
-  background: #e3f2fd;
+  background: #d8f3dc;
   color: #1565c0;
   padding: 0.2rem 0.6rem;
   border-radius: 20px;
@@ -441,8 +441,8 @@
 }
 
 .suggestionCard:hover {
-  border-color: #1a73e8;
-  background: #e8f0fe;
+  border-color: #2d6a4f;
+  background: #e8f5e9;
 }
 
 .suggestionSpecies {
@@ -531,13 +531,13 @@
 
 .correctionInput:focus {
   outline: none;
-  border-color: #1a73e8;
-  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.12);
+  border-color: #2d6a4f;
+  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
 }
 
 .correctionBtn {
   padding: 0.45rem 1rem;
-  background: #1a73e8;
+  background: #2d6a4f;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -548,7 +548,7 @@
   transition: background 0.2s;
 }
 
-.correctionBtn:hover:not(:disabled) { background: #0d47a1; }
+.correctionBtn:hover:not(:disabled) { background: #1b4332; }
 .correctionBtn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 @media (max-width: 600px) {

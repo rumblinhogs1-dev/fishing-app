@@ -7,7 +7,7 @@
 .backBtn {
   background: none;
   border: none;
-  color: #1a73e8;
+  color: #2d6a4f;
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
@@ -17,7 +17,7 @@
   align-items: center;
   gap: 0.25rem;
 }
-.backBtn:hover { color: #0d47a1; }
+.backBtn:hover { color: #1b4332; }
 
 .headerRow {
   display: flex;
@@ -27,14 +27,14 @@
 }
 
 .heading {
-  color: #0d47a1;
+  color: #1b4332;
   margin: 0;
 }
 
 .markAllBtn {
   padding: 0.4rem 0.85rem;
-  background: #e8f0fe;
-  color: #1a73e8;
+  background: #e8f5e9;
+  color: #2d6a4f;
   border: none;
   border-radius: 8px;
   font-size: 0.82rem;
@@ -141,7 +141,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #1a73e8;
+  background: #2d6a4f;
   flex-shrink: 0;
 }
 

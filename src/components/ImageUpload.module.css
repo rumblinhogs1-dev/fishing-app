@@ -34,9 +34,9 @@
 
 .cameraBtn:hover,
 .uploadBtn:hover {
-  background: #e8f0fe;
-  border-color: #1a73e8;
-  color: #1a73e8;
+  background: #e8f5e9;
+  border-color: #2d6a4f;
+  color: #2d6a4f;
 }
 
 .cameraBtn svg,

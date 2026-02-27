@@ -8,7 +8,7 @@
 .comment:last-child { border-bottom: none; }
 
 .commentHeader { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.2rem; }
-.author { font-weight: 600; font-size: 0.85rem; color: #1a73e8; text-decoration: none; }
+.author { font-weight: 600; font-size: 0.85rem; color: #2d6a4f; text-decoration: none; }
 .author:hover { text-decoration: underline; }
 .time { font-size: 0.7rem; color: #999; }
 .deleteBtn { margin-left: auto; background: none; border: none; color: #d32f2f; font-size: 1.1rem; cursor: pointer; line-height: 1; padding: 0 0.2rem; }
@@ -18,11 +18,11 @@
 
 .form { display: flex; gap: 0.5rem; }
 .input { flex: 1; padding: 0.5rem 0.75rem; border: 1.5px solid #ccc; border-radius: 8px; font-size: 0.9rem; font-family: inherit; }
-.input:focus { outline: none; border-color: #1a73e8; }
+.input:focus { outline: none; border-color: #2d6a4f; }
 
-.sendBtn { padding: 0.5rem 1rem; background: #1a73e8; color: #fff; border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
-.sendBtn:hover:not(:disabled) { background: #0d47a1; }
+.sendBtn { padding: 0.5rem 1rem; background: #2d6a4f; color: #fff; border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+.sendBtn:hover:not(:disabled) { background: #1b4332; }
 .sendBtn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .signInHint { font-size: 0.85rem; color: #888; }
-.signInHint a { color: #1a73e8; }
+.signInHint a { color: #2d6a4f; }
