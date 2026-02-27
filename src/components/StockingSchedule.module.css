@@ -1,0 +1,362 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.heading {
+  margin: 0 0 0.25rem;
+  font-size: 1.4rem;
+  color: #2d6a4f;
+}
+
+.subtitle {
+  color: #888;
+  font-size: 0.85rem;
+  margin: 0 0 1.25rem;
+}
+
+.disclaimer {
+  padding: 0.65rem 0.85rem;
+  margin-bottom: 1.25rem;
+  border-radius: 8px;
+  background: #fff8e1;
+  border: 1px solid #ffe0b2;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: #6d4c00;
+}
+
+.disclaimer strong {
+  color: #e65100;
+}
+
+/* Loading / Error */
+.loading {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #888;
+  font-size: 0.95rem;
+}
+
+.spinner {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border: 3px solid #2d6a4f;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin-bottom: 0.75rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error {
+  text-align: center;
+  padding: 2rem;
+  color: #d32f2f;
+  font-size: 0.9rem;
+}
+
+.retryBtn {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.5rem 1.25rem;
+  border: none;
+  border-radius: 8px;
+  background: #2d6a4f;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* This Week Cards */
+.weekSection {
+  margin-bottom: 1.5rem;
+}
+
+.weekHeading {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2d6a4f;
+  margin: 0 0 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.weekDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #43a047;
+  display: inline-block;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.weekCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.weekCard {
+  padding: 0.75rem;
+  border-radius: 10px;
+  background: #e8f5e9;
+  border: 1px solid #c8e6c9;
+}
+
+.weekCardWater {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #1b5e20;
+  margin: 0 0 0.25rem;
+}
+
+.weekCardSpecies {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.speciesBadge {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.speciesTrout {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.speciesCatfish {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.weekCardRegion {
+  font-size: 0.72rem;
+  color: #666;
+  margin-top: 0.35rem;
+}
+
+.emptyWeek {
+  padding: 1rem;
+  text-align: center;
+  color: #999;
+  font-size: 0.85rem;
+  border: 1px dashed #ddd;
+  border-radius: 8px;
+}
+
+/* Filters */
+.filters {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.searchInput {
+  flex: 1;
+  padding: 0.55rem 0.75rem;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  box-sizing: border-box;
+}
+
+.searchInput::placeholder {
+  color: #bbb;
+}
+
+.regionSelect {
+  padding: 0.55rem 0.75rem;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #333;
+  background: #fff;
+  min-width: 120px;
+}
+
+/* Region Accordion */
+.regionGroup {
+  margin-bottom: 1rem;
+  border: 1px solid #e8e8e8;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.regionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.85rem;
+  background: #f5f5f5;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.regionHeader:hover {
+  background: #eeeeee;
+}
+
+.regionChevron {
+  transition: transform 0.2s;
+  color: #888;
+}
+
+.regionChevronOpen {
+  transform: rotate(180deg);
+}
+
+.regionCount {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #888;
+  margin-left: 0.5rem;
+}
+
+.waterList {
+  padding: 0;
+}
+
+.waterRow {
+  padding: 0.65rem 0.85rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.waterName {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #222;
+  margin: 0 0 0.5rem;
+}
+
+/* Timeline */
+.timeline {
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+
+.timeBlock {
+  min-width: 28px;
+  height: 22px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: #fff;
+  cursor: default;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.blockTrout {
+  background: #1565c0;
+}
+
+.blockCatfish {
+  background: #7b1fa2;
+}
+
+.blockBoth {
+  background: linear-gradient(135deg, #1565c0 50%, #7b1fa2 50%);
+}
+
+.blockEmpty {
+  background: #e0e0e0;
+}
+
+.blockCurrent {
+  outline: 2px solid #43a047;
+  outline-offset: 1px;
+  z-index: 1;
+}
+
+.timeBlock[title] {
+  cursor: help;
+}
+
+/* Footer link */
+.footerLink {
+  display: block;
+  text-align: center;
+  margin-top: 1.5rem;
+  padding: 0.75rem;
+  font-size: 0.8rem;
+  color: #2d6a4f;
+  text-decoration: none;
+}
+
+.footerLink:hover {
+  text-decoration: underline;
+}
+
+.bottomDisclaimer {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background: #fafafa;
+  border: 1px solid #eee;
+  font-size: 0.75rem;
+  color: #999;
+  font-style: italic;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 0.75rem;
+  }
+
+  .heading {
+    font-size: 1.2rem;
+  }
+
+  .filters {
+    flex-direction: column;
+  }
+
+  .regionSelect {
+    min-width: unset;
+  }
+
+  .weekCards {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline {
+    gap: 1px;
+  }
+
+  .timeBlock {
+    min-width: 22px;
+    height: 18px;
+    font-size: 0.5rem;
+  }
+}

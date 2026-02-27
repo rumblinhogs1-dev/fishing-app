@@ -11,6 +11,8 @@ import { useDepthPoints } from '../hooks/useDepthPoints';
 import { useMapLayers } from '../hooks/useMapLayers';
 import { useAuth } from '../contexts/AuthContext';
 import { fetchCommunityHeatmapPoints } from '../utils/firestore';
+import { fetchStockingData, getCurrentWeekStocking } from '../utils/stockingData';
+import { getWaterCoordinates } from '../data/azWaterCoordinates';
 import { getGPSLocation, geocodeLocation } from '../utils/weather';
 import { fetchUSGSStations } from '../utils/usgs';
 import SaveSpotModal from './SaveSpotModal';
@@ -430,6 +432,76 @@ function SonarDataLayer({ depthPoints }) {
   return null;
 }
 
+const stockingIcon = L.divIcon({
+  className: '',
+  html: `<div style="
+    width:30px;height:30px;border-radius:50%;
+    background:#e65100;border:3px solid #fff;
+    box-shadow:0 2px 6px rgba(0,0,0,0.3);
+    display:flex;align-items:center;justify-content:center;
+  "><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff">
+    <path d="M12 2C6.5 2 2 4 2 7c0 2 2 4 5 5l-1 4 3-2c1 .3 2 .5 3 .5s2-.2 3-.5l3 2-1-4c3-1 5-3 5-5 0-3-4.5-5-10-5z"/>
+  </svg></div>`,
+  iconSize: [30, 30],
+  iconAnchor: [15, 15],
+  popupAnchor: [0, -17],
+});
+
+function StockingLayer() {
+  const [markers, setMarkers] = useState([]);
+
+  useEffect(() => {
+    fetchStockingData()
+      .then((entries) => {
+        const current = getCurrentWeekStocking(entries);
+        // Dedupe by water body and resolve coordinates
+        const waterMap = new Map();
+        current.forEach((e) => {
+          const key = e.waterBody.toLowerCase();
+          if (!waterMap.has(key)) {
+            waterMap.set(key, { ...e, species: [...e.species] });
+          } else {
+            const existing = waterMap.get(key);
+            e.species.forEach((s) => {
+              if (!existing.species.includes(s)) existing.species.push(s);
+            });
+          }
+        });
+
+        const pins = [];
+        waterMap.forEach((entry) => {
+          const coords = getWaterCoordinates(entry.waterBody);
+          if (coords) {
+            pins.push({ ...entry, lat: coords.lat, lng: coords.lng });
+          }
+        });
+        setMarkers(pins);
+      })
+      .catch(() => setMarkers([]));
+  }, []);
+
+  return (
+    <>
+      {markers.map((m) => (
+        <Marker key={m.waterBody} position={[m.lat, m.lng]} icon={stockingIcon}>
+          <Popup>
+            <div style={{ fontSize: '0.85rem' }}>
+              <strong style={{ color: '#e65100' }}>{m.waterBody}</strong>
+              <div style={{ margin: '0.25rem 0', color: '#555' }}>
+                Stocked: {m.species.join(', ')}
+              </div>
+              {m.region && <div style={{ fontSize: '0.75rem', color: '#888' }}>{m.region}</div>}
+              <a href="/stocking" style={{ fontSize: '0.75rem', color: '#2d6a4f' }}>
+                View Full Schedule
+              </a>
+            </div>
+          </Popup>
+        </Marker>
+      ))}
+    </>
+  );
+}
+
 function MapCenterTracker({ onCenterChange }) {
   useMapEvents({
     moveend(e) {
@@ -642,6 +714,8 @@ export default function MapView({ catches = [] }) {
         {layers.sonarData && depthPoints.length > 0 && (
           <SonarDataLayer depthPoints={depthPoints} />
         )}
+
+        {layers.stockingSchedule && <StockingLayer />}
 
         <MapCenterTracker onCenterChange={setMapCenter} />
         <RecenterButton userLocation={userLocation} />

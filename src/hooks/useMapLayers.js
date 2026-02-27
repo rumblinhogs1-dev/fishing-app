@@ -15,6 +15,7 @@ const DEFAULTS = {
   usgsTopo: false,
   publicLands: false,
   sonarData: false,
+  stockingSchedule: false,
 };
 
 function loadLayers() {

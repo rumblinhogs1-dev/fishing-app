@@ -67,6 +67,7 @@ const WelcomeModal = lazyRetry(() => import('./components/WelcomeModal'));
 const TermsPage = lazyRetry(() => import('./components/TermsPage'));
 const PrivacyPolicy = lazyRetry(() => import('./components/PrivacyPolicy'));
 const PricingPage = lazyRetry(() => import('./components/PricingPage'));
+const StockingSchedule = lazyRetry(() => import('./components/StockingSchedule'));
 
 function EditPage({ getCatch, updateCatch }) {
   const { id } = useParams();
@@ -149,6 +150,7 @@ export default function App() {
                 <Route path="/regulations" element={<Regulations />} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/conservation" element={<ConservationGuide />} />
+                <Route path="/stocking" element={<StockingSchedule />} />
                 <Route path="/challenges" element={<Challenges />} />
                 <Route path="/challenge/:id" element={<ChallengeDetail />} />
                 <Route path="/local-guide" element={<LocalGuide />} />
