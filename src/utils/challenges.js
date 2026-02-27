@@ -54,6 +54,7 @@ export async function createChallenge(userId, data) {
     status,
     visibility: data.visibility || 'public',
     participants: [creator],
+    participantIds: [userId],
     participantCount: 1,
     invited: data.invited || [],
     results: null,
@@ -84,13 +85,14 @@ export async function joinChallenge(challengeId, userId, profile) {
   };
   await updateDoc(doc(db, 'challenges', challengeId), {
     participants: arrayUnion(participant),
+    participantIds: arrayUnion(userId),
     participantCount: increment(1),
     updatedAt: serverTimestamp(),
   });
   // Fire-and-forget notification to challenge creator
   getChallenge(challengeId).then((c) => {
-    if (c) notifyChallengeJoined(userId, profile.displayName, c.createdBy, challengeId, c.name);
-  }).catch(() => {});
+    if (c) return notifyChallengeJoined(userId, profile.displayName, c.createdBy, challengeId, c.name);
+  }).catch((err) => console.error('Challenge join notification error:', err));
 }
 
 export async function leaveChallenge(challengeId, userId, participants) {
@@ -98,6 +100,7 @@ export async function leaveChallenge(challengeId, userId, participants) {
   if (!existing) return;
   await updateDoc(doc(db, 'challenges', challengeId), {
     participants: arrayRemove(existing),
+    participantIds: arrayRemove(userId),
     participantCount: increment(-1),
     updatedAt: serverTimestamp(),
   });
@@ -128,7 +131,7 @@ export function subscribeToPublicChallenges(callback) {
 }
 
 export function subscribeToChallenges(userId, callback) {
-  // Two separate queries: public challenges + user's own challenges
+  // Three queries: public + user-created + user-joined
   const publicQ = query(
     collection(db, 'challenges'),
     where('visibility', '==', 'public'),
@@ -139,16 +142,25 @@ export function subscribeToChallenges(userId, callback) {
     where('createdBy', '==', userId),
     orderBy('startDate', 'desc')
   );
+  const joinedQ = query(
+    collection(db, 'challenges'),
+    where('participantIds', 'array-contains', userId)
+  );
 
   let publicResults = [];
   let ownResults = [];
-  let initialPublic = false;
-  let initialOwn = false;
+  let joinedResults = [];
+  let ready = { public: false, own: false, joined: false };
+
+  function allReady() {
+    return ready.public && ready.own && ready.joined;
+  }
 
   function merge() {
     const map = new Map();
     publicResults.forEach((c) => map.set(c.id, c));
     ownResults.forEach((c) => map.set(c.id, c));
+    joinedResults.forEach((c) => map.set(c.id, c));
     const merged = Array.from(map.values());
     merged.sort((a, b) => {
       const aTime = a.startDate?.seconds || 0;
@@ -160,29 +172,41 @@ export function subscribeToChallenges(userId, callback) {
 
   const unsubPublic = onSnapshot(publicQ, (snap) => {
     publicResults = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    initialPublic = true;
-    if (initialOwn) merge();
+    ready.public = true;
+    if (allReady()) merge();
   }, (error) => {
     console.error('Firestore subscription error (public):', error);
     publicResults = [];
-    initialPublic = true;
-    if (initialOwn) merge();
+    ready.public = true;
+    if (allReady()) merge();
   });
 
   const unsubOwn = onSnapshot(ownQ, (snap) => {
     ownResults = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    initialOwn = true;
-    if (initialPublic) merge();
+    ready.own = true;
+    if (allReady()) merge();
   }, (error) => {
     console.error('Firestore subscription error (own):', error);
     ownResults = [];
-    initialOwn = true;
-    if (initialPublic) merge();
+    ready.own = true;
+    if (allReady()) merge();
+  });
+
+  const unsubJoined = onSnapshot(joinedQ, (snap) => {
+    joinedResults = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    ready.joined = true;
+    if (allReady()) merge();
+  }, (error) => {
+    console.error('Firestore subscription error (joined):', error);
+    joinedResults = [];
+    ready.joined = true;
+    if (allReady()) merge();
   });
 
   return () => {
     unsubPublic();
     unsubOwn();
+    unsubJoined();
   };
 }
 
