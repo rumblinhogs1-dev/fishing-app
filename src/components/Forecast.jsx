@@ -801,7 +801,7 @@ export default function Forecast() {
 
           {/* Water Body Info Section */}
           <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Water Body Info</h3>
+            <h3 className={styles.sectionTitle}>Water Body Info{data.waterData?.stationName ? ` — ${data.waterData.stationName}` : ''}</h3>
 
             {/* Toggle: Water Conditions */}
             <div className={styles.toggleRow}>
