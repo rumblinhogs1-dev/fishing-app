@@ -15,6 +15,59 @@
   margin: 0 0 1.25rem;
 }
 
+/* Fun Facts */
+.funFactsSection {
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+  border-radius: 12px;
+  border: 1px solid #c8e6c9;
+}
+
+.funFactsHeading {
+  margin: 0 0 0.15rem;
+  font-size: 1.05rem;
+  color: #1b4332;
+}
+
+.funFactsSubtitle {
+  margin: 0 0 0.75rem;
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.funFactsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.funFactCard {
+  background: #fff;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.funFactCategory {
+  display: inline-block;
+  padding: 0.1rem 0.45rem;
+  border-radius: 10px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  background: #e8f5e9;
+  color: #2e7d32;
+  margin-bottom: 0.35rem;
+}
+
+.funFactText {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #444;
+  line-height: 1.5;
+}
+
 .search {
   width: 100%;
   padding: 0.6rem 1rem;

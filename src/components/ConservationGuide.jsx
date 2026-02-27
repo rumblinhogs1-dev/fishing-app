@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { CONSERVATION_GUIDE } from '../utils/conservationTips';
+import { useState, useMemo } from 'react';
+import { CONSERVATION_GUIDE, getRotatingFacts } from '../utils/conservationTips';
 import styles from './ConservationGuide.module.css';
 
 export default function ConservationGuide() {
@@ -7,6 +7,7 @@ export default function ConservationGuide() {
   const [search, setSearch] = useState('');
 
   const categories = Object.entries(CONSERVATION_GUIDE);
+  const funFacts = useMemo(() => getRotatingFacts(3), []);
 
   function toggleCategory(cat) {
     setExpanded((prev) => ({ ...prev, [cat]: !prev[cat] }));
@@ -33,6 +34,19 @@ export default function ConservationGuide() {
       <p className={styles.intro}>
         Best practices for catch &amp; release and protecting our waterways.
       </p>
+
+      <div className={styles.funFactsSection}>
+        <h3 className={styles.funFactsHeading}>Did You Know?</h3>
+        <p className={styles.funFactsSubtitle}>New facts every day</p>
+        <div className={styles.funFactsList}>
+          {funFacts.map((f, i) => (
+            <div key={i} className={styles.funFactCard}>
+              <span className={styles.funFactCategory}>{f.category}</span>
+              <p className={styles.funFactText}>{f.fact}</p>
+            </div>
+          ))}
+        </div>
+      </div>
 
       <input
         type="text"
