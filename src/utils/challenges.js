@@ -64,9 +64,10 @@ export async function createChallenge(userId, data) {
 
   // Fire-and-forget invite notifications
   if (data.invited?.length) {
+    const details = { name: data.name, type: data.type, description: data.description };
     Promise.all(
       data.invited.map((inv) =>
-        notifyChallengeInvite(userId, data.creatorDisplayName, inv.userId, ref.id)
+        notifyChallengeInvite(userId, data.creatorDisplayName, inv.userId, ref.id, details)
       )
     ).catch(() => {});
   }

@@ -91,13 +91,19 @@ export async function notifyCatchLiked(fromUserId, fromDisplayName, toUserId, ca
   });
 }
 
-export async function notifyChallengeInvite(fromUserId, fromDisplayName, toUserId, challengeId) {
+export async function notifyChallengeInvite(fromUserId, fromDisplayName, toUserId, challengeId, challengeDetails = {}) {
   const prefs = await getUserNotifPrefs(toUserId);
   if (prefs && prefs.challenge_invite === false) return;
+  const { name, type, description } = challengeDetails;
+  const desc = description ? ` — ${description.slice(0, 80)}` : '';
+  const typeName = type ? ` (${type.replace(/_/g, ' ')})` : '';
+  const msg = name
+    ? `${fromDisplayName || 'Someone'} invited you to "${name}"${typeName}${desc}`
+    : `${fromDisplayName || 'Someone'} challenged you!`;
   return createNotification(toUserId, {
     type: 'challenge_invite',
     fromUserId,
-    message: `${fromDisplayName || 'Someone'} challenged you!`,
+    message: msg,
     link: `/challenge/${challengeId}`,
   });
 }
