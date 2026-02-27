@@ -212,28 +212,44 @@ export function buildBBox(lat, lng, delta) {
  * Forward geocode a location query (city, zip, lake name, etc.) using Nominatim.
  */
 export async function geocodeLocation(query) {
+  // Use Photon (OSM-based) as primary — much better at matching water bodies
+  try {
+    const photonRes = await fetch(
+      `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=10`
+    );
+    if (photonRes.ok) {
+      const data = await photonRes.json();
+      const features = data.features || [];
+      if (features.length > 0) {
+        const waterTypes = ['water', 'reservoir', 'lake', 'river', 'stream', 'wetland', 'bay', 'pond'];
+        const waterKeywords = ['lake', 'river', 'creek', 'reservoir', 'pond', 'bay', 'stream'];
+        const queryLower = query.toLowerCase();
+        const isWaterQuery = waterKeywords.some((w) => queryLower.includes(w));
+        let best = features[0];
+        if (isWaterQuery) {
+          const waterHit = features.find((f) =>
+            waterTypes.includes(f.properties?.osm_value) || waterTypes.includes(f.properties?.osm_key)
+          );
+          if (waterHit) best = waterHit;
+        }
+        const [lng, lat] = best.geometry.coordinates;
+        const p = best.properties || {};
+        return { lat, lng, displayName: p.name || p.display_name || query };
+      }
+    }
+  } catch (_) { /* fall through to Nominatim */ }
+
+  // Fallback: Nominatim
   const res = await fetch(
-    `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=10`
+    `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5`
   );
   if (!res.ok) throw new Error('Geocoding request failed. Please try again.');
   const results = await res.json();
   if (!results.length) throw new Error(`No results found for "${query}". Try a different search.`);
-  // Prefer water features (lakes, rivers, reservoirs) when the query suggests one
-  const waterTypes = ['water', 'reservoir', 'lake', 'river', 'stream', 'wetland', 'bay'];
-  const waterKeywords = ['lake', 'river', 'creek', 'reservoir', 'pond', 'bay', 'stream'];
-  const queryLower = query.toLowerCase();
-  const isWaterQuery = waterKeywords.some((w) => queryLower.includes(w));
-  let top = results[0];
-  if (isWaterQuery) {
-    const waterResult = results.find(
-      (r) => waterTypes.includes(r.type) || waterTypes.includes(r.class)
-    );
-    if (waterResult) top = waterResult;
-  }
   return {
-    lat: parseFloat(top.lat),
-    lng: parseFloat(top.lon),
-    displayName: top.display_name,
+    lat: parseFloat(results[0].lat),
+    lng: parseFloat(results[0].lon),
+    displayName: results[0].display_name,
   };
 }
 
