@@ -5,7 +5,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useSpots } from '../hooks/useSpots';
 import { useDepthPoints } from '../hooks/useDepthPoints';
 import { useMapLayers } from '../hooks/useMapLayers';
@@ -440,25 +440,6 @@ function MapCenterTracker({ onCenterChange }) {
   return null;
 }
 
-function MapClickHandler() {
-  const navigate = useNavigate();
-  const timerRef = useRef(null);
-
-  useMapEvents({
-    click(e) {
-      clearTimeout(timerRef.current);
-      timerRef.current = setTimeout(() => {
-        navigate('/add', { state: { lat: e.latlng.lat, lng: e.latlng.lng } });
-      }, 250);
-    },
-    dblclick() {
-      clearTimeout(timerRef.current);
-    },
-  });
-
-  return null;
-}
-
 function MapRefSetter({ onMap }) {
   const map = useMap();
   useEffect(() => { onMap(map); }, [map, onMap]);
@@ -590,8 +571,6 @@ export default function MapView({ catches = [] }) {
         </span>
       </div>
 
-      <div className={styles.addHint}>Tap anywhere to log a catch</div>
-
       <LocationSearch mapRef={mapInstanceRef} />
 
       <MapContainer center={center} zoom={zoom} className={styles.map} zoomControl={false}>
@@ -667,7 +646,6 @@ export default function MapView({ catches = [] }) {
         <MapCenterTracker onCenterChange={setMapCenter} />
         <RecenterButton userLocation={userLocation} />
         <MapRefSetter onMap={useCallback((m) => { mapInstanceRef.current = m; }, [])} />
-        <MapClickHandler />
       </MapContainer>
 
       {/* Floating buttons */}
