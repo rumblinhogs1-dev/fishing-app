@@ -54,7 +54,7 @@ export default function CreateChallengeForm({ onClose }) {
     try {
       const invited = visibility === 'invite_only'
         ? selectedFriends.map((id) => {
-            const f = friendProfiles.find((fp) => fp.uid === id);
+            const f = friendProfiles.find((fp) => fp.id === id);
             return { userId: id, displayName: f?.displayName || 'Angler', photoURL: f?.photoURL || null };
           })
         : [];
@@ -175,11 +175,11 @@ export default function CreateChallengeForm({ onClose }) {
           <label className={styles.label}>Invite Friends</label>
           <div className={styles.friendList}>
             {friendProfiles.map((f) => (
-              <label key={f.uid} className={styles.friendCheckbox}>
+              <label key={f.id} className={styles.friendCheckbox}>
                 <input
                   type="checkbox"
-                  checked={selectedFriends.includes(f.uid)}
-                  onChange={() => toggleFriend(f.uid)}
+                  checked={selectedFriends.includes(f.id)}
+                  onChange={() => toggleFriend(f.id)}
                 />
                 {f.photoURL ? (
                   <img src={f.photoURL} alt="" className={styles.friendAvatar} referrerPolicy="no-referrer" />

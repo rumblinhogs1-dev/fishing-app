@@ -62,13 +62,13 @@ export async function createChallenge(userId, data) {
     updatedAt: serverTimestamp(),
   });
 
-  // Send invite notifications
+  // Fire-and-forget invite notifications
   if (data.invited?.length) {
-    await Promise.all(
+    Promise.all(
       data.invited.map((inv) =>
         notifyChallengeInvite(userId, data.creatorDisplayName, inv.userId, ref.id)
       )
-    );
+    ).catch(() => {});
   }
 
   return ref.id;
