@@ -93,3 +93,38 @@ exports.utahStocking = onRequest(
     }
   }
 );
+
+exports.idahoStocking = onRequest(
+  { cors: true, region: 'us-west1' },
+  async (req, res) => {
+    const url =
+      'https://idfg.idaho.gov/ifwis/fishingplanner/api/2.0/stocking/?limit=2000&sort=stocked&order=desc';
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        res.status(502).json({ error: `IDFG returned ${response.status}` });
+        return;
+      }
+
+      const data = await response.json();
+      const rows = data.rows || [];
+
+      const entries = rows
+        .filter((r) => r.name && r.stocked)
+        .map((r) => ({
+          waterBody: r.name,
+          county: r.loc || '',
+          species: r.spp || '',
+          quantity: parseInt(r.n, 10) || 0,
+          length: r.len || '',
+          date: r.stocked,
+        }));
+
+      res.set('Cache-Control', 'public, max-age=86400');
+      res.json(entries);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+);

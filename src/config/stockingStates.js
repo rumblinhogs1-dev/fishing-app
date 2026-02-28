@@ -58,6 +58,27 @@ export const STOCKING_STATES = {
     cacheKey: 'co-stocking-v1',
     getCoordinates: () => import('../data/coWaterCoordinates.js'),
   },
+  id: {
+    code: 'id',
+    name: 'Idaho',
+    agency: 'IDFG',
+    agencyUrl: 'https://idfg.idaho.gov/fish/stocking',
+    subtitle:
+      'IDFG fish stocking reports for Idaho lakes, reservoirs, rivers, and ponds.',
+    disclaimer:
+      'Stocking reports reflect IDFG records and may not include exact dates. Always verify with Idaho Fish and Game before planning a trip.',
+    bottomDisclaimer:
+      'Data sourced from Idaho Department of Fish and Game stocking database. MyCatchBook is not affiliated with IDFG.',
+    format: 'proxy-json',
+    sheets: [
+      {
+        name: 'Idaho Stocking Data',
+        url: '/api/idaho-stocking',
+      },
+    ],
+    cacheKey: 'id-stocking-v1',
+    getCoordinates: () => import('../data/idWaterCoordinates.js'),
+  },
   nm: {
     code: 'nm',
     name: 'New Mexico',
