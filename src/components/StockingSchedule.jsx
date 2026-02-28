@@ -186,17 +186,26 @@ export default function StockingSchedule() {
     return Array.from(set).sort();
   }, [data]);
 
-  // Filter
+  // Filter and trim past entries to 10 most recent per water body
   const filtered = useMemo(() => {
     const result = new Map();
     const needle = search.toLowerCase().trim();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
     waterMap.forEach(({ waterBody, region, weeks }) => {
       if (regionFilter && region !== regionFilter) return;
       if (needle && !waterBody.toLowerCase().includes(needle)) return;
 
+      const future = weeks.filter((w) => !w.weekEnd || w.weekEnd >= today);
+      const past = weeks
+        .filter((w) => w.weekEnd && w.weekEnd < today)
+        .sort((a, b) => (b.weekStart || 0) - (a.weekStart || 0))
+        .slice(0, 10);
+      const trimmed = [...past, ...future];
+
       if (!result.has(region)) result.set(region, []);
-      result.get(region).push({ waterBody, weeks });
+      result.get(region).push({ waterBody, weeks: trimmed });
     });
 
     // Sort waters within each region
