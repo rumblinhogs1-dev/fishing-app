@@ -150,7 +150,8 @@ export default function App() {
                 <Route path="/regulations" element={<Regulations />} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/conservation" element={<ConservationGuide />} />
-                <Route path="/stocking" element={<StockingSchedule />} />
+                <Route path="/stocking/:state" element={<StockingSchedule />} />
+                <Route path="/stocking" element={<Navigate to="/stocking/az" replace />} />
                 <Route path="/challenges" element={<Challenges />} />
                 <Route path="/challenge/:id" element={<ChallengeDetail />} />
                 <Route path="/local-guide" element={<LocalGuide />} />

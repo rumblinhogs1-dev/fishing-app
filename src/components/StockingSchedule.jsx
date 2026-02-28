@@ -1,5 +1,7 @@
 import { useState, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
 import { useStockingData } from '../hooks/useStockingData';
+import { getStateConfig } from '../config/stockingStates';
 import { getCurrentWeekStocking } from '../utils/stockingData';
 import styles from './StockingSchedule.module.css';
 
@@ -161,7 +163,9 @@ function RegionAccordion({ region, waters, defaultOpen }) {
 }
 
 export default function StockingSchedule() {
-  const { data, loading, error } = useStockingData();
+  const { state } = useParams();
+  const config = getStateConfig(state);
+  const { data, loading, error } = useStockingData(config);
   const [search, setSearch] = useState('');
   const [regionFilter, setRegionFilter] = useState('');
 
@@ -193,10 +197,21 @@ export default function StockingSchedule() {
     return result;
   }, [waterMap, search, regionFilter]);
 
+  if (!config) {
+    return (
+      <div className={styles.container}>
+        <h1 className={styles.heading}>State Not Found</h1>
+        <div className={styles.error}>
+          <p>No stocking data available for &ldquo;{state}&rdquo;. Check back later as we add more states.</p>
+        </div>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className={styles.container}>
-        <h1 className={styles.heading}>AZ Fish Stocking Schedule</h1>
+        <h1 className={styles.heading}>{config.name} Fish Stocking Schedule</h1>
         <div className={styles.loading}>
           <div className={styles.spinner} />
           <div>Loading stocking schedules...</div>
@@ -208,7 +223,7 @@ export default function StockingSchedule() {
   if (error) {
     return (
       <div className={styles.container}>
-        <h1 className={styles.heading}>AZ Fish Stocking Schedule</h1>
+        <h1 className={styles.heading}>{config.name} Fish Stocking Schedule</h1>
         <div className={styles.error}>
           <p>{error}</p>
           <button className={styles.retryBtn} onClick={() => window.location.reload()}>
@@ -221,14 +236,11 @@ export default function StockingSchedule() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.heading}>AZ Fish Stocking Schedule</h1>
-      <p className={styles.subtitle}>
-        AZGFD stocking schedules for community fishing waters, winter, and spring/summer programs.
-      </p>
+      <h1 className={styles.heading}>{config.name} Fish Stocking Schedule</h1>
+      <p className={styles.subtitle}>{config.subtitle}</p>
 
       <div className={styles.disclaimer}>
-        <strong>Note:</strong> Stocking schedules are tentative and subject to change due to weather,
-        fish availability, and water conditions. Always verify with AZGFD before planning a trip.
+        <strong>Note:</strong> {config.disclaimer}
       </div>
 
       <ThisWeekSection entries={data} />
@@ -280,16 +292,15 @@ export default function StockingSchedule() {
 
       <a
         className={styles.footerLink}
-        href="https://www.azgfd.com/fishing/stocking/"
+        href={config.agencyUrl}
         target="_blank"
         rel="noopener noreferrer"
       >
-        View official AZGFD stocking page &rarr;
+        View official {config.agency} stocking page &rarr;
       </a>
 
       <div className={styles.bottomDisclaimer}>
-        Data sourced from publicly available AZGFD stocking schedules.
-        MyCatchBook is not affiliated with Arizona Game & Fish Department.
+        {config.bottomDisclaimer}
       </div>
     </div>
   );

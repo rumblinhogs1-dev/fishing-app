@@ -90,7 +90,7 @@ export default function Navbar({ onSearchOpen }) {
         <NavLink to="/regulations" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
           Regs
         </NavLink>
-        <NavLink to="/stocking" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
+        <NavLink to="/stocking/az" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
           Stocking
         </NavLink>
         <NavLink to="/conservation" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>

@@ -12,7 +12,7 @@ import { useMapLayers } from '../hooks/useMapLayers';
 import { useAuth } from '../contexts/AuthContext';
 import { fetchCommunityHeatmapPoints } from '../utils/firestore';
 import { fetchStockingData, getCurrentWeekStocking } from '../utils/stockingData';
-import { getWaterCoordinates } from '../data/azWaterCoordinates';
+import { getAvailableStates } from '../config/stockingStates';
 import { getGPSLocation, geocodeLocation } from '../utils/weather';
 import { fetchUSGSStations } from '../utils/usgs';
 import SaveSpotModal from './SaveSpotModal';
@@ -451,15 +451,22 @@ function StockingLayer() {
   const [markers, setMarkers] = useState([]);
 
   useEffect(() => {
-    fetchStockingData()
-      .then((entries) => {
+    const states = getAvailableStates();
+
+    Promise.all(
+      states.map(async (stateConfig) => {
+        const entries = await fetchStockingData({
+          sheets: stateConfig.sheets,
+          cacheKey: stateConfig.cacheKey,
+        });
         const current = getCurrentWeekStocking(entries);
-        // Dedupe by water body and resolve coordinates
+
+        // Dedupe by water body and merge species
         const waterMap = new Map();
         current.forEach((e) => {
           const key = e.waterBody.toLowerCase();
           if (!waterMap.has(key)) {
-            waterMap.set(key, { ...e, species: [...e.species] });
+            waterMap.set(key, { ...e, species: [...e.species], stateCode: stateConfig.code });
           } else {
             const existing = waterMap.get(key);
             e.species.forEach((s) => {
@@ -468,22 +475,27 @@ function StockingLayer() {
           }
         });
 
+        // Resolve coordinates via dynamic import
+        const coordModule = await stateConfig.getCoordinates();
+        const getCoords = coordModule.getWaterCoordinates;
         const pins = [];
         waterMap.forEach((entry) => {
-          const coords = getWaterCoordinates(entry.waterBody);
+          const coords = getCoords(entry.waterBody);
           if (coords) {
             pins.push({ ...entry, lat: coords.lat, lng: coords.lng });
           }
         });
-        setMarkers(pins);
+        return pins;
       })
+    )
+      .then((allPins) => setMarkers(allPins.flat()))
       .catch(() => setMarkers([]));
   }, []);
 
   return (
     <>
       {markers.map((m) => (
-        <Marker key={m.waterBody} position={[m.lat, m.lng]} icon={stockingIcon}>
+        <Marker key={`${m.stateCode}-${m.waterBody}`} position={[m.lat, m.lng]} icon={stockingIcon}>
           <Popup>
             <div style={{ fontSize: '0.85rem' }}>
               <strong style={{ color: '#e65100' }}>{m.waterBody}</strong>
@@ -491,7 +503,7 @@ function StockingLayer() {
                 Stocked: {m.species.join(', ')}
               </div>
               {m.region && <div style={{ fontSize: '0.75rem', color: '#888' }}>{m.region}</div>}
-              <a href="/stocking" style={{ fontSize: '0.75rem', color: '#2d6a4f' }}>
+              <a href={`/stocking/${m.stateCode}`} style={{ fontSize: '0.75rem', color: '#2d6a4f' }}>
                 View Full Schedule
               </a>
             </div>

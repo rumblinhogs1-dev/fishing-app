@@ -1,17 +1,23 @@
 import { useState, useEffect } from 'react';
 import { fetchStockingData } from '../utils/stockingData';
 
-export function useStockingData() {
+export function useStockingData(stateConfig) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (!stateConfig) {
+      setData([]);
+      setLoading(false);
+      return;
+    }
+
     let cancelled = false;
     setLoading(true);
     setError(null);
 
-    fetchStockingData()
+    fetchStockingData({ sheets: stateConfig.sheets, cacheKey: stateConfig.cacheKey })
       .then((entries) => {
         if (!cancelled) {
           setData(entries);
@@ -26,7 +32,7 @@ export function useStockingData() {
       });
 
     return () => { cancelled = true; };
-  }, []);
+  }, [stateConfig]);
 
   return { data, loading, error };
 }

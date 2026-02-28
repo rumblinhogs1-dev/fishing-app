@@ -24,7 +24,7 @@ const DATA_OVERLAYS = [
   { key: 'heatmap', label: 'Heatmap' },
   { key: 'usgsGauges', label: 'USGS Gauges' },
   { key: 'sonarData', label: 'My Sonar Data' },
-  { key: 'stockingSchedule', label: 'AZ Stocking' },
+  { key: 'stockingSchedule', label: 'Fish Stocking' },
 ];
 
 export default function LayerControlPanel({ layers, onToggle, onBasemap, onClose }) {

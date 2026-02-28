@@ -1,25 +1,3 @@
-const SHEETS = [
-  {
-    name: 'Community Fishing',
-    id: '1xJYPRrX2Gb7ACr6HxPB7mlsCw9K8NvClLfBIw7qjTcA',
-    gid: '1486391694',
-    type: 'community',
-  },
-  {
-    name: 'Winter Stocking',
-    id: '1PZuTV-zi5vMdxaMSnGx6c-QxeQQm-6DRQJJPKAZDjZM',
-    gid: '1253509900',
-    type: 'winter',
-  },
-  {
-    name: 'Spring/Summer',
-    id: '1S5wsDfGzEInV64UKjUPzexAe2KOO1KocfB4dJH7oVrs',
-    gid: '0',
-    type: 'springsummer',
-  },
-];
-
-const CACHE_KEY = 'az-stocking-v1';
 const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 
 const MONTH_NAMES = [
@@ -210,11 +188,15 @@ export function normalizeName(name) {
 }
 
 /** Fetch and parse all stocking sheets */
-export async function fetchStockingData({ forceRefresh = false } = {}) {
+export async function fetchStockingData({ sheets, cacheKey, forceRefresh = false } = {}) {
+  if (!sheets || !cacheKey) {
+    throw new Error('fetchStockingData requires sheets and cacheKey');
+  }
+
   // Check cache
   if (!forceRefresh) {
     try {
-      const cached = localStorage.getItem(CACHE_KEY);
+      const cached = localStorage.getItem(cacheKey);
       if (cached) {
         const { data, timestamp } = JSON.parse(cached);
         if (Date.now() - timestamp < CACHE_TTL && data?.length) {
@@ -229,7 +211,7 @@ export async function fetchStockingData({ forceRefresh = false } = {}) {
   }
 
   const results = await Promise.allSettled(
-    SHEETS.map(async (sheet) => {
+    sheets.map(async (sheet) => {
       const resp = await fetch(csvUrl(sheet.id, sheet.gid));
       if (!resp.ok) throw new Error(`${sheet.name}: ${resp.status}`);
       const text = await resp.text();
@@ -245,7 +227,7 @@ export async function fetchStockingData({ forceRefresh = false } = {}) {
     if (r.status === 'fulfilled') {
       allEntries.push(...r.value);
     } else {
-      errors.push({ sheet: SHEETS[i].name, error: r.reason?.message });
+      errors.push({ sheet: sheets[i].name, error: r.reason?.message });
     }
   });
 
@@ -255,7 +237,7 @@ export async function fetchStockingData({ forceRefresh = false } = {}) {
 
   // Cache
   try {
-    localStorage.setItem(CACHE_KEY, JSON.stringify({
+    localStorage.setItem(cacheKey, JSON.stringify({
       data: allEntries,
       timestamp: Date.now(),
       errors,
