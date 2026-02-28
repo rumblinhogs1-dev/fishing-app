@@ -22,7 +22,6 @@ export default function CreateDM() {
       );
       navigate(`/chat/${dmId}`);
     } catch (err) {
-      console.error('Failed to create DM:', err);
       setCreating(false);
     }
   }

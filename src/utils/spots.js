@@ -55,6 +55,5 @@ export function subscribeToSpots(userId, callback) {
     }));
     callback(spots);
   }, (error) => {
-    console.error('Firestore subscription error:', error);
   });
 }

@@ -14,7 +14,6 @@ export default function SaveSpotModal({ lat, lng, defaultName, onSave, onClose }
       await onSave({ name: name.trim(), lat, lng, notes: notes.trim() });
       onClose();
     } catch (err) {
-      console.error('Failed to save spot:', err);
       setSaving(false);
     }
   }

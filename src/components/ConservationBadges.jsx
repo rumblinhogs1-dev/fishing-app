@@ -34,7 +34,6 @@ export default function ConservationBadges({ catches, earnedBadges, userId, isOw
           }
         }
       } catch (err) {
-        console.error('Failed to save badges:', err);
       }
     }
 

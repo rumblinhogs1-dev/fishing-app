@@ -51,7 +51,7 @@ export default function Stats({ catches }) {
     );
   }
 
-  const maxMonth = Math.max(...stats.months.map((m) => m[1]));
+  const maxMonth = stats.months.length ? Math.max(...stats.months.map((m) => m[1])) : 0;
 
   return (
     <div className={styles.container}>

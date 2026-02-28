@@ -47,7 +47,6 @@ export default function UserProfile() {
           createdAt: d.data().createdAt?.toDate?.()?.toISOString() || null,
         })));
       } catch (err) {
-        console.error('Failed to load profile:', err);
       } finally {
         setLoading(false);
       }

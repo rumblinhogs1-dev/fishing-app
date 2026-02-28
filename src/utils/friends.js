@@ -119,7 +119,6 @@ export function subscribeToFriendRequests(userId, callback) {
   return onSnapshot(q, (snapshot) => {
     callback(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
   }, (error) => {
-    console.error('Firestore subscription error:', error);
     callback([]);
   });
 }

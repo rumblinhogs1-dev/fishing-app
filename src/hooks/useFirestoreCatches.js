@@ -51,7 +51,6 @@ export function useFirestoreCatches(user) {
 
     // Mark as attempted so it only runs once
     localStorage.setItem(repairKey, '1');
-    console.log(`Image repair: found ${needsRepair.length} catches with missing imageUrl`);
 
     let cancelled = false;
     (async () => {
@@ -62,7 +61,6 @@ export function useFirestoreCatches(user) {
           if (c.image && typeof c.image === 'string' && c.image.startsWith('data:')) {
             if (cancelled) return;
             await fsUpdateCatch(c.id, { imageUrl: c.image });
-            console.log('Image repair: copied image→imageUrl for catch', c.id);
             continue;
           }
 
@@ -73,7 +71,6 @@ export function useFirestoreCatches(user) {
           const url = await getDownloadURL(storageRef);
           if (cancelled) return;
           await fsUpdateCatch(c.id, { imageUrl: url });
-          console.log('Image repair: recovered Storage URL for catch', c.id);
         } catch {
           // No image source found — nothing to recover
         }
@@ -109,7 +106,6 @@ export function useFirestoreCatches(user) {
         await fsUpdateCatch(catchId, updates);
       }
     } catch (err) {
-      console.error('Image upload failed, catch saved without image:', err);
     }
 
     notifyFriendCatch(userId, user?.displayName, catchId, data.species).catch(() => {});
@@ -124,7 +120,6 @@ export function useFirestoreCatches(user) {
         const url = await uploadCatchImage(userId, id, image);
         if (url) data.imageUrl = url;
       } catch (err) {
-        console.error('Image upload failed:', err);
       }
     } else if (image === '') {
       data.imageUrl = '';
@@ -138,7 +133,6 @@ export function useFirestoreCatches(user) {
         const snap = await uploadString(storageRef, lureImage, 'data_url');
         data.lureImage = await getDownloadURL(snap.ref);
       } catch (err) {
-        console.error('Lure image upload failed:', err);
       }
     }
 

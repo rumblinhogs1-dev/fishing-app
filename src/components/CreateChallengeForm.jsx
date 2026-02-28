@@ -75,7 +75,6 @@ export default function CreateChallengeForm({ onClose }) {
       toast.success('Challenge created!');
       onClose();
     } catch (err) {
-      console.error('Create challenge error:', err);
       toast.error(`Failed to create challenge: ${err.message || err}`);
     } finally {
       setSaving(false);

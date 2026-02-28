@@ -146,7 +146,6 @@ export default function ProfileSettings() {
       toast.success('Settings saved!');
       navigate('/');
     } catch (err) {
-      console.error('Failed to save settings:', err);
       toast.error('Failed to save. Please try again.');
     } finally {
       setSaving(false);

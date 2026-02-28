@@ -43,7 +43,6 @@ export default function ActivityFeed() {
       lastDocRef.current = result.lastDoc;
       setHasMore(result.hasMore);
     } catch (err) {
-      console.error('Failed to load feed:', err);
     } finally {
       setLoading(false);
       loadingRef.current = false;

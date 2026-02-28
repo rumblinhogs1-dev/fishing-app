@@ -77,7 +77,6 @@ export function subscribeToReactions(catchId, callback) {
       ...d.data(),
     })));
   }, (error) => {
-    console.error('Firestore subscription error:', error);
     callback([]);
   });
 }

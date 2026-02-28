@@ -40,7 +40,6 @@ export default function FriendsList() {
       const results = await searchUsers(searchQuery);
       setSearchResults(results.filter((u) => u.id !== user.uid));
     } catch (err) {
-      console.error('Search failed:', err);
     } finally {
       setSearching(false);
     }
@@ -71,7 +70,6 @@ export default function FriendsList() {
       );
       navigate(`/chat/${dmId}`);
     } catch (err) {
-      console.error('Failed to start DM:', err);
     }
   }
 

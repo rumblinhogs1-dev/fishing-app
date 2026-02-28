@@ -78,7 +78,6 @@ export default function CatchDetail() {
           }
         }
       } catch (err) {
-        console.error('Failed to load catch:', err);
       } finally {
         setLoading(false);
       }
@@ -93,10 +92,7 @@ export default function CatchDetail() {
   const dateStr = d ? d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }) : '';
   const timeStr = d ? d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : '';
   const img = entry.imageUrl || entry.image;
-  if (!img) {
-    console.warn('CatchDetail: no image found for catch', entry.id, { imageUrl: entry.imageUrl, image: entry.image });
-  }
-  const isOwn = !user || entry.userId === user.uid;
+  const isOwn = !!user && entry.userId === user.uid;
   // If publicFields is null, the author hasn't set preferences — show everything
   const show = (field) => isOwn || !publicFields || publicFields[field] !== false;
 

@@ -25,7 +25,6 @@ async function getUserNotifPrefs(userId) {
       return snap.data().notificationPreferences;
     }
   } catch (err) {
-    console.error('Failed to read notification preferences:', err);
   }
   return null;
 }
@@ -193,7 +192,6 @@ export function subscribeToNotifications(userId, callback) {
       }))
     );
   }, (error) => {
-    console.error('Firestore subscription error:', error);
     callback([]);
   });
 }

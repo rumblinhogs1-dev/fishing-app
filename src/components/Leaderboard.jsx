@@ -65,7 +65,6 @@ export default function Leaderboard() {
           setRankings(cat.rankFn(catches));
         }
       } catch (err) {
-        console.error('Leaderboard load error:', err);
       } finally {
         if (!cancelled) setLoading(false);
       }

@@ -46,7 +46,6 @@ export default function ShareCardModal({ entry, onClose }) {
       ]);
       toast.success('Image copied!');
     } catch (err) {
-      console.error('Copy failed:', err);
       toast.error('Failed to copy image');
     }
   }
@@ -63,7 +62,6 @@ export default function ShareCardModal({ entry, onClose }) {
         files: [file],
       });
     } catch (err) {
-      if (err.name !== 'AbortError') console.error('Share failed:', err);
     }
   }
 
@@ -81,7 +79,6 @@ export default function ShareCardModal({ entry, onClose }) {
         files: [file],
       });
     } catch (err) {
-      if (err.name !== 'AbortError') console.error('Share photo failed:', err);
     }
   }
 

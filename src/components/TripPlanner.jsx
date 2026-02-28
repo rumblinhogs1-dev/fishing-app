@@ -138,7 +138,6 @@ export default function TripPlanner({ catches = [] }) {
         const chatGroupId = await createTripChat(newId, form.name.trim(), invitedIds, user.uid);
         await updateTrip(newId, { chatGroupId });
       } catch (err) {
-        console.error('Failed to create trip chat:', err);
       }
       // Notify invited friends
       const tripName = form.name.trim();
@@ -151,7 +150,6 @@ export default function TripPlanner({ catches = [] }) {
       setShowForm(false);
       setActiveTrip(newId);
     } catch (err) {
-      console.error('Failed to create trip:', err);
       toast.error('Failed to create trip');
     } finally {
       setSaving(false);
@@ -196,7 +194,6 @@ export default function TripPlanner({ catches = [] }) {
       notifyTripInvite(user.uid, user.displayName, friendProfile.id, trip.name).catch(() => {});
       toast.success(`${friendProfile.displayName || 'Friend'} added!`);
     } catch (err) {
-      console.error('Failed to add member:', err);
       toast.error('Failed to add member');
     }
   }
@@ -209,7 +206,6 @@ export default function TripPlanner({ catches = [] }) {
       }
       toast.success('Member removed');
     } catch (err) {
-      console.error('Failed to remove member:', err);
       toast.error('Failed to remove member');
     }
   }
@@ -237,7 +233,6 @@ export default function TripPlanner({ catches = [] }) {
       all.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
       setTripCatches((prev) => ({ ...prev, [trip.id]: all }));
     } catch (err) {
-      console.error('Failed to load trip catches:', err);
       setTripCatches((prev) => ({ ...prev, [trip.id]: [] }));
     } finally {
       setLoadingCatches((prev) => ({ ...prev, [trip.id]: false }));
@@ -255,7 +250,6 @@ export default function TripPlanner({ catches = [] }) {
       setItineraryForm({ time: '', description: '' });
       toast.success('Item added');
     } catch (err) {
-      console.error('Failed to add itinerary item:', err);
       toast.error('Failed to add item');
     }
   }
@@ -264,7 +258,6 @@ export default function TripPlanner({ catches = [] }) {
     try {
       await removeItineraryItem(tripId, itemId);
     } catch (err) {
-      console.error('Failed to remove itinerary item:', err);
     }
   }
 
@@ -305,7 +298,6 @@ export default function TripPlanner({ catches = [] }) {
       }
       setTripWeather((prev) => ({ ...prev, [trip.id]: days }));
     } catch (err) {
-      console.error('Failed to load weather:', err);
       setTripWeather((prev) => ({ ...prev, [trip.id]: [] }));
     } finally {
       setLoadingWeather((prev) => ({ ...prev, [trip.id]: false }));
@@ -336,7 +328,6 @@ export default function TripPlanner({ catches = [] }) {
       setExpenseSplitIds([]);
       toast.success('Expense added');
     } catch (err) {
-      console.error('Failed to add expense:', err);
       toast.error('Failed to add expense');
     }
   }
@@ -347,7 +338,6 @@ export default function TripPlanner({ catches = [] }) {
     try {
       await removeExpense(tripId, expenseId);
     } catch (err) {
-      console.error('Failed to remove expense:', err);
       toast.error('Failed to remove expense');
     }
   }
@@ -435,7 +425,6 @@ export default function TripPlanner({ catches = [] }) {
       setPhotoCaption('');
       toast.success('Photo uploaded!');
     } catch (err) {
-      console.error('Failed to upload photo:', err);
       toast.error('Failed to upload photo');
     } finally {
       setUploadingPhoto(false);
@@ -453,7 +442,6 @@ export default function TripPlanner({ catches = [] }) {
       setLightboxPhoto(null);
       toast.success('Photo deleted');
     } catch (err) {
-      console.error('Failed to delete photo:', err);
       toast.error('Failed to delete photo');
     }
   }
@@ -476,7 +464,6 @@ export default function TripPlanner({ catches = [] }) {
       setEditingTrip(null);
       setEditForm(EMPTY_TRIP);
     } catch (err) {
-      console.error('Failed to update trip:', err);
       toast.error('Failed to update trip');
     } finally {
       setSaving(false);

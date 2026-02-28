@@ -48,7 +48,6 @@ export default function SpotsList() {
     try {
       await deleteSpot(spotId);
     } catch (err) {
-      console.error('Failed to delete spot:', err);
     }
     setDeleting(null);
   }

@@ -265,7 +265,6 @@ export default function CatchForm({ existing, onSubmit }) {
         await addPendingCatch(entry);
         toast.success('Saved offline! Will sync when back online.');
       } catch (err) {
-        console.error('Failed to save offline:', err);
         toast.error('Failed to save catch offline.');
       }
       navigate('/');
@@ -280,7 +279,6 @@ export default function CatchForm({ existing, onSubmit }) {
       }
       navigate('/');
     } catch (err) {
-      console.error('Failed to save catch:', err);
       toast.error('Failed to save catch.');
       setSubmitting(false);
     }

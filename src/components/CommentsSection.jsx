@@ -19,7 +19,6 @@ export default function CommentsSection({ catchId }) {
       await addComment(catchId, user.uid, user.displayName || 'Angler', text.trim());
       setText('');
     } catch (err) {
-      console.error('Failed to add comment:', err);
     } finally {
       setSending(false);
     }

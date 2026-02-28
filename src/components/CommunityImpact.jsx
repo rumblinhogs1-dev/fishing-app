@@ -18,7 +18,6 @@ export default function CommunityImpact() {
           setImpact(getCommunityImpact(catches));
         }
       } catch (err) {
-        console.error('Failed to load community impact:', err);
       } finally {
         if (!cancelled) setLoading(false);
       }

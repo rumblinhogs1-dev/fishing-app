@@ -62,7 +62,6 @@ export function subscribeToTrips(userId, callback) {
     trips.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
     callback(trips);
   }, (error) => {
-    console.error('Firestore subscription error:', error);
     callback([]);
   });
 }
@@ -179,7 +178,6 @@ export function subscribeToTripPhotos(tripId, callback) {
     }));
     callback(photos);
   }, (error) => {
-    console.error('Trip photos subscription error:', error);
     callback([]);
   });
 }

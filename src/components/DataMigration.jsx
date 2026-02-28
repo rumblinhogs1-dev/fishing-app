@@ -42,11 +42,9 @@ export default function DataMigration({ userId, onComplete }) {
             await withTimeout(updateCatch(catchId, { imageUrl: storageUrl }), 10000);
           } catch (imgErr) {
             // Image is already saved as data URL, so this is non-critical
-            console.warn('Storage upload failed, using inline image:', imgErr);
           }
         }
       } catch (err) {
-        console.error('Failed to migrate catch:', err);
         failed++;
       }
       setProgress({ done: i + 1, total, failed });

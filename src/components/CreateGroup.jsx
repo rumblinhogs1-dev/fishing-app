@@ -27,7 +27,6 @@ export default function CreateGroup() {
       const groupId = await createGroup(name.trim(), selectedIds, user.uid);
       navigate(`/chat/${groupId}`);
     } catch (err) {
-      console.error('Failed to create group:', err);
       setCreating(false);
     }
   }

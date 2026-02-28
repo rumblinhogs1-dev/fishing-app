@@ -101,7 +101,6 @@ export default function ChallengeDetail() {
       }
       setLoading(false);
     }, (error) => {
-      console.error('Firestore subscription error:', error);
       setLoading(false);
     });
     return unsub;
@@ -124,7 +123,6 @@ export default function ChallengeDetail() {
           const results = await computeChallengeLeaderboard(challenge);
           if (!cancelled) setLeaderboard(results);
         } catch (err) {
-          console.error('Leaderboard load error:', err);
         } finally {
           if (!cancelled) setLbLoading(false);
         }

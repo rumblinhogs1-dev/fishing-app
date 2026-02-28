@@ -58,7 +58,6 @@ export default function OfflineBanner() {
         setTimeout(() => setShowSynced(false), 4000);
       }
     } catch (err) {
-      console.error('Sync failed:', err);
     }
   }
 

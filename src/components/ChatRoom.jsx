@@ -131,7 +131,6 @@ export default function ChatRoom() {
       setText('');
       setImagePreview(null);
     } catch (err) {
-      console.error('Failed to send:', err);
     } finally {
       setSending(false);
     }

@@ -90,6 +90,5 @@ export function subscribeToCatches(userId, callback) {
     }));
     callback(catches);
   }, (error) => {
-    console.error('Firestore subscription error:', error);
   });
 }

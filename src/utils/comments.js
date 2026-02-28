@@ -49,7 +49,6 @@ export function subscribeToComments(catchId, callback) {
     comments.sort((a, b) => (a.createdAt || '').localeCompare(b.createdAt || ''));
     callback(comments);
   }, (error) => {
-    console.error('Firestore subscription error:', error);
     callback([]);
   });
 }

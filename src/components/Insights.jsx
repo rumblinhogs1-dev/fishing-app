@@ -28,7 +28,11 @@ function drawBar(ctx, data, width, height) {
     grad.addColorStop(1, '#4caf50');
     ctx.fillStyle = grad;
     ctx.beginPath();
-    ctx.roundRect(x, y, barW, barH, [3, 3, 0, 0]);
+    if (ctx.roundRect) {
+      ctx.roundRect(x, y, barW, barH, [3, 3, 0, 0]);
+    } else {
+      ctx.rect(x, y, barW, barH);
+    }
     ctx.fill();
 
     ctx.fillStyle = '#888';

@@ -21,7 +21,6 @@ export default function CatchCard({ entry, onDelete }) {
       await updateCatch(entry.id, { visibility: isPublic ? 'private' : 'public' });
       toast.success('Visibility updated');
     } catch (err) {
-      console.error('Failed to update visibility:', err);
       toast.error('Failed to update visibility');
     }
   }

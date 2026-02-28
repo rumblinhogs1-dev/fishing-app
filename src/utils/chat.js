@@ -86,7 +86,6 @@ export function subscribeToMessages(groupId, callback) {
       createdAt: d.data().createdAt?.toDate?.()?.toISOString() || null,
     })), null);
   }, (error) => {
-    console.error('Firestore subscription error:', error);
     callback([], error.message || 'Failed to load messages');
   });
 }
@@ -99,7 +98,6 @@ export function subscribeToGroups(userId, callback) {
   return onSnapshot(q, (snapshot) => {
     callback(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
   }, (error) => {
-    console.error('Firestore subscription error:', error);
     callback([]);
   });
 }

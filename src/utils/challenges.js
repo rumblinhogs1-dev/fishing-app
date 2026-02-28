@@ -92,7 +92,7 @@ export async function joinChallenge(challengeId, userId, profile) {
   // Fire-and-forget notification to challenge creator
   getChallenge(challengeId).then((c) => {
     if (c) return notifyChallengeJoined(userId, profile.displayName, c.createdBy, challengeId, c.name);
-  }).catch((err) => console.error('Challenge join notification error:', err));
+  }).catch(() => {});
 }
 
 export async function leaveChallenge(challengeId, userId, participants) {
@@ -125,7 +125,6 @@ export function subscribeToPublicChallenges(callback) {
   return onSnapshot(q, (snap) => {
     callback(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
   }, (error) => {
-    console.error('Firestore subscription error:', error);
     callback([]);
   });
 }
@@ -175,7 +174,6 @@ export function subscribeToChallenges(userId, callback) {
     ready.public = true;
     if (allReady()) merge();
   }, (error) => {
-    console.error('Firestore subscription error (public):', error);
     publicResults = [];
     ready.public = true;
     if (allReady()) merge();
@@ -186,7 +184,6 @@ export function subscribeToChallenges(userId, callback) {
     ready.own = true;
     if (allReady()) merge();
   }, (error) => {
-    console.error('Firestore subscription error (own):', error);
     ownResults = [];
     ready.own = true;
     if (allReady()) merge();
@@ -197,7 +194,6 @@ export function subscribeToChallenges(userId, callback) {
     ready.joined = true;
     if (allReady()) merge();
   }, (error) => {
-    console.error('Firestore subscription error (joined):', error);
     joinedResults = [];
     ready.joined = true;
     if (allReady()) merge();

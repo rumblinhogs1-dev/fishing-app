@@ -165,7 +165,6 @@ export async function syncPendingCatches(userId, addCatchFn, existingCatches = [
       await removePendingCatch(item.id);
       synced++;
     } catch (err) {
-      console.error('Failed to sync catch:', err);
       failed++;
     }
   }
