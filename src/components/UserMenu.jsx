@@ -22,7 +22,7 @@ export default function UserMenu() {
   async function handleSignOut() {
     setOpen(false);
     await signOut();
-    navigate('/');
+    window.location.href = '/';
   }
 
   if (!user) return null;
