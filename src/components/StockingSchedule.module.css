@@ -292,6 +292,10 @@
   background: #e0e0e0;
 }
 
+.blockPast {
+  opacity: 0.4;
+}
+
 .blockCurrent {
   outline: 2px solid #43a047;
   outline-offset: 1px;

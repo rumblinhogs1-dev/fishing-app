@@ -96,6 +96,8 @@ function formatWeekLabel(weekStart, weekEnd) {
 function WaterTimeline({ weeks }) {
   // Sort by weekStart
   const sorted = [...weeks].sort((a, b) => (a.weekStart || 0) - (b.weekStart || 0));
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
   return (
     <div className={styles.timeline}>
@@ -103,6 +105,7 @@ function WaterTimeline({ weeks }) {
         const hasTrout = w.species.some((s) => s.toLowerCase().includes('trout'));
         const hasCatfish = w.species.some((s) => s.toLowerCase().includes('catfish'));
         const current = isCurrentWeek(w.weekStart, w.weekEnd);
+        const past = w.weekEnd && w.weekEnd < today;
 
         let blockClass = styles.blockEmpty;
         if (hasTrout && hasCatfish) blockClass = styles.blockBoth;
@@ -115,7 +118,7 @@ function WaterTimeline({ weeks }) {
         return (
           <div
             key={i}
-            className={`${styles.timeBlock} ${blockClass} ${current ? styles.blockCurrent : ''}`}
+            className={`${styles.timeBlock} ${blockClass} ${current ? styles.blockCurrent : ''} ${past ? styles.blockPast : ''}`}
             title={`${label}\n${speciesLabel}`}
           >
             {hasTrout && hasCatfish ? 'B' : hasTrout ? 'T' : hasCatfish ? 'C' : ''}
