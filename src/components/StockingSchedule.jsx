@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect, useMemo } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useStockingData } from '../hooks/useStockingData';
 import { getStateConfig } from '../config/stockingStates';
 import { getCurrentWeekStocking } from '../utils/stockingData';
@@ -22,7 +22,33 @@ function SpeciesBadges({ species }) {
   );
 }
 
-function ThisWeekSection({ entries }) {
+function MapPinIcon() {
+  return (
+    <svg className={styles.mapIcon} width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/>
+    </svg>
+  );
+}
+
+function WaterBodyLink({ name, getCoords, navigate }) {
+  if (!getCoords) return name;
+  const coords = getCoords(name);
+  if (!coords) return name;
+
+  function handleClick(e) {
+    e.stopPropagation();
+    navigate(`/map?lat=${coords.lat}&lng=${coords.lng}&zoom=13&label=${encodeURIComponent(name)}`);
+  }
+
+  return (
+    <button className={styles.waterLink} onClick={handleClick} title="View on map">
+      {name}
+      <MapPinIcon />
+    </button>
+  );
+}
+
+function ThisWeekSection({ entries, getCoords, navigate }) {
   const current = useMemo(() => getCurrentWeekStocking(entries), [entries]);
 
   // Deduplicate by waterBody — merge species
@@ -56,7 +82,9 @@ function ThisWeekSection({ entries }) {
         <div className={styles.weekCards}>
           {merged.map((e) => (
             <div key={e.waterBody} className={styles.weekCard}>
-              <div className={styles.weekCardWater}>{e.waterBody}</div>
+              <div className={styles.weekCardWater}>
+                <WaterBodyLink name={e.waterBody} getCoords={getCoords} navigate={navigate} />
+              </div>
               <SpeciesBadges species={e.species} />
               {e.region && <div className={styles.weekCardRegion}>{e.region}</div>}
             </div>
@@ -120,13 +148,15 @@ function WaterTimeline({ weeks, greyPast }) {
   );
 }
 
-function WaterRow({ waterBody, weeks, greyPast }) {
+function WaterRow({ waterBody, weeks, greyPast, getCoords, navigate }) {
   const [open, setOpen] = useState(false);
 
   return (
     <div className={styles.waterRow}>
       <button className={styles.waterToggle} onClick={() => setOpen(!open)}>
-        <span className={styles.waterName}>{waterBody}</span>
+        <span className={styles.waterName}>
+          <WaterBodyLink name={waterBody} getCoords={getCoords} navigate={navigate} />
+        </span>
         <span className={styles.waterMeta}>
           <span className={styles.waterCount}>{weeks.length} stocking{weeks.length !== 1 ? 's' : ''}</span>
           <svg
@@ -142,7 +172,7 @@ function WaterRow({ waterBody, weeks, greyPast }) {
   );
 }
 
-function RegionAccordion({ region, waters, defaultOpen, greyPast }) {
+function RegionAccordion({ region, waters, defaultOpen, greyPast, getCoords, navigate }) {
   const [open, setOpen] = useState(defaultOpen);
 
   return (
@@ -162,7 +192,7 @@ function RegionAccordion({ region, waters, defaultOpen, greyPast }) {
       {open && (
         <div className={styles.waterList}>
           {waters.map(({ waterBody, weeks }) => (
-            <WaterRow key={waterBody} waterBody={waterBody} weeks={weeks} greyPast={greyPast} />
+            <WaterRow key={waterBody} waterBody={waterBody} weeks={weeks} greyPast={greyPast} getCoords={getCoords} navigate={navigate} />
           ))}
         </div>
       )}
@@ -176,6 +206,19 @@ export default function StockingSchedule() {
   const { data, loading, error } = useStockingData(config);
   const [search, setSearch] = useState('');
   const [regionFilter, setRegionFilter] = useState('');
+  const [getCoords, setGetCoords] = useState(null);
+  const navigate = useNavigate();
+
+  // Load coordinate lookup for this state
+  useEffect(() => {
+    if (!config?.getCoordinates) return;
+    config.getCoordinates()
+      .then((mod) => {
+        // Wrap in function so React doesn't call it as a state updater
+        setGetCoords(() => mod.getWaterCoordinates);
+      })
+      .catch(() => setGetCoords(null));
+  }, [config]);
 
   // Build grouped data
   const waterMap = useMemo(() => buildTimeline(data), [data]);
@@ -267,7 +310,7 @@ export default function StockingSchedule() {
         <strong>Note:</strong> {config.disclaimer}
       </div>
 
-      <ThisWeekSection entries={data} />
+      <ThisWeekSection entries={data} getCoords={getCoords} navigate={navigate} />
 
       <div className={styles.filters}>
         <input
@@ -303,6 +346,8 @@ export default function StockingSchedule() {
               waters={waters}
               defaultOpen={idx === 0}
               greyPast={greyPast}
+              getCoords={getCoords}
+              navigate={navigate}
             />
           ))
       )}

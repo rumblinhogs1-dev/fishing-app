@@ -325,6 +325,33 @@
   opacity: 0.5;
 }
 
+/* Water body link */
+.waterLink {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  font-weight: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+.waterLink:hover {
+  color: #2d6a4f;
+  text-decoration: underline;
+}
+
+.mapIcon {
+  opacity: 0.4;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+}
+
+.waterLink:hover .mapIcon {
+  opacity: 0.85;
+}
+
 /* Footer link */
 .footerLink {
   display: block;

@@ -5,7 +5,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useSpots } from '../hooks/useSpots';
 import { useDepthPoints } from '../hooks/useDepthPoints';
 import { useMapLayers } from '../hooks/useMapLayers';
@@ -447,6 +447,29 @@ const stockingIcon = L.divIcon({
   popupAnchor: [0, -17],
 });
 
+const highlightIcon = L.divIcon({
+  className: '',
+  html: `<div style="
+    width:36px;height:36px;border-radius:50%;
+    background:#2d6a4f;border:3px solid #fff;
+    box-shadow:0 0 0 4px rgba(45,106,79,0.35), 0 2px 8px rgba(0,0,0,0.3);
+    display:flex;align-items:center;justify-content:center;
+  "><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff">
+    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/>
+  </svg></div>`,
+  iconSize: [36, 36],
+  iconAnchor: [18, 36],
+  popupAnchor: [0, -36],
+});
+
+function HighlightMarker({ position, label }) {
+  return (
+    <Marker position={position} icon={highlightIcon}>
+      <Popup>{label}</Popup>
+    </Marker>
+  );
+}
+
 function StockingLayer() {
   const [markers, setMarkers] = useState([]);
 
@@ -595,18 +618,35 @@ function LocationSearch({ mapRef }) {
 
 export default function MapView({ catches = [] }) {
   useEffect(() => { markStepComplete('exploredMap'); }, []);
+  const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const { spots, addSpot } = useSpots();
   const { depthPoints } = useDepthPoints();
   const { layers, toggleLayer, setBasemap } = useMapLayers();
   const [userLocation, setUserLocation] = useState(null);
-  const [center, setCenter] = useState(US_CENTER);
-  const [zoom, setZoom] = useState(DEFAULT_ZOOM);
+
+  // Check for deep-link params (?lat=X&lng=Y&zoom=Z&label=Name)
+  const deepLink = useMemo(() => {
+    const lat = parseFloat(searchParams.get('lat'));
+    const lng = parseFloat(searchParams.get('lng'));
+    if (isNaN(lat) || isNaN(lng)) return null;
+    return {
+      lat,
+      lng,
+      zoom: parseInt(searchParams.get('zoom'), 10) || 13,
+      label: searchParams.get('label') || '',
+    };
+  }, [searchParams]);
+
+  const [center, setCenter] = useState(deepLink ? [deepLink.lat, deepLink.lng] : US_CENTER);
+  const [zoom, setZoom] = useState(deepLink ? deepLink.zoom : DEFAULT_ZOOM);
   const [spotModal, setSpotModal] = useState(null);
   const [showLayerPanel, setShowLayerPanel] = useState(false);
   const [showStructure, setShowStructure] = useState(false);
   const [showWaterInfo, setShowWaterInfo] = useState(false);
-  const [mapCenter, setMapCenter] = useState({ lat: US_CENTER[0], lng: US_CENTER[1] });
+  const [mapCenter, setMapCenter] = useState(
+    deepLink ? { lat: deepLink.lat, lng: deepLink.lng } : { lat: US_CENTER[0], lng: US_CENTER[1] }
+  );
   const [communityPoints, setCommunityPoints] = useState([]);
   const mapInstanceRef = useRef(null);
 
@@ -623,6 +663,9 @@ export default function MapView({ catches = [] }) {
   }, [layers.heatmap, user?.uid]);
 
   useEffect(() => {
+    // Skip GPS override when arriving via deep link
+    if (deepLink) return;
+
     getGPSLocation()
       .then((loc) => {
         setUserLocation([loc.lat, loc.lng]);
@@ -638,7 +681,7 @@ export default function MapView({ catches = [] }) {
           setMapCenter({ lat: first.lat, lng: first.lng });
         }
       });
-  }, [catchesWithCoords]);
+  }, [catchesWithCoords, deepLink]);
 
   const handleSaveSpot = useCallback((lat, lng, species) => {
     setSpotModal({ lat, lng, defaultName: species ? `${species} Spot` : '' });
@@ -729,6 +772,10 @@ export default function MapView({ catches = [] }) {
         )}
 
         {layers.stockingSchedule && <StockingLayer />}
+
+        {deepLink && (
+          <HighlightMarker position={[deepLink.lat, deepLink.lng]} label={deepLink.label} />
+        )}
 
         <MapCenterTracker onCenterChange={setMapCenter} />
         <RecenterButton userLocation={userLocation} />
