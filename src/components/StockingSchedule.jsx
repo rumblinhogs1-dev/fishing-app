@@ -96,37 +96,48 @@ function formatWeekLabel(weekStart, weekEnd) {
 }
 
 function WaterTimeline({ weeks, greyPast }) {
-  // Sort by weekStart
   const sorted = [...weeks].sort((a, b) => (a.weekStart || 0) - (b.weekStart || 0));
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
   return (
-    <div className={styles.timeline}>
+    <div className={styles.eventList}>
       {sorted.map((w, i) => {
-        const hasTrout = w.species.some((s) => s.toLowerCase().includes('trout'));
-        const hasCatfish = w.species.some((s) => s.toLowerCase().includes('catfish'));
         const current = isCurrentWeek(w.weekStart, w.weekEnd);
         const past = greyPast && w.weekEnd && w.weekEnd < today;
-
-        let blockClass = styles.blockEmpty;
-        if (hasTrout && hasCatfish) blockClass = styles.blockBoth;
-        else if (hasTrout) blockClass = styles.blockTrout;
-        else if (hasCatfish) blockClass = styles.blockCatfish;
-
-        const label = formatWeekLabel(w.weekStart, w.weekEnd);
-        const speciesLabel = w.species.join(', ');
 
         return (
           <div
             key={i}
-            className={`${styles.timeBlock} ${blockClass} ${current ? styles.blockCurrent : ''} ${past ? styles.blockPast : ''}`}
-            title={`${label}\n${speciesLabel}`}
+            className={`${styles.eventRow} ${current ? styles.eventCurrent : ''} ${past ? styles.eventPast : ''}`}
           >
-            {hasTrout && hasCatfish ? 'B' : hasTrout ? 'T' : hasCatfish ? 'C' : ''}
+            <div className={styles.eventDate}>{formatWeekLabel(w.weekStart, w.weekEnd)}</div>
+            <SpeciesBadges species={w.species} />
           </div>
         );
       })}
+    </div>
+  );
+}
+
+function WaterRow({ waterBody, weeks, greyPast }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className={styles.waterRow}>
+      <button className={styles.waterToggle} onClick={() => setOpen(!open)}>
+        <span className={styles.waterName}>{waterBody}</span>
+        <span className={styles.waterMeta}>
+          <span className={styles.waterCount}>{weeks.length} stocking{weeks.length !== 1 ? 's' : ''}</span>
+          <svg
+            width="14" height="14" viewBox="0 0 24 24" fill="currentColor"
+            className={`${styles.waterChevron} ${open ? styles.waterChevronOpen : ''}`}
+          >
+            <path d="M7 10l5 5 5-5z" />
+          </svg>
+        </span>
+      </button>
+      {open && <WaterTimeline weeks={weeks} greyPast={greyPast} />}
     </div>
   );
 }
@@ -151,10 +162,7 @@ function RegionAccordion({ region, waters, defaultOpen, greyPast }) {
       {open && (
         <div className={styles.waterList}>
           {waters.map(({ waterBody, weeks }) => (
-            <div key={waterBody} className={styles.waterRow}>
-              <div className={styles.waterName}>{waterBody}</div>
-              <WaterTimeline weeks={weeks} greyPast={greyPast} />
-            </div>
+            <WaterRow key={waterBody} waterBody={waterBody} weeks={weeks} greyPast={greyPast} />
           ))}
         </div>
       )}
@@ -279,14 +287,6 @@ export default function StockingSchedule() {
             <option key={r} value={r}>{r}</option>
           ))}
         </select>
-      </div>
-
-      {/* Timeline legend */}
-      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', fontSize: '0.75rem', color: '#666', flexWrap: 'wrap' }}>
-        <span><span style={{ display: 'inline-block', width: 12, height: 12, borderRadius: 2, background: '#1565c0', verticalAlign: 'middle', marginRight: 4 }} /> Trout</span>
-        <span><span style={{ display: 'inline-block', width: 12, height: 12, borderRadius: 2, background: '#7b1fa2', verticalAlign: 'middle', marginRight: 4 }} /> Catfish</span>
-        <span><span style={{ display: 'inline-block', width: 12, height: 12, borderRadius: 2, background: 'linear-gradient(135deg, #1565c0 50%, #7b1fa2 50%)', verticalAlign: 'middle', marginRight: 4 }} /> Both</span>
-        <span><span style={{ display: 'inline-block', width: 12, height: 12, borderRadius: 2, border: '2px solid #43a047', verticalAlign: 'middle', marginRight: 4 }} /> Current Week</span>
       </div>
 
       {filtered.size === 0 ? (

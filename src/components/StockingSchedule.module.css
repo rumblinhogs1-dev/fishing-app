@@ -242,68 +242,87 @@
 }
 
 .waterRow {
-  padding: 0.65rem 0.85rem;
+  padding: 0;
   border-top: 1px solid #f0f0f0;
+}
+
+.waterToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.6rem 0.85rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.waterToggle:hover {
+  background: #f9f9f9;
 }
 
 .waterName {
   font-weight: 600;
   font-size: 0.85rem;
   color: #222;
-  margin: 0 0 0.5rem;
 }
 
-/* Timeline */
-.timeline {
-  display: flex;
-  gap: 2px;
-  overflow-x: auto;
-  padding-bottom: 0.25rem;
-}
-
-.timeBlock {
-  min-width: 28px;
-  height: 22px;
-  border-radius: 3px;
+.waterMeta {
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 0.55rem;
-  font-weight: 700;
-  color: #fff;
-  cursor: default;
-  position: relative;
+  gap: 0.35rem;
   flex-shrink: 0;
 }
 
-.blockTrout {
-  background: #1565c0;
+.waterCount {
+  font-size: 0.72rem;
+  color: #999;
+  font-weight: 400;
 }
 
-.blockCatfish {
-  background: #7b1fa2;
+.waterChevron {
+  transition: transform 0.2s;
+  color: #aaa;
 }
 
-.blockBoth {
-  background: linear-gradient(135deg, #1565c0 50%, #7b1fa2 50%);
+.waterChevronOpen {
+  transform: rotate(180deg);
 }
 
-.blockEmpty {
-  background: #e0e0e0;
+/* Event List */
+.eventList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 0.85rem 0.6rem;
 }
 
-.blockPast {
-  opacity: 0.4;
+.eventRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  border-left: 3px solid transparent;
+  background: #fafafa;
 }
 
-.blockCurrent {
-  outline: 2px solid #43a047;
-  outline-offset: 1px;
-  z-index: 1;
+.eventDate {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #444;
+  white-space: nowrap;
+  min-width: 130px;
 }
 
-.timeBlock[title] {
-  cursor: help;
+.eventCurrent {
+  border-left-color: #43a047;
+  background: #e8f5e9;
+}
+
+.eventPast {
+  opacity: 0.5;
 }
 
 /* Footer link */
@@ -354,13 +373,12 @@
     grid-template-columns: 1fr;
   }
 
-  .timeline {
-    gap: 1px;
+  .eventRow {
+    flex-wrap: wrap;
   }
 
-  .timeBlock {
-    min-width: 22px;
-    height: 18px;
-    font-size: 0.5rem;
+  .eventDate {
+    min-width: unset;
+    font-size: 0.75rem;
   }
 }
