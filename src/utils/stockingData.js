@@ -218,7 +218,11 @@ export async function fetchStockingData({ forceRefresh = false } = {}) {
       if (cached) {
         const { data, timestamp } = JSON.parse(cached);
         if (Date.now() - timestamp < CACHE_TTL && data?.length) {
-          return data;
+          return data.map((e) => ({
+            ...e,
+            weekStart: e.weekStart ? new Date(e.weekStart) : null,
+            weekEnd: e.weekEnd ? new Date(e.weekEnd) : null,
+          }));
         }
       }
     } catch { /* ignore */ }
