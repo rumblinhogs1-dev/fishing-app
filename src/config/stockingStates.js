@@ -10,6 +10,7 @@ export const STOCKING_STATES = {
       'Stocking schedules are tentative and subject to change due to weather, fish availability, and water conditions. Always verify with AZGFD before planning a trip.',
     bottomDisclaimer:
       'Data sourced from publicly available AZGFD stocking schedules. MyCatchBook is not affiliated with Arizona Game & Fish Department.',
+    format: 'grid',
     sheets: [
       {
         name: 'Community Fishing',
@@ -32,6 +33,30 @@ export const STOCKING_STATES = {
     ],
     cacheKey: 'az-stocking-v1',
     getCoordinates: () => import('../data/azWaterCoordinates.js'),
+  },
+  co: {
+    code: 'co',
+    name: 'Colorado',
+    agency: 'CPW',
+    agencyUrl: 'https://cpw.state.co.us/fishing/stocking-report',
+    subtitle:
+      'CPW weekly fish stocking reports for Colorado lakes, reservoirs, and rivers.',
+    disclaimer:
+      'Stocking reports reflect weekly summaries and may not include exact dates. Always verify with CPW before planning a trip.',
+    bottomDisclaimer:
+      'Data sourced from publicly available CPW stocking reports. MyCatchBook is not affiliated with Colorado Parks & Wildlife.',
+    format: 'list',
+    sheets: [
+      {
+        name: '2025 Stocking',
+        id: '2PACX-1vSRURGSiGWRaPnJoz11cq0pTTaFPzIWGumsJONymkYmAmrGxYslI1f86qn2iad1R7iQzOhSlBV8rwWK',
+        gid: '757471397',
+        type: 'flat',
+        published: true,
+      },
+    ],
+    cacheKey: 'co-stocking-v1',
+    getCoordinates: () => import('../data/coWaterCoordinates.js'),
   },
 };
 

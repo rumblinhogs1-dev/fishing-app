@@ -5,7 +5,10 @@ const MONTH_NAMES = [
   'july', 'august', 'september', 'october', 'november', 'december',
 ];
 
-function csvUrl(sheetId, gid) {
+function csvUrl(sheetId, gid, published = false) {
+  if (published) {
+    return `https://docs.google.com/spreadsheets/d/e/${sheetId}/pub?gid=${gid}&single=true&output=csv`;
+  }
   return `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`;
 }
 
@@ -179,6 +182,52 @@ function parseSheet(rows, sheetType, sheetName) {
   return entries;
 }
 
+/**
+ * Parse a flat event-list CSV (one row per stocking event).
+ * Columns: Body of Water, Region, Date, Map Link
+ * Returns same shape as parseSheet entries.
+ */
+function parseFlatSheet(rows, sheetName) {
+  const entries = [];
+  if (!rows || rows.length < 2) return entries;
+
+  // Skip header row
+  for (let i = 1; i < rows.length; i++) {
+    const row = rows[i];
+    if (!row || row.length < 3) continue;
+
+    const rawName = (row[0] || '').trim();
+    const region = (row[1] || '').trim();
+    const rawDate = (row[2] || '').trim();
+
+    if (!rawName || !rawDate) continue;
+
+    const waterBody = normalizeName(rawName);
+
+    // Parse M/D/YYYY date
+    const parts = rawDate.split('/');
+    if (parts.length !== 3) continue;
+    const month = parseInt(parts[0], 10) - 1;
+    const day = parseInt(parts[1], 10);
+    const year = parseInt(parts[2], 10);
+    if (isNaN(month) || isNaN(day) || isNaN(year)) continue;
+
+    const weekStart = new Date(year, month, day);
+    const weekEnd = new Date(year, month, day + 6);
+
+    entries.push({
+      waterBody,
+      region,
+      species: ['Trout'],
+      weekStart,
+      weekEnd,
+      sheetName,
+    });
+  }
+
+  return entries;
+}
+
 /** Normalize water body names for matching */
 export function normalizeName(name) {
   return name
@@ -188,7 +237,7 @@ export function normalizeName(name) {
 }
 
 /** Fetch and parse all stocking sheets */
-export async function fetchStockingData({ sheets, cacheKey, forceRefresh = false } = {}) {
+export async function fetchStockingData({ sheets, cacheKey, format = 'grid', forceRefresh = false } = {}) {
   if (!sheets || !cacheKey) {
     throw new Error('fetchStockingData requires sheets and cacheKey');
   }
@@ -212,10 +261,13 @@ export async function fetchStockingData({ sheets, cacheKey, forceRefresh = false
 
   const results = await Promise.allSettled(
     sheets.map(async (sheet) => {
-      const resp = await fetch(csvUrl(sheet.id, sheet.gid));
+      const resp = await fetch(csvUrl(sheet.id, sheet.gid, sheet.published));
       if (!resp.ok) throw new Error(`${sheet.name}: ${resp.status}`);
       const text = await resp.text();
       const rows = parseCSV(text);
+      if (format === 'list') {
+        return parseFlatSheet(rows, sheet.name);
+      }
       return parseSheet(rows, sheet.type, sheet.name);
     })
   );

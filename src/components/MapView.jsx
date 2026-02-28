@@ -458,6 +458,7 @@ function StockingLayer() {
         const entries = await fetchStockingData({
           sheets: stateConfig.sheets,
           cacheKey: stateConfig.cacheKey,
+          format: stateConfig.format,
         });
         const current = getCurrentWeekStocking(entries);
 
