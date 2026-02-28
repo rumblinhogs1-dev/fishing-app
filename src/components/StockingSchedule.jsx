@@ -95,7 +95,7 @@ function formatWeekLabel(weekStart, weekEnd) {
   return e ? `${s} – ${e}` : s;
 }
 
-function WaterTimeline({ weeks }) {
+function WaterTimeline({ weeks, greyPast }) {
   // Sort by weekStart
   const sorted = [...weeks].sort((a, b) => (a.weekStart || 0) - (b.weekStart || 0));
   const now = new Date();
@@ -107,7 +107,7 @@ function WaterTimeline({ weeks }) {
         const hasTrout = w.species.some((s) => s.toLowerCase().includes('trout'));
         const hasCatfish = w.species.some((s) => s.toLowerCase().includes('catfish'));
         const current = isCurrentWeek(w.weekStart, w.weekEnd);
-        const past = w.weekEnd && w.weekEnd < today;
+        const past = greyPast && w.weekEnd && w.weekEnd < today;
 
         let blockClass = styles.blockEmpty;
         if (hasTrout && hasCatfish) blockClass = styles.blockBoth;
@@ -131,7 +131,7 @@ function WaterTimeline({ weeks }) {
   );
 }
 
-function RegionAccordion({ region, waters, defaultOpen }) {
+function RegionAccordion({ region, waters, defaultOpen, greyPast }) {
   const [open, setOpen] = useState(defaultOpen);
 
   return (
@@ -153,7 +153,7 @@ function RegionAccordion({ region, waters, defaultOpen }) {
           {waters.map(({ waterBody, weeks }) => (
             <div key={waterBody} className={styles.waterRow}>
               <div className={styles.waterName}>{waterBody}</div>
-              <WaterTimeline weeks={weeks} />
+              <WaterTimeline weeks={weeks} greyPast={greyPast} />
             </div>
           ))}
         </div>
@@ -171,6 +171,13 @@ export default function StockingSchedule() {
 
   // Build grouped data
   const waterMap = useMemo(() => buildTimeline(data), [data]);
+
+  // Only grey out past blocks when there's current/future data to contrast with
+  const greyPast = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return data.some((e) => e.weekEnd && e.weekEnd >= today);
+  }, [data]);
 
   // Get unique regions
   const regions = useMemo(() => {
@@ -286,6 +293,7 @@ export default function StockingSchedule() {
               region={region}
               waters={waters}
               defaultOpen={idx === 0}
+              greyPast={greyPast}
             />
           ))
       )}

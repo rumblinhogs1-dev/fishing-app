@@ -8,13 +8,18 @@ import styles from './Navbar.module.css';
 export default function Navbar({ onSearchOpen }) {
   const { user } = useAuth();
   const [aiOpen, setAiOpen] = useState(false);
+  const [stockingOpen, setStockingOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const aiRef = useRef(null);
+  const stockingRef = useRef(null);
 
   useEffect(() => {
     function handleClickOutside(e) {
       if (aiRef.current && !aiRef.current.contains(e.target)) {
         setAiOpen(false);
+      }
+      if (stockingRef.current && !stockingRef.current.contains(e.target)) {
+        setStockingOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -90,9 +95,24 @@ export default function Navbar({ onSearchOpen }) {
         <NavLink to="/regulations" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
           Regs
         </NavLink>
-        <NavLink to="/stocking/az" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
-          Stocking
-        </NavLink>
+        <div className={styles.dropdown} ref={stockingRef}>
+          <button className={styles.dropdownTrigger} onClick={() => setStockingOpen(!stockingOpen)}>
+            Stocking
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style={{ marginLeft: 4 }}>
+              <path d="M7 10l5 5 5-5z" />
+            </svg>
+          </button>
+          {stockingOpen && (
+            <div className={styles.dropdownMenu}>
+              <NavLink to="/stocking/az" className={styles.dropdownItem} onClick={() => { setStockingOpen(false); setMenuOpen(false); }}>
+                Arizona
+              </NavLink>
+              <NavLink to="/stocking/co" className={styles.dropdownItem} onClick={() => { setStockingOpen(false); setMenuOpen(false); }}>
+                Colorado
+              </NavLink>
+            </div>
+          )}
+        </div>
         <NavLink to="/conservation" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
           Eco Guide
         </NavLink>
