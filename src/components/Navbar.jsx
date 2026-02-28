@@ -29,7 +29,7 @@ export default function Navbar({ onSearchOpen }) {
   return (
     <nav className={styles.nav}>
       <div className={styles.brand}>
-        <img src={import.meta.env.BASE_URL + 'logo-192.png'} alt="" className={styles.icon} />
+        <img src={import.meta.env.BASE_URL + 'assets/logo-icon.svg'} alt="" className={styles.icon} />
         <span className={styles.title}>MyCatchBook</span>
         <span className={styles.tagline}>AI-Powered Fishing Community</span>
       </div>
@@ -109,6 +109,9 @@ export default function Navbar({ onSearchOpen }) {
               </NavLink>
               <NavLink to="/stocking/co" className={styles.dropdownItem} onClick={() => { setStockingOpen(false); setMenuOpen(false); }}>
                 Colorado
+              </NavLink>
+              <NavLink to="/stocking/nm" className={styles.dropdownItem} onClick={() => { setStockingOpen(false); setMenuOpen(false); }}>
+                New Mexico
               </NavLink>
             </div>
           )}

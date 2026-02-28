@@ -58,6 +58,27 @@ export const STOCKING_STATES = {
     cacheKey: 'co-stocking-v1',
     getCoordinates: () => import('../data/coWaterCoordinates.js'),
   },
+  nm: {
+    code: 'nm',
+    name: 'New Mexico',
+    agency: 'NMDGF',
+    agencyUrl: 'https://wildlife.dgf.nm.gov/fishing/weekly-report/',
+    subtitle:
+      'NMDGF weekly fish stocking reports for New Mexico lakes, rivers, and ponds.',
+    disclaimer:
+      'Stocking data sourced from weekly NMDGF reports. Dates and quantities may vary. Always verify with NMDGF before planning a trip.',
+    bottomDisclaimer:
+      'Data sourced from publicly available NMDGF stocking reports via stockingreport.com. MyCatchBook is not affiliated with NM Department of Game & Fish.',
+    format: 'json',
+    sheets: [
+      {
+        name: 'NM Stocking Data',
+        url: 'https://www.stockingreport.com/stocking_data.json',
+      },
+    ],
+    cacheKey: 'nm-stocking-v1',
+    getCoordinates: () => import('../data/nmWaterCoordinates.js'),
+  },
 };
 
 export function getStateConfig(code) {

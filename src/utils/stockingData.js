@@ -228,6 +228,53 @@ function parseFlatSheet(rows, sheetName) {
   return entries;
 }
 
+/**
+ * Parse a JSON stocking source (e.g. stockingreport.com).
+ * JSON is keyed by water name, each with `records` array and optional `coords`.
+ * Filters to last 12 months to avoid loading years of historical data.
+ */
+function parseJsonStocking(json, sheetName) {
+  const entries = [];
+  const cutoff = new Date();
+  cutoff.setFullYear(cutoff.getFullYear() - 1);
+
+  for (const [waterName, value] of Object.entries(json)) {
+    if (!value || !Array.isArray(value.records)) continue;
+
+    const waterBody = normalizeName(waterName);
+
+    for (const record of value.records) {
+      if (!record.date) continue;
+
+      // Parse YYYY-MM-DD date
+      const parts = record.date.split('-');
+      if (parts.length !== 3) continue;
+      const year = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10) - 1;
+      const day = parseInt(parts[2], 10);
+      if (isNaN(year) || isNaN(month) || isNaN(day)) continue;
+
+      const weekStart = new Date(year, month, day);
+      if (weekStart < cutoff) continue;
+
+      const weekEnd = new Date(year, month, day + 6);
+
+      const species = record.species ? [record.species] : ['Fish'];
+
+      entries.push({
+        waterBody,
+        region: '',
+        species,
+        weekStart,
+        weekEnd,
+        sheetName,
+      });
+    }
+  }
+
+  return entries;
+}
+
 /** Normalize water body names for matching */
 export function normalizeName(name) {
   return name
@@ -261,6 +308,12 @@ export async function fetchStockingData({ sheets, cacheKey, format = 'grid', for
 
   const results = await Promise.allSettled(
     sheets.map(async (sheet) => {
+      if (format === 'json') {
+        const resp = await fetch(sheet.url);
+        if (!resp.ok) throw new Error(`${sheet.name}: ${resp.status}`);
+        const json = await resp.json();
+        return parseJsonStocking(json, sheet.name);
+      }
       const resp = await fetch(csvUrl(sheet.id, sheet.gid, sheet.published));
       if (!resp.ok) throw new Error(`${sheet.name}: ${resp.status}`);
       const text = await resp.text();
