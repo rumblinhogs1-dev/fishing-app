@@ -113,6 +113,9 @@ export default function Navbar({ onSearchOpen }) {
               <NavLink to="/stocking/nm" className={styles.dropdownItem} onClick={() => { setStockingOpen(false); setMenuOpen(false); }}>
                 New Mexico
               </NavLink>
+              <NavLink to="/stocking/ut" className={styles.dropdownItem} onClick={() => { setStockingOpen(false); setMenuOpen(false); }}>
+                Utah
+              </NavLink>
             </div>
           )}
         </div>

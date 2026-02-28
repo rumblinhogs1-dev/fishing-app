@@ -275,6 +275,47 @@ function parseJsonStocking(json, sheetName) {
   return entries;
 }
 
+/**
+ * Parse JSON from our Utah DWR proxy Cloud Function.
+ * Input: array of { waterBody, county, species, quantity, length, date (MM/DD/YYYY) }
+ * Filters to last 12 months.
+ */
+function parseUtahJson(json, sheetName) {
+  const entries = [];
+  const cutoff = new Date();
+  cutoff.setFullYear(cutoff.getFullYear() - 1);
+
+  for (const record of json) {
+    if (!record.waterBody || !record.date) continue;
+
+    // Parse MM/DD/YYYY date
+    const parts = record.date.split('/');
+    if (parts.length !== 3) continue;
+    const month = parseInt(parts[0], 10) - 1;
+    const day = parseInt(parts[1], 10);
+    const year = parseInt(parts[2], 10);
+    if (isNaN(month) || isNaN(day) || isNaN(year)) continue;
+
+    const weekStart = new Date(year, month, day);
+    if (weekStart < cutoff) continue;
+
+    const weekEnd = new Date(year, month, day + 6);
+
+    entries.push({
+      waterBody: normalizeName(record.waterBody),
+      region: record.county || '',
+      species: record.species ? [record.species] : ['Fish'],
+      quantity: record.quantity || null,
+      length: record.length || null,
+      weekStart,
+      weekEnd,
+      sheetName,
+    });
+  }
+
+  return entries;
+}
+
 /** Normalize water body names for matching */
 export function normalizeName(name) {
   return name
@@ -308,6 +349,13 @@ export async function fetchStockingData({ sheets, cacheKey, format = 'grid', for
 
   const results = await Promise.allSettled(
     sheets.map(async (sheet) => {
+      if (format === 'proxy-json') {
+        const url = sheet.url.replace('CURRENT_YEAR', new Date().getFullYear());
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error(`${sheet.name}: ${resp.status}`);
+        const json = await resp.json();
+        return parseUtahJson(json, sheet.name);
+      }
       if (format === 'json') {
         const resp = await fetch(sheet.url);
         if (!resp.ok) throw new Error(`${sheet.name}: ${resp.status}`);

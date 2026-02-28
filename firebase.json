@@ -6,10 +6,18 @@
   "storage": {
     "rules": "storage.rules"
   },
+  "functions": {
+    "source": "functions",
+    "runtime": "nodejs20"
+  },
   "hosting": {
     "public": "firebase-dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
+      {
+        "source": "/api/utah-stocking",
+        "function": "utahStocking"
+      },
       {
         "source": "/fishing-app/**",
         "destination": "/fishing-app/index.html"

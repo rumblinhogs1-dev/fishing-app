@@ -79,6 +79,27 @@ export const STOCKING_STATES = {
     cacheKey: 'nm-stocking-v1',
     getCoordinates: () => import('../data/nmWaterCoordinates.js'),
   },
+  ut: {
+    code: 'ut',
+    name: 'Utah',
+    agency: 'DWR',
+    agencyUrl: 'https://dwrapps.utah.gov/fishstocking/Fish',
+    subtitle:
+      'Utah DWR fish stocking reports for Utah lakes, reservoirs, and streams.',
+    disclaimer:
+      'Stocking reports reflect DWR records and may not include exact dates. Always verify with Utah DWR before planning a trip.',
+    bottomDisclaimer:
+      'Data sourced from Utah Division of Wildlife Resources stocking database. MyCatchBook is not affiliated with Utah DWR.',
+    format: 'proxy-json',
+    sheets: [
+      {
+        name: 'Utah Stocking Data',
+        url: '/api/utah-stocking?y=CURRENT_YEAR',
+      },
+    ],
+    cacheKey: 'ut-stocking-v1',
+    getCoordinates: () => import('../data/utWaterCoordinates.js'),
+  },
 };
 
 export function getStateConfig(code) {
