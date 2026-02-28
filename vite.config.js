@@ -22,6 +22,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp}'],
+        skipWaiting: true,
+        clientsClaim: true,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/api\.open-meteo\.com\/.*/i,
@@ -109,7 +111,7 @@ export default defineConfig({
         name: 'MyCatchBook',
         short_name: 'MyCatchBook',
         description: 'AI-Powered Fishing Community — Log catches, identify fish, discover spots, and connect with anglers.',
-        theme_color: '#0d47a1',
+        theme_color: '#2d6a4f',
         background_color: '#ffffff',
         display: 'standalone',
         icons: [
