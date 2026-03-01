@@ -1,4 +1,4 @@
-# MyCatchBook Production Checklist
+# CatchDaddy Production Checklist
 
 ## Phase 1: Critical Security (Do First)
 
@@ -54,7 +54,7 @@
 - [x] **Terms of Service & Privacy Policy** — Added `/terms` and `/privacy` routes with legal content pages covering data collection, AI features, user content, and fishing disclaimers.
 - [x] **Monetization tier structure** — Created config-driven tier system (Free/Angler/Pro Guide) with `useTier()` hook, `UpgradePrompt` component, and `/pricing` page. Payment integration deferred.
 - [x] **Landing page / marketing site** — Static HTML landing page at root `/` with hero, features, pricing table, and app store badges. App served at `/fishing-app/`.
-- [x] **Capacitor setup (Android + iOS)** — Initialized Capacitor with `com.mycatchbook.app` package ID, Android and iOS platforms added, build scripts configured.
+- [x] **Capacitor setup (Android + iOS)** — Initialized Capacitor with `net.catchdaddy.app` package ID, Android and iOS platforms added, build scripts configured.
 - [x] **Site-wide footer** — Added footer component with links to Terms, Privacy, and Pricing pages.
 
 ## Phase 6b: Marketing & Analytics
@@ -62,7 +62,7 @@
 - [x] **Feature detail pages** — Created 6 dedicated feature pages (`/features/*.html`) with CSS phone mockups, real fish photos (Wikimedia Commons), and real OpenStreetMap tiles. Linked from landing page feature cards.
 - [x] **Real fish photos in mockups** — Replaced placeholder gradients with real largemouth bass, rainbow trout, and striped bass photos in AI Fish ID, Catch Logging, and Community feature pages.
 - [x] **Real map tiles** — Replaced SVG map with OpenStreetMap tiles of Lake Fork, TX in the Interactive Maps feature page.
-- [x] **Logo rebrand** — Replaced "Crawdaddy's Catch" text on fish logo with "MYCATCHBOOK" across all sizes (192px, 512px, 1024px).
+- [x] **Logo rebrand** — Replaced "Crawdaddy's Catch" text on fish logo with "CATCHDADDY" across all sizes (192px, 512px, 1024px).
 - [x] **Google Analytics** — Added GA4 tracking (G-B13DLREYV9) to landing page and all 6 feature detail pages.
 
 ## Phase 7: Growth & Scale

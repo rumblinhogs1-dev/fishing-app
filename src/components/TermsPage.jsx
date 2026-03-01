@@ -111,7 +111,7 @@ export default function TermsPage() {
       <section className={styles.section}>
         <h2>12. Contact</h2>
         <p>
-          For questions about these terms, contact us at support@mycatchbook.com.
+          For questions about these terms, contact us at support@catchdaddy.net.
         </p>
       </section>
     </div>

@@ -91,7 +91,7 @@ export default function PrivacyPolicy() {
         <p>
           Your data is retained as long as your account is active. You may delete individual catches
           at any time. To delete your entire account and associated data, contact us at
-          support@mycatchbook.com.
+          support@catchdaddy.net.
         </p>
       </section>
 
@@ -123,7 +123,7 @@ export default function PrivacyPolicy() {
           <li>Withdraw consent for data processing</li>
         </ul>
         <p>
-          To exercise any of these rights, contact us at support@mycatchbook.com.
+          To exercise any of these rights, contact us at support@catchdaddy.net.
         </p>
       </section>
 
@@ -138,7 +138,7 @@ export default function PrivacyPolicy() {
       <section className={styles.section}>
         <h2>11. Contact</h2>
         <p>
-          For privacy-related questions or requests, contact us at support@mycatchbook.com.
+          For privacy-related questions or requests, contact us at support@catchdaddy.net.
         </p>
       </section>
     </div>

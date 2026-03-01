@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.mycatchbook.app',
+  appId: 'net.catchdaddy.app',
   appName: 'CatchDaddy',
   webDir: 'dist',
 

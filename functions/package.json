@@ -1,6 +1,6 @@
 {
   "name": "fishing-app-functions",
-  "description": "Cloud Functions for MyCatchBook",
+  "description": "Cloud Functions for CatchDaddy",
   "engines": {
     "node": "20"
   },

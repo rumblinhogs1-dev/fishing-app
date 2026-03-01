@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">MyCatchBook</string>
-    <string name="title_activity_main">MyCatchBook</string>
-    <string name="package_name">com.mycatchbook.app</string>
-    <string name="custom_url_scheme">com.mycatchbook.app</string>
+    <string name="app_name">CatchDaddy</string>
+    <string name="title_activity_main">CatchDaddy</string>
+    <string name="package_name">net.catchdaddy.app</string>
+    <string name="custom_url_scheme">net.catchdaddy.app</string>
 </resources>
