@@ -1,4 +1,4 @@
-package com.fishinglog.app;
+package net.catchdaddy.app;
 
 import com.getcapacitor.BridgeActivity;
 
