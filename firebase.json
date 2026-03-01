@@ -10,57 +10,72 @@
     "source": "functions",
     "runtime": "nodejs20"
   },
-  "hosting": {
-    "public": "firebase-dist",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "rewrites": [
-      {
-        "source": "/api/utah-stocking",
-        "function": "utahStocking"
-      },
-      {
-        "source": "/api/idaho-stocking",
-        "function": "idahoStocking"
-      },
-      {
-        "source": "/fishing-app/**",
-        "destination": "/fishing-app/index.html"
-      }
-    ],
-    "headers": [
-      {
-        "source": "**",
-        "headers": [
-          {
-            "key": "Cross-Origin-Opener-Policy",
-            "value": "same-origin-allow-popups"
-          },
-          {
-            "key": "X-Content-Type-Options",
-            "value": "nosniff"
-          },
-          {
-            "key": "X-Frame-Options",
-            "value": "DENY"
-          },
-          {
-            "key": "Strict-Transport-Security",
-            "value": "max-age=63072000; includeSubDomains; preload"
-          },
-          {
-            "key": "Referrer-Policy",
-            "value": "strict-origin-when-cross-origin"
-          },
-          {
-            "key": "Permissions-Policy",
-            "value": "camera=(), microphone=(), geolocation=(self)"
-          },
-          {
-            "key": "X-XSS-Protection",
-            "value": "1; mode=block"
-          }
-        ]
-      }
-    ]
-  }
+  "hosting": [
+    {
+      "site": "fishing-app-46485",
+      "public": "firebase-dist",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        {
+          "source": "/api/utah-stocking",
+          "function": "utahStocking"
+        },
+        {
+          "source": "/api/idaho-stocking",
+          "function": "idahoStocking"
+        },
+        {
+          "source": "/fishing-app/**",
+          "destination": "/fishing-app/index.html"
+        }
+      ],
+      "headers": [
+        {
+          "source": "**",
+          "headers": [
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin-allow-popups"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=63072000; includeSubDomains; preload"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "strict-origin-when-cross-origin"
+            },
+            {
+              "key": "Permissions-Policy",
+              "value": "camera=(), microphone=(), geolocation=(self)"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "1; mode=block"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "site": "mycatchbook-redirect",
+      "public": "firebase-dist/redirect",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "redirects": [
+        {
+          "regex": "/(.*)",
+          "destination": "https://catchdaddy.net/:1",
+          "type": 301
+        }
+      ]
+    }
+  ]
 }
