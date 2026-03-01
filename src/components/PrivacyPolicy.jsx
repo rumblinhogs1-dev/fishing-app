@@ -9,7 +9,7 @@ export default function PrivacyPolicy() {
       <section className={styles.section}>
         <h2>1. Introduction</h2>
         <p>
-          MyCatchBook ("we", "our", "us") respects your privacy. This policy explains what data we
+          CatchDaddy ("we", "our", "us") respects your privacy. This policy explains what data we
           collect, how we use it, and your rights regarding your information.
         </p>
       </section>
@@ -56,7 +56,7 @@ export default function PrivacyPolicy() {
       <section className={styles.section}>
         <h2>3. How We Use Your Data</h2>
         <ul>
-          <li>To provide and improve the MyCatchBook service</li>
+          <li>To provide and improve the CatchDaddy service</li>
           <li>To display your catches and profile to other users (based on your visibility settings)</li>
           <li>To power AI-based fish and lure identification</li>
           <li>To generate fishing insights and statistics</li>
@@ -106,7 +106,7 @@ export default function PrivacyPolicy() {
       <section className={styles.section}>
         <h2>8. Children's Privacy</h2>
         <p>
-          MyCatchBook is not directed at children under 13. We do not knowingly collect data from
+          CatchDaddy is not directed at children under 13. We do not knowingly collect data from
           children under 13. If you believe a child has provided us with personal data, please
           contact us so we can delete it.
         </p>

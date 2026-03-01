@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Fish Identification — CatchDaddy</title>
-  <meta name="description" content="Snap a photo and instantly identify any fish species with AI. Get species details, size estimates, and fun facts." />
+  <title>Friends & Chat — CatchDaddy</title>
+  <meta name="description" content="Connect with fishing buddies, send direct messages, and coordinate trips with group chats." />
   <link rel="icon" type="image/svg+xml" href="/fishing-app/assets/logo-icon.svg" />
 
   <!-- Google Analytics -->
@@ -219,89 +219,63 @@
     .lp-footer p { color: #95d5b2; font-size: 0.78rem; }
 
     /* Page-specific mockup styles */
-    .upload-area {
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 0.75rem;
-      background: #e8f0e8;
-    }
-    .upload-area img {
-      width: 100%;
-      height: 130px;
-      object-fit: contain;
-      display: block;
-    }
-    .result-card {
+    .chat-item {
       background: #fff;
       border-radius: 12px;
-      padding: 0.85rem;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+      padding: 0.75rem 0.85rem;
       margin-bottom: 0.6rem;
-    }
-    .result-card h4 {
-      font-size: 0.85rem;
-      color: #333;
-      margin-bottom: 0.1rem;
-    }
-    .result-card .sci-name {
-      font-size: 0.65rem;
-      color: #888;
-      font-style: italic;
-      margin-bottom: 0.5rem;
-    }
-    .confidence-bar {
-      background: #e8f5e9;
-      border-radius: 6px;
-      height: 18px;
-      overflow: hidden;
-      margin-bottom: 0.5rem;
-      position: relative;
-    }
-    .confidence-fill {
-      background: linear-gradient(90deg, #43a047, #66bb6a);
-      height: 100%;
-      width: 94%;
-      border-radius: 6px;
-    }
-    .confidence-label {
-      position: absolute;
-      right: 6px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 0.6rem;
-      font-weight: 700;
-      color: #2e7d32;
-    }
-    .est-stats {
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
       display: flex;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
+      align-items: center;
+      gap: 0.65rem;
     }
-    .est-stat {
+    .chat-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .chat-content {
       flex: 1;
-      background: #f5f5f5;
-      border-radius: 8px;
-      padding: 0.4rem;
-      text-align: center;
+      min-width: 0;
     }
-    .est-stat .val {
+    .chat-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.15rem;
+    }
+    .chat-name {
       font-size: 0.8rem;
       font-weight: 700;
       color: #333;
     }
-    .est-stat .lbl {
-      font-size: 0.55rem;
+    .chat-time {
+      font-size: 0.6rem;
+      color: #999;
+      flex-shrink: 0;
+    }
+    .chat-preview {
+      font-size: 0.7rem;
       color: #888;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .fun-fact {
-      background: #d8f3dc;
-      border-radius: 8px;
-      padding: 0.5rem 0.65rem;
-      font-size: 0.65rem;
-      color: #1b4332;
-      line-height: 1.4;
+    .chat-unread {
+      width: 8px;
+      height: 8px;
+      background: #43a047;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-left: 0.25rem;
     }
-    .fun-fact strong { font-size: 0.6rem; }
 
     @media (max-width: 600px) {
       .hero { padding: 3rem 1.25rem 2rem; }
@@ -326,11 +300,11 @@
   <!-- Hero -->
   <section class="hero">
     <div class="hero-icon">
-      <svg viewBox="0 0 24 24" width="32" height="32"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+      <svg viewBox="0 0 24 24" width="32" height="32"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
     </div>
-    <h1>AI Fish Identification</h1>
-    <p class="tagline">Snap. Identify. Learn.</p>
-    <p class="desc">Take a photo of any catch and our AI instantly identifies the species, estimates size, and shares fascinating facts — all in seconds.</p>
+    <h1>Friends & Chat</h1>
+    <p class="tagline">Fish together. Chat anywhere.</p>
+    <p class="desc">Connect with fishing buddies, send direct messages, coordinate trips with group chats, and share your best catches with your inner circle.</p>
   </section>
 
   <!-- Phone Mockup -->
@@ -341,34 +315,48 @@
           <span>9:41 AM</span>
           <span>100%</span>
         </div>
-        <div class="phone-header">AI Fish ID</div>
+        <div class="phone-header">Messages</div>
         <div class="phone-body">
-          <div class="upload-area">
-            <img src="/features/images/largemouth-bass.jpg" alt="Largemouth Bass caught at lake" />
+          <div class="chat-item">
+            <div class="chat-avatar" style="background:#2d6a4f;">B</div>
+            <div class="chat-content">
+              <div class="chat-top">
+                <span class="chat-name">Bass Masters Group</span>
+                <span class="chat-time">2m ago</span>
+              </div>
+              <div class="chat-preview">Jake: Heading to the lake at 6am!</div>
+            </div>
+            <div class="chat-unread"></div>
           </div>
-          <div class="result-card">
-            <h4>Largemouth Bass</h4>
-            <div class="sci-name">Micropterus salmoides</div>
-            <div class="confidence-bar">
-              <div class="confidence-fill"></div>
-              <span class="confidence-label">94%</span>
+          <div class="chat-item">
+            <div class="chat-avatar" style="background:#e76f51;">S</div>
+            <div class="chat-content">
+              <div class="chat-top">
+                <span class="chat-name">Sarah M.</span>
+                <span class="chat-time">15m ago</span>
+              </div>
+              <div class="chat-preview">Did you see my 8lb largemouth??</div>
             </div>
-            <div class="est-stats">
-              <div class="est-stat">
-                <div class="val">22"</div>
-                <div class="lbl">Length</div>
+            <div class="chat-unread"></div>
+          </div>
+          <div class="chat-item">
+            <div class="chat-avatar" style="background:#264653;">M</div>
+            <div class="chat-content">
+              <div class="chat-top">
+                <span class="chat-name">Mike's Fly Fishing</span>
+                <span class="chat-time">1h ago</span>
               </div>
-              <div class="est-stat">
-                <div class="val">5.2 lbs</div>
-                <div class="lbl">Weight</div>
-              </div>
-              <div class="est-stat">
-                <div class="val">~3 yrs</div>
-                <div class="lbl">Age</div>
-              </div>
+              <div class="chat-preview">New dry fly pattern works great</div>
             </div>
-            <div class="fun-fact">
-              <strong>Fun fact:</strong> Largemouth bass can eat prey up to 50% of their own body length in a single strike!
+          </div>
+          <div class="chat-item">
+            <div class="chat-avatar" style="background:#e9c46a; color:#1b4332;">T</div>
+            <div class="chat-content">
+              <div class="chat-top">
+                <span class="chat-name">Tournament Crew</span>
+                <span class="chat-time">3h ago</span>
+              </div>
+              <div class="chat-preview">Sign up closes Friday</div>
             </div>
           </div>
         </div>
@@ -381,28 +369,28 @@
     <h2>How It Works</h2>
     <div class="details-grid">
       <div class="detail-card">
-        <h3>Instant Recognition</h3>
-        <p>Our AI model recognizes hundreds of freshwater and saltwater species from a single photo, even at odd angles or in low light.</p>
+        <h3>Direct Messages</h3>
+        <p>Private one-on-one conversations with any angler on the platform. Share photos, locations, and catches.</p>
       </div>
       <div class="detail-card">
-        <h3>Size Estimates</h3>
-        <p>Get estimated length, weight, and age for your catch based on visual analysis — perfect when you don't have a scale handy.</p>
+        <h3>Group Chats</h3>
+        <p>Create group chats for your fishing crew, tournament teams, or local fishing clubs.</p>
       </div>
       <div class="detail-card">
-        <h3>Species Details</h3>
-        <p>Learn about habitat, diet, seasonal behavior, and regional regulations for every identified species.</p>
+        <h3>Trip Coordination</h3>
+        <p>Plan meet-ups, share locations in real-time, and coordinate logistics all in one thread.</p>
       </div>
       <div class="detail-card">
-        <h3>Lure ID Too</h3>
-        <p>Not just fish — snap a photo of any lure or fly and get brand, type, recommended use, and similar alternatives.</p>
+        <h3>Catch Sharing</h3>
+        <p>Share your latest catches directly in chat with full details — species, weight, location, and photos.</p>
       </div>
     </div>
   </section>
 
   <!-- CTA -->
   <section class="cta-section">
-    <h2>Ready to try AI Fish ID?</h2>
-    <p>Start identifying your catches for free today.</p>
+    <h2>Ready to connect with anglers?</h2>
+    <p>Start chatting with fishing buddies for free.</p>
     <a href="/fishing-app/auth" class="cta-btn">Get Started Free</a>
   </section>
 

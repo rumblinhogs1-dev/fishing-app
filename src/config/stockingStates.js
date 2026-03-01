@@ -9,7 +9,7 @@ export const STOCKING_STATES = {
     disclaimer:
       'Stocking schedules are tentative and subject to change due to weather, fish availability, and water conditions. Always verify with AZGFD before planning a trip.',
     bottomDisclaimer:
-      'Data sourced from publicly available AZGFD stocking schedules. MyCatchBook is not affiliated with Arizona Game & Fish Department.',
+      'Data sourced from publicly available AZGFD stocking schedules. CatchDaddy is not affiliated with Arizona Game & Fish Department.',
     format: 'grid',
     sheets: [
       {
@@ -44,7 +44,7 @@ export const STOCKING_STATES = {
     disclaimer:
       'Stocking reports reflect weekly summaries and may not include exact dates. Always verify with CPW before planning a trip.',
     bottomDisclaimer:
-      'Data sourced from publicly available CPW stocking reports. MyCatchBook is not affiliated with Colorado Parks & Wildlife.',
+      'Data sourced from publicly available CPW stocking reports. CatchDaddy is not affiliated with Colorado Parks & Wildlife.',
     format: 'list',
     sheets: [
       {
@@ -68,7 +68,7 @@ export const STOCKING_STATES = {
     disclaimer:
       'Stocking reports reflect IDFG records and may not include exact dates. Always verify with Idaho Fish and Game before planning a trip.',
     bottomDisclaimer:
-      'Data sourced from Idaho Department of Fish and Game stocking database. MyCatchBook is not affiliated with IDFG.',
+      'Data sourced from Idaho Department of Fish and Game stocking database. CatchDaddy is not affiliated with IDFG.',
     format: 'proxy-json',
     sheets: [
       {
@@ -89,7 +89,7 @@ export const STOCKING_STATES = {
     disclaimer:
       'Stocking data sourced from weekly NMDGF reports. Dates and quantities may vary. Always verify with NMDGF before planning a trip.',
     bottomDisclaimer:
-      'Data sourced from publicly available NMDGF stocking reports via stockingreport.com. MyCatchBook is not affiliated with NM Department of Game & Fish.',
+      'Data sourced from publicly available NMDGF stocking reports via stockingreport.com. CatchDaddy is not affiliated with NM Department of Game & Fish.',
     format: 'json',
     sheets: [
       {
@@ -110,7 +110,7 @@ export const STOCKING_STATES = {
     disclaimer:
       'Stocking reports reflect DWR records and may not include exact dates. Always verify with Utah DWR before planning a trip.',
     bottomDisclaimer:
-      'Data sourced from Utah Division of Wildlife Resources stocking database. MyCatchBook is not affiliated with Utah DWR.',
+      'Data sourced from Utah Division of Wildlife Resources stocking database. CatchDaddy is not affiliated with Utah DWR.',
     format: 'proxy-json',
     sheets: [
       {

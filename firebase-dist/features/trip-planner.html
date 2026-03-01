@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Fish Identification — CatchDaddy</title>
-  <meta name="description" content="Snap a photo and instantly identify any fish species with AI. Get species details, size estimates, and fun facts." />
+  <title>Trip Planner — CatchDaddy</title>
+  <meta name="description" content="Plan fishing trips with weather forecasts, target species, and customizable gear checklists." />
   <link rel="icon" type="image/svg+xml" href="/fishing-app/assets/logo-icon.svg" />
 
   <!-- Google Analytics -->
@@ -219,89 +219,83 @@
     .lp-footer p { color: #95d5b2; font-size: 0.78rem; }
 
     /* Page-specific mockup styles */
-    .upload-area {
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 0.75rem;
-      background: #e8f0e8;
-    }
-    .upload-area img {
-      width: 100%;
-      height: 130px;
-      object-fit: contain;
-      display: block;
-    }
-    .result-card {
+    .trip-title-area {
       background: #fff;
       border-radius: 12px;
-      padding: 0.85rem;
+      padding: 0.75rem 0.85rem;
       box-shadow: 0 1px 6px rgba(0,0,0,0.08);
       margin-bottom: 0.6rem;
     }
-    .result-card h4 {
-      font-size: 0.85rem;
+    .trip-title-area h4 {
+      font-size: 0.9rem;
       color: #333;
-      margin-bottom: 0.1rem;
+      margin-bottom: 0.15rem;
     }
-    .result-card .sci-name {
+    .trip-title-area .trip-date {
       font-size: 0.65rem;
       color: #888;
-      font-style: italic;
-      margin-bottom: 0.5rem;
     }
-    .confidence-bar {
-      background: #e8f5e9;
-      border-radius: 6px;
-      height: 18px;
-      overflow: hidden;
-      margin-bottom: 0.5rem;
-      position: relative;
-    }
-    .confidence-fill {
-      background: linear-gradient(90deg, #43a047, #66bb6a);
-      height: 100%;
-      width: 94%;
-      border-radius: 6px;
-    }
-    .confidence-label {
-      position: absolute;
-      right: 6px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 0.6rem;
-      font-weight: 700;
-      color: #2e7d32;
-    }
-    .est-stats {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
-    }
-    .est-stat {
-      flex: 1;
-      background: #f5f5f5;
-      border-radius: 8px;
-      padding: 0.4rem;
-      text-align: center;
-    }
-    .est-stat .val {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #333;
-    }
-    .est-stat .lbl {
-      font-size: 0.55rem;
-      color: #888;
-    }
-    .fun-fact {
+    .weather-bar {
       background: #d8f3dc;
       border-radius: 8px;
-      padding: 0.5rem 0.65rem;
-      font-size: 0.65rem;
+      padding: 0.45rem 0.65rem;
+      font-size: 0.62rem;
       color: #1b4332;
-      line-height: 1.4;
+      margin-bottom: 0.6rem;
+      text-align: center;
+      font-weight: 500;
     }
-    .fun-fact strong { font-size: 0.6rem; }
+    .species-section {
+      margin-bottom: 0.6rem;
+    }
+    .species-label {
+      font-size: 0.6rem;
+      color: #888;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.3rem;
+    }
+    .species-tags {
+      display: flex;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+    .species-tag {
+      background: #e8f0e8;
+      color: #2d6a4f;
+      font-size: 0.6rem;
+      font-weight: 600;
+      padding: 0.25rem 0.55rem;
+      border-radius: 20px;
+    }
+    .gear-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 0.75rem 0.85rem;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+    }
+    .gear-card h4 {
+      font-size: 0.75rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    .gear-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.65rem;
+      color: #444;
+      padding: 0.2rem 0;
+    }
+    .gear-item .check {
+      font-size: 0.7rem;
+      width: 16px;
+      text-align: center;
+    }
+    .gear-item.checked .check { color: #43a047; }
+    .gear-item.checked span { color: #888; text-decoration: line-through; }
+    .gear-item.unchecked .check { color: #bbb; }
 
     @media (max-width: 600px) {
       .hero { padding: 3rem 1.25rem 2rem; }
@@ -326,11 +320,11 @@
   <!-- Hero -->
   <section class="hero">
     <div class="hero-icon">
-      <svg viewBox="0 0 24 24" width="32" height="32"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+      <svg viewBox="0 0 24 24" width="32" height="32"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/></svg>
     </div>
-    <h1>AI Fish Identification</h1>
-    <p class="tagline">Snap. Identify. Learn.</p>
-    <p class="desc">Take a photo of any catch and our AI instantly identifies the species, estimates size, and shares fascinating facts — all in seconds.</p>
+    <h1>Trip Planner</h1>
+    <p class="tagline">Plan it. Pack it. Catch it.</p>
+    <p class="desc">Organize every fishing trip with weather integration, target species, location picks, and fully customizable gear checklists — all in one place.</p>
   </section>
 
   <!-- Phone Mockup -->
@@ -341,34 +335,41 @@
           <span>9:41 AM</span>
           <span>100%</span>
         </div>
-        <div class="phone-header">AI Fish ID</div>
+        <div class="phone-header">Trip Planner</div>
         <div class="phone-body">
-          <div class="upload-area">
-            <img src="/features/images/largemouth-bass.jpg" alt="Largemouth Bass caught at lake" />
+          <div class="trip-title-area">
+            <h4>Weekend at Blue Mesa</h4>
+            <div class="trip-date">Mar 8–9, 2026</div>
           </div>
-          <div class="result-card">
-            <h4>Largemouth Bass</h4>
-            <div class="sci-name">Micropterus salmoides</div>
-            <div class="confidence-bar">
-              <div class="confidence-fill"></div>
-              <span class="confidence-label">94%</span>
+          <div class="weather-bar">Sat: 62° Sunny · Sun: 58° Clouds</div>
+          <div class="species-section">
+            <div class="species-label">Target Species</div>
+            <div class="species-tags">
+              <span class="species-tag">Rainbow Trout</span>
+              <span class="species-tag">Brown Trout</span>
             </div>
-            <div class="est-stats">
-              <div class="est-stat">
-                <div class="val">22"</div>
-                <div class="lbl">Length</div>
-              </div>
-              <div class="est-stat">
-                <div class="val">5.2 lbs</div>
-                <div class="lbl">Weight</div>
-              </div>
-              <div class="est-stat">
-                <div class="val">~3 yrs</div>
-                <div class="lbl">Age</div>
-              </div>
+          </div>
+          <div class="gear-card">
+            <h4>Gear Checklist</h4>
+            <div class="gear-item checked">
+              <span class="check">&#10003;</span>
+              <span>5-weight fly rod</span>
             </div>
-            <div class="fun-fact">
-              <strong>Fun fact:</strong> Largemouth bass can eat prey up to 50% of their own body length in a single strike!
+            <div class="gear-item checked">
+              <span class="check">&#10003;</span>
+              <span>Waders &amp; boots</span>
+            </div>
+            <div class="gear-item unchecked">
+              <span class="check">&#9633;</span>
+              <span>Elk hair caddis (#14)</span>
+            </div>
+            <div class="gear-item unchecked">
+              <span class="check">&#9633;</span>
+              <span>Split shot &amp; indicators</span>
+            </div>
+            <div class="gear-item unchecked">
+              <span class="check">&#9633;</span>
+              <span>Landing net</span>
             </div>
           </div>
         </div>
@@ -381,28 +382,28 @@
     <h2>How It Works</h2>
     <div class="details-grid">
       <div class="detail-card">
-        <h3>Instant Recognition</h3>
-        <p>Our AI model recognizes hundreds of freshwater and saltwater species from a single photo, even at odd angles or in low light.</p>
+        <h3>Weather Integration</h3>
+        <p>See weather forecasts for your trip dates and destination so you can pack smart and plan around conditions.</p>
       </div>
       <div class="detail-card">
-        <h3>Size Estimates</h3>
-        <p>Get estimated length, weight, and age for your catch based on visual analysis — perfect when you don't have a scale handy.</p>
+        <h3>Species Targeting</h3>
+        <p>Select target species and get AI-powered recommendations for lures, techniques, and best times.</p>
       </div>
       <div class="detail-card">
-        <h3>Species Details</h3>
-        <p>Learn about habitat, diet, seasonal behavior, and regional regulations for every identified species.</p>
+        <h3>Gear Checklists</h3>
+        <p>Customizable packing lists so you never forget essential tackle. Share lists with your fishing crew.</p>
       </div>
       <div class="detail-card">
-        <h3>Lure ID Too</h3>
-        <p>Not just fish — snap a photo of any lure or fly and get brand, type, recommended use, and similar alternatives.</p>
+        <h3>Trip History</h3>
+        <p>Review past trips, what worked, and what didn't — all linked to your catch data for continuous improvement.</p>
       </div>
     </div>
   </section>
 
   <!-- CTA -->
   <section class="cta-section">
-    <h2>Ready to try AI Fish ID?</h2>
-    <p>Start identifying your catches for free today.</p>
+    <h2>Ready to plan your next trip?</h2>
+    <p>Start planning trips for free today.</p>
     <a href="/fishing-app/auth" class="cta-btn">Get Started Free</a>
   </section>
 

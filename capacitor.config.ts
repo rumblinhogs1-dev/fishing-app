@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.mycatchbook.app',
-  appName: 'MyCatchBook',
+  appName: 'CatchDaddy',
   webDir: 'dist',
 
   // Uncomment the block below for live-reload during development:

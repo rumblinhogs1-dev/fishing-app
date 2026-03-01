@@ -91,7 +91,7 @@ export default function Regulations() {
       <p className={styles.subtitle}>Check size limits, daily bags, and seasons by state</p>
 
       <div className={styles.topDisclaimer}>
-        <strong>Disclaimer:</strong> The information provided here is for reference only and may not reflect the most current regulations. It is your responsibility to verify all rules with your local fish and wildlife agency before fishing. MyCatchBook is not liable for any violations.
+        <strong>Disclaimer:</strong> The information provided here is for reference only and may not reflect the most current regulations. It is your responsibility to verify all rules with your local fish and wildlife agency before fishing. CatchDaddy is not liable for any violations.
       </div>
 
       <div className={styles.modeToggle}>

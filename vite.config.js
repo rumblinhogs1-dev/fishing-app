@@ -108,8 +108,8 @@ export default defineConfig({
         ],
       },
       manifest: {
-        name: 'MyCatchBook',
-        short_name: 'MyCatchBook',
+        name: 'CatchDaddy',
+        short_name: 'CatchDaddy',
         description: 'AI-Powered Fishing Community — Log catches, identify fish, discover spots, and connect with anglers.',
         theme_color: '#2d6a4f',
         background_color: '#ffffff',

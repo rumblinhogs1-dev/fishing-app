@@ -9,7 +9,7 @@ export default function TermsPage() {
       <section className={styles.section}>
         <h2>1. Acceptance of Terms</h2>
         <p>
-          By accessing or using MyCatchBook ("the Service"), you agree to be bound by these Terms of Service.
+          By accessing or using CatchDaddy ("the Service"), you agree to be bound by these Terms of Service.
           If you do not agree, do not use the Service.
         </p>
       </section>
@@ -17,7 +17,7 @@ export default function TermsPage() {
       <section className={styles.section}>
         <h2>2. Description of Service</h2>
         <p>
-          MyCatchBook is a fishing community platform that allows users to log catches, share photos,
+          CatchDaddy is a fishing community platform that allows users to log catches, share photos,
           identify fish and lures using AI, view maps, access local fishing guides, and interact with other anglers.
         </p>
       </section>
@@ -35,7 +35,7 @@ export default function TermsPage() {
         <h2>4. User-Generated Content</h2>
         <p>
           You retain ownership of content you submit (catch photos, comments, chat messages). By posting
-          content publicly, you grant MyCatchBook a non-exclusive, royalty-free license to display it
+          content publicly, you grant CatchDaddy a non-exclusive, royalty-free license to display it
           within the Service. You may delete your content at any time.
         </p>
         <p>
@@ -47,7 +47,7 @@ export default function TermsPage() {
       <section className={styles.section}>
         <h2>5. AI Features</h2>
         <p>
-          MyCatchBook uses Google Gemini AI for fish identification, lure identification, and local
+          CatchDaddy uses Google Gemini AI for fish identification, lure identification, and local
           fishing guide recommendations. AI results are informational only and may be inaccurate.
           Do not rely on AI identifications for safety decisions (e.g., determining if a fish is safe to consume).
         </p>
@@ -56,7 +56,7 @@ export default function TermsPage() {
       <section className={styles.section}>
         <h2>6. Fishing Disclaimer</h2>
         <p>
-          MyCatchBook provides fishing information for educational and recreational purposes only.
+          CatchDaddy provides fishing information for educational and recreational purposes only.
           You are solely responsible for complying with all local, state, and federal fishing regulations,
           including licensing requirements, catch limits, and seasonal restrictions. Regulation information
           displayed in the app may not be current — always verify with your local wildlife agency.
@@ -66,7 +66,7 @@ export default function TermsPage() {
       <section className={styles.section}>
         <h2>7. Subscriptions &amp; Payments</h2>
         <p>
-          MyCatchBook may offer paid subscription tiers with additional features. Pricing, billing
+          CatchDaddy may offer paid subscription tiers with additional features. Pricing, billing
           terms, and cancellation policies will be clearly disclosed at the time of purchase. Free
           tier users may access core features at no cost.
         </p>
@@ -94,7 +94,7 @@ export default function TermsPage() {
       <section className={styles.section}>
         <h2>10. Limitation of Liability</h2>
         <p>
-          MyCatchBook is provided "as is" without warranties of any kind. We are not liable for any
+          CatchDaddy is provided "as is" without warranties of any kind. We are not liable for any
           damages arising from your use of the Service, including but not limited to data loss,
           inaccurate AI identifications, or reliance on fishing information provided through the platform.
         </p>

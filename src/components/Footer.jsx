@@ -11,7 +11,7 @@ export default function Footer() {
         <span className={styles.divider}>|</span>
         <Link to="/pricing">Pricing</Link>
       </div>
-      <p className={styles.copy}>&copy; 2026 MyCatchBook. All rights reserved.</p>
+      <p className={styles.copy}>&copy; 2026 CatchDaddy. All rights reserved.</p>
     </footer>
   );
 }

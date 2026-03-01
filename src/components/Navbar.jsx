@@ -30,7 +30,7 @@ export default function Navbar({ onSearchOpen }) {
     <nav className={styles.nav}>
       <div className={styles.brand}>
         <img src={import.meta.env.BASE_URL + 'assets/logo-icon.svg'} alt="" className={styles.icon} />
-        <span className={styles.title}>MyCatchBook</span>
+        <span className={styles.title}>CatchDaddy</span>
         <span className={styles.tagline}>AI-Powered Fishing Community</span>
       </div>
 

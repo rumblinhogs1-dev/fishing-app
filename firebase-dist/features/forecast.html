@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Fish Identification — CatchDaddy</title>
-  <meta name="description" content="Snap a photo and instantly identify any fish species with AI. Get species details, size estimates, and fun facts." />
+  <title>Fishing Forecast — CatchDaddy</title>
+  <meta name="description" content="Weather, solunar, and species activity forecasts to help you fish at the best times." />
   <link rel="icon" type="image/svg+xml" href="/fishing-app/assets/logo-icon.svg" />
 
   <!-- Google Analytics -->
@@ -219,89 +219,77 @@
     .lp-footer p { color: #95d5b2; font-size: 0.78rem; }
 
     /* Page-specific mockup styles */
-    .upload-area {
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 0.75rem;
-      background: #e8f0e8;
-    }
-    .upload-area img {
-      width: 100%;
-      height: 130px;
-      object-fit: contain;
-      display: block;
-    }
-    .result-card {
-      background: #fff;
+    .weather-card {
+      background: linear-gradient(135deg, #2d6a4f, #40916c);
       border-radius: 12px;
       padding: 0.85rem;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
-      margin-bottom: 0.6rem;
+      color: #fff;
+      margin-bottom: 0.75rem;
     }
-    .result-card h4 {
-      font-size: 0.85rem;
-      color: #333;
-      margin-bottom: 0.1rem;
+    .weather-temp {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 0.15rem;
     }
-    .result-card .sci-name {
-      font-size: 0.65rem;
-      color: #888;
-      font-style: italic;
-      margin-bottom: 0.5rem;
+    .weather-cond {
+      font-size: 0.75rem;
+      opacity: 0.9;
+      margin-bottom: 0.35rem;
     }
-    .confidence-bar {
-      background: #e8f5e9;
-      border-radius: 6px;
-      height: 18px;
-      overflow: hidden;
-      margin-bottom: 0.5rem;
-      position: relative;
-    }
-    .confidence-fill {
-      background: linear-gradient(90deg, #43a047, #66bb6a);
-      height: 100%;
-      width: 94%;
-      border-radius: 6px;
-    }
-    .confidence-label {
-      position: absolute;
-      right: 6px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 0.6rem;
-      font-weight: 700;
-      color: #2e7d32;
-    }
-    .est-stats {
+    .weather-details {
       display: flex;
-      gap: 0.5rem;
+      gap: 0.75rem;
+      font-size: 0.6rem;
+      opacity: 0.85;
+    }
+    .activity-bar {
+      background: #fff;
+      border-radius: 10px;
+      padding: 0.55rem 0.75rem;
       margin-bottom: 0.5rem;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
     }
-    .est-stat {
-      flex: 1;
-      background: #f5f5f5;
-      border-radius: 8px;
-      padding: 0.4rem;
-      text-align: center;
+    .activity-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.3rem;
     }
-    .est-stat .val {
-      font-size: 0.8rem;
-      font-weight: 700;
+    .activity-label span:first-child {
+      font-size: 0.75rem;
+      font-weight: 600;
       color: #333;
     }
-    .est-stat .lbl {
-      font-size: 0.55rem;
-      color: #888;
+    .activity-label span:last-child {
+      font-size: 0.65rem;
+      font-weight: 700;
     }
-    .fun-fact {
+    .activity-track {
+      background: #e8e8e8;
+      border-radius: 6px;
+      height: 14px;
+      overflow: hidden;
+    }
+    .activity-fill {
+      height: 100%;
+      border-radius: 6px;
+    }
+    .activity-fill.high { background: linear-gradient(90deg, #43a047, #66bb6a); }
+    .activity-fill.medium { background: linear-gradient(90deg, #f9a825, #fdd835); }
+    .activity-fill.low { background: linear-gradient(90deg, #e65100, #ff6d00); }
+    .best-times {
       background: #d8f3dc;
-      border-radius: 8px;
-      padding: 0.5rem 0.65rem;
+      border-radius: 10px;
+      padding: 0.55rem 0.75rem;
       font-size: 0.65rem;
       color: #1b4332;
       line-height: 1.4;
+      margin-top: 0.25rem;
     }
-    .fun-fact strong { font-size: 0.6rem; }
+    .best-times strong {
+      font-size: 0.65rem;
+    }
 
     @media (max-width: 600px) {
       .hero { padding: 3rem 1.25rem 2rem; }
@@ -326,11 +314,11 @@
   <!-- Hero -->
   <section class="hero">
     <div class="hero-icon">
-      <svg viewBox="0 0 24 24" width="32" height="32"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+      <svg viewBox="0 0 24 24" width="32" height="32"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/></svg>
     </div>
-    <h1>AI Fish Identification</h1>
-    <p class="tagline">Snap. Identify. Learn.</p>
-    <p class="desc">Take a photo of any catch and our AI instantly identifies the species, estimates size, and shares fascinating facts — all in seconds.</p>
+    <h1>Fishing Forecast</h1>
+    <p class="tagline">Fish smarter, not harder.</p>
+    <p class="desc">Combines real-time weather, solunar tables, and species-specific activity data so you always know the best time to hit the water.</p>
   </section>
 
   <!-- Phone Mockup -->
@@ -341,35 +329,45 @@
           <span>9:41 AM</span>
           <span>100%</span>
         </div>
-        <div class="phone-header">AI Fish ID</div>
+        <div class="phone-header">Fishing Forecast</div>
         <div class="phone-body">
-          <div class="upload-area">
-            <img src="/features/images/largemouth-bass.jpg" alt="Largemouth Bass caught at lake" />
+          <div class="weather-card">
+            <div class="weather-temp">68&deg;</div>
+            <div class="weather-cond">Partly Cloudy</div>
+            <div class="weather-details">
+              <span>Wind: 8 mph SW</span>
+              <span>Pressure: 30.1 &uarr;</span>
+            </div>
           </div>
-          <div class="result-card">
-            <h4>Largemouth Bass</h4>
-            <div class="sci-name">Micropterus salmoides</div>
-            <div class="confidence-bar">
-              <div class="confidence-fill"></div>
-              <span class="confidence-label">94%</span>
+          <div class="activity-bar">
+            <div class="activity-label">
+              <span>Bass Activity</span>
+              <span style="color:#43a047;">88%</span>
             </div>
-            <div class="est-stats">
-              <div class="est-stat">
-                <div class="val">22"</div>
-                <div class="lbl">Length</div>
-              </div>
-              <div class="est-stat">
-                <div class="val">5.2 lbs</div>
-                <div class="lbl">Weight</div>
-              </div>
-              <div class="est-stat">
-                <div class="val">~3 yrs</div>
-                <div class="lbl">Age</div>
-              </div>
+            <div class="activity-track">
+              <div class="activity-fill high" style="width:88%;"></div>
             </div>
-            <div class="fun-fact">
-              <strong>Fun fact:</strong> Largemouth bass can eat prey up to 50% of their own body length in a single strike!
+          </div>
+          <div class="activity-bar">
+            <div class="activity-label">
+              <span>Trout Activity</span>
+              <span style="color:#f9a825;">62%</span>
             </div>
+            <div class="activity-track">
+              <div class="activity-fill medium" style="width:62%;"></div>
+            </div>
+          </div>
+          <div class="activity-bar">
+            <div class="activity-label">
+              <span>Catfish Activity</span>
+              <span style="color:#e65100;">35%</span>
+            </div>
+            <div class="activity-track">
+              <div class="activity-fill low" style="width:35%;"></div>
+            </div>
+          </div>
+          <div class="best-times">
+            <strong>Best Times:</strong> 6:15 AM &ndash; 8:30 AM &middot; 5:45 PM &ndash; 7:00 PM
           </div>
         </div>
       </div>
@@ -381,28 +379,28 @@
     <h2>How It Works</h2>
     <div class="details-grid">
       <div class="detail-card">
-        <h3>Instant Recognition</h3>
-        <p>Our AI model recognizes hundreds of freshwater and saltwater species from a single photo, even at odd angles or in low light.</p>
+        <h3>Real-Time Weather</h3>
+        <p>Current conditions, wind, pressure, temperature, and hourly forecasts tailored for anglers.</p>
       </div>
       <div class="detail-card">
-        <h3>Size Estimates</h3>
-        <p>Get estimated length, weight, and age for your catch based on visual analysis — perfect when you don't have a scale handy.</p>
+        <h3>Solunar Data</h3>
+        <p>Major and minor feeding periods based on moon phase and position for peak bite windows.</p>
       </div>
       <div class="detail-card">
-        <h3>Species Details</h3>
-        <p>Learn about habitat, diet, seasonal behavior, and regional regulations for every identified species.</p>
+        <h3>Species Activity</h3>
+        <p>AI-powered activity ratings for common species based on weather, water temp, and seasonal patterns.</p>
       </div>
       <div class="detail-card">
-        <h3>Lure ID Too</h3>
-        <p>Not just fish — snap a photo of any lure or fly and get brand, type, recommended use, and similar alternatives.</p>
+        <h3>Best Time Alerts</h3>
+        <p>Get notified when conditions are perfect for your target species at your favorite spots.</p>
       </div>
     </div>
   </section>
 
   <!-- CTA -->
   <section class="cta-section">
-    <h2>Ready to try AI Fish ID?</h2>
-    <p>Start identifying your catches for free today.</p>
+    <h2>Ready to fish at the perfect time?</h2>
+    <p>Start using fishing forecasts for free.</p>
     <a href="/fishing-app/auth" class="cta-btn">Get Started Free</a>
   </section>
 

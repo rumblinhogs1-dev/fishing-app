@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Fish Identification — CatchDaddy</title>
-  <meta name="description" content="Snap a photo and instantly identify any fish species with AI. Get species details, size estimates, and fun facts." />
+  <title>Conservation Guide — CatchDaddy</title>
+  <meta name="description" content="Eco-friendly fishing practices, conservation badges, and tips to protect the waters you love." />
   <link rel="icon" type="image/svg+xml" href="/fishing-app/assets/logo-icon.svg" />
 
   <!-- Google Analytics -->
@@ -219,81 +219,66 @@
     .lp-footer p { color: #95d5b2; font-size: 0.78rem; }
 
     /* Page-specific mockup styles */
-    .upload-area {
+    .impact-card {
+      background: linear-gradient(135deg, #2d6a4f, #40916c);
       border-radius: 12px;
-      overflow: hidden;
+      padding: 0.85rem;
+      color: #fff;
+      text-align: center;
       margin-bottom: 0.75rem;
-      background: #e8f0e8;
     }
-    .upload-area img {
-      width: 100%;
-      height: 130px;
-      object-fit: contain;
-      display: block;
+    .impact-card .impact-label {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      opacity: 0.85;
+      margin-bottom: 0.35rem;
     }
-    .result-card {
+    .impact-card .impact-stats {
+      font-size: 0.7rem;
+      line-height: 1.5;
+      opacity: 0.95;
+    }
+    .badges-section {
       background: #fff;
       border-radius: 12px;
       padding: 0.85rem;
       box-shadow: 0 1px 6px rgba(0,0,0,0.08);
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.75rem;
     }
-    .result-card h4 {
-      font-size: 0.85rem;
-      color: #333;
-      margin-bottom: 0.1rem;
-    }
-    .result-card .sci-name {
+    .badges-label {
       font-size: 0.65rem;
-      color: #888;
-      font-style: italic;
-      margin-bottom: 0.5rem;
-    }
-    .confidence-bar {
-      background: #e8f5e9;
-      border-radius: 6px;
-      height: 18px;
-      overflow: hidden;
-      margin-bottom: 0.5rem;
-      position: relative;
-    }
-    .confidence-fill {
-      background: linear-gradient(90deg, #43a047, #66bb6a);
-      height: 100%;
-      width: 94%;
-      border-radius: 6px;
-    }
-    .confidence-label {
-      position: absolute;
-      right: 6px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 0.6rem;
-      font-weight: 700;
-      color: #2e7d32;
-    }
-    .est-stats {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
-    }
-    .est-stat {
-      flex: 1;
-      background: #f5f5f5;
-      border-radius: 8px;
-      padding: 0.4rem;
-      text-align: center;
-    }
-    .est-stat .val {
-      font-size: 0.8rem;
       font-weight: 700;
       color: #333;
+      margin-bottom: 0.5rem;
     }
-    .est-stat .lbl {
-      font-size: 0.55rem;
-      color: #888;
+    .badge-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
     }
-    .fun-fact {
+    .badge-item:last-child {
+      margin-bottom: 0;
+    }
+    .badge-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .badge-icon.green { background: #2d6a4f; }
+    .badge-icon.blue { background: #1976d2; }
+    .badge-icon svg { fill: #fff; width: 14px; height: 14px; }
+    .badge-name {
+      font-size: 0.7rem;
+      color: #333;
+      font-weight: 600;
+    }
+    .tip-card {
       background: #d8f3dc;
       border-radius: 8px;
       padding: 0.5rem 0.65rem;
@@ -301,7 +286,7 @@
       color: #1b4332;
       line-height: 1.4;
     }
-    .fun-fact strong { font-size: 0.6rem; }
+    .tip-card strong { font-size: 0.6rem; }
 
     @media (max-width: 600px) {
       .hero { padding: 3rem 1.25rem 2rem; }
@@ -326,11 +311,11 @@
   <!-- Hero -->
   <section class="hero">
     <div class="hero-icon">
-      <svg viewBox="0 0 24 24" width="32" height="32"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+      <svg viewBox="0 0 24 24" width="32" height="32"><path d="M6.05 8.05c-2.73 2.73-2.73 7.17 0 9.9C7.42 19.32 9.21 20 11 20s3.58-.68 4.95-2.05C19.43 14.47 20 4 20 4S9.53 4.57 6.05 8.05zm8.49 8.49c-.95.94-2.2 1.46-3.54 1.46-.89 0-1.73-.25-2.48-.68.92-1.07 2.18-2.36 3.88-3.71l-1.28-1.52c-2.02 1.6-3.44 3.07-4.44 4.26-.63-1.2-.63-2.66.04-3.87.67-1.22 2.69-3.31 6.87-4.68-1.37 4.18-3.46 6.2-4.68 6.87 1.79-1.2 3.7-1.89 5.07-1.89.75 0 1.34.19 1.67.52.58.58.58 1.52.01 2.09l-1.12 1.15z"/></svg>
     </div>
-    <h1>AI Fish Identification</h1>
-    <p class="tagline">Snap. Identify. Learn.</p>
-    <p class="desc">Take a photo of any catch and our AI instantly identifies the species, estimates size, and shares fascinating facts — all in seconds.</p>
+    <h1>Conservation Guide</h1>
+    <p class="tagline">Fish responsibly. Protect our waters.</p>
+    <p class="desc">Learn eco-friendly fishing practices, track your conservation impact, and earn badges for sustainable angling — because great fishing starts with healthy ecosystems.</p>
   </section>
 
   <!-- Phone Mockup -->
@@ -341,35 +326,29 @@
           <span>9:41 AM</span>
           <span>100%</span>
         </div>
-        <div class="phone-header">AI Fish ID</div>
+        <div class="phone-header">Conservation</div>
         <div class="phone-body">
-          <div class="upload-area">
-            <img src="/features/images/largemouth-bass.jpg" alt="Largemouth Bass caught at lake" />
+          <div class="impact-card">
+            <div class="impact-label">Your Impact</div>
+            <div class="impact-stats">12 fish released &middot; 3 clean-ups joined &middot; 2 badges earned</div>
           </div>
-          <div class="result-card">
-            <h4>Largemouth Bass</h4>
-            <div class="sci-name">Micropterus salmoides</div>
-            <div class="confidence-bar">
-              <div class="confidence-fill"></div>
-              <span class="confidence-label">94%</span>
-            </div>
-            <div class="est-stats">
-              <div class="est-stat">
-                <div class="val">22"</div>
-                <div class="lbl">Length</div>
+          <div class="badges-section">
+            <div class="badges-label">Badges Earned</div>
+            <div class="badge-item">
+              <div class="badge-icon green">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
               </div>
-              <div class="est-stat">
-                <div class="val">5.2 lbs</div>
-                <div class="lbl">Weight</div>
-              </div>
-              <div class="est-stat">
-                <div class="val">~3 yrs</div>
-                <div class="lbl">Age</div>
-              </div>
+              <span class="badge-name">Catch &amp; Release Champion</span>
             </div>
-            <div class="fun-fact">
-              <strong>Fun fact:</strong> Largemouth bass can eat prey up to 50% of their own body length in a single strike!
+            <div class="badge-item">
+              <div class="badge-icon blue">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+              </div>
+              <span class="badge-name">Waterway Guardian</span>
             </div>
+          </div>
+          <div class="tip-card">
+            <strong>Tip:</strong> Wet your hands before handling fish to protect their slime coat.
           </div>
         </div>
       </div>
@@ -381,28 +360,28 @@
     <h2>How It Works</h2>
     <div class="details-grid">
       <div class="detail-card">
-        <h3>Instant Recognition</h3>
-        <p>Our AI model recognizes hundreds of freshwater and saltwater species from a single photo, even at odd angles or in low light.</p>
+        <h3>Best Practices</h3>
+        <p>Learn proper catch-and-release techniques, ethical wading, and minimal-impact fishing methods.</p>
       </div>
       <div class="detail-card">
-        <h3>Size Estimates</h3>
-        <p>Get estimated length, weight, and age for your catch based on visual analysis — perfect when you don't have a scale handy.</p>
+        <h3>Conservation Badges</h3>
+        <p>Earn badges for releasing fish, participating in clean-ups, and following sustainable practices.</p>
       </div>
       <div class="detail-card">
-        <h3>Species Details</h3>
-        <p>Learn about habitat, diet, seasonal behavior, and regional regulations for every identified species.</p>
+        <h3>Impact Tracking</h3>
+        <p>See your personal conservation stats: fish released, invasive species reported, and community events joined.</p>
       </div>
       <div class="detail-card">
-        <h3>Lure ID Too</h3>
-        <p>Not just fish — snap a photo of any lure or fly and get brand, type, recommended use, and similar alternatives.</p>
+        <h3>Local Conservation</h3>
+        <p>Stay informed about local conservation efforts, habitat restoration projects, and volunteer opportunities near you.</p>
       </div>
     </div>
   </section>
 
   <!-- CTA -->
   <section class="cta-section">
-    <h2>Ready to try AI Fish ID?</h2>
-    <p>Start identifying your catches for free today.</p>
+    <h2>Ready to make a difference?</h2>
+    <p>Start your conservation journey for free.</p>
     <a href="/fishing-app/auth" class="cta-btn">Get Started Free</a>
   </section>
 

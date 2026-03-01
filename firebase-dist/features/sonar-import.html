@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Fish Identification — CatchDaddy</title>
-  <meta name="description" content="Snap a photo and instantly identify any fish species with AI. Get species details, size estimates, and fun facts." />
+  <title>Sonar Import — CatchDaddy</title>
+  <meta name="description" content="Import sonar data from your fish finder and overlay it on interactive maps for deeper insight." />
   <link rel="icon" type="image/svg+xml" href="/fishing-app/assets/logo-icon.svg" />
 
   <!-- Google Analytics -->
@@ -219,89 +219,76 @@
     .lp-footer p { color: #95d5b2; font-size: 0.78rem; }
 
     /* Page-specific mockup styles */
-    .upload-area {
+    .upload-drop-area {
+      border: 2px dashed #a0b8a0;
       border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 0.75rem;
       background: #e8f0e8;
+      padding: 1.25rem 0.75rem;
+      text-align: center;
+      margin-bottom: 0.75rem;
     }
-    .upload-area img {
-      width: 100%;
-      height: 130px;
-      object-fit: contain;
-      display: block;
+    .upload-drop-area svg {
+      fill: #6b8f6b;
+      margin-bottom: 0.35rem;
     }
-    .result-card {
+    .upload-drop-area p {
+      font-size: 0.7rem;
+      color: #5a7a5a;
+      font-weight: 600;
+    }
+    .sonar-preview {
       background: #fff;
       border-radius: 12px;
       padding: 0.85rem;
       box-shadow: 0 1px 6px rgba(0,0,0,0.08);
-      margin-bottom: 0.6rem;
     }
-    .result-card h4 {
+    .sonar-preview h4 {
       font-size: 0.85rem;
       color: #333;
-      margin-bottom: 0.1rem;
+      margin-bottom: 0.6rem;
     }
-    .result-card .sci-name {
-      font-size: 0.65rem;
-      color: #888;
-      font-style: italic;
-      margin-bottom: 0.5rem;
+    .depth-chart {
+      margin-bottom: 0.6rem;
     }
-    .confidence-bar {
-      background: #e8f5e9;
-      border-radius: 6px;
-      height: 18px;
-      overflow: hidden;
-      margin-bottom: 0.5rem;
-      position: relative;
-    }
-    .confidence-fill {
-      background: linear-gradient(90deg, #43a047, #66bb6a);
-      height: 100%;
-      width: 94%;
-      border-radius: 6px;
-    }
-    .confidence-label {
-      position: absolute;
-      right: 6px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 0.6rem;
-      font-weight: 700;
-      color: #2e7d32;
-    }
-    .est-stats {
+    .depth-bar {
       display: flex;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
+      align-items: center;
+      margin-bottom: 4px;
+      border-radius: 4px;
+      overflow: hidden;
     }
-    .est-stat {
-      flex: 1;
-      background: #f5f5f5;
-      border-radius: 8px;
-      padding: 0.4rem;
-      text-align: center;
+    .depth-bar .bar {
+      height: 22px;
+      border-radius: 4px;
     }
-    .est-stat .val {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #333;
+    .depth-bar .bar-label {
+      font-size: 0.6rem;
+      font-weight: 600;
+      color: #fff;
+      padding: 0 6px;
+      white-space: nowrap;
+      line-height: 22px;
     }
-    .est-stat .lbl {
-      font-size: 0.55rem;
-      color: #888;
+    .depth-bar.shallow .bar {
+      background: #81d4fa;
+      width: 55%;
     }
-    .fun-fact {
-      background: #d8f3dc;
-      border-radius: 8px;
-      padding: 0.5rem 0.65rem;
+    .depth-bar.shallow .bar-label { color: #0d47a1; }
+    .depth-bar.mid .bar {
+      background: #42a5f5;
+      width: 75%;
+    }
+    .depth-bar.deep .bar {
+      background: #1565c0;
+      width: 100%;
+    }
+    .sonar-stats {
       font-size: 0.65rem;
-      color: #1b4332;
-      line-height: 1.4;
+      color: #666;
+      text-align: center;
+      padding-top: 0.4rem;
+      border-top: 1px solid #eee;
     }
-    .fun-fact strong { font-size: 0.6rem; }
 
     @media (max-width: 600px) {
       .hero { padding: 3rem 1.25rem 2rem; }
@@ -326,11 +313,11 @@
   <!-- Hero -->
   <section class="hero">
     <div class="hero-icon">
-      <svg viewBox="0 0 24 24" width="32" height="32"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+      <svg viewBox="0 0 24 24" width="32" height="32"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.22.21-1.79L11 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
     </div>
-    <h1>AI Fish Identification</h1>
-    <p class="tagline">Snap. Identify. Learn.</p>
-    <p class="desc">Take a photo of any catch and our AI instantly identifies the species, estimates size, and shares fascinating facts — all in seconds.</p>
+    <h1>Sonar Import</h1>
+    <p class="tagline">See beneath the surface.</p>
+    <p class="desc">Import sonar data from your fish finder, overlay it on interactive maps, and visualize underwater structure, depth contours, and fish activity.</p>
   </section>
 
   <!-- Phone Mockup -->
@@ -341,34 +328,33 @@
           <span>9:41 AM</span>
           <span>100%</span>
         </div>
-        <div class="phone-header">AI Fish ID</div>
+        <div class="phone-header">Sonar Import</div>
         <div class="phone-body">
-          <div class="upload-area">
-            <img src="/features/images/largemouth-bass.jpg" alt="Largemouth Bass caught at lake" />
+          <div class="upload-drop-area">
+            <svg viewBox="0 0 24 24" width="28" height="28"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
+            <p>Drag sonar file or tap to upload</p>
           </div>
-          <div class="result-card">
-            <h4>Largemouth Bass</h4>
-            <div class="sci-name">Micropterus salmoides</div>
-            <div class="confidence-bar">
-              <div class="confidence-fill"></div>
-              <span class="confidence-label">94%</span>
-            </div>
-            <div class="est-stats">
-              <div class="est-stat">
-                <div class="val">22"</div>
-                <div class="lbl">Length</div>
+          <div class="sonar-preview">
+            <h4>Blue Mesa Reservoir</h4>
+            <div class="depth-chart">
+              <div class="depth-bar shallow">
+                <div class="bar">
+                  <span class="bar-label">0 – 10 ft</span>
+                </div>
               </div>
-              <div class="est-stat">
-                <div class="val">5.2 lbs</div>
-                <div class="lbl">Weight</div>
+              <div class="depth-bar mid">
+                <div class="bar">
+                  <span class="bar-label">10 – 25 ft</span>
+                </div>
               </div>
-              <div class="est-stat">
-                <div class="val">~3 yrs</div>
-                <div class="lbl">Age</div>
+              <div class="depth-bar deep">
+                <div class="bar">
+                  <span class="bar-label">25 – 50 ft</span>
+                </div>
               </div>
             </div>
-            <div class="fun-fact">
-              <strong>Fun fact:</strong> Largemouth bass can eat prey up to 50% of their own body length in a single strike!
+            <div class="sonar-stats">
+              Avg Depth: 32ft &middot; Max: 87ft &middot; Area: 2.4 mi&sup2;
             </div>
           </div>
         </div>
@@ -381,28 +367,28 @@
     <h2>How It Works</h2>
     <div class="details-grid">
       <div class="detail-card">
-        <h3>Instant Recognition</h3>
-        <p>Our AI model recognizes hundreds of freshwater and saltwater species from a single photo, even at odd angles or in low light.</p>
+        <h3>Easy Import</h3>
+        <p>Upload sonar logs from Garmin, Lowrance, Humminbird, and other popular fish finder brands in just a few taps.</p>
       </div>
       <div class="detail-card">
-        <h3>Size Estimates</h3>
-        <p>Get estimated length, weight, and age for your catch based on visual analysis — perfect when you don't have a scale handy.</p>
+        <h3>Map Overlay</h3>
+        <p>See sonar data layered onto interactive maps with depth contours, structure, and bottom composition.</p>
       </div>
       <div class="detail-card">
-        <h3>Species Details</h3>
-        <p>Learn about habitat, diet, seasonal behavior, and regional regulations for every identified species.</p>
+        <h3>Historical Data</h3>
+        <p>Build a library of sonar readings over time to track underwater changes and seasonal patterns.</p>
       </div>
       <div class="detail-card">
-        <h3>Lure ID Too</h3>
-        <p>Not just fish — snap a photo of any lure or fly and get brand, type, recommended use, and similar alternatives.</p>
+        <h3>Share with Crew</h3>
+        <p>Share sonar maps with friends and fishing partners so everyone knows the best spots and structure.</p>
       </div>
     </div>
   </section>
 
   <!-- CTA -->
   <section class="cta-section">
-    <h2>Ready to try AI Fish ID?</h2>
-    <p>Start identifying your catches for free today.</p>
+    <h2>Ready to map the depths?</h2>
+    <p>Start importing sonar data today.</p>
     <a href="/fishing-app/auth" class="cta-btn">Get Started Free</a>
   </section>
 

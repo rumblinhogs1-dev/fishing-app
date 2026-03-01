@@ -5,7 +5,7 @@ import styles from './WelcomeModal.module.css';
 const SLIDES = [
   {
     icon: '🎣',
-    title: 'Welcome to MyCatchBook!',
+    title: 'Welcome to CatchDaddy!',
     desc: 'Your AI-powered fishing community. Track catches, discover spots, and level up your fishing game.',
   },
   {

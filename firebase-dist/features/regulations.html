@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Fish Identification — CatchDaddy</title>
-  <meta name="description" content="Snap a photo and instantly identify any fish species with AI. Get species details, size estimates, and fun facts." />
+  <title>Regulations Lookup — CatchDaddy</title>
+  <meta name="description" content="State fishing regulations at a glance — seasons, limits, and license info right when you need it." />
   <link rel="icon" type="image/svg+xml" href="/fishing-app/assets/logo-icon.svg" />
 
   <!-- Google Analytics -->
@@ -219,89 +219,53 @@
     .lp-footer p { color: #95d5b2; font-size: 0.78rem; }
 
     /* Page-specific mockup styles */
-    .upload-area {
-      border-radius: 12px;
-      overflow: hidden;
+    .state-selector {
+      background: #fff;
+      border-radius: 10px;
+      padding: 0.6rem 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       margin-bottom: 0.75rem;
-      background: #e8f0e8;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     }
-    .upload-area img {
-      width: 100%;
-      height: 130px;
-      object-fit: contain;
-      display: block;
+    .state-selector .state-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #333;
     }
-    .result-card {
+    .state-selector .arrow {
+      font-size: 0.7rem;
+      color: #888;
+    }
+    .reg-card {
       background: #fff;
       border-radius: 12px;
-      padding: 0.85rem;
+      padding: 0.75rem 0.85rem;
       box-shadow: 0 1px 6px rgba(0,0,0,0.08);
       margin-bottom: 0.6rem;
     }
-    .result-card h4 {
+    .reg-card h4 {
       font-size: 0.85rem;
-      color: #333;
-      margin-bottom: 0.1rem;
-    }
-    .result-card .sci-name {
-      font-size: 0.65rem;
-      color: #888;
-      font-style: italic;
-      margin-bottom: 0.5rem;
-    }
-    .confidence-bar {
-      background: #e8f5e9;
-      border-radius: 6px;
-      height: 18px;
-      overflow: hidden;
-      margin-bottom: 0.5rem;
-      position: relative;
-    }
-    .confidence-fill {
-      background: linear-gradient(90deg, #43a047, #66bb6a);
-      height: 100%;
-      width: 94%;
-      border-radius: 6px;
-    }
-    .confidence-label {
-      position: absolute;
-      right: 6px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 0.6rem;
       font-weight: 700;
-      color: #2e7d32;
+      color: #333;
+      margin-bottom: 0.35rem;
     }
-    .est-stats {
+    .reg-row {
       display: flex;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
-    }
-    .est-stat {
-      flex: 1;
-      background: #f5f5f5;
-      border-radius: 8px;
-      padding: 0.4rem;
-      text-align: center;
-    }
-    .est-stat .val {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #333;
-    }
-    .est-stat .lbl {
-      font-size: 0.55rem;
-      color: #888;
-    }
-    .fun-fact {
-      background: #d8f3dc;
-      border-radius: 8px;
-      padding: 0.5rem 0.65rem;
+      justify-content: space-between;
       font-size: 0.65rem;
-      color: #1b4332;
-      line-height: 1.4;
+      color: #666;
+      padding: 0.15rem 0;
     }
-    .fun-fact strong { font-size: 0.6rem; }
+    .reg-row .reg-label {
+      font-weight: 600;
+      color: #555;
+    }
+    .reg-row .reg-value {
+      color: #1b4332;
+      font-weight: 600;
+    }
 
     @media (max-width: 600px) {
       .hero { padding: 3rem 1.25rem 2rem; }
@@ -326,11 +290,11 @@
   <!-- Hero -->
   <section class="hero">
     <div class="hero-icon">
-      <svg viewBox="0 0 24 24" width="32" height="32"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+      <svg viewBox="0 0 24 24" width="32" height="32"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6zm2-6h8v2H8v-2zm0-3h8v2H8v-2z"/></svg>
     </div>
-    <h1>AI Fish Identification</h1>
-    <p class="tagline">Snap. Identify. Learn.</p>
-    <p class="desc">Take a photo of any catch and our AI instantly identifies the species, estimates size, and shares fascinating facts — all in seconds.</p>
+    <h1>Regulations Lookup</h1>
+    <p class="tagline">Stay legal. Fish confident.</p>
+    <p class="desc">Access state fishing regulations at a glance — seasons, bag limits, size limits, and license requirements right when you need them on the water.</p>
   </section>
 
   <!-- Phone Mockup -->
@@ -341,34 +305,55 @@
           <span>9:41 AM</span>
           <span>100%</span>
         </div>
-        <div class="phone-header">AI Fish ID</div>
+        <div class="phone-header">Regulations</div>
         <div class="phone-body">
-          <div class="upload-area">
-            <img src="/features/images/largemouth-bass.jpg" alt="Largemouth Bass caught at lake" />
+          <div class="state-selector">
+            <span class="state-name">Colorado</span>
+            <span class="arrow">&#9660;</span>
           </div>
-          <div class="result-card">
+          <div class="reg-card">
+            <h4>Rainbow Trout</h4>
+            <div class="reg-row">
+              <span class="reg-label">Bag Limit</span>
+              <span class="reg-value">4/day</span>
+            </div>
+            <div class="reg-row">
+              <span class="reg-label">Min Size</span>
+              <span class="reg-value">12"</span>
+            </div>
+            <div class="reg-row">
+              <span class="reg-label">Season</span>
+              <span class="reg-value">Year-round</span>
+            </div>
+          </div>
+          <div class="reg-card">
             <h4>Largemouth Bass</h4>
-            <div class="sci-name">Micropterus salmoides</div>
-            <div class="confidence-bar">
-              <div class="confidence-fill"></div>
-              <span class="confidence-label">94%</span>
+            <div class="reg-row">
+              <span class="reg-label">Bag Limit</span>
+              <span class="reg-value">5/day</span>
             </div>
-            <div class="est-stats">
-              <div class="est-stat">
-                <div class="val">22"</div>
-                <div class="lbl">Length</div>
-              </div>
-              <div class="est-stat">
-                <div class="val">5.2 lbs</div>
-                <div class="lbl">Weight</div>
-              </div>
-              <div class="est-stat">
-                <div class="val">~3 yrs</div>
-                <div class="lbl">Age</div>
-              </div>
+            <div class="reg-row">
+              <span class="reg-label">Min Size</span>
+              <span class="reg-value">15"</span>
             </div>
-            <div class="fun-fact">
-              <strong>Fun fact:</strong> Largemouth bass can eat prey up to 50% of their own body length in a single strike!
+            <div class="reg-row">
+              <span class="reg-label">Season</span>
+              <span class="reg-value">Mar 1 – Nov 30</span>
+            </div>
+          </div>
+          <div class="reg-card">
+            <h4>Walleye</h4>
+            <div class="reg-row">
+              <span class="reg-label">Bag Limit</span>
+              <span class="reg-value">3/day</span>
+            </div>
+            <div class="reg-row">
+              <span class="reg-label">Min Size</span>
+              <span class="reg-value">18"</span>
+            </div>
+            <div class="reg-row">
+              <span class="reg-label">Season</span>
+              <span class="reg-value">Year-round</span>
             </div>
           </div>
         </div>
@@ -381,28 +366,28 @@
     <h2>How It Works</h2>
     <div class="details-grid">
       <div class="detail-card">
-        <h3>Instant Recognition</h3>
-        <p>Our AI model recognizes hundreds of freshwater and saltwater species from a single photo, even at odd angles or in low light.</p>
+        <h3>State-by-State</h3>
+        <p>Regulations for every US state, organized by species and water body for quick lookup.</p>
       </div>
       <div class="detail-card">
-        <h3>Size Estimates</h3>
-        <p>Get estimated length, weight, and age for your catch based on visual analysis — perfect when you don't have a scale handy.</p>
+        <h3>Bag & Size Limits</h3>
+        <p>Instantly see daily bag limits, minimum size requirements, and possession limits.</p>
       </div>
       <div class="detail-card">
-        <h3>Species Details</h3>
-        <p>Learn about habitat, diet, seasonal behavior, and regional regulations for every identified species.</p>
+        <h3>Season Dates</h3>
+        <p>Know exactly when seasons open and close for each species in your area.</p>
       </div>
       <div class="detail-card">
-        <h3>Lure ID Too</h3>
-        <p>Not just fish — snap a photo of any lure or fly and get brand, type, recommended use, and similar alternatives.</p>
+        <h3>License Info</h3>
+        <p>Links to official state license portals so you can purchase or renew on the spot.</p>
       </div>
     </div>
   </section>
 
   <!-- CTA -->
   <section class="cta-section">
-    <h2>Ready to try AI Fish ID?</h2>
-    <p>Start identifying your catches for free today.</p>
+    <h2>Ready to fish with confidence?</h2>
+    <p>Look up regulations for free today.</p>
     <a href="/fishing-app/auth" class="cta-btn">Get Started Free</a>
   </section>
 
