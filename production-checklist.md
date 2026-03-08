@@ -68,10 +68,18 @@
 ## Phase 7: Launch Readiness
 
 ### Must-do before launch
-- [ ] **Payment integration** — Wire up Stripe (web) and/or RevenueCat (mobile) to the existing tier system (Free/Angler/Pro Guide). Currently tier UI exists but no actual payment flow.
 - [x] **Firebase Cloud Functions for API proxying** — Gemini and Places API calls routed through `geminiProxy` and `placesProxy` Cloud Functions with Firebase Auth verification. Keys removed from client bundle.
-- [ ] **App store submissions** — Prepare screenshots, descriptions, privacy disclosures, and submit to Google Play and Apple App Store. Account for review lead time.
-- [ ] **Commit & clean up working tree** — 20+ modified/new files uncommitted. Review, commit, and push before launch.
+- [x] **Commit & clean up working tree** — All files committed and pushed.
+- [x] **Pricing model updated** — "Taste Everything" approach: Free (limited access to all features), Angler ($4.99/mo or $49/yr), Pro Guide ($7.99/mo or $79/yr). Annual toggle on pricing page. Landing page updated.
+- [ ] **Payment integration (RevenueCat)** — Next step. Handles web + iOS + Android subscriptions in one SDK.
+  - [ ] Step 1: Create RevenueCat account (free) at revenuecat.com
+  - [ ] Step 2: Create Google Play Developer account ($25 one-time)
+  - [ ] Step 3: Create Apple Developer Program account ($99/year)
+  - [ ] Step 4: Create subscription products in both app stores
+  - [ ] Step 5: Configure products & entitlements in RevenueCat dashboard
+  - [ ] Step 6: Build integration — RevenueCat SDK on client, webhook Cloud Function to update Firestore `tier` field
+  - [ ] Step 7: Replace "Coming Soon" buttons with real checkout flows
+- [ ] **App store submissions** — After payment is working. Prepare screenshots, descriptions, privacy disclosures, and submit to Google Play and Apple App Store. Account for review lead time.
 
 ### Should-do before launch
 - [ ] **Automated Firestore backups** — Set up scheduled Firestore exports to Cloud Storage bucket.
