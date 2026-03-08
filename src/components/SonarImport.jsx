@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { parseSonarFile, computeStats } from '../utils/sonarParsers';
 import { saveDepthPoints } from '../utils/depthPoints';
 import SonarPreviewMap from './SonarPreviewMap';
+import UpgradePrompt from './UpgradePrompt';
 import styles from './SonarImport.module.css';
 
 const ACCEPTED = '.csv,.gpx,.txt,.xml';
@@ -119,6 +120,7 @@ export default function SonarImport() {
     <div className={styles.page}>
       <h1 className={styles.heading}>Sonar Import</h1>
       <p className={styles.subheading}>Upload depth logs from your fish finder to build a personal bathymetric dataset.</p>
+      <UpgradePrompt feature="sonarImport" featureLabel="Sonar Import">
 
       {error && <div className={styles.errorMsg}>{error}</div>}
 
@@ -246,6 +248,7 @@ export default function SonarImport() {
           </div>
         </div>
       )}
+      </UpgradePrompt>
     </div>
   );
 }

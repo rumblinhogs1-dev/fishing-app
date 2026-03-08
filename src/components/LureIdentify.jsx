@@ -2,11 +2,14 @@ import { useState, useRef } from 'react';
 import { getApiKey, hasEnvKey, saveApiKey, resizeImage } from '../utils/gemini';
 import { identifyLure } from '../utils/geminiLure';
 import { createCooldown } from '../utils/rateLimit';
+import { useAuth } from '../contexts/AuthContext';
+import { trackAiIdentification } from '../utils/usageTracking';
 import styles from './LureIdentify.module.css';
 
 const cooldown = createCooldown();
 
 export default function LureIdentify() {
+  const { user } = useAuth();
   const [image, setImage] = useState('');
   const [apiKey, setApiKey] = useState(() => getApiKey());
   const [showKeyInput, setShowKeyInput] = useState(false);
@@ -55,6 +58,7 @@ export default function LureIdentify() {
     try {
       const parsed = await identifyLure(image, key);
       setResult(parsed);
+      if (parsed.type !== 'Unknown' && user) trackAiIdentification(user.uid).catch(() => {});
     } catch (err) {
       setError(err.message);
     } finally {

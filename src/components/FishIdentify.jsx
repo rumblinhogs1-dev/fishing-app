@@ -2,12 +2,15 @@ import { useState, useRef } from 'react';
 import { getApiKey, hasEnvKey, saveApiKey, resizeImage, identifyFish } from '../utils/gemini';
 import { markStepComplete } from '../utils/onboarding';
 import { createCooldown } from '../utils/rateLimit';
+import { useAuth } from '../contexts/AuthContext';
+import { trackAiIdentification } from '../utils/usageTracking';
 import SpeciesInfoCard from './SpeciesInfoCard';
 import styles from './FishIdentify.module.css';
 
 const cooldown = createCooldown();
 
 export default function FishIdentify() {
+  const { user } = useAuth();
   const [image, setImage] = useState('');
   const [apiKey, setApiKey] = useState(() => getApiKey());
   const [showKeyInput, setShowKeyInput] = useState(false);
@@ -64,7 +67,10 @@ export default function FishIdentify() {
       const parsed = await identifyFish(image, key);
       setResult(parsed);
       setSelectedSpecies(parsed.species || '');
-      if (parsed.confidence > 0) markStepComplete('fishId');
+      if (parsed.confidence > 0) {
+        markStepComplete('fishId');
+        if (user) trackAiIdentification(user.uid).catch(() => {});
+      }
     } catch (err) {
       setError(err.message);
     } finally {

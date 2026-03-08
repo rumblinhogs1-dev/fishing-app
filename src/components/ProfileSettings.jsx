@@ -6,6 +6,8 @@ import { ref, uploadString, getDownloadURL } from 'firebase/storage';
 import { db, auth, storage } from '../firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
+import { SHARE_LEVELS, migrateShareLevel } from '../config/heatmapSharing';
+import ContributionRewards from './ContributionRewards';
 import styles from './ProfileSettings.module.css';
 
 const MAX_BIO = 150;
@@ -58,7 +60,9 @@ export default function ProfileSettings() {
     trip_invite: true,
     chat_message: true,
   });
-  const [heatmapOptIn, setHeatmapOptIn] = useState(false);
+  const [heatmapShareLevel, setHeatmapShareLevel] = useState('private');
+  const [contributionPoints, setContributionPoints] = useState(0);
+  const [earnedMilestones, setEarnedMilestones] = useState({});
   const [publicFields, setPublicFields] = useState({
     weight: true,
     length: true,
@@ -89,9 +93,9 @@ export default function ProfileSettings() {
         if (data.publicCatchFields) {
           setPublicFields((prev) => ({ ...prev, ...data.publicCatchFields }));
         }
-        if (data.heatmapOptIn != null) {
-          setHeatmapOptIn(data.heatmapOptIn);
-        }
+        setHeatmapShareLevel(migrateShareLevel(data.heatmapOptIn, data.heatmapShareLevel));
+        if (data.contributionPoints) setContributionPoints(data.contributionPoints);
+        if (data.earnedMilestones) setEarnedMilestones(data.earnedMilestones);
       } else {
         setForm({
           displayName: user.displayName || '',
@@ -141,7 +145,8 @@ export default function ProfileSettings() {
         defaultVisibility: form.defaultVisibility,
         notificationPreferences: notifPrefs,
         publicCatchFields: publicFields,
-        heatmapOptIn,
+        heatmapShareLevel,
+        heatmapOptIn: heatmapShareLevel !== 'private',
       }, { merge: true });
       toast.success('Settings saved!');
       navigate('/');
@@ -287,18 +292,31 @@ export default function ProfileSettings() {
 
         <div className={styles.notifSection}>
           <h3 className={styles.sectionTitle}>Community Heatmap</h3>
-          <p className={styles.sectionHint}>Share your catch locations anonymously to help build a community fishing heatmap.</p>
-          <div className={styles.toggleRow}>
-            <span className={styles.toggleLabel}>Contribute to heatmap</span>
-            <button
-              type="button"
-              className={`${styles.toggleSwitch} ${heatmapOptIn ? styles.toggleOn : ''}`}
-              onClick={() => setHeatmapOptIn((prev) => !prev)}
-              aria-label="Toggle community heatmap sharing"
-            >
-              <span className={styles.toggleKnob} />
-            </button>
+          <p className={styles.sectionHint}>Choose how much location data you share to help build the community fishing heatmap.</p>
+          <div className={styles.shareLevelCards}>
+            {SHARE_LEVELS.map((level) => (
+              <button
+                key={level.key}
+                type="button"
+                className={`${styles.shareLevelCard} ${heatmapShareLevel === level.key ? styles.shareLevelActive : ''}`}
+                onClick={() => setHeatmapShareLevel(level.key)}
+              >
+                <div className={styles.shareLevelHeader}>
+                  <span className={styles.shareLevelName}>{level.label}</span>
+                  {level.points > 0 && (
+                    <span className={styles.shareLevelPoints}>+{level.points} pt{level.points !== 1 ? 's' : ''}/catch</span>
+                  )}
+                </div>
+                <span className={styles.shareLevelDesc}>{level.description}</span>
+              </button>
+            ))}
           </div>
+          <ContributionRewards
+            contributionPoints={contributionPoints}
+            earnedMilestones={earnedMilestones}
+            userId={user.uid}
+            isOwn
+          />
         </div>
 
         <div className={styles.actions}>

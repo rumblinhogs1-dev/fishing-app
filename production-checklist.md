@@ -65,11 +65,20 @@
 - [x] **Logo rebrand** — Replaced "Crawdaddy's Catch" text on fish logo with "CATCHDADDY" across all sizes (192px, 512px, 1024px).
 - [x] **Google Analytics** — Added GA4 tracking (G-B13DLREYV9) to landing page and all 6 feature detail pages.
 
-## Phase 7: Growth & Scale
+## Phase 7: Launch Readiness
 
+### Must-do before launch
+- [ ] **Payment integration** — Wire up Stripe (web) and/or RevenueCat (mobile) to the existing tier system (Free/Angler/Pro Guide). Currently tier UI exists but no actual payment flow.
+- [ ] **Firebase Cloud Functions for API proxying** — Move Gemini and Google Places API calls behind Cloud Functions so keys aren't exposed in the client bundle.
+- [ ] **App store submissions** — Prepare screenshots, descriptions, privacy disclosures, and submit to Google Play and Apple App Store. Account for review lead time.
+- [ ] **Commit & clean up working tree** — 20+ modified/new files uncommitted. Review, commit, and push before launch.
+
+### Should-do before launch
+- [ ] **Automated Firestore backups** — Set up scheduled Firestore exports to Cloud Storage bucket.
+- [ ] **Database indexing audit** — Review Firestore queries and add composite indexes to prevent slow queries under load.
+- [ ] **DKIM authentication** — Google Admin → Apps → Gmail → Authenticate email → catchdaddy.net. Required for email deliverability.
+
+### Post-launch (Growth & Scale)
 - [ ] Server-side search (Algolia/Typesense) to replace full collection scans
-- [ ] Firebase Cloud Functions for API proxying and server-side logic
 - [ ] CDN optimization for images
-- [ ] Database indexing audit
 - [ ] Load testing
-- [ ] Automated backups for Firestore data

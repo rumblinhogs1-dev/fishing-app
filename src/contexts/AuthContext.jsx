@@ -10,6 +10,7 @@ import {
   sendPasswordResetEmail,
 } from 'firebase/auth';
 import { auth, firebaseConfigured } from '../firebase';
+import { ensureUserDoc } from '../utils/friends';
 
 const AuthContext = createContext(null);
 
@@ -28,6 +29,7 @@ export function AuthProvider({ children }) {
     const unsub = onAuthStateChanged(auth, (u) => {
       setUser(u);
       setLoading(false);
+      if (u) ensureUserDoc(u).catch(() => {});
     });
     return unsub;
   }, []);

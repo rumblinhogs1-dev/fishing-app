@@ -14,6 +14,7 @@ import { SkeletonCard } from './Skeleton';
 import { useToast } from '../contexts/ToastContext';
 import { useConfirm } from '../contexts/ConfirmContext';
 import ImageUpload from './ImageUpload';
+import UpgradePrompt from './UpgradePrompt';
 import styles from './TripPlanner.module.css';
 
 const EMPTY_TRIP = {
@@ -495,6 +496,7 @@ export default function TripPlanner({ catches = [] }) {
   return (
     <div className={styles.container}>
       <h2 className={styles.heading}>Trip Planner</h2>
+      <UpgradePrompt feature="tripPlanner" featureLabel="Trip Planner">
 
       <button className={styles.addBtn} onClick={() => { setShowForm(!showForm); setActiveTrip(null); }}>
         {showForm ? 'Cancel' : '+ Plan a Trip'}
@@ -1258,6 +1260,7 @@ export default function TripPlanner({ catches = [] }) {
           </div>
         </div>
       )}
+      </UpgradePrompt>
     </div>
   );
 }

@@ -143,6 +143,7 @@ export async function ensureUserDoc(user) {
       friendIds: [],
       friendCount: 0,
       catchCount: 0,
+      tier: 'free',
       defaultVisibility: 'public',
       bio: '',
       region: '',

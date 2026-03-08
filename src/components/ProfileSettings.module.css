@@ -131,3 +131,62 @@
 .toggleOn .toggleKnob {
   transform: translateX(20px);
 }
+
+/* Share level cards */
+.shareLevelCards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.shareLevelCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.2s, background 0.2s;
+  font-family: inherit;
+}
+
+.shareLevelCard:hover {
+  border-color: #a5d6a7;
+  background: #f9fdf9;
+}
+
+.shareLevelActive {
+  border-color: #2d6a4f;
+  background: #e8f5e9;
+}
+
+.shareLevelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.shareLevelName {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.shareLevelPoints {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #2d6a4f;
+  background: #c8e6c9;
+  padding: 0.1rem 0.5rem;
+  border-radius: 10px;
+}
+
+.shareLevelDesc {
+  font-size: 0.78rem;
+  color: #777;
+  line-height: 1.3;
+}

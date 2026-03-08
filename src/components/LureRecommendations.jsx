@@ -3,6 +3,7 @@ import { getApiKey } from '../utils/gemini';
 import { getRecommendations } from '../utils/geminiRecommend';
 import { getGPSLocation, reverseGeocode, fetchWeather, fetchWaterData } from '../utils/weather';
 import { createCooldown } from '../utils/rateLimit';
+import UpgradePrompt from './UpgradePrompt';
 import styles from './LureRecommendations.module.css';
 
 const cooldown = createCooldown();
@@ -84,6 +85,7 @@ export default function LureRecommendations() {
     <div className={styles.container}>
       <h2 className={styles.heading}>AI Lure Recommendations</h2>
       <p className={styles.subtext}>Get AI-powered lure and fly suggestions based on current conditions.</p>
+      <UpgradePrompt feature="lureRecommendations" featureLabel="Lure Recommendations">
 
       <form onSubmit={handleSubmit} className={styles.form}>
         <button type="button" className={styles.gpsBtn} onClick={handleGPS} disabled={gpsLoading}>
@@ -185,6 +187,7 @@ export default function LureRecommendations() {
           )}
         </div>
       )}
+      </UpgradePrompt>
     </div>
   );
 }

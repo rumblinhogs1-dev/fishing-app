@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { getConservationStats } from '../utils/conservation';
 import { SkeletonStats } from './Skeleton';
+import UpgradePrompt from './UpgradePrompt';
 import styles from './Insights.module.css';
 
 const TABS = ['Records', 'Best Conditions', 'Species', 'Trends', 'Lures', 'Locations', 'Time of Day', 'Conservation'];
@@ -340,6 +341,7 @@ export default function Insights({ catches }) {
   return (
     <div className={styles.container}>
       <h2 className={styles.heading}>Insights</h2>
+      <UpgradePrompt feature="advancedStats" featureLabel="Advanced Insights">
 
       <div className={styles.tabs}>
         {TABS.map((t) => (
@@ -361,6 +363,7 @@ export default function Insights({ catches }) {
       {tab === 'Locations' && <LocationsTab data={data} />}
       {tab === 'Time of Day' && <TimeTab data={data} />}
       {tab === 'Conservation' && <ConservationTab data={data} />}
+      </UpgradePrompt>
     </div>
   );
 }

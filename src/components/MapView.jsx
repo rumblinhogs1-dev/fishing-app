@@ -10,7 +10,7 @@ import { useSpots } from '../hooks/useSpots';
 import { useDepthPoints } from '../hooks/useDepthPoints';
 import { useMapLayers } from '../hooks/useMapLayers';
 import { useAuth } from '../contexts/AuthContext';
-import { fetchCommunityHeatmapPoints } from '../utils/firestore';
+import { fetchCommunityHeatmapData } from '../utils/firestore';
 import { fetchStockingData, getCurrentWeekStocking } from '../utils/stockingData';
 import { getAvailableStates } from '../config/stockingStates';
 import { getGPSLocation, geocodeLocation } from '../utils/weather';
@@ -19,6 +19,7 @@ import SaveSpotModal from './SaveSpotModal';
 import LayerControlPanel from './LayerControlPanel';
 import StructureHintsPanel from './StructureHintsPanel';
 import WaterBodyInfoPanel from './WaterBodyInfoPanel';
+import CommunityHeatPanel from './CommunityHeatPanel';
 import styles from './MapView.module.css';
 
 const US_CENTER = [39.8283, -98.5795];
@@ -56,6 +57,23 @@ function getSpeciesColor(species) {
     if (lower.includes(key)) return color;
   }
   return '#2d6a4f';
+}
+
+function createWaterBodyIcon(count) {
+  const size = Math.min(40, 28 + Math.floor(count / 5) * 2);
+  return L.divIcon({
+    className: '',
+    html: `<div style="
+      width:${size}px;height:${size}px;border-radius:50%;
+      background:#2d6a4f;border:3px solid #fff;
+      box-shadow:0 2px 6px rgba(0,0,0,0.3);
+      display:flex;align-items:center;justify-content:center;
+      color:#fff;font-weight:700;font-size:${size > 32 ? 13 : 11}px;
+    ">${count}</div>`,
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size / 2],
+    popupAnchor: [0, -(size / 2 + 2)],
+  });
 }
 
 function createCatchIcon(species) {
@@ -647,7 +665,8 @@ export default function MapView({ catches = [] }) {
   const [mapCenter, setMapCenter] = useState(
     deepLink ? { lat: deepLink.lat, lng: deepLink.lng } : { lat: US_CENTER[0], lng: US_CENTER[1] }
   );
-  const [communityPoints, setCommunityPoints] = useState([]);
+  const [communityData, setCommunityData] = useState({ waterBodyAggregates: [], heatPoints: [] });
+  const [showHeatPanel, setShowHeatPanel] = useState(false);
   const mapInstanceRef = useRef(null);
 
   const catchesWithCoords = useMemo(
@@ -657,9 +676,9 @@ export default function MapView({ catches = [] }) {
 
   useEffect(() => {
     if (!layers.heatmap) return;
-    fetchCommunityHeatmapPoints(user?.uid)
-      .then(setCommunityPoints)
-      .catch(() => setCommunityPoints([]));
+    fetchCommunityHeatmapData(user?.uid)
+      .then(setCommunityData)
+      .catch(() => setCommunityData({ waterBodyAggregates: [], heatPoints: [] }));
   }, [layers.heatmap, user?.uid]);
 
   useEffect(() => {
@@ -751,7 +770,39 @@ export default function MapView({ catches = [] }) {
         {layers.catchPins && (
           <CatchClusterLayer catches={catchesWithCoords} onSaveSpot={handleSaveSpot} />
         )}
-        {layers.heatmap && <HeatLayer catches={catchesWithCoords} communityPoints={communityPoints} />}
+        {layers.heatmap && <HeatLayer catches={catchesWithCoords} communityPoints={communityData.heatPoints} />}
+
+        {layers.heatmap && communityData.waterBodyAggregates.map((wb) => (
+          <Marker
+            key={wb.waterBody}
+            position={[wb.lat, wb.lng]}
+            icon={createWaterBodyIcon(wb.totalCatches)}
+          >
+            <Popup>
+              <div className={styles.popup}>
+                <strong style={{ color: '#2d6a4f', fontSize: '0.95rem', display: 'block', marginBottom: '0.25rem' }}>
+                  {wb.waterBody}
+                </strong>
+                <div style={{ fontSize: '0.8rem', color: '#555', marginBottom: '0.3rem' }}>
+                  {wb.totalCatches} catch{wb.totalCatches !== 1 ? 'es' : ''} shared
+                </div>
+                {wb.species.length > 0 && (
+                  <div style={{ display: 'flex', gap: '0.25rem', flexWrap: 'wrap' }}>
+                    {wb.species.slice(0, 5).map((s) => (
+                      <span key={s.name} style={{
+                        background: '#e8f5e9', color: '#2e7d32',
+                        padding: '0.1rem 0.4rem', borderRadius: '8px',
+                        fontSize: '0.72rem', fontWeight: 500,
+                      }}>
+                        {s.name} ({s.count})
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </Popup>
+          </Marker>
+        ))}
 
         {layers.favoriteSpots && spots.map((spot) => (
           <Marker key={spot.id} position={[spot.lat, spot.lng]} icon={spotIcon}>
@@ -803,6 +854,18 @@ export default function MapView({ catches = [] }) {
         </svg>
       </button>
 
+      {layers.heatmap && (
+        <button
+          className={styles.heatPanelBtn}
+          onClick={() => setShowHeatPanel(true)}
+          title="Community Activity"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+          </svg>
+        </button>
+      )}
+
       <button
         className={styles.layerBtn}
         onClick={() => setShowLayerPanel(true)}
@@ -827,6 +890,14 @@ export default function MapView({ catches = [] }) {
           lat={mapCenter.lat}
           lng={mapCenter.lng}
           onClose={() => setShowStructure(false)}
+        />
+      )}
+
+      {showHeatPanel && (
+        <CommunityHeatPanel
+          waterBodyAggregates={communityData.waterBodyAggregates}
+          heatPoints={communityData.heatPoints}
+          onClose={() => setShowHeatPanel(false)}
         />
       )}
 

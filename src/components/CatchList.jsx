@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import CatchCard from './CatchCard';
 import GettingStarted from './GettingStarted';
 import QuickIdentify from './QuickIdentify';
+import { PremiumBadge } from './UpgradePrompt';
 import styles from './CatchList.module.css';
 
 function StatsDashboard({ catches }) {
@@ -219,7 +220,7 @@ export default function CatchList({ catches, onDelete }) {
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{ verticalAlign: -2 }}>
                 <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
               </svg>
-              {' '}Export CSV
+              {' '}Export CSV<PremiumBadge feature="exportData" />
             </button>
           )}
         </div>

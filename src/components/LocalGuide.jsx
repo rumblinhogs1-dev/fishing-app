@@ -5,6 +5,7 @@ import { getPlacesRecommendations, hasPlacesApiKey } from '../utils/googlePlaces
 import { getGPSLocation, reverseGeocode } from '../utils/weather';
 import { createCooldown } from '../utils/rateLimit';
 import { SkeletonCard } from './Skeleton';
+import UpgradePrompt from './UpgradePrompt';
 import styles from './LocalGuide.module.css';
 
 const cooldown = createCooldown();
@@ -158,6 +159,7 @@ export default function LocalGuide() {
   return (
     <div className={styles.container}>
       <h2 className={styles.heading}>Local Guide</h2>
+      <UpgradePrompt feature="localGuide" featureLabel="Local Guide">
 
       <form onSubmit={handleSearch} className={styles.searchRow}>
         <input
@@ -289,6 +291,7 @@ export default function LocalGuide() {
       {!results && !loading && !error && (
         <p className={styles.empty}>Search for a location to find fishing guides, lodging, bait shops, and more nearby.</p>
       )}
+      </UpgradePrompt>
     </div>
   );
 }

@@ -32,8 +32,10 @@ service cloud.firestore {
     // ── users ──
     match /users/{userId} {
       allow read: if isSignedIn();
-      allow create: if isOwner(userId);
-      allow update: if isOwner(userId)
+      allow create: if isOwner(userId)
+                    && (!('tier' in request.resource.data) || request.resource.data.tier == 'free');
+      allow update: if (isOwner(userId)
+                       && !('tier' in request.resource.data.diff(resource.data).affectedKeys()))
                     || (isSignedIn() && onlyUpdating(['friendIds', 'friendCount', 'earnedBadges']));
       allow delete: if false;
     }

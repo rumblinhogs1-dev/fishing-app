@@ -104,6 +104,31 @@
   transform: scale(1.05);
 }
 
+/* Floating heat panel button */
+.heatPanelBtn {
+  position: absolute;
+  bottom: 192px;
+  left: 16px;
+  z-index: 500;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #2d6a4f;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.heatPanelBtn:hover {
+  background: #f0f4f8;
+  transform: scale(1.05);
+}
+
 /* Floating structure button */
 .structureBtn {
   position: absolute;
@@ -446,6 +471,11 @@
 
   .waterInfoBtn {
     bottom: 124px;
+    left: 12px;
+  }
+
+  .heatPanelBtn {
+    bottom: 176px;
     left: 12px;
   }
 

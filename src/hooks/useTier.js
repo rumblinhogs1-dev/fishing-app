@@ -13,6 +13,7 @@ import { TIERS, hasFeature } from '../config/tiers';
 export function useTier() {
   const { user } = useAuth();
   const [tier, setTier] = useState('free');
+  const [usage, setUsage] = useState(null);
   const [loading, setLoading] = useState(!!user);
 
   useEffect(() => {
@@ -29,6 +30,7 @@ export function useTier() {
         const data = snap.data();
         const userTier = data?.tier || 'free';
         setTier(TIERS[userTier] ? userTier : 'free');
+        setUsage(data?.usage || null);
         setLoading(false);
       },
       () => {
@@ -54,6 +56,7 @@ export function useTier() {
   return {
     tier,
     tierConfig: TIERS[tier] || TIERS.free,
+    usage,
     loading,
     canUse,
     featureLimit,

@@ -8,6 +8,8 @@ import {
 import { uploadCatchImage } from '../utils/firebaseStorage';
 import { notifyFriendCatch } from '../utils/notifications';
 import { cacheCatches, getCachedCatches } from '../utils/offlineStorage';
+import { trackCatchLogged } from '../utils/usageTracking';
+import { trackContributionPoints } from '../utils/contributionPoints';
 
 export function useFirestoreCatches(user) {
   const userId = user?.uid;
@@ -87,6 +89,8 @@ export function useFirestoreCatches(user) {
 
     // Create doc first, then upload images to Storage
     const catchId = await fsAddCatch(userId, data);
+    trackCatchLogged(userId).catch(() => {});
+    trackContributionPoints(userId).catch(() => {});
 
     try {
       const updates = {};

@@ -9,6 +9,8 @@ import { identifyFish, getApiKey } from '../utils/gemini';
 import { getRandomTip } from '../utils/conservationTips';
 import { addPendingCatch } from '../utils/offlineStorage';
 import { useToast } from '../contexts/ToastContext';
+import { useAuth } from '../contexts/AuthContext';
+import { trackAiIdentification } from '../utils/usageTracking';
 import styles from './CatchForm.module.css';
 
 const EMPTY = {
@@ -52,6 +54,7 @@ export default function CatchForm({ existing, onSubmit }) {
   const [fishIdError, setFishIdError] = useState('');
   const [fishIdConfirmed, setFishIdConfirmed] = useState(null);
   const [correctedSpecies, setCorrectedSpecies] = useState('');
+  const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const toast = useToast();
@@ -131,6 +134,7 @@ export default function CatchForm({ existing, onSubmit }) {
     try {
       const result = await identifyFish(img, apiKey);
       setFishIdResult(result);
+      if (result.confidence > 0 && user) trackAiIdentification(user.uid).catch(() => {});
       if (result.confidence >= 50) {
         setForm((prev) => ({
           ...prev,

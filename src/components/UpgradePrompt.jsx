@@ -1,23 +1,50 @@
 import { useNavigate } from 'react-router-dom';
 import { useTier } from '../hooks/useTier';
+import { TIERS, TIER_ORDER } from '../config/tiers';
 import styles from './UpgradePrompt.module.css';
+
+function getRequiredTierName(feature) {
+  for (const tierKey of TIER_ORDER) {
+    const tier = TIERS[tierKey];
+    const val = tier.features[feature];
+    if (val === true || (typeof val === 'number' && val > 0)) {
+      return tier.name;
+    }
+  }
+  return 'Angler';
+}
 
 /**
  * Renders children if the user's tier has access to the given feature.
- * Otherwise shows an upgrade prompt overlay.
- *
- * Usage:
- *   <UpgradePrompt feature="localGuide" featureLabel="Local Guide">
- *     <LocalGuide />
- *   </UpgradePrompt>
+ * In soft mode (default): shows a banner but still renders children.
+ * In hard mode: shows a blocking overlay.
  */
-export default function UpgradePrompt({ feature, featureLabel, children }) {
+export default function UpgradePrompt({ feature, featureLabel, soft = true, children }) {
   const { canUse, loading } = useTier();
   const navigate = useNavigate();
 
   if (loading) return children;
 
   if (canUse(feature)) return children;
+
+  const requiredTier = getRequiredTierName(feature);
+
+  if (soft) {
+    return (
+      <>
+        <div className={styles.softBanner}>
+          <span className={styles.softBadge}>{requiredTier}</span>
+          <span className={styles.softText}>
+            {featureLabel || feature} is a {requiredTier} feature
+          </span>
+          <button className={styles.softUpgradeBtn} onClick={() => navigate('/pricing')}>
+            View Plans
+          </button>
+        </div>
+        {children}
+      </>
+    );
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -40,4 +67,14 @@ export default function UpgradePrompt({ feature, featureLabel, children }) {
       </div>
     </div>
   );
+}
+
+export function PremiumBadge({ feature }) {
+  const { canUse, loading } = useTier();
+
+  if (loading || canUse(feature)) return null;
+
+  const requiredTier = getRequiredTierName(feature);
+
+  return <span className={styles.inlineBadge}>{requiredTier}</span>;
 }
