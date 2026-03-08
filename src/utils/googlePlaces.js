@@ -1,8 +1,11 @@
+import { auth } from '../firebase';
+
 const PLACES_KEY_STORAGE = 'fishing-app-places-api-key';
 const PLACES_CACHE_KEY = 'fishing-app-places-cache-v1';
 const CACHE_TTL = 2 * 60 * 60 * 1000; // 2 hours
 const MAX_CACHE_ENTRIES = 30;
 const PLACES_URL = 'https://places.googleapis.com/v1/places:searchText';
+const PROXY_URL = '/api/places';
 
 const FIELD_MASK = [
   'places.displayName',
@@ -92,18 +95,38 @@ function normalizePlace(place) {
 }
 
 async function searchCategory(query, location, apiKey) {
-  const res = await fetch(PLACES_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Goog-Api-Key': apiKey,
-      'X-Goog-FieldMask': FIELD_MASK,
-    },
-    body: JSON.stringify({
-      textQuery: `${query} ${location}`,
-      maxResultCount: 5,
-    }),
-  });
+  let res;
+
+  // Try server proxy first if user is authenticated
+  const authToken = await auth?.currentUser?.getIdToken().catch(() => null);
+  if (authToken) {
+    res = await fetch(PROXY_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${authToken}`,
+      },
+      body: JSON.stringify({
+        textQuery: `${query} ${location}`,
+        maxResultCount: 5,
+        fieldMask: FIELD_MASK,
+      }),
+    });
+  } else {
+    // Fallback: direct API call with client-side key
+    res = await fetch(PLACES_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Goog-Api-Key': apiKey,
+        'X-Goog-FieldMask': FIELD_MASK,
+      },
+      body: JSON.stringify({
+        textQuery: `${query} ${location}`,
+        maxResultCount: 5,
+      }),
+    });
+  }
 
   if (!res.ok) {
     const errData = await res.json().catch(() => null);

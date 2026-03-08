@@ -13,6 +13,7 @@ dist-ssr
 dist_vercel
 *.local
 .env
+functions/.env
 
 # Capacitor / iOS native build artifacts
 ios/App/Pods

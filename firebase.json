@@ -25,6 +25,14 @@
           "function": "idahoStocking"
         },
         {
+          "source": "/api/gemini",
+          "function": "geminiProxy"
+        },
+        {
+          "source": "/api/places",
+          "function": "placesProxy"
+        },
+        {
           "source": "/fishing-app/**",
           "destination": "/fishing-app/index.html"
         }

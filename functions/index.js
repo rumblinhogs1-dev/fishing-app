@@ -1,4 +1,116 @@
 const { onRequest } = require('firebase-functions/v2/https');
+const admin = require('firebase-admin');
+
+admin.initializeApp();
+
+const GEMINI_MODEL = 'gemini-2.5-flash';
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1/models/${GEMINI_MODEL}:generateContent`;
+const PLACES_URL = 'https://places.googleapis.com/v1/places:searchText';
+
+/**
+ * Verify Firebase Auth ID token from Authorization header.
+ * Returns the decoded token or null.
+ */
+async function verifyAuth(req) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader?.startsWith('Bearer ')) return null;
+  try {
+    return await admin.auth().verifyIdToken(authHeader.split('Bearer ')[1]);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Proxy Gemini API calls. Keeps the API key server-side.
+ * Client sends the full Gemini request body; function adds the key and forwards.
+ */
+exports.geminiProxy = onRequest(
+  { cors: true, region: 'us-west1', maxInstances: 20 },
+  async (req, res) => {
+    if (req.method !== 'POST') {
+      res.status(405).json({ error: 'Method not allowed' });
+      return;
+    }
+
+    const user = await verifyAuth(req);
+    if (!user) {
+      res.status(401).json({ error: 'Authentication required' });
+      return;
+    }
+
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      res.status(500).json({ error: 'Gemini API key not configured on server' });
+      return;
+    }
+
+    try {
+      const response = await fetch(GEMINI_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': apiKey,
+        },
+        body: JSON.stringify(req.body),
+      });
+
+      const data = await response.text();
+      res.status(response.status).set('Content-Type', 'application/json').send(data);
+    } catch (err) {
+      res.status(502).json({ error: 'Failed to reach Gemini API' });
+    }
+  }
+);
+
+/**
+ * Proxy Google Places API calls. Keeps the API key server-side.
+ * Client sends { textQuery, maxResultCount, fieldMask }.
+ */
+exports.placesProxy = onRequest(
+  { cors: true, region: 'us-west1', maxInstances: 10 },
+  async (req, res) => {
+    if (req.method !== 'POST') {
+      res.status(405).json({ error: 'Method not allowed' });
+      return;
+    }
+
+    const user = await verifyAuth(req);
+    if (!user) {
+      res.status(401).json({ error: 'Authentication required' });
+      return;
+    }
+
+    const apiKey = process.env.GOOGLE_PLACES_API_KEY;
+    if (!apiKey) {
+      res.status(500).json({ error: 'Places API key not configured on server' });
+      return;
+    }
+
+    const { textQuery, maxResultCount, fieldMask } = req.body;
+    if (!textQuery) {
+      res.status(400).json({ error: 'textQuery is required' });
+      return;
+    }
+
+    try {
+      const response = await fetch(PLACES_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Goog-Api-Key': apiKey,
+          'X-Goog-FieldMask': fieldMask || 'places.displayName',
+        },
+        body: JSON.stringify({ textQuery, maxResultCount: maxResultCount || 5 }),
+      });
+
+      const data = await response.text();
+      res.status(response.status).set('Content-Type', 'application/json').send(data);
+    } catch (err) {
+      res.status(502).json({ error: 'Failed to reach Places API' });
+    }
+  }
+);
 
 const SPECIES_MAP = {
   'RAINBOW': 'Rainbow Trout',

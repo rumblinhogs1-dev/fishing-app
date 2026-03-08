@@ -69,7 +69,7 @@
 
 ### Must-do before launch
 - [ ] **Payment integration** — Wire up Stripe (web) and/or RevenueCat (mobile) to the existing tier system (Free/Angler/Pro Guide). Currently tier UI exists but no actual payment flow.
-- [ ] **Firebase Cloud Functions for API proxying** — Move Gemini and Google Places API calls behind Cloud Functions so keys aren't exposed in the client bundle.
+- [x] **Firebase Cloud Functions for API proxying** — Gemini and Places API calls routed through `geminiProxy` and `placesProxy` Cloud Functions with Firebase Auth verification. Keys removed from client bundle.
 - [ ] **App store submissions** — Prepare screenshots, descriptions, privacy disclosures, and submit to Google Play and Apple App Store. Account for review lead time.
 - [ ] **Commit & clean up working tree** — 20+ modified/new files uncommitted. Review, commit, and push before launch.
 

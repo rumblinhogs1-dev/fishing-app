@@ -1,13 +1,17 @@
+import { auth } from '../firebase';
+
 const API_KEY_STORAGE = 'fishing-log-gemini-key';
 const GEMINI_MODEL = 'gemini-2.5-flash';
 export const API_URL = `https://generativelanguage.googleapis.com/v1/models/${GEMINI_MODEL}:generateContent`;
+const PROXY_URL = '/api/gemini';
 const MAX_SIZE = 512;
 const MAX_RETRIES = 1;
 const BASE_DELAY_MS = 2000;
-const FETCH_TIMEOUT_MS = 15000;
+const FETCH_TIMEOUT_MS = 30000;
 
 /**
  * Returns the Gemini API key from env var or localStorage fallback.
+ * When using the server proxy, this may return empty (key lives server-side).
  */
 export function getApiKey() {
   const envKey = import.meta.env.VITE_GEMINI_API_KEY;
@@ -17,9 +21,10 @@ export function getApiKey() {
 
 /**
  * Returns true if the key comes from the env var (not user-entered).
+ * Also returns true when using the server proxy (key is server-side).
  */
 export function hasEnvKey() {
-  return !!import.meta.env.VITE_GEMINI_API_KEY;
+  return !!import.meta.env.VITE_GEMINI_API_KEY || !!auth?.currentUser;
 }
 
 /**
@@ -30,16 +35,44 @@ export function saveApiKey(key) {
 }
 
 /**
+ * Try to get a Firebase Auth token for the server proxy.
+ * Returns null if not authenticated.
+ */
+async function getAuthToken() {
+  try {
+    return await auth?.currentUser?.getIdToken();
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Fetch with automatic retry on 429 (rate limit) using exponential backoff.
- * Pass apiKey to have it sent via the x-goog-api-key header.
+ * Routes through the server proxy when the user is authenticated (keeps API key server-side).
+ * Falls back to direct API call with client-side key if not authenticated.
  */
 export async function fetchWithRetry(url, options, apiKey) {
-  if (apiKey) {
+  const authToken = await getAuthToken();
+  const useProxy = !!authToken && url === API_URL;
+
+  if (useProxy) {
+    // Route through server proxy — API key stays server-side
+    url = PROXY_URL;
+    options = {
+      ...options,
+      headers: {
+        ...options.headers,
+        Authorization: `Bearer ${authToken}`,
+      },
+    };
+  } else if (apiKey) {
+    // Fallback: direct API call with client-side key (unauthenticated users)
     options = {
       ...options,
       headers: { ...options.headers, 'x-goog-api-key': apiKey.trim() },
     };
   }
+
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     let res;
     try {
