@@ -112,6 +112,53 @@ exports.placesProxy = onRequest(
   }
 );
 
+/**
+ * Email subscribe endpoint. Stores emails in Firestore 'subscribers' collection.
+ * No auth required — this is for pre-launch capture from the landing page.
+ */
+exports.subscribeEmail = onRequest(
+  { cors: true, region: 'us-west1', maxInstances: 5 },
+  async (req, res) => {
+    if (req.method !== 'POST') {
+      res.status(405).json({ error: 'Method not allowed' });
+      return;
+    }
+
+    const { email } = req.body;
+    if (!email || typeof email !== 'string') {
+      res.status(400).json({ error: 'Valid email is required' });
+      return;
+    }
+
+    const trimmed = email.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      res.status(400).json({ error: 'Invalid email format' });
+      return;
+    }
+
+    try {
+      const db = admin.firestore();
+      const ref = db.collection('subscribers').doc(trimmed);
+      const existing = await ref.get();
+
+      if (existing.exists) {
+        res.json({ ok: true, message: 'Already subscribed' });
+        return;
+      }
+
+      await ref.set({
+        email: trimmed,
+        subscribedAt: admin.firestore.FieldValue.serverTimestamp(),
+        source: req.body.source || 'landing',
+      });
+
+      res.json({ ok: true, message: 'Subscribed' });
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to subscribe' });
+    }
+  }
+);
+
 const SPECIES_MAP = {
   'RAINBOW': 'Rainbow Trout',
   'RAINBOW TROUT': 'Rainbow Trout',

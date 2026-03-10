@@ -36,3 +36,72 @@
   font-size: 0.78rem;
   margin: 0;
 }
+
+/* ── Email Subscribe ── */
+.subscribe {
+  margin-bottom: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.subHeading {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1b4332;
+  margin-bottom: 0.5rem;
+}
+
+.subForm {
+  display: flex;
+  gap: 0.4rem;
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.subInput {
+  flex: 1;
+  padding: 0.55rem 0.75rem;
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.subInput:focus {
+  border-color: #2d6a4f;
+}
+
+.subBtn {
+  background: #2d6a4f;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.55rem 1.1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.subBtn:hover {
+  background: #1b4332;
+}
+
+.subBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.subSuccess {
+  color: #2d6a4f;
+  font-size: 0.8rem;
+  margin-top: 0.4rem;
+}
+
+.subError {
+  color: #e76f51;
+  font-size: 0.8rem;
+  margin-top: 0.4rem;
+}

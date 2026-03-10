@@ -830,6 +830,85 @@
     .store-badge:hover { opacity: 0.85; }
     .store-badge svg { fill: #fefae0; }
 
+    /* ── Email Capture ── */
+    .email-capture {
+      background: linear-gradient(145deg, #2d6a4f, #1b4332);
+      color: #fefae0;
+      text-align: center;
+      padding: 4rem 1.5rem;
+    }
+    .email-capture h2 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+    .email-capture .ec-sub {
+      color: #95d5b2;
+      font-size: 1.05rem;
+      margin-bottom: 2rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+    .ec-form {
+      display: flex;
+      gap: 0.5rem;
+      max-width: 460px;
+      margin: 0 auto;
+    }
+    .ec-form input {
+      flex: 1;
+      padding: 0.85rem 1rem;
+      border: 2px solid #52796f;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.1);
+      color: #fefae0;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .ec-form input::placeholder { color: #95d5b2; }
+    .ec-form input:focus { border-color: #e9c46a; }
+    .ec-form button {
+      background: #e9c46a;
+      color: #1b4332;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 0.85rem 1.75rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+    .ec-form button:hover {
+      background: #d4a373;
+      transform: translateY(-1px);
+    }
+    .ec-form button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .ec-msg {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      min-height: 1.4em;
+    }
+    .ec-msg.success { color: #95d5b2; }
+    .ec-msg.error { color: #e76f51; }
+    .ec-privacy {
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      color: #74c69d;
+    }
+    .ec-privacy a { color: #e9c46a; }
+    @media (max-width: 520px) {
+      .ec-form { flex-direction: column; }
+      .ec-form button { width: 100%; }
+    }
+
     /* ── Footer ── */
     .lp-footer {
       text-align: center;
@@ -1352,6 +1431,59 @@
       </span>
     </div>
   </section>
+
+  <!-- Email Capture -->
+  <section class="email-capture" id="notify">
+    <h2>Get Notified at Launch</h2>
+    <p class="ec-sub">Be the first to know when CatchDaddy goes live. Early subscribers get exclusive perks.</p>
+    <form class="ec-form" id="subscribe-form" onsubmit="handleSubscribe(event)">
+      <input type="email" id="subscribe-email" placeholder="you@example.com" required autocomplete="email" />
+      <button type="submit" id="subscribe-btn">Notify Me</button>
+    </form>
+    <p class="ec-msg" id="subscribe-msg"></p>
+    <p class="ec-privacy">No spam, ever. <a href="/fishing-app/privacy">Privacy Policy</a></p>
+  </section>
+
+  <script>
+    async function handleSubscribe(e) {
+      e.preventDefault();
+      var btn = document.getElementById('subscribe-btn');
+      var msg = document.getElementById('subscribe-msg');
+      var input = document.getElementById('subscribe-email');
+      var email = input.value.trim();
+      if (!email) return;
+
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+      msg.textContent = '';
+      msg.className = 'ec-msg';
+
+      try {
+        var res = await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, source: 'landing' })
+        });
+        var data = await res.json();
+        if (res.ok) {
+          msg.textContent = "You're in! We'll let you know when we launch.";
+          msg.className = 'ec-msg success';
+          input.value = '';
+          if (typeof gtag === 'function') {
+            gtag('event', 'subscribe', { event_category: 'email', event_label: 'landing' });
+          }
+        } else {
+          msg.textContent = data.error || 'Something went wrong. Try again.';
+          msg.className = 'ec-msg error';
+        }
+      } catch (err) {
+        msg.textContent = 'Network error. Please try again.';
+        msg.className = 'ec-msg error';
+      }
+      btn.disabled = false;
+      btn.textContent = 'Notify Me';
+    }
+  </script>
 
   <!-- Footer -->
   <footer class="lp-footer">

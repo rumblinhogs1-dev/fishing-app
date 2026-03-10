@@ -33,6 +33,10 @@
           "function": "placesProxy"
         },
         {
+          "source": "/api/subscribe",
+          "function": "subscribeEmail"
+        },
+        {
           "source": "/fishing-app/**",
           "destination": "/fishing-app/index.html"
         }
