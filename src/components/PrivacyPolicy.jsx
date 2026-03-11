@@ -34,8 +34,20 @@ export default function PrivacyPolicy() {
         <h3>Location Data</h3>
         <p>
           With your permission, we collect GPS coordinates when you log catches or fishing spots.
-          Location data is used to display catches on maps and provide local fishing recommendations.
-          You can deny location access at any time through your browser or device settings.
+          Location data is used to display catches on maps, provide local fishing recommendations,
+          fetch weather conditions (via Open-Meteo), retrieve water data (via USGS), and detect
+          your state for fishing regulations. Coordinates may also be sent to OpenStreetMap
+          (Nominatim/Photon) for address lookup. You can deny location access at any time through
+          your browser or device settings.
+        </p>
+
+        <h3>Community Heatmap</h3>
+        <p>
+          You may choose to contribute your catch data to a community heatmap. This is fully
+          opt-in with four sharing levels: Private (no sharing), Water Body Only (lake/river name),
+          General Area (approximate location within ~1 mile), or Exact Location (precise GPS).
+          Your sharing level defaults to Private and can be changed at any time in your profile
+          settings. Contributed data is visible to other users according to your chosen level.
         </p>
 
         <h3>AI Feature Data</h3>
@@ -70,7 +82,11 @@ export default function PrivacyPolicy() {
         <p>We do not sell your personal data. We share data only with:</p>
         <ul>
           <li><strong>Google Firebase</strong> — Authentication, database, file storage, analytics</li>
-          <li><strong>Google Gemini API</strong> — AI feature processing</li>
+          <li><strong>Google Gemini API</strong> — AI feature processing (fish/lure identification, local guide)</li>
+          <li><strong>Google Places API</strong> — Local business recommendations (bait shops, lodging, guides)</li>
+          <li><strong>Open-Meteo</strong> — Weather forecast data</li>
+          <li><strong>USGS Water Services</strong> — Stream and water condition data</li>
+          <li><strong>OpenStreetMap (Nominatim/Photon)</strong> — Address and location lookup</li>
           <li><strong>Sentry</strong> — Error tracking and diagnostics</li>
         </ul>
         <p>

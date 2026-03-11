@@ -4,6 +4,34 @@ const nodemailer = require('nodemailer');
 
 admin.initializeApp();
 
+// ── Per-user rate limiting ──
+const rateLimitCache = new Map(); // { uid: { count, windowStart } }
+const RATE_WINDOW_MS = 60 * 1000; // 1 minute window
+
+function isRateLimited(uid, maxPerMinute) {
+  const now = Date.now();
+  const entry = rateLimitCache.get(uid);
+  if (!entry || now - entry.windowStart > RATE_WINDOW_MS) {
+    rateLimitCache.set(uid, { count: 1, windowStart: now });
+    return false;
+  }
+  entry.count++;
+  if (entry.count > maxPerMinute) return true;
+  return false;
+}
+
+// Clean up stale entries every 5 minutes
+setInterval(() => {
+  const now = Date.now();
+  for (const [uid, entry] of rateLimitCache) {
+    if (now - entry.windowStart > RATE_WINDOW_MS * 2) rateLimitCache.delete(uid);
+  }
+}, 5 * 60 * 1000);
+
+// ── Input validation helpers ──
+const MAX_BODY_SIZE = 1024 * 1024; // 1MB max for Gemini requests (images)
+const MAX_TEXT_QUERY_LEN = 500;
+
 const GEMINI_MODEL = 'gemini-2.5-flash';
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1/models/${GEMINI_MODEL}:generateContent`;
 const PLACES_URL = 'https://places.googleapis.com/v1/places:searchText';
@@ -40,6 +68,26 @@ exports.geminiProxy = onRequest(
       return;
     }
 
+    // Rate limit: 15 Gemini requests per minute per user
+    if (isRateLimited(user.uid, 15)) {
+      res.status(429).json({ error: 'Rate limit exceeded. Please wait a minute and try again.' });
+      return;
+    }
+
+    // Validate request body structure
+    const body = req.body;
+    if (!body || !body.contents || !Array.isArray(body.contents)) {
+      res.status(400).json({ error: 'Invalid request: contents array is required' });
+      return;
+    }
+
+    // Check body size (serialized)
+    const bodyStr = JSON.stringify(body);
+    if (bodyStr.length > MAX_BODY_SIZE) {
+      res.status(413).json({ error: 'Request too large' });
+      return;
+    }
+
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       res.status(500).json({ error: 'Gemini API key not configured on server' });
@@ -53,7 +101,7 @@ exports.geminiProxy = onRequest(
           'Content-Type': 'application/json',
           'x-goog-api-key': apiKey,
         },
-        body: JSON.stringify(req.body),
+        body: bodyStr,
       });
 
       const data = await response.text();
@@ -82,6 +130,12 @@ exports.placesProxy = onRequest(
       return;
     }
 
+    // Rate limit: 10 Places requests per minute per user
+    if (isRateLimited(user.uid, 10)) {
+      res.status(429).json({ error: 'Rate limit exceeded. Please wait a minute and try again.' });
+      return;
+    }
+
     const apiKey = process.env.GOOGLE_PLACES_API_KEY;
     if (!apiKey) {
       res.status(500).json({ error: 'Places API key not configured on server' });
@@ -89,8 +143,12 @@ exports.placesProxy = onRequest(
     }
 
     const { textQuery, maxResultCount, fieldMask } = req.body;
-    if (!textQuery) {
+    if (!textQuery || typeof textQuery !== 'string') {
       res.status(400).json({ error: 'textQuery is required' });
+      return;
+    }
+    if (textQuery.length > MAX_TEXT_QUERY_LEN) {
+      res.status(400).json({ error: 'textQuery too long' });
       return;
     }
 
@@ -102,7 +160,7 @@ exports.placesProxy = onRequest(
           'X-Goog-Api-Key': apiKey,
           'X-Goog-FieldMask': fieldMask || 'places.displayName',
         },
-        body: JSON.stringify({ textQuery, maxResultCount: maxResultCount || 5 }),
+        body: JSON.stringify({ textQuery, maxResultCount: Math.min(maxResultCount || 5, 10) }),
       });
 
       const data = await response.text();
@@ -734,6 +792,380 @@ function parseWisconsinTable(html) {
       length,
       date: normalizedDate,
     });
+  }
+
+  return entries;
+}
+
+/**
+ * Proxy North Carolina NCWRC trout stocking schedule.
+ * Fetches HTML table from ncpaws.org OnlineSchedule page.
+ */
+exports.ncStocking = onRequest(
+  { cors: true, region: 'us-west1' },
+  async (req, res) => {
+    const url =
+      'https://ncpaws.org/PAWS/Fish/Stocking/Schedule/OnlineSchedule.aspx';
+
+    try {
+      const response = await fetch(url, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CatchDaddy/1.0)' },
+      });
+      if (!response.ok) {
+        res.status(502).json({ error: `NCWRC returned ${response.status}` });
+        return;
+      }
+
+      const html = await response.text();
+      const entries = parseNcTable(html);
+
+      res.set('Cache-Control', 'public, max-age=86400');
+      res.json(entries);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
+
+function parseNcTable(html) {
+  const entries = [];
+  const trRegex = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
+  const tdRegex = /<td[^>]*>([\s\S]*?)<\/td>/gi;
+
+  let trMatch;
+  while ((trMatch = trRegex.exec(html)) !== null) {
+    const rowHtml = trMatch[1];
+    if (rowHtml.includes('<th')) continue;
+
+    const cells = [];
+    let tdMatch;
+    tdRegex.lastIndex = 0;
+    while ((tdMatch = tdRegex.exec(rowHtml)) !== null) {
+      cells.push(tdMatch[1].replace(/<[^>]*>/g, '').trim());
+    }
+
+    if (cells.length < 2) continue;
+
+    // NC table: County, Stream, Classification (e.g. "Delayed Harvest"), Date
+    const county = cells[0] || '';
+    const waterBody = cells[1] || '';
+    const classification = cells[2] || '';
+    const dateRaw = cells[3] || '';
+
+    if (!waterBody) continue;
+
+    // Try to extract date, may be in various formats
+    let date = '';
+    const dateMatch = dateRaw.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/);
+    if (dateMatch) {
+      const yr =
+        dateMatch[3].length === 2 ? '20' + dateMatch[3] : dateMatch[3];
+      date = `${dateMatch[1].padStart(2, '0')}/${dateMatch[2].padStart(2, '0')}/${yr}`;
+    } else {
+      // Use today if no date column
+      const now = new Date();
+      date = `${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')}/${now.getFullYear()}`;
+    }
+
+    entries.push({
+      waterBody,
+      county,
+      species: 'Trout',
+      quantity: 0,
+      length: '',
+      date,
+      classification,
+    });
+  }
+
+  return entries;
+}
+
+/**
+ * Proxy Tennessee TWRA trout stocking schedule.
+ * Fetches HTML tables from the TWRA stocking page.
+ */
+exports.tennesseeStocking = onRequest(
+  { cors: true, region: 'us-west1' },
+  async (req, res) => {
+    const url =
+      'https://www.tn.gov/twra/fishing/trout-information-stockings.html';
+
+    try {
+      const response = await fetch(url, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CatchDaddy/1.0)' },
+      });
+      if (!response.ok) {
+        res.status(502).json({ error: `TWRA returned ${response.status}` });
+        return;
+      }
+
+      const html = await response.text();
+      const entries = parseTennesseeTable(html);
+
+      res.set('Cache-Control', 'public, max-age=86400');
+      res.json(entries);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
+
+function parseTennesseeTable(html) {
+  const entries = [];
+  const trRegex = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
+  const tdRegex = /<td[^>]*>([\s\S]*?)<\/td>/gi;
+
+  let trMatch;
+  while ((trMatch = trRegex.exec(html)) !== null) {
+    const rowHtml = trMatch[1];
+    if (rowHtml.includes('<th')) continue;
+
+    const cells = [];
+    let tdMatch;
+    tdRegex.lastIndex = 0;
+    while ((tdMatch = tdRegex.exec(rowHtml)) !== null) {
+      cells.push(tdMatch[1].replace(/<[^>]*>/g, '').trim());
+    }
+
+    if (cells.length < 3) continue;
+
+    // TN table: Destination, County, Region, Stocking Type, Species, Months/Date
+    const waterBody = cells[0] || '';
+    const county = cells[1] || '';
+    const region = cells[2] || '';
+    const stockingType = cells[3] || '';
+    const species = cells[4] || 'Trout';
+    const dateInfo = cells[5] || cells[cells.length - 1] || '';
+
+    if (!waterBody) continue;
+
+    // Try to parse date; TN may list months or specific dates
+    let date = '';
+    const dateMatch = dateInfo.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/);
+    if (dateMatch) {
+      const yr =
+        dateMatch[3].length === 2 ? '20' + dateMatch[3] : dateMatch[3];
+      date = `${dateMatch[1].padStart(2, '0')}/${dateMatch[2].padStart(2, '0')}/${yr}`;
+    } else {
+      // Use current date as fallback for schedule-type entries
+      const now = new Date();
+      date = `${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')}/${now.getFullYear()}`;
+    }
+
+    entries.push({
+      waterBody,
+      county,
+      species,
+      quantity: 0,
+      length: '',
+      date,
+      region,
+      stockingType,
+    });
+  }
+
+  return entries;
+}
+
+/**
+ * Proxy California CDFW fish planting data.
+ * Fetches the default results page from nrm.dfg.ca.gov/fishplants.
+ */
+exports.californiaStocking = onRequest(
+  { cors: true, region: 'us-west1' },
+  async (req, res) => {
+    const url = 'https://nrm.dfg.ca.gov/fishplants/Default.aspx';
+
+    try {
+      const response = await fetch(url, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CatchDaddy/1.0)' },
+      });
+      if (!response.ok) {
+        res.status(502).json({ error: `CDFW returned ${response.status}` });
+        return;
+      }
+
+      const html = await response.text();
+      const entries = parseCaliforniaTable(html);
+
+      res.set('Cache-Control', 'public, max-age=86400');
+      res.json(entries);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
+
+function parseCaliforniaTable(html) {
+  const entries = [];
+  const trRegex = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
+  const tdRegex = /<td[^>]*>([\s\S]*?)<\/td>/gi;
+
+  let trMatch;
+  while ((trMatch = trRegex.exec(html)) !== null) {
+    const rowHtml = trMatch[1];
+    if (rowHtml.includes('<th')) continue;
+
+    const cells = [];
+    let tdMatch;
+    tdRegex.lastIndex = 0;
+    while ((tdMatch = tdRegex.exec(rowHtml)) !== null) {
+      cells.push(tdMatch[1].replace(/<[^>]*>/g, '').trim());
+    }
+
+    if (cells.length < 3) continue;
+
+    // CA table: Week of, Water Body, County, Species
+    const weekOf = cells[0] || '';
+    const waterBody = cells[1] || '';
+    const county = cells[2] || '';
+    const species = cells[3] || 'Trout';
+
+    if (!waterBody) continue;
+
+    // Parse date range like "03/03 - 03/09" or "March 3-9, 2026"
+    let date = '';
+    const slashDate = weekOf.match(/(\d{1,2})\/(\d{1,2})/);
+    const fullDate = weekOf.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+    if (fullDate) {
+      date = `${fullDate[1].padStart(2, '0')}/${fullDate[2].padStart(2, '0')}/${fullDate[3]}`;
+    } else if (slashDate) {
+      date = `${slashDate[1].padStart(2, '0')}/${slashDate[2].padStart(2, '0')}/${new Date().getFullYear()}`;
+    } else {
+      const now = new Date();
+      date = `${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')}/${now.getFullYear()}`;
+    }
+
+    entries.push({
+      waterBody,
+      county,
+      species,
+      quantity: 0,
+      length: '',
+      date,
+    });
+  }
+
+  return entries;
+}
+
+/**
+ * Proxy West Virginia DNR fish stocking data.
+ * Fetches the daily stocking page and parses the update list.
+ */
+exports.wvStocking = onRequest(
+  { cors: true, region: 'us-west1' },
+  async (req, res) => {
+    const url = 'https://wvdnr.gov/fishing/fish-stocking/';
+
+    try {
+      const response = await fetch(url, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CatchDaddy/1.0)' },
+      });
+      if (!response.ok) {
+        res.status(502).json({ error: `WVDNR returned ${response.status}` });
+        return;
+      }
+
+      const html = await response.text();
+      const entries = parseWvStocking(html);
+
+      res.set('Cache-Control', 'public, max-age=86400');
+      res.json(entries);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
+
+function parseWvStocking(html) {
+  const entries = [];
+
+  // WV posts daily updates in paragraphs/lists with water names and dates
+  // Look for date headers and water body lists
+  const dateHeaderRegex =
+    /(?:<h[2-4][^>]*>|<strong>|<b>)\s*((?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s*\d{4})\s*(?:<\/h[2-4]>|<\/strong>|<\/b>)/gi;
+  const listItemRegex = /<li[^>]*>([\s\S]*?)<\/li>/gi;
+
+  // Also try table format
+  const trRegex = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
+  const tdRegex = /<td[^>]*>([\s\S]*?)<\/td>/gi;
+
+  // Try table parsing first
+  let trMatch;
+  while ((trMatch = trRegex.exec(html)) !== null) {
+    const rowHtml = trMatch[1];
+    if (rowHtml.includes('<th')) continue;
+
+    const cells = [];
+    let tdMatch;
+    tdRegex.lastIndex = 0;
+    while ((tdMatch = tdRegex.exec(rowHtml)) !== null) {
+      cells.push(tdMatch[1].replace(/<[^>]*>/g, '').trim());
+    }
+
+    if (cells.length >= 2) {
+      const waterBody = cells[0] || '';
+      const county = cells[1] || '';
+      const species = cells[2] || 'Trout';
+      const dateRaw = cells[3] || '';
+
+      if (!waterBody) continue;
+
+      let date = '';
+      const dm = dateRaw.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/);
+      if (dm) {
+        const yr = dm[3].length === 2 ? '20' + dm[3] : dm[3];
+        date = `${dm[1].padStart(2, '0')}/${dm[2].padStart(2, '0')}/${yr}`;
+      } else {
+        const now = new Date();
+        date = `${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')}/${now.getFullYear()}`;
+      }
+
+      entries.push({ waterBody, county, species, quantity: 0, length: '', date });
+    }
+  }
+
+  // If no table data, try list items with date context
+  if (entries.length === 0) {
+    let currentDate = '';
+    let dateMatch;
+    const monthMap = {
+      january: '01', february: '02', march: '03', april: '04',
+      may: '05', june: '06', july: '07', august: '08',
+      september: '09', october: '10', november: '11', december: '12',
+    };
+
+    while ((dateMatch = dateHeaderRegex.exec(html)) !== null) {
+      const raw = dateMatch[1];
+      const parts = raw.match(/(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),?\s*(\d{4})/i);
+      if (parts) {
+        const mm = monthMap[parts[1].toLowerCase()];
+        currentDate = `${mm}/${parts[2].padStart(2, '0')}/${parts[3]}`;
+      }
+    }
+
+    // Fall back to today if no date headers found
+    if (!currentDate) {
+      const now = new Date();
+      currentDate = `${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')}/${now.getFullYear()}`;
+    }
+
+    let liMatch;
+    while ((liMatch = listItemRegex.exec(html)) !== null) {
+      const text = liMatch[1].replace(/<[^>]*>/g, '').trim();
+      if (text.length > 3 && !text.toLowerCase().includes('click') && !text.toLowerCase().includes('hotline')) {
+        entries.push({
+          waterBody: text,
+          county: '',
+          species: 'Trout',
+          quantity: 0,
+          length: '',
+          date: currentDate,
+        });
+      }
+    }
   }
 
   return entries;

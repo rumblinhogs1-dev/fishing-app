@@ -3,7 +3,7 @@ service firebase.storage {
   match /b/{bucket}/o {
     // Allow authenticated users to read all images
     match /{allPaths=**} {
-      allow read: if true;
+      allow read: if request.auth != null;
     }
 
     // Allow authenticated users to upload their own catch images

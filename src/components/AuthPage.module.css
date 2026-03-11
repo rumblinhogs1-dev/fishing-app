@@ -188,6 +188,24 @@
   text-decoration: underline;
 }
 
+.passwordRules {
+  list-style: none;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.15rem 1rem;
+  font-size: 0.78rem;
+}
+
+.rulePassed {
+  color: #2e7d32;
+}
+
+.ruleFailed {
+  color: #999;
+}
+
 @media (max-width: 600px) {
   .card {
     padding: 1.5rem;

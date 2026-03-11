@@ -4,6 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { useMessages } from '../hooks/useChat';
 import { sendMessage, sendMessageWithImage, getGroupDoc } from '../utils/chat';
 import { getUserProfile } from '../utils/friends';
+import { submitReport } from '../utils/reports';
+import ReportModal from './ReportModal';
 import styles from './ChatRoom.module.css';
 
 function isSameDay(a, b) {
@@ -64,6 +66,7 @@ export default function ChatRoom() {
   const [imagePreview, setImagePreview] = useState(null);
   const [group, setGroup] = useState(null);
   const [partnerName, setPartnerName] = useState('');
+  const [reportingMsgId, setReportingMsgId] = useState(null);
   const endRef = useRef(null);
   const imageInputRef = useRef(null);
 
@@ -186,6 +189,11 @@ export default function ChatRoom() {
                   {msg.createdAt ? new Date(msg.createdAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : ''}
                 </span>
               )}
+              {msg.userId !== user.uid && (
+                <button className={styles.msgFlag} onClick={() => setReportingMsgId(msg.id)} title="Report">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+                </button>
+              )}
             </div>
           </Fragment>
         ))}
@@ -229,6 +237,15 @@ export default function ChatRoom() {
           Send
         </button>
       </form>
+
+      {reportingMsgId && (
+        <ReportModal
+          contentType="message"
+          contentId={reportingMsgId}
+          onClose={() => setReportingMsgId(null)}
+          onSubmit={(data) => submitReport(user.uid, data)}
+        />
+      )}
     </div>
   );
 }

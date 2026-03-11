@@ -256,6 +256,25 @@
   background: #245c3e;
 }
 
+.reportBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0.75rem 0 0.75rem 0.5rem;
+  padding: 0.4rem 0.75rem;
+  background: none;
+  color: #999;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.reportBtn:hover {
+  color: #d32f2f;
+  border-color: #d32f2f;
+}
+
 @media (max-width: 600px) {
   .details { grid-template-columns: 1fr; }
 }

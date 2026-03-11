@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { validatePassword } from '../utils/validate';
 import styles from './AuthPage.module.css';
 
 export default function AuthPage() {
@@ -50,9 +51,15 @@ export default function AuthPage() {
     }
   }
 
+  const passwordCheck = isSignUp ? validatePassword(password) : null;
+
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
+    if (isSignUp && !passwordCheck.valid) {
+      setError('Password requires: ' + passwordCheck.errors.join(', '));
+      return;
+    }
     setLoading(true);
     try {
       if (isSignUp) {
@@ -67,7 +74,7 @@ export default function AuthPage() {
         'auth/wrong-password': 'Incorrect password.',
         'auth/invalid-credential': 'Invalid email or password.',
         'auth/email-already-in-use': 'An account with this email already exists.',
-        'auth/weak-password': 'Password must be at least 6 characters.',
+        'auth/weak-password': 'Password must be at least 8 characters with uppercase, lowercase, and a number.',
         'auth/invalid-email': 'Please enter a valid email address.',
       };
       setError(messages[err.code] || err.message);
@@ -135,10 +142,24 @@ export default function AuthPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="At least 6 characters"
+              placeholder={isSignUp ? 'Min 8 chars, upper, lower, number' : 'Your password'}
               required
-              minLength={6}
+              minLength={isSignUp ? 8 : 1}
             />
+            {isSignUp && password.length > 0 && (
+              <ul className={styles.passwordRules}>
+                {[
+                  { test: password.length >= 8, label: '8+ characters' },
+                  { test: /[A-Z]/.test(password), label: 'Uppercase letter' },
+                  { test: /[a-z]/.test(password), label: 'Lowercase letter' },
+                  { test: /[0-9]/.test(password), label: 'Number' },
+                ].map((rule) => (
+                  <li key={rule.label} className={rule.test ? styles.rulePassed : styles.ruleFailed}>
+                    {rule.test ? '\u2713' : '\u2717'} {rule.label}
+                  </li>
+                ))}
+              </ul>
+            )}
           </label>
 
           {!isSignUp && (

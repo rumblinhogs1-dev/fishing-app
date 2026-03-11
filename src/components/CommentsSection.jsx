@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useComments } from '../hooks/useComments';
 import { addComment, deleteComment } from '../utils/comments';
+import { submitReport } from '../utils/reports';
+import ReportModal from './ReportModal';
 import styles from './CommentsSection.module.css';
 
 export default function CommentsSection({ catchId }) {
@@ -10,6 +12,7 @@ export default function CommentsSection({ catchId }) {
   const { comments, loading } = useComments(catchId);
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
+  const [reportingId, setReportingId] = useState(null);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -45,9 +48,16 @@ export default function CommentsSection({ catchId }) {
                 <span className={styles.time}>
                   {c.createdAt ? new Date(c.createdAt).toLocaleDateString() : ''}
                 </span>
-                {user?.uid === c.userId && (
-                  <button className={styles.deleteBtn} onClick={() => handleDelete(c.id)}>&times;</button>
-                )}
+                <span className={styles.commentActions}>
+                  {user?.uid === c.userId && (
+                    <button className={styles.deleteBtn} onClick={() => handleDelete(c.id)}>&times;</button>
+                  )}
+                  {user && user.uid !== c.userId && (
+                    <button className={styles.flagBtn} onClick={() => setReportingId(c.id)} title="Report">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+                    </button>
+                  )}
+                </span>
               </div>
               <p className={styles.text}>{c.text}</p>
             </div>
@@ -73,6 +83,15 @@ export default function CommentsSection({ catchId }) {
         <p className={styles.signInHint}>
           <Link to="/auth">Sign in</Link> to comment.
         </p>
+      )}
+
+      {reportingId && (
+        <ReportModal
+          contentType="comment"
+          contentId={reportingId}
+          onClose={() => setReportingId(null)}
+          onSubmit={(data) => submitReport(user.uid, data)}
+        />
       )}
     </div>
   );

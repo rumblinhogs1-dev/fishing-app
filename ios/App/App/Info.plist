@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-        <string>Crawdaddy&apos;s Catch</string>
+	<string>CatchDaddy</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -46,10 +46,10 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app uses your location to tag where you caught fish.</string>
+	<string>CatchDaddy uses your location to tag your catch on the map, show local weather and water conditions, and provide nearby fishing regulations.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>This app uses the camera to photograph your catch.</string>
+	<string>CatchDaddy uses the camera to photograph your catch for logging and AI-powered fish species identification.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app accesses your photo library to attach photos to your catches.</string>
+	<string>CatchDaddy accesses your photo library so you can attach existing fish photos to your catch log or use them for AI species identification.</string>
 </dict>
 </plist>

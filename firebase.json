@@ -45,6 +45,22 @@
           "function": "wisconsinStocking"
         },
         {
+          "source": "/api/nc-stocking",
+          "function": "ncStocking"
+        },
+        {
+          "source": "/api/tennessee-stocking",
+          "function": "tennesseeStocking"
+        },
+        {
+          "source": "/api/california-stocking",
+          "function": "californiaStocking"
+        },
+        {
+          "source": "/api/wv-stocking",
+          "function": "wvStocking"
+        },
+        {
           "source": "/api/gemini",
           "function": "geminiProxy"
         },

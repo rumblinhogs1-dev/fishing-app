@@ -9,8 +9,10 @@ import ReactionsBar from './ReactionsBar';
 import RegulationBadge from './RegulationBadge';
 import SaveSpotModal from './SaveSpotModal';
 import ShareCardModal from './ShareCardModal';
+import ReportModal from './ReportModal';
 import { SkeletonCard } from './Skeleton';
 import { useToast } from '../contexts/ToastContext';
+import { submitReport } from '../utils/reports';
 import styles from './CatchDetail.module.css';
 
 export default function CatchDetail() {
@@ -23,6 +25,7 @@ export default function CatchDetail() {
   const [loading, setLoading] = useState(true);
   const [showSpotModal, setShowSpotModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
   const [publicFields, setPublicFields] = useState(null);
   const containerRef = useRef(null);
 
@@ -248,6 +251,15 @@ export default function CatchDetail() {
             Share
           </button>
 
+          {user && !isOwn && (
+            <button className={styles.reportBtn} onClick={() => setShowReportModal(true)}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/>
+              </svg>
+              Report
+            </button>
+          )}
+
           <ReactionsBar catchId={id} reactionCounts={entry.reactionCounts || {}} />
           <CommentsSection catchId={id} />
         </div>
@@ -265,6 +277,15 @@ export default function CatchDetail() {
 
       {showShareModal && (
         <ShareCardModal entry={entry} onClose={() => setShowShareModal(false)} />
+      )}
+
+      {showReportModal && (
+        <ReportModal
+          contentType="catch"
+          contentId={id}
+          onClose={() => setShowReportModal(false)}
+          onSubmit={(data) => submitReport(user.uid, data)}
+        />
       )}
     </div>
   );

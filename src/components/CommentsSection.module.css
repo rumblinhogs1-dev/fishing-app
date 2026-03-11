@@ -11,8 +11,11 @@
 .author { font-weight: 600; font-size: 0.85rem; color: #2d6a4f; text-decoration: none; }
 .author:hover { text-decoration: underline; }
 .time { font-size: 0.7rem; color: #999; }
-.deleteBtn { margin-left: auto; background: none; border: none; color: #d32f2f; font-size: 1.1rem; cursor: pointer; line-height: 1; padding: 0 0.2rem; }
+.commentActions { margin-left: auto; display: flex; align-items: center; gap: 0.3rem; }
+.deleteBtn { background: none; border: none; color: #d32f2f; font-size: 1.1rem; cursor: pointer; line-height: 1; padding: 0 0.2rem; }
 .deleteBtn:hover { opacity: 0.7; }
+.flagBtn { background: none; border: none; color: #ccc; cursor: pointer; padding: 0 0.2rem; line-height: 1; }
+.flagBtn:hover { color: #d32f2f; }
 
 .text { margin: 0; font-size: 0.9rem; color: #444; line-height: 1.4; }
 
