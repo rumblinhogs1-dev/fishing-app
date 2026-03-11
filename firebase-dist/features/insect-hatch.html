@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Insect Hatch Tracker — CatchDaddy</title>
+  <meta name="description" content="Real-time insect hatch predictions powered by weather, water temp, and seasonal data. Match the hatch with AI-recommended fly patterns." />
+  <link rel="icon" type="image/svg+xml" href="/fishing-app/assets/logo-icon.svg" />
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-B13DLREYV9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-B13DLREYV9');
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #222;
+      background: #fefae0;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; }
+
+    /* Nav */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      background: #1b4332;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #fefae0;
+      font-weight: 800;
+      font-size: 1.15rem;
+    }
+    .nav-brand img { width: 44px; height: 44px; }
+    .nav-cta {
+      background: #e9c46a;
+      color: #1b4332;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      transition: box-shadow 0.15s;
+    }
+    .nav-cta:hover { box-shadow: 0 4px 12px rgba(45,106,79,0.35); }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #1b4332, #2d6a4f);
+      color: #fff;
+      text-align: center;
+      padding: 4rem 1.5rem 3rem;
+    }
+    .hero-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+    }
+    .hero-icon svg { fill: #fff; }
+    .hero h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.5px;
+    }
+    .hero .tagline {
+      font-size: 1.15rem;
+      opacity: 0.9;
+      margin-bottom: 0.75rem;
+    }
+    .hero .desc {
+      font-size: 0.95rem;
+      opacity: 0.8;
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Phone Mockup */
+    .mockup-section {
+      padding: 3rem 1.5rem;
+      display: flex;
+      justify-content: center;
+    }
+    .phone-frame {
+      width: 300px;
+      min-height: 640px;
+      background: #1a1a2e;
+      border-radius: 36px;
+      padding: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    }
+    .phone-screen {
+      background: #f5f5f5;
+      border-radius: 26px;
+      overflow: hidden;
+      min-height: 616px;
+    }
+    .phone-status-bar {
+      background: #1b4332;
+      color: #fff;
+      font-size: 0.65rem;
+      padding: 0.35rem 1rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    .phone-header {
+      background: #1b4332;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .phone-header-title { text-align: center; flex: 1; }
+    .phone-header-icon { opacity: 0.7; font-size: 0.75rem; }
+    .phone-body {
+      padding: 0.75rem;
+    }
+
+    /* Feature Details */
+    .details {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+    .details h2 {
+      text-align: center;
+      font-size: 1.5rem;
+      color: #fefae0;
+      margin-bottom: 2rem;
+    }
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+    .detail-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+    .detail-card h3 {
+      font-size: 0.95rem;
+      color: #333;
+      margin-bottom: 0.4rem;
+    }
+    .detail-card p {
+      font-size: 0.85rem;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* CTA */
+    .cta-section {
+      text-align: center;
+      padding: 3rem 1.5rem 4rem;
+      background: #fff;
+    }
+    .cta-section h2 {
+      font-size: 1.5rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    .cta-section p {
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: #e9c46a;
+      color: #1b4332;
+      font-size: 1.05rem;
+      font-weight: 700;
+      padding: 0.85rem 2.5rem;
+      border-radius: 12px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(45,106,79,0.35);
+    }
+
+    /* Footer */
+    .lp-footer {
+      text-align: center;
+      padding: 1.5rem 1rem;
+      border-top: none;
+      background: #1b4332;
+    }
+    .lp-footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.5rem;
+    }
+    .lp-footer-links a { color: #e9c46a; font-size: 0.85rem; font-weight: 500; }
+    .lp-footer-links a:hover { text-decoration: underline; }
+    .lp-footer-links .sep { color: #52796f; font-size: 0.8rem; }
+    .lp-footer p { color: #95d5b2; font-size: 0.78rem; }
+
+    /* ===== Insect Hatch Mockup Styles ===== */
+
+    /* Location & date bar */
+    .ih-location {
+      background: linear-gradient(135deg, #2d6a4f, #40916c);
+      border-radius: 10px;
+      padding: 0.55rem 0.75rem;
+      color: #fff;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .ih-loc-icon {
+      width: 28px;
+      height: 28px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+    .ih-loc-info { flex: 1; }
+    .ih-loc-name { font-size: 0.75rem; font-weight: 700; display: block; }
+    .ih-loc-meta { font-size: 0.58rem; opacity: 0.8; }
+    .ih-loc-temp {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #a7f3d0;
+    }
+
+    /* Hatch activity summary */
+    .ih-summary {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 10px;
+      padding: 0.55rem 0.65rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-left: 4px solid #43a047;
+    }
+    .ih-summary-score {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #43a047, #66bb6a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .ih-summary-info { flex: 1; }
+    .ih-summary-label { font-size: 0.6rem; color: #888; display: block; }
+    .ih-summary-text { font-size: 0.72rem; font-weight: 600; color: #333; line-height: 1.3; }
+
+    /* Time-of-day hatch timeline */
+    .ih-timeline {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 10px;
+      padding: 0.55rem 0.65rem;
+      margin-bottom: 0.5rem;
+    }
+    .ih-timeline-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 0.4rem;
+    }
+    .ih-time-bar {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 0.25rem;
+      height: 16px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .ih-time-seg {
+      flex: 1;
+      border-radius: 2px;
+      position: relative;
+    }
+    .ih-time-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.35rem;
+    }
+    .ih-time-labels span {
+      font-size: 0.5rem;
+      color: #aaa;
+    }
+    .ih-peak-badge {
+      display: inline-block;
+      background: #d8f3dc;
+      color: #1b4332;
+      font-size: 0.58rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+    }
+
+    /* Individual hatch cards */
+    .ih-hatches {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 0.5rem;
+    }
+    .ih-hatch-card {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 10px;
+      padding: 0.5rem 0.6rem;
+    }
+    .ih-hatch-top {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.3rem;
+    }
+    .ih-bug-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .ih-bug-mayfly { background: #e8f5e9; }
+    .ih-bug-caddis { background: #fff3e0; }
+    .ih-bug-stonefly { background: #e3f2fd; }
+    .ih-bug-midge { background: #fce4ec; }
+    .ih-hatch-name {
+      flex: 1;
+    }
+    .ih-hatch-name strong {
+      font-size: 0.75rem;
+      color: #333;
+      display: block;
+      line-height: 1.2;
+    }
+    .ih-hatch-name span {
+      font-size: 0.55rem;
+      color: #888;
+      font-style: italic;
+    }
+    .ih-hatch-status {
+      font-size: 0.55rem;
+      font-weight: 700;
+      padding: 0.15rem 0.45rem;
+      border-radius: 20px;
+      flex-shrink: 0;
+    }
+    .ih-status-active {
+      background: #d8f3dc;
+      color: #1b4332;
+    }
+    .ih-status-peak {
+      background: #43a047;
+      color: #fff;
+    }
+    .ih-status-emerging {
+      background: #fff3e0;
+      color: #e65100;
+    }
+    .ih-status-winding {
+      background: #f5f5f5;
+      color: #888;
+    }
+    .ih-hatch-details {
+      display: flex;
+      gap: 0.3rem;
+    }
+    .ih-hatch-detail {
+      flex: 1;
+      background: #f8f9fa;
+      border-radius: 6px;
+      padding: 0.25rem 0.35rem;
+      text-align: center;
+    }
+    .ih-hatch-detail .hd-val {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #333;
+      display: block;
+    }
+    .ih-hatch-detail .hd-lbl {
+      font-size: 0.45rem;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    /* Fly pattern recommendations */
+    .ih-flies {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 10px;
+      padding: 0.55rem 0.65rem;
+      margin-bottom: 0.5rem;
+    }
+    .ih-flies-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 0.35rem;
+    }
+    .ih-fly-row {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-bottom: 0.25rem;
+      padding: 0.25rem 0.35rem;
+      background: #f8f9fa;
+      border-radius: 6px;
+    }
+    .ih-fly-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .ih-fly-info { flex: 1; }
+    .ih-fly-name {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: #333;
+      display: block;
+    }
+    .ih-fly-size {
+      font-size: 0.5rem;
+      color: #888;
+    }
+    .ih-fly-match {
+      font-size: 0.5rem;
+      font-weight: 700;
+      color: #43a047;
+    }
+
+    /* Pro tip */
+    .ih-tip {
+      background: #d8f3dc;
+      border-radius: 10px;
+      padding: 0.5rem 0.65rem;
+      font-size: 0.65rem;
+      color: #1b4332;
+      line-height: 1.4;
+    }
+    .ih-tip strong { font-size: 0.6rem; }
+
+    @media (max-width: 600px) {
+      .hero { padding: 3rem 1.25rem 2rem; }
+      .hero h1 { font-size: 1.6rem; }
+      .phone-frame { width: 270px; min-height: 580px; }
+      .phone-screen { min-height: 556px; }
+      .details, .cta-section { padding: 2rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <a href="/" class="nav-brand">
+      <img src="/fishing-app/assets/logo-icon.svg" alt="CatchDaddy" />
+      CatchDaddy
+    </a>
+    <a href="/fishing-app/auth" class="nav-cta">Get Started</a>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-icon">
+      <svg viewBox="0 0 24 24" width="32" height="32"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+    </div>
+    <h1>Insect Hatch Tracker</h1>
+    <p class="tagline">Match the hatch. Catch more fish.</p>
+    <p class="desc">Real-time insect hatch predictions powered by water temperature, weather conditions, and seasonal data. Know exactly which bugs are hatching, when they peak, and which fly patterns to tie on.</p>
+  </section>
+
+  <!-- Phone Mockup -->
+  <section class="mockup-section">
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="phone-status-bar">
+          <span>9:41 AM</span>
+          <span>100%</span>
+        </div>
+        <div class="phone-header">
+          <span class="phone-header-icon">&larr;</span>
+          <span class="phone-header-title">Insect Hatch</span>
+          <span class="phone-header-icon">&#9881;</span>
+        </div>
+        <div class="phone-body">
+
+          <!-- Location & conditions bar -->
+          <div class="ih-location">
+            <div class="ih-loc-icon">&#128205;</div>
+            <div class="ih-loc-info">
+              <span class="ih-loc-name">South Llano River, TX</span>
+              <span class="ih-loc-meta">Mar 11 &middot; Overcast &middot; 62&deg;F air</span>
+            </div>
+            <div class="ih-loc-temp">58&deg;</div>
+          </div>
+
+          <!-- Hatch activity summary -->
+          <div class="ih-summary">
+            <div class="ih-summary-score">8</div>
+            <div class="ih-summary-info">
+              <span class="ih-summary-label">Hatch Activity</span>
+              <span class="ih-summary-text">Heavy hatch &mdash; overcast + 58&deg; water triggering strong mayfly &amp; caddis emergence</span>
+            </div>
+          </div>
+
+          <!-- Hatch timeline -->
+          <div class="ih-timeline">
+            <div class="ih-timeline-title">Hatch Timeline Today</div>
+            <div class="ih-time-bar">
+              <div class="ih-time-seg" style="background:#e8f5e9"></div>
+              <div class="ih-time-seg" style="background:#c8e6c9"></div>
+              <div class="ih-time-seg" style="background:#a5d6a7"></div>
+              <div class="ih-time-seg" style="background:#66bb6a"></div>
+              <div class="ih-time-seg" style="background:#43a047"></div>
+              <div class="ih-time-seg" style="background:#43a047"></div>
+              <div class="ih-time-seg" style="background:#66bb6a"></div>
+              <div class="ih-time-seg" style="background:#a5d6a7"></div>
+              <div class="ih-time-seg" style="background:#c8e6c9"></div>
+              <div class="ih-time-seg" style="background:#e8f5e9"></div>
+              <div class="ih-time-seg" style="background:#c8e6c9"></div>
+              <div class="ih-time-seg" style="background:#a5d6a7"></div>
+              <div class="ih-time-seg" style="background:#66bb6a"></div>
+              <div class="ih-time-seg" style="background:#43a047"></div>
+              <div class="ih-time-seg" style="background:#2e7d32"></div>
+              <div class="ih-time-seg" style="background:#2e7d32"></div>
+              <div class="ih-time-seg" style="background:#43a047"></div>
+              <div class="ih-time-seg" style="background:#66bb6a"></div>
+              <div class="ih-time-seg" style="background:#a5d6a7"></div>
+              <div class="ih-time-seg" style="background:#e8f5e9"></div>
+            </div>
+            <div class="ih-time-labels">
+              <span>6 AM</span>
+              <span>10 AM</span>
+              <span>2 PM</span>
+              <span>6 PM</span>
+              <span>9 PM</span>
+            </div>
+            <span class="ih-peak-badge">Peak: 5:30 PM &ndash; 7:15 PM</span>
+          </div>
+
+          <!-- Hatch cards -->
+          <div class="ih-hatches">
+
+            <!-- Mayfly -->
+            <div class="ih-hatch-card">
+              <div class="ih-hatch-top">
+                <div class="ih-bug-icon ih-bug-mayfly">&#129439;</div>
+                <div class="ih-hatch-name">
+                  <strong>Blue-Winged Olive</strong>
+                  <span>Baetis spp. &middot; Mayfly</span>
+                </div>
+                <span class="ih-hatch-status ih-status-peak">PEAK</span>
+              </div>
+              <div class="ih-hatch-details">
+                <div class="ih-hatch-detail">
+                  <span class="hd-val">#16-20</span>
+                  <span class="hd-lbl">Size</span>
+                </div>
+                <div class="ih-hatch-detail">
+                  <span class="hd-val">5:30 PM</span>
+                  <span class="hd-lbl">Peak</span>
+                </div>
+                <div class="ih-hatch-detail">
+                  <span class="hd-val">Heavy</span>
+                  <span class="hd-lbl">Density</span>
+                </div>
+                <div class="ih-hatch-detail">
+                  <span class="hd-val">Surface</span>
+                  <span class="hd-lbl">Stage</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Caddis -->
+            <div class="ih-hatch-card">
+              <div class="ih-hatch-top">
+                <div class="ih-bug-icon ih-bug-caddis">&#129431;</div>
+                <div class="ih-hatch-name">
+                  <strong>Spotted Sedge</strong>
+                  <span>Hydropsyche spp. &middot; Caddis</span>
+                </div>
+                <span class="ih-hatch-status ih-status-active">ACTIVE</span>
+              </div>
+              <div class="ih-hatch-details">
+                <div class="ih-hatch-detail">
+                  <span class="hd-val">#14-16</span>
+                  <span class="hd-lbl">Size</span>
+                </div>
+                <div class="ih-hatch-detail">
+                  <span class="hd-val">6:45 PM</span>
+                  <span class="hd-lbl">Peak</span>
+                </div>
+                <div class="ih-hatch-detail">
+                  <span class="hd-val">Moderate</span>
+                  <span class="hd-lbl">Density</span>
+                </div>
+                <div class="ih-hatch-detail">
+                  <span class="hd-val">Emerger</span>
+                  <span class="hd-lbl">Stage</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Stonefly -->
+            <div class="ih-hatch-card">
+              <div class="ih-hatch-top">
+                <div class="ih-bug-icon ih-bug-stonefly">&#128027;</div>
+                <div class="ih-hatch-name">
+                  <strong>Little Yellow Sally</strong>
+                  <span>Isoperla spp. &middot; Stonefly</span>
+                </div>
+                <span class="ih-hatch-status ih-status-emerging">EMERGING</span>
+              </div>
+              <div class="ih-hatch-details">
+                <div class="ih-hatch-detail">
+                  <span class="hd-val">#14-16</span>
+                  <span class="hd-lbl">Size</span>
+                </div>
+                <div class="ih-hatch-detail">
+                  <span class="hd-val">11:00 AM</span>
+                  <span class="hd-lbl">Peak</span>
+                </div>
+                <div class="ih-hatch-detail">
+                  <span class="hd-val">Light</span>
+                  <span class="hd-lbl">Density</span>
+                </div>
+                <div class="ih-hatch-detail">
+                  <span class="hd-val">Nymph</span>
+                  <span class="hd-lbl">Stage</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Midge -->
+            <div class="ih-hatch-card">
+              <div class="ih-hatch-top">
+                <div class="ih-bug-icon ih-bug-midge">&#128029;</div>
+                <div class="ih-hatch-name">
+                  <strong>Zebra Midge</strong>
+                  <span>Chironomidae &middot; Midge</span>
+                </div>
+                <span class="ih-hatch-status ih-status-winding">WINDING DOWN</span>
+              </div>
+              <div class="ih-hatch-details">
+                <div class="ih-hatch-detail">
+                  <span class="hd-val">#18-22</span>
+                  <span class="hd-lbl">Size</span>
+                </div>
+                <div class="ih-hatch-detail">
+                  <span class="hd-val">8:30 AM</span>
+                  <span class="hd-lbl">Peak</span>
+                </div>
+                <div class="ih-hatch-detail">
+                  <span class="hd-val">Light</span>
+                  <span class="hd-lbl">Density</span>
+                </div>
+                <div class="ih-hatch-detail">
+                  <span class="hd-val">Adult</span>
+                  <span class="hd-lbl">Stage</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fly pattern recommendations -->
+          <div class="ih-flies">
+            <div class="ih-flies-title">Recommended Fly Patterns</div>
+            <div class="ih-fly-row">
+              <div class="ih-fly-dot" style="background:#43a047"></div>
+              <div class="ih-fly-info">
+                <span class="ih-fly-name">Parachute Adams</span>
+                <span class="ih-fly-size">#18 &middot; Dry fly</span>
+              </div>
+              <span class="ih-fly-match">98% match</span>
+            </div>
+            <div class="ih-fly-row">
+              <div class="ih-fly-dot" style="background:#43a047"></div>
+              <div class="ih-fly-info">
+                <span class="ih-fly-name">RS2 Emerger</span>
+                <span class="ih-fly-size">#20 &middot; Emerger</span>
+              </div>
+              <span class="ih-fly-match">95% match</span>
+            </div>
+            <div class="ih-fly-row">
+              <div class="ih-fly-dot" style="background:#f9a825"></div>
+              <div class="ih-fly-info">
+                <span class="ih-fly-name">Elk Hair Caddis</span>
+                <span class="ih-fly-size">#14 &middot; Dry fly</span>
+              </div>
+              <span class="ih-fly-match" style="color:#f9a825">88% match</span>
+            </div>
+            <div class="ih-fly-row">
+              <div class="ih-fly-dot" style="background:#43a047"></div>
+              <div class="ih-fly-info">
+                <span class="ih-fly-name">Pheasant Tail Nymph</span>
+                <span class="ih-fly-size">#16 &middot; Nymph</span>
+              </div>
+              <span class="ih-fly-match">92% match</span>
+            </div>
+          </div>
+
+          <!-- Pro tip -->
+          <div class="ih-tip">
+            <strong>Pro tip:</strong> BWOs hatch heaviest on overcast days. Switch to an RS2 emerger in the film when you see refusal rises &mdash; trout are keying on the emerger stage right now.
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature Details -->
+  <section class="details">
+    <h2>How It Works</h2>
+    <div class="details-grid">
+      <div class="detail-card">
+        <h3>Real-Time Hatch Predictions</h3>
+        <p>AI analyzes water temperature, air temp, cloud cover, wind, and seasonal data to predict which insects are hatching right now at your location.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Hatch Activity Score</h3>
+        <p>Get a 1&ndash;10 overall hatch activity score so you know at a glance whether it's worth hitting the water with a fly rod.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Species-Level Detail</h3>
+        <p>See individual hatch cards for mayflies, caddis, stoneflies, and midges &mdash; each with scientific name, hook size, density, life stage, and peak time.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Hatch Timeline</h3>
+        <p>Visual hour-by-hour hatch intensity chart shows exactly when activity ramps up and peaks throughout the day so you can plan your session.</p>
+      </div>
+      <div class="detail-card">
+        <h3>AI Fly Pattern Matching</h3>
+        <p>Get fly pattern recommendations matched to the active hatch with confidence scores. Includes pattern name, hook size, and fly type (dry, emerger, nymph).</p>
+      </div>
+      <div class="detail-card">
+        <h3>Life Stage Tracking</h3>
+        <p>Know whether bugs are in the nymph, emerger, or adult stage so you can fish the right depth and presentation to match what trout are eating.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Location-Aware</h3>
+        <p>Hatch data is tuned to your specific river or stream. Regional insect populations and elevation are factored into every prediction.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Pro Tips & Tactics</h3>
+        <p>Context-aware fishing tips based on current hatch conditions &mdash; when to switch flies, how to read refusal rises, and presentation adjustments.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Multi-Day Hatch Forecast</h3>
+        <p>See hatch predictions for the next 5 days so you can plan your trip around peak insect activity, not just weather.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2>Ready to match the hatch?</h2>
+    <p>Start getting insect hatch predictions for free.</p>
+    <a href="/fishing-app/auth" class="cta-btn">Get Started Free</a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="lp-footer">
+    <div class="lp-footer-links">
+      <a href="/fishing-app/terms">Terms of Service</a>
+      <span class="sep">|</span>
+      <a href="/fishing-app/privacy">Privacy Policy</a>
+      <span class="sep">|</span>
+      <a href="/fishing-app/pricing">Pricing</a>
+    </div>
+    <p>&copy; 2026 CatchDaddy. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

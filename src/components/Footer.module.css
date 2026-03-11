@@ -105,3 +105,26 @@
   font-size: 0.8rem;
   margin-top: 0.4rem;
 }
+
+/* ── Contact ── */
+.contact {
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.contact p {
+  font-size: 0.85rem;
+  color: #555;
+  margin: 0 0 0.2rem;
+}
+
+.contact a {
+  color: #2d6a4f;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.contact a:hover {
+  text-decoration: underline;
+}

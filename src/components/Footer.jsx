@@ -61,6 +61,10 @@ export default function Footer() {
           )}
         </div>
       )}
+      <div className={styles.contact}>
+        <p>Questions or feedback?</p>
+        <a href="mailto:support@catchdaddy.net">support@catchdaddy.net</a>
+      </div>
       <div className={styles.links}>
         <Link to="/terms">Terms of Service</Link>
         <span className={styles.divider}>|</span>

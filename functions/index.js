@@ -1,5 +1,6 @@
 const { onRequest } = require('firebase-functions/v2/https');
 const admin = require('firebase-admin');
+const nodemailer = require('nodemailer');
 
 admin.initializeApp();
 
@@ -151,6 +152,102 @@ exports.subscribeEmail = onRequest(
         subscribedAt: admin.firestore.FieldValue.serverTimestamp(),
         source: req.body.source || 'landing',
       });
+
+      // Send emails
+      try {
+        const transporter = nodemailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASS,
+          },
+        });
+
+        const confirmHtml = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f4f4f4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:24px 0;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;max-width:600px;width:100%;">
+        <!-- Header -->
+        <tr>
+          <td style="background:#1b4332;padding:32px 24px;text-align:center;">
+            <img src="https://catchdaddy.net/fishing-app/assets/logo-icon.svg" alt="CatchDaddy" width="80" height="80" style="display:block;margin:0 auto 12px;" />
+            <h1 style="margin:0;color:#e9c46a;font-size:24px;font-weight:800;letter-spacing:0.5px;">CATCH<span style="color:#fefae0;">DADDY</span></h1>
+          </td>
+        </tr>
+        <!-- Body -->
+        <tr>
+          <td style="padding:32px 28px;">
+            <h2 style="color:#1b4332;font-size:22px;margin:0 0 16px;">You're on the list!</h2>
+            <p style="color:#333;font-size:15px;line-height:1.6;margin:0 0 20px;">Thanks for signing up for CatchDaddy — we're stoked to have you. Here's what you're getting into:</p>
+
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;">
+              <tr>
+                <td style="padding:16px;background:#f0faf4;border-radius:10px;border-left:4px solid #2d6a4f;margin-bottom:12px;">
+                  <p style="margin:0 0 4px;font-weight:700;color:#1b4332;font-size:15px;">Your data stays yours.</p>
+                  <p style="margin:0;color:#555;font-size:14px;line-height:1.5;">Your catches, spots, and fishing logs are private by default. We never sell your data or share your locations. You choose what to share and with whom.</p>
+                </td>
+              </tr>
+              <tr><td style="height:12px;"></td></tr>
+              <tr>
+                <td style="padding:16px;background:#fef9ef;border-radius:10px;border-left:4px solid #e9c46a;">
+                  <p style="margin:0 0 4px;font-weight:700;color:#1b4332;font-size:15px;">AI that actually helps you fish.</p>
+                  <p style="margin:0;color:#555;font-size:14px;line-height:1.5;">Snap a photo and instantly ID any fish species or lure. Get AI-powered local fishing guides, lure recommendations based on conditions, and smart trip planning — all tailored to where you fish.</p>
+                </td>
+              </tr>
+              <tr><td style="height:12px;"></td></tr>
+              <tr>
+                <td style="padding:16px;background:#f0faf4;border-radius:10px;border-left:4px solid #2d6a4f;">
+                  <p style="margin:0 0 4px;font-weight:700;color:#1b4332;font-size:15px;">Plus so much more.</p>
+                  <p style="margin:0;color:#555;font-size:14px;line-height:1.5;">Real-time stocking schedules, weather forecasts, community challenges, and more.</p>
+                </td>
+              </tr>
+            </table>
+
+            <p style="color:#333;font-size:15px;line-height:1.6;margin:0 0 24px;">We'll hit your inbox once when we launch — no spam, ever.</p>
+
+            <p style="margin:0 0 4px;color:#1b4332;font-weight:700;font-size:15px;">Tight lines,</p>
+            <p style="margin:0;color:#555;font-size:15px;">The CatchDaddy Team</p>
+          </td>
+        </tr>
+        <!-- Footer -->
+        <tr>
+          <td style="background:#1b4332;padding:20px 24px;text-align:center;">
+            <a href="https://catchdaddy.net" style="color:#e9c46a;font-size:14px;font-weight:600;text-decoration:none;">catchdaddy.net</a>
+            <p style="margin:8px 0 0;color:#74c69d;font-size:12px;">Questions? Reply to this email or reach us at support@catchdaddy.net</p>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+
+        // Confirmation to subscriber
+        await transporter.sendMail({
+          from: `"CatchDaddy" <${process.env.SMTP_USER}>`,
+          to: trimmed,
+          subject: "You're on the list — CatchDaddy is coming soon",
+          text: "Thanks for signing up for CatchDaddy! We'll let you know when we launch. Your data stays private, and our AI helps you fish smarter. Tight lines, The CatchDaddy Team — catchdaddy.net",
+          html: confirmHtml,
+        });
+
+        // Notify admin
+        await transporter.sendMail({
+          from: `"CatchDaddy" <${process.env.SMTP_USER}>`,
+          to: 'support@catchdaddy.net',
+          subject: `New subscriber: ${trimmed}`,
+          text: `New email signup from ${req.body.source || 'landing'} page:\n\n${trimmed}`,
+        });
+      } catch (mailErr) {
+        // Don't fail the request if email fails
+        console.error('Email send failed:', mailErr.message);
+      }
 
       res.json({ ok: true, message: 'Subscribed' });
     } catch (err) {

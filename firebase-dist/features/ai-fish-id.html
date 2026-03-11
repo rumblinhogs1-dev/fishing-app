@@ -303,6 +303,65 @@
     }
     .fun-fact strong { font-size: 0.6rem; }
 
+    .context-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .context-item {
+      flex: 1;
+      background: #f5f5f5;
+      border-radius: 8px;
+      padding: 0.4rem 0.5rem;
+    }
+    .context-item .lbl {
+      font-size: 0.5rem;
+      color: #888;
+    }
+    .context-item .val {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #333;
+    }
+    .desc-section {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 0.5rem 0.65rem;
+      margin-bottom: 0.5rem;
+    }
+    .desc-section h5 {
+      font-size: 0.6rem;
+      color: #1b4332;
+      margin-bottom: 0.2rem;
+    }
+    .desc-section p {
+      font-size: 0.6rem;
+      color: #555;
+      line-height: 1.4;
+    }
+    .alt-species {
+      display: flex;
+      gap: 0.4rem;
+    }
+    .alt-chip {
+      flex: 1;
+      background: #f5f0e1;
+      border-radius: 8px;
+      padding: 0.35rem 0.5rem;
+      text-align: center;
+    }
+    .alt-chip .alt-name {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: #333;
+      display: block;
+    }
+    .alt-chip .alt-conf {
+      font-size: 0.5rem;
+      color: #888;
+    }
+
     @media (max-width: 600px) {
       .hero { padding: 3rem 1.25rem 2rem; }
       .hero h1 { font-size: 1.6rem; }
@@ -330,7 +389,7 @@
     </div>
     <h1>AI Fish Identification</h1>
     <p class="tagline">Snap. Identify. Learn.</p>
-    <p class="desc">Take a photo of any catch and our AI instantly identifies the species, estimates size, and shares fascinating facts — all in seconds.</p>
+    <p class="desc">Take a photo of any catch and our AI instantly identifies the species, estimates size and age, infers weather and location, describes identifying features, and suggests alternative species — all in seconds.</p>
   </section>
 
   <!-- Phone Mockup -->
@@ -344,31 +403,59 @@
         <div class="phone-header">AI Fish ID</div>
         <div class="phone-body">
           <div class="upload-area">
-            <img src="/features/images/largemouth-bass.jpg" alt="Largemouth Bass caught at lake" />
+            <img src="/features/images/rainbow-trout.jpg" alt="Rainbow Trout" />
           </div>
           <div class="result-card">
-            <h4>Largemouth Bass</h4>
-            <div class="sci-name">Micropterus salmoides</div>
+            <h4>Rainbow Trout</h4>
+            <div class="sci-name">Oncorhynchus mykiss</div>
             <div class="confidence-bar">
               <div class="confidence-fill"></div>
               <span class="confidence-label">94%</span>
             </div>
             <div class="est-stats">
               <div class="est-stat">
-                <div class="val">22"</div>
+                <div class="val">16"</div>
                 <div class="lbl">Length</div>
               </div>
               <div class="est-stat">
-                <div class="val">5.2 lbs</div>
+                <div class="val">2.1 lbs</div>
                 <div class="lbl">Weight</div>
               </div>
               <div class="est-stat">
-                <div class="val">~3 yrs</div>
+                <div class="val">2-3 yrs</div>
                 <div class="lbl">Age</div>
               </div>
             </div>
-            <div class="fun-fact">
-              <strong>Fun fact:</strong> Largemouth bass can eat prey up to 50% of their own body length in a single strike!
+            <div class="context-row">
+              <div class="context-item">
+                <div class="lbl">Weather</div>
+                <div class="val">62&deg;F Overcast</div>
+              </div>
+              <div class="context-item">
+                <div class="lbl">Location</div>
+                <div class="val">Frio River, TX</div>
+              </div>
+            </div>
+            <div class="desc-section">
+              <h5>Identifying Features</h5>
+              <p>Pink lateral stripe, small dark spots on body and tail, silvery sides with greenish back.</p>
+            </div>
+            <div class="desc-section">
+              <h5>Habitat</h5>
+              <p>Cold, clear streams and lakes. Prefers water temperatures between 50-60&deg;F with moderate current.</p>
+            </div>
+            <div class="alt-species">
+              <div class="alt-chip">
+                <span class="alt-name">Brown Trout</span>
+                <span class="alt-conf">4%</span>
+              </div>
+              <div class="alt-chip">
+                <span class="alt-name">Cutthroat</span>
+                <span class="alt-conf">2%</span>
+              </div>
+            </div>
+            <div class="fun-fact" style="margin-top: 0.5rem;">
+              <strong>Fun fact:</strong> Rainbow trout can jump up to 3 feet out of the water and are one of the most widely stocked game fish in the world!
             </div>
           </div>
         </div>
@@ -381,20 +468,28 @@
     <h2>How It Works</h2>
     <div class="details-grid">
       <div class="detail-card">
-        <h3>Instant Recognition</h3>
-        <p>Our AI model recognizes hundreds of freshwater and saltwater species from a single photo, even at odd angles or in low light.</p>
+        <h3>Instant Species Recognition</h3>
+        <p>Our AI recognizes hundreds of freshwater and saltwater species from a single photo — even at odd angles or in low light. Get species name, scientific name, and confidence score.</p>
       </div>
       <div class="detail-card">
-        <h3>Size Estimates</h3>
-        <p>Get estimated length, weight, and age for your catch based on visual analysis — perfect when you don't have a scale handy.</p>
+        <h3>Size &amp; Age Estimates</h3>
+        <p>Get estimated length, weight, and age based on visual analysis using known species growth rates and regional data. Perfect when you don't have a scale handy.</p>
       </div>
       <div class="detail-card">
-        <h3>Species Details</h3>
-        <p>Learn about habitat, diet, seasonal behavior, and regional regulations for every identified species.</p>
+        <h3>Weather &amp; Location Inference</h3>
+        <p>AI analyzes surroundings, lighting, vegetation, and water color to infer weather conditions and likely geographic location where the fish was caught.</p>
       </div>
       <div class="detail-card">
-        <h3>Lure ID Too</h3>
-        <p>Not just fish — snap a photo of any lure or fly and get brand, type, recommended use, and similar alternatives.</p>
+        <h3>Identifying Features</h3>
+        <p>Get a detailed description of the physical features that led to the identification — learn to spot the differences between similar species.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Habitat &amp; Fun Facts</h3>
+        <p>Learn about preferred habitat, water temperature, seasonal behavior, and fascinating facts for every identified species.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Alternative Species</h3>
+        <p>Not 100% sure? AI provides 2nd and 3rd most likely species with confidence scores so you can compare and pick the right match.</p>
       </div>
     </div>
   </section>

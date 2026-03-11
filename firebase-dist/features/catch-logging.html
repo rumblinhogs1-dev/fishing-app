@@ -154,85 +154,174 @@
     .lp-footer p { color: #95d5b2; font-size: 0.78rem; }
 
     /* Catch form mockup */
-    .form-field {
-      background: #fefae0;
-      border-radius: 10px;
-      padding: 0.55rem 0.7rem;
-      margin-bottom: 0.45rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    }
-    .form-field .label {
-      font-size: 0.55rem;
-      color: #888;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 0.15rem;
-    }
-    .form-field .value {
-      font-size: 0.78rem;
-      color: #333;
-      font-weight: 600;
-    }
-    .form-row {
-      display: flex;
-      gap: 0.4rem;
-    }
-    .form-row .form-field { flex: 1; }
-    .toggle-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #fefae0;
-      border-radius: 10px;
-      padding: 0.55rem 0.7rem;
-      margin-bottom: 0.45rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    }
-    .toggle-row .label { font-size: 0.72rem; color: #333; font-weight: 500; }
-    .toggle {
-      width: 36px;
-      height: 20px;
-      background: #43a047;
-      border-radius: 10px;
-      position: relative;
-    }
-    .toggle::after {
-      content: '';
-      width: 16px;
-      height: 16px;
-      background: #fefae0;
-      border-radius: 50%;
-      position: absolute;
-      top: 2px;
-      right: 2px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-    }
     .photo-thumb {
       width: 100%;
-      height: 90px;
+      height: 100px;
       border-radius: 10px;
       overflow: hidden;
-      margin-bottom: 0.45rem;
-      background: #e8f0e8;
+      margin-bottom: 0.5rem;
     }
     .photo-thumb img {
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      object-fit: cover;
       display: block;
     }
-    .gps-bar {
+    .fish-id-bar {
       background: #d8f3dc;
       border-radius: 8px;
-      padding: 0.35rem 0.6rem;
-      font-size: 0.6rem;
-      color: #2d6a4f;
+      padding: 0.4rem 0.65rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .fish-id-bar .fid-species {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #1b4332;
+    }
+    .fish-id-bar .ai-badge {
+      background: #e9c46a;
+      color: #1b4332;
+      font-size: 0.5rem;
+      font-weight: 800;
+      padding: 0.1rem 0.3rem;
+      border-radius: 4px;
+      margin-left: 0.3rem;
+    }
+    .fish-id-bar .fid-conf {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #2e7d32;
+    }
+    .gps-btn {
+      background: #2d6a4f;
+      color: #fff;
+      border-radius: 8px;
+      padding: 0.4rem 0.65rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 0.5rem;
       display: flex;
       align-items: center;
-      gap: 0.35rem;
-      margin-bottom: 0.45rem;
+      justify-content: center;
+      gap: 0.3rem;
     }
-    .gps-bar svg { fill: #2d6a4f; width: 12px; height: 12px; }
+    .gps-btn svg { fill: #fff; width: 14px; height: 14px; }
+    .release-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f0faf4;
+      border-radius: 8px;
+      padding: 0.4rem 0.65rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: #2e7d32;
+    }
+    .toggle-pill {
+      width: 28px;
+      height: 16px;
+      background: #4caf50;
+      border-radius: 8px;
+      position: relative;
+    }
+    .toggle-pill::after {
+      content: '';
+      position: absolute;
+      right: 2px;
+      top: 2px;
+      width: 12px;
+      height: 12px;
+      background: #fff;
+      border-radius: 50%;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.35rem;
+      margin-bottom: 0.5rem;
+    }
+    .form-field {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 0.35rem 0.5rem;
+    }
+    .form-field .label {
+      font-size: 0.5rem;
+      color: #888;
+      font-weight: 600;
+      margin-bottom: 0.1rem;
+    }
+    .form-field .value {
+      font-size: 0.7rem;
+      color: #333;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+    }
+    .form-field .ai-badge {
+      background: #e9c46a;
+      color: #1b4332;
+      font-size: 0.4rem;
+      font-weight: 800;
+      padding: 0.08rem 0.2rem;
+      border-radius: 3px;
+    }
+    .lure-row {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 0.35rem 0.5rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .lure-row .label {
+      font-size: 0.5rem;
+      font-weight: 600;
+      color: #888;
+    }
+    .lure-tags { display: flex; gap: 0.2rem; }
+    .lure-tag {
+      background: #d8f3dc;
+      color: #1b4332;
+      font-size: 0.5rem;
+      font-weight: 600;
+      padding: 0.15rem 0.35rem;
+      border-radius: 4px;
+    }
+    .vis-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.65rem;
+    }
+    .vis-row .label { font-weight: 600; color: #333; }
+    .vis-badge {
+      background: #e8f5e9;
+      color: #2e7d32;
+      font-size: 0.55rem;
+      font-weight: 700;
+      padding: 0.15rem 0.4rem;
+      border-radius: 5px;
+    }
+    .save-btn {
+      background: #2d6a4f;
+      color: #fefae0;
+      border-radius: 8px;
+      text-align: center;
+      padding: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
 
     @media (max-width: 600px) {
       .hero { padding: 3rem 1.25rem 2rem; }
@@ -257,9 +346,9 @@
     <div class="hero-icon">
       <svg viewBox="0 0 24 24" width="32" height="32"><path d="M17.66 7.93L12 2.27 6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31A7.98 7.98 0 0012 21.58c2.05 0 4.1-.78 5.66-2.34 3.12-3.12 3.12-8.19 0-11.31zM12 19.59c-1.6 0-3.11-.62-4.24-1.76C6.62 16.69 6 15.19 6 13.59s.62-3.11 1.76-4.24L12 5.1v14.49z"/></svg>
     </div>
-    <h1>Catch Logging</h1>
-    <p class="tagline">Your Personal Fishing Journal</p>
-    <p class="desc">Record every detail of every catch — species, size, location, weather, and photos — all in one beautiful, searchable log.</p>
+    <h1>AI Catch Logging</h1>
+    <p class="tagline">One Tap. Every Detail. Automatically.</p>
+    <p class="desc">Snap a photo and AI auto-fills species, weight, length, location, weather, water temp, flow rate, and lure. Your complete fishing journal, built automatically.</p>
   </section>
 
   <section class="mockup-section">
@@ -272,40 +361,66 @@
         <div class="phone-header">Log a Catch</div>
         <div class="phone-body">
           <div class="photo-thumb">
-            <img src="/features/images/rainbow-trout.jpg" alt="Rainbow Trout in net" />
+            <img src="/features/images/largemouth-bass.jpg" alt="Largemouth Bass" />
           </div>
-          <div class="form-field">
-            <div class="label">Species</div>
-            <div class="value">Rainbow Trout</div>
+          <div class="fish-id-bar">
+            <span class="fid-species">Largemouth Bass <span class="ai-badge">AI</span></span>
+            <span class="fid-conf">94%</span>
           </div>
-          <div class="form-row">
+          <div class="gps-btn">
+            <svg viewBox="0 0 24 24"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0 0 13 3.06V1h-2v2.06A8.994 8.994 0 0 0 3.06 11H1v2h2.06A8.994 8.994 0 0 0 11 20.94V23h2v-2.06A8.994 8.994 0 0 0 20.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>
+            Auto-fill location, weather &amp; water data
+          </div>
+          <div class="release-toggle">
+            <span>Catch &amp; Release</span>
+            <div class="toggle-pill"></div>
+          </div>
+          <div class="form-grid">
+            <div class="form-field">
+              <div class="label">Species</div>
+              <div class="value">Largemouth Bass <span class="ai-badge">AI</span></div>
+            </div>
             <div class="form-field">
               <div class="label">Weight</div>
-              <div class="value">3.4 lbs</div>
+              <div class="value">4.2 lbs <span class="ai-badge">AI</span></div>
             </div>
             <div class="form-field">
               <div class="label">Length</div>
-              <div class="value">18 in</div>
+              <div class="value">18 in <span class="ai-badge">AI</span></div>
             </div>
-          </div>
-          <div class="gps-bar">
-            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/></svg>
-            36.1234, -94.5678
-          </div>
-          <div class="form-row">
             <div class="form-field">
-              <div class="label">Date</div>
-              <div class="value">Feb 26, 2026</div>
+              <div class="label">Location</div>
+              <div class="value">Lake Travis, TX <span class="ai-badge">AI</span></div>
             </div>
             <div class="form-field">
               <div class="label">Weather</div>
-              <div class="value">Partly Cloudy 62&deg;F</div>
+              <div class="value">72&deg;F Cloudy <span class="ai-badge">AI</span></div>
+            </div>
+            <div class="form-field">
+              <div class="label">Water Temp</div>
+              <div class="value">65&deg;F <span class="ai-badge">AI</span></div>
+            </div>
+            <div class="form-field">
+              <div class="label">Flow Rate</div>
+              <div class="value">142 ft&sup3;/s <span class="ai-badge">AI</span></div>
+            </div>
+            <div class="form-field">
+              <div class="label">Depth</div>
+              <div class="value">8 ft</div>
             </div>
           </div>
-          <div class="toggle-row">
-            <span class="label">Catch &amp; Release</span>
-            <div class="toggle"></div>
+          <div class="lure-row">
+            <span class="label">AI Lure ID</span>
+            <span class="lure-tags">
+              <span class="lure-tag">Rapala F11</span>
+              <span class="lure-tag">Minnow</span>
+            </span>
           </div>
+          <div class="vis-row">
+            <span class="label">Visibility</span>
+            <span class="vis-badge">Public</span>
+          </div>
+          <div class="save-btn">Add Catch</div>
         </div>
       </div>
     </div>
@@ -315,20 +430,28 @@
     <h2>Built for Anglers</h2>
     <div class="details-grid">
       <div class="detail-card">
-        <h3>Auto-Fill Details</h3>
-        <p>GPS coordinates, date, time, and weather conditions are captured automatically — just focus on fishing.</p>
+        <h3>AI Auto-Fill Everything</h3>
+        <p>Snap a photo and AI identifies the species, estimates weight and length. Hit the GPS button to auto-fill location, weather, water temp, and flow rate.</p>
       </div>
       <div class="detail-card">
-        <h3>Photo Gallery</h3>
-        <p>Attach multiple photos per catch. Browse your history as a beautiful timeline of trophy moments.</p>
+        <h3>AI Lure &amp; Fly ID</h3>
+        <p>Photo your lure or fly and AI identifies the brand, type, and color — automatically tagged to your catch entry.</p>
       </div>
       <div class="detail-card">
         <h3>Catch &amp; Release Tracking</h3>
-        <p>Tag each catch as kept or released. See your conservation stats and release percentage over time.</p>
+        <p>Tag each catch as kept or released with one toggle. Your release data is saved with every catch entry.</p>
       </div>
       <div class="detail-card">
-        <h3>Export Your Data</h3>
-        <p>Download your entire catch log as CSV or PDF. Your data is always yours to keep and share.</p>
+        <h3>Privacy Controls</h3>
+        <p>Set each catch as public, friends-only, or private. Your spots and data stay under your control.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Build Your Data</h3>
+        <p>Every catch logged feeds your personal insights — seasonal trends, best conditions, top lures, and AI-powered recommendations.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Photo Uploads</h3>
+        <p>Attach photos to each catch entry. Browse your catch history with images alongside all the data.</p>
       </div>
     </div>
   </section>

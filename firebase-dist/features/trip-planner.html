@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Trip Planner — CatchDaddy</title>
-  <meta name="description" content="Plan fishing trips with weather forecasts, target species, and customizable gear checklists." />
+  <meta name="description" content="Plan fishing trips with weather forecasts, member invites, itineraries, expense tracking, and trip chat." />
   <link rel="icon" type="image/svg+xml" href="/fishing-app/assets/logo-icon.svg" />
 
   <!-- Google Analytics -->
@@ -103,7 +103,7 @@
     }
     .phone-frame {
       width: 300px;
-      min-height: 540px;
+      min-height: 720px;
       background: #1a1a2e;
       border-radius: 36px;
       padding: 12px;
@@ -113,7 +113,7 @@
       background: #f5f5f5;
       border-radius: 26px;
       overflow: hidden;
-      min-height: 516px;
+      min-height: 696px;
     }
     .phone-status-bar {
       background: #1b4332;
@@ -224,7 +224,7 @@
       border-radius: 12px;
       padding: 0.75rem 0.85rem;
       box-shadow: 0 1px 6px rgba(0,0,0,0.08);
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.5rem;
     }
     .trip-title-area h4 {
       font-size: 0.9rem;
@@ -235,18 +235,23 @@
       font-size: 0.65rem;
       color: #888;
     }
+    .trip-title-area .trip-dest {
+      font-size: 0.6rem;
+      color: #2d6a4f;
+      font-weight: 600;
+    }
     .weather-bar {
       background: #d8f3dc;
       border-radius: 8px;
       padding: 0.45rem 0.65rem;
       font-size: 0.62rem;
       color: #1b4332;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.5rem;
       text-align: center;
       font-weight: 500;
     }
     .species-section {
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.5rem;
     }
     .species-label {
       font-size: 0.6rem;
@@ -269,39 +274,113 @@
       padding: 0.25rem 0.55rem;
       border-radius: 20px;
     }
-    .gear-card {
+    .tp-members {
       background: #fff;
-      border-radius: 12px;
-      padding: 0.75rem 0.85rem;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
-    }
-    .gear-card h4 {
-      font-size: 0.75rem;
-      color: #333;
+      border-radius: 10px;
+      padding: 0.55rem 0.7rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
       margin-bottom: 0.5rem;
     }
-    .gear-item {
+    .tp-section-label {
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 0.3rem;
+    }
+    .tp-member-row {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
-      font-size: 0.65rem;
-      color: #444;
-      padding: 0.2rem 0;
+      gap: 0.3rem;
+      margin-bottom: 0.15rem;
     }
-    .gear-item .check {
-      font-size: 0.7rem;
-      width: 16px;
+    .tp-avatar {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.45rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .tp-member-name {
+      font-size: 0.6rem;
+      color: #555;
+    }
+    .tp-member-role {
+      font-size: 0.48rem;
+      color: #888;
+      margin-left: auto;
+    }
+    .tp-itinerary {
+      background: #fff;
+      border-radius: 10px;
+      padding: 0.55rem 0.7rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      margin-bottom: 0.5rem;
+    }
+    .tp-itin-row {
+      display: flex;
+      gap: 0.35rem;
+      align-items: flex-start;
+      padding: 0.15rem 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .tp-itin-row:last-child { border-bottom: none; }
+    .tp-itin-time {
+      font-size: 0.55rem;
+      font-weight: 700;
+      color: #2d6a4f;
+      min-width: 45px;
+      flex-shrink: 0;
+    }
+    .tp-itin-desc {
+      font-size: 0.58rem;
+      color: #555;
+    }
+    .tp-expenses {
+      background: #fff;
+      border-radius: 10px;
+      padding: 0.55rem 0.7rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      margin-bottom: 0.5rem;
+    }
+    .tp-exp-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.12rem 0;
+    }
+    .tp-exp-item { font-size: 0.58rem; color: #555; }
+    .tp-exp-cat { font-size: 0.45rem; color: #999; }
+    .tp-exp-amount { font-size: 0.6rem; font-weight: 700; color: #333; }
+    .tp-exp-total {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid #eee;
+      padding-top: 0.2rem;
+      margin-top: 0.15rem;
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: #1b4332;
+    }
+    .tp-chat-preview {
+      background: #f0f7f4;
+      border-radius: 10px;
+      padding: 0.4rem 0.6rem;
+      font-size: 0.55rem;
+      color: #2d6a4f;
+      font-weight: 600;
       text-align: center;
     }
-    .gear-item.checked .check { color: #43a047; }
-    .gear-item.checked span { color: #888; text-decoration: line-through; }
-    .gear-item.unchecked .check { color: #bbb; }
 
     @media (max-width: 600px) {
       .hero { padding: 3rem 1.25rem 2rem; }
       .hero h1 { font-size: 1.6rem; }
-      .phone-frame { width: 270px; min-height: 480px; }
-      .phone-screen { min-height: 456px; }
+      .phone-frame { width: 270px; min-height: 660px; }
+      .phone-screen { min-height: 636px; }
       .details, .cta-section { padding: 2rem 1rem; }
     }
   </style>
@@ -324,7 +403,7 @@
     </div>
     <h1>Trip Planner</h1>
     <p class="tagline">Plan it. Pack it. Catch it.</p>
-    <p class="desc">Organize every fishing trip with weather integration, target species, location picks, and fully customizable gear checklists — all in one place.</p>
+    <p class="desc">Organize every fishing trip with weather forecasts, target species, member invites, itineraries, expense tracking, and trip photos — all in one place.</p>
   </section>
 
   <!-- Phone Mockup -->
@@ -340,8 +419,9 @@
           <div class="trip-title-area">
             <h4>Weekend at Blue Mesa</h4>
             <div class="trip-date">Mar 8–9, 2026</div>
+            <div class="trip-dest">Blue Mesa Reservoir, CO</div>
           </div>
-          <div class="weather-bar">Sat: 62° Sunny · Sun: 58° Clouds</div>
+          <div class="weather-bar">Sat: 62&deg; Sunny &middot; Sun: 58&deg; Clouds</div>
           <div class="species-section">
             <div class="species-label">Target Species</div>
             <div class="species-tags">
@@ -349,29 +429,67 @@
               <span class="species-tag">Brown Trout</span>
             </div>
           </div>
-          <div class="gear-card">
-            <h4>Gear Checklist</h4>
-            <div class="gear-item checked">
-              <span class="check">&#10003;</span>
-              <span>5-weight fly rod</span>
+          <!-- Members -->
+          <div class="tp-members">
+            <div class="tp-section-label">Members</div>
+            <div class="tp-member-row">
+              <div class="tp-avatar" style="background:#2d6a4f;">J</div>
+              <span class="tp-member-name">Jake_Angler92</span>
+              <span class="tp-member-role">Organizer</span>
             </div>
-            <div class="gear-item checked">
-              <span class="check">&#10003;</span>
-              <span>Waders &amp; boots</span>
+            <div class="tp-member-row">
+              <div class="tp-avatar" style="background:#e76f51;">M</div>
+              <span class="tp-member-name">Mike_Bass</span>
+              <span class="tp-member-role">Member</span>
             </div>
-            <div class="gear-item unchecked">
-              <span class="check">&#9633;</span>
-              <span>Elk hair caddis (#14)</span>
-            </div>
-            <div class="gear-item unchecked">
-              <span class="check">&#9633;</span>
-              <span>Split shot &amp; indicators</span>
-            </div>
-            <div class="gear-item unchecked">
-              <span class="check">&#9633;</span>
-              <span>Landing net</span>
+            <div class="tp-member-row">
+              <div class="tp-avatar" style="background:#264653;">T</div>
+              <span class="tp-member-name">TroutChaser</span>
+              <span class="tp-member-role">Member</span>
             </div>
           </div>
+          <!-- Itinerary -->
+          <div class="tp-itinerary">
+            <div class="tp-section-label">Itinerary</div>
+            <div class="tp-itin-row">
+              <span class="tp-itin-time">5:30 AM</span>
+              <span class="tp-itin-desc">Meet at marina boat ramp</span>
+            </div>
+            <div class="tp-itin-row">
+              <span class="tp-itin-time">6:00 AM</span>
+              <span class="tp-itin-desc">Fish the north inlet — trout stocked last week</span>
+            </div>
+            <div class="tp-itin-row">
+              <span class="tp-itin-time">12:00 PM</span>
+              <span class="tp-itin-desc">Break for lunch at campsite</span>
+            </div>
+            <div class="tp-itin-row">
+              <span class="tp-itin-time">5:00 PM</span>
+              <span class="tp-itin-desc">Evening bite — east bank drop-off</span>
+            </div>
+          </div>
+          <!-- Expenses -->
+          <div class="tp-expenses">
+            <div class="tp-section-label">Expenses</div>
+            <div class="tp-exp-row">
+              <div><div class="tp-exp-item">Boat rental</div><div class="tp-exp-cat">Equipment</div></div>
+              <span class="tp-exp-amount">$120</span>
+            </div>
+            <div class="tp-exp-row">
+              <div><div class="tp-exp-item">Campsite (2 nights)</div><div class="tp-exp-cat">Lodging</div></div>
+              <span class="tp-exp-amount">$45</span>
+            </div>
+            <div class="tp-exp-row">
+              <div><div class="tp-exp-item">Gas + bait</div><div class="tp-exp-cat">Supplies</div></div>
+              <span class="tp-exp-amount">$60</span>
+            </div>
+            <div class="tp-exp-total">
+              <span>Total</span>
+              <span>$225 &middot; Split 3 ways</span>
+            </div>
+          </div>
+          <!-- Trip chat -->
+          <div class="tp-chat-preview">Trip Chat &middot; 3 members &middot; 12 messages</div>
         </div>
       </div>
     </div>
@@ -382,20 +500,36 @@
     <h2>How It Works</h2>
     <div class="details-grid">
       <div class="detail-card">
-        <h3>Weather Integration</h3>
-        <p>See weather forecasts for your trip dates and destination so you can pack smart and plan around conditions.</p>
+        <h3>Weather Forecasts</h3>
+        <p>See weather forecasts for your trip dates and destination so you can plan around conditions.</p>
       </div>
       <div class="detail-card">
-        <h3>Species Targeting</h3>
-        <p>Select target species and get AI-powered recommendations for lures, techniques, and best times.</p>
+        <h3>Target Species</h3>
+        <p>Select target species for your trip and keep your group focused on the plan.</p>
       </div>
       <div class="detail-card">
-        <h3>Gear Checklists</h3>
-        <p>Customizable packing lists so you never forget essential tackle. Share lists with your fishing crew.</p>
+        <h3>Invite Members</h3>
+        <p>Add friends to your trip from your friends list. Everyone sees the same plan, itinerary, and updates.</p>
       </div>
       <div class="detail-card">
-        <h3>Trip History</h3>
-        <p>Review past trips, what worked, and what didn't — all linked to your catch data for continuous improvement.</p>
+        <h3>Trip Chat</h3>
+        <p>A group chat is auto-created for every trip so your crew can coordinate in real time.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Itinerary Builder</h3>
+        <p>Add timed itinerary items to plan your day — meet-up times, fishing spots, lunch breaks, and more.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Expense Tracking</h3>
+        <p>Log trip expenses by category and split costs with members. See the total and per-person breakdown.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Trip Photos</h3>
+        <p>Upload and share photos from the trip. Everyone in the group can add to the shared album.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Linked Catches</h3>
+        <p>Catches logged during trip dates are automatically linked, so you can review what was caught on each trip.</p>
       </div>
     </div>
   </section>

@@ -101,9 +101,6 @@
       overflow: hidden;
     }
     .map-tiles {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
       width: 100%;
       height: 100%;
     }
@@ -113,6 +110,7 @@
       object-fit: cover;
       display: block;
     }
+    .map-tiles img:nth-child(n+2) { display: none; }
     .map-pin {
       position: absolute;
       width: 18px;
@@ -158,6 +156,58 @@
     }
     .map-popup h4 { font-size: 0.75rem; color: #333; margin-bottom: 0.15rem; }
     .map-popup p { font-size: 0.6rem; color: #888; }
+    .map-legend {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(254,250,224,0.92);
+      border-radius: 8px;
+      padding: 6px 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .map-legend-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.55rem;
+      font-weight: 600;
+      color: #333;
+    }
+    .map-legend-row .pin-dot {
+      width: 8px; height: 8px;
+      background: #f44336;
+      border-radius: 50%;
+      border: 1.5px solid #fff;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+    .map-legend-row .heat-dot {
+      width: 18px; height: 8px;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #ffd600, #ff9800, #f44336);
+    }
+    .map-toggle {
+      position: absolute;
+      bottom: 55px;
+      left: 10px;
+      background: rgba(254,250,224,0.92);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 0.55rem;
+      font-weight: 700;
+      color: #1b4332;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .map-toggle-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #f44336;
+    }
 
     @media (max-width: 600px) {
       .hero { padding: 3rem 1.25rem 2rem; }
@@ -220,6 +270,15 @@
             <div class="map-pin" style="background:#f44336;left:60px;top:215px;"></div>
             <div class="map-pin" style="background:#ff9800;left:95px;top:140px;"></div>
 
+            <!-- Legend -->
+            <div class="map-legend">
+              <div class="map-legend-row"><span class="pin-dot"></span> My Catches</div>
+              <div class="map-legend-row"><span class="heat-dot"></span> Community Hotspots</div>
+            </div>
+
+            <!-- Heatmap toggle -->
+            <div class="map-toggle"><span class="map-toggle-dot"></span> Heatmap ON</div>
+
             <!-- Map controls -->
             <div class="map-controls">
               <div class="map-ctrl-btn">
@@ -246,19 +305,35 @@
     <div class="details-grid">
       <div class="detail-card">
         <h3>Catch Pins</h3>
-        <p>Every logged catch appears as a color-coded pin on the map. Tap any pin to see species, weight, and who caught it.</p>
+        <p>Every logged catch appears as a color-coded pin on the map. Tap any pin to see species, weight, depth, date, and weather.</p>
       </div>
       <div class="detail-card">
-        <h3>Heatmap View</h3>
-        <p>Toggle the heatmap overlay to instantly see fishing hotspots in any area based on community catch data.</p>
+        <h3>Community Heatmap</h3>
+        <p>Toggle the heatmap overlay to see fishing hotspots based on anonymous, opt-in community data. Your exact spots stay private unless you choose to share.</p>
       </div>
       <div class="detail-card">
-        <h3>Water Info</h3>
-        <p>View water temperature, flow rates, and conditions for lakes and rivers to plan your next trip.</p>
+        <h3>USGS Water Gauges</h3>
+        <p>Live water temperature, flow rates, and gauge height from USGS stations overlaid directly on the map.</p>
       </div>
       <div class="detail-card">
-        <h3>Saved Spots</h3>
-        <p>Bookmark your best fishing locations. Add private notes and get notified when conditions are ideal.</p>
+        <h3>Private Saved Spots</h3>
+        <p>Bookmark your best fishing locations — completely private to you. Add notes and name each spot for quick access.</p>
+      </div>
+      <div class="detail-card">
+        <h3>10+ Map Layers</h3>
+        <p>Switch between street, satellite, ocean, depth contours, NOAA charts, USGS topo, public lands, and more.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Structure Hints</h3>
+        <p>AI-powered structure hints identify likely fish-holding areas like drop-offs, points, and submerged cover.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Stocking Overlay</h3>
+        <p>See recent stocking locations plotted on the map so you can target freshly stocked waters.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Location Search</h3>
+        <p>Search any lake, river, or location by name and jump directly to it on the map.</p>
       </div>
     </div>
   </section>

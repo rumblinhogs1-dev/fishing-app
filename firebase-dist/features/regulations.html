@@ -103,7 +103,7 @@
     }
     .phone-frame {
       width: 300px;
-      min-height: 540px;
+      min-height: 720px;
       background: #1a1a2e;
       border-radius: 36px;
       padding: 12px;
@@ -113,7 +113,7 @@
       background: #f5f5f5;
       border-radius: 26px;
       overflow: hidden;
-      min-height: 516px;
+      min-height: 696px;
     }
     .phone-status-bar {
       background: #1b4332;
@@ -219,59 +219,208 @@
     .lp-footer p { color: #95d5b2; font-size: 0.78rem; }
 
     /* Page-specific mockup styles */
-    .state-selector {
-      background: #fff;
-      border-radius: 10px;
-      padding: 0.6rem 0.85rem;
+
+    /* Disclaimer banner */
+    .rg-disclaimer {
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: 8px;
+      padding: 0.4rem 0.55rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.55rem;
+      color: #6d4c00;
+      line-height: 1.4;
+    }
+    .rg-disclaimer strong { font-size: 0.55rem; }
+
+    /* Mode toggle */
+    .rg-mode-toggle {
+      display: flex;
+      background: #e8e8e8;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+    }
+    .rg-mode-btn {
+      flex: 1;
+      text-align: center;
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 0.35rem 0;
+      color: #666;
+      background: transparent;
+    }
+    .rg-mode-btn.active {
+      background: #1b4332;
+      color: #fff;
+      border-radius: 8px;
+    }
+
+    /* GPS detect button */
+    .rg-gps-btn {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.75rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    }
-    .state-selector .state-name {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: #333;
-    }
-    .state-selector .arrow {
+      justify-content: center;
+      gap: 0.3rem;
+      background: #2d6a4f;
+      color: #fff;
+      border-radius: 10px;
+      padding: 0.5rem;
       font-size: 0.7rem;
-      color: #888;
-    }
-    .reg-card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 0.75rem 0.85rem;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
-      margin-bottom: 0.6rem;
-    }
-    .reg-card h4 {
-      font-size: 0.85rem;
       font-weight: 700;
-      color: #333;
-      margin-bottom: 0.35rem;
+      margin-bottom: 0.5rem;
+      width: 100%;
     }
-    .reg-row {
+    .rg-gps-btn svg {
+      fill: #fff;
+      width: 14px;
+      height: 14px;
+    }
+
+    /* GPS info line */
+    .rg-gps-info {
+      font-size: 0.55rem;
+      color: #888;
+      text-align: center;
+      margin-bottom: 0.4rem;
+    }
+
+    /* State header */
+    .rg-state-header {
       display: flex;
       justify-content: space-between;
-      font-size: 0.65rem;
-      color: #666;
-      padding: 0.15rem 0;
+      align-items: center;
+      margin-bottom: 0.4rem;
     }
-    .reg-row .reg-label {
-      font-weight: 600;
-      color: #555;
-    }
-    .reg-row .reg-value {
+    .rg-state-name {
+      font-size: 0.85rem;
+      font-weight: 800;
       color: #1b4332;
+    }
+    .rg-agency-link {
+      font-size: 0.5rem;
+      color: #2d6a4f;
+      text-decoration: underline;
+    }
+
+    /* License banner */
+    .rg-license {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: #e3f2fd;
+      border: 1px solid #90caf9;
+      border-radius: 8px;
+      padding: 0.35rem 0.5rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.6rem;
+      color: #1565c0;
+    }
+    .rg-license svg {
+      fill: #1565c0;
+      width: 13px;
+      height: 13px;
+      flex-shrink: 0;
+    }
+    .rg-license a {
+      color: #1565c0;
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
+    /* Species filter */
+    .rg-filter {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 0.4rem 0.55rem;
+      font-size: 0.65rem;
+      color: #999;
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Regulation card */
+    .rg-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 0.6rem 0.7rem;
+      border-left: 4px solid #ccc;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.06);
+      margin-bottom: 0.45rem;
+    }
+    .rg-card.open { border-left-color: #4caf50; }
+    .rg-card.closed { border-left-color: #d32f2f; }
+    .rg-card.restricted { border-left-color: #ff9800; }
+
+    .rg-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.35rem;
+    }
+    .rg-card-name {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #222;
+    }
+    .rg-status {
+      font-size: 0.5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      padding: 0.12rem 0.4rem;
+      border-radius: 10px;
+    }
+    .rg-status.open { background: #e8f5e9; color: #2e7d32; }
+    .rg-status.closed { background: #fdecea; color: #c62828; }
+    .rg-status.restricted { background: #fff8e1; color: #e65100; }
+
+    .rg-card-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.25rem 0.5rem;
+    }
+    .rg-detail-label {
+      font-size: 0.5rem;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .rg-detail-value {
+      font-size: 0.68rem;
       font-weight: 600;
+      color: #333;
+    }
+
+    /* AI Summary button */
+    .rg-ai-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      background: linear-gradient(135deg, #1b4332, #2d6a4f);
+      color: #fff;
+      border-radius: 10px;
+      padding: 0.5rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      width: 100%;
+      margin-top: 0.15rem;
+    }
+    .rg-ai-badge {
+      background: rgba(255,255,255,0.2);
+      font-size: 0.45rem;
+      font-weight: 700;
+      padding: 0.1rem 0.3rem;
+      border-radius: 4px;
     }
 
     @media (max-width: 600px) {
       .hero { padding: 3rem 1.25rem 2rem; }
       .hero h1 { font-size: 1.6rem; }
-      .phone-frame { width: 270px; min-height: 480px; }
-      .phone-screen { min-height: 456px; }
+      .phone-frame { width: 270px; min-height: 660px; }
+      .phone-screen { min-height: 636px; }
       .details, .cta-section { padding: 2rem 1rem; }
     }
   </style>
@@ -307,54 +456,80 @@
         </div>
         <div class="phone-header">Regulations</div>
         <div class="phone-body">
-          <div class="state-selector">
-            <span class="state-name">Colorado</span>
-            <span class="arrow">&#9660;</span>
+          <!-- Disclaimer -->
+          <div class="rg-disclaimer">
+            <strong>Disclaimer:</strong> For reference only. Verify all rules with your local fish &amp; wildlife agency before fishing.
           </div>
-          <div class="reg-card">
-            <h4>Rainbow Trout</h4>
-            <div class="reg-row">
-              <span class="reg-label">Bag Limit</span>
-              <span class="reg-value">4/day</span>
+
+          <!-- Mode toggle -->
+          <div class="rg-mode-toggle">
+            <div class="rg-mode-btn active">Auto-detect (GPS)</div>
+            <div class="rg-mode-btn">Select State</div>
+          </div>
+
+          <!-- GPS button -->
+          <div class="rg-gps-btn">
+            <svg viewBox="0 0 24 24"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0 0 13 3.06V1h-2v2.06A8.994 8.994 0 0 0 3.06 11H1v2h2.06A8.994 8.994 0 0 0 11 20.94V23h2v-2.06A8.994 8.994 0 0 0 20.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>
+            Detect My State
+          </div>
+          <div class="rg-gps-info">GPS: 39.7392, -104.9903</div>
+
+          <!-- State header -->
+          <div class="rg-state-header">
+            <span class="rg-state-name">Colorado</span>
+            <span class="rg-agency-link">CO Parks &amp; Wildlife</span>
+          </div>
+
+          <!-- License banner -->
+          <div class="rg-license">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Fishing license required. <a href="#">Get a license</a>
+          </div>
+
+          <!-- Species filter -->
+          <div class="rg-filter">Filter species...</div>
+
+          <!-- Regulation Cards -->
+          <div class="rg-card open">
+            <div class="rg-card-header">
+              <span class="rg-card-name">Rainbow Trout</span>
+              <span class="rg-status open">Open</span>
             </div>
-            <div class="reg-row">
-              <span class="reg-label">Min Size</span>
-              <span class="reg-value">12"</span>
-            </div>
-            <div class="reg-row">
-              <span class="reg-label">Season</span>
-              <span class="reg-value">Year-round</span>
+            <div class="rg-card-details">
+              <div><div class="rg-detail-label">Min Length</div><div class="rg-detail-value">12"</div></div>
+              <div><div class="rg-detail-label">Daily Limit</div><div class="rg-detail-value">4</div></div>
+              <div><div class="rg-detail-label">Season</div><div class="rg-detail-value">Year-round</div></div>
             </div>
           </div>
-          <div class="reg-card">
-            <h4>Largemouth Bass</h4>
-            <div class="reg-row">
-              <span class="reg-label">Bag Limit</span>
-              <span class="reg-value">5/day</span>
+
+          <div class="rg-card restricted">
+            <div class="rg-card-header">
+              <span class="rg-card-name">Largemouth Bass</span>
+              <span class="rg-status restricted">Restricted</span>
             </div>
-            <div class="reg-row">
-              <span class="reg-label">Min Size</span>
-              <span class="reg-value">15"</span>
-            </div>
-            <div class="reg-row">
-              <span class="reg-label">Season</span>
-              <span class="reg-value">Mar 1 – Nov 30</span>
+            <div class="rg-card-details">
+              <div><div class="rg-detail-label">Min Length</div><div class="rg-detail-value">15"</div></div>
+              <div><div class="rg-detail-label">Daily Limit</div><div class="rg-detail-value">5</div></div>
+              <div><div class="rg-detail-label">Season</div><div class="rg-detail-value">Mar 1 – Nov 30</div></div>
             </div>
           </div>
-          <div class="reg-card">
-            <h4>Walleye</h4>
-            <div class="reg-row">
-              <span class="reg-label">Bag Limit</span>
-              <span class="reg-value">3/day</span>
+
+          <div class="rg-card open">
+            <div class="rg-card-header">
+              <span class="rg-card-name">Walleye</span>
+              <span class="rg-status open">Open</span>
             </div>
-            <div class="reg-row">
-              <span class="reg-label">Min Size</span>
-              <span class="reg-value">18"</span>
+            <div class="rg-card-details">
+              <div><div class="rg-detail-label">Min Length</div><div class="rg-detail-value">18"</div></div>
+              <div><div class="rg-detail-label">Daily Limit</div><div class="rg-detail-value">3</div></div>
+              <div><div class="rg-detail-label">Season</div><div class="rg-detail-value">Year-round</div></div>
             </div>
-            <div class="reg-row">
-              <span class="reg-label">Season</span>
-              <span class="reg-value">Year-round</span>
-            </div>
+          </div>
+
+          <!-- AI Summary button -->
+          <div class="rg-ai-btn">
+            <span class="rg-ai-badge">AI</span>
+            Get AI Regulation Summary for Colorado
           </div>
         </div>
       </div>
@@ -366,20 +541,28 @@
     <h2>How It Works</h2>
     <div class="details-grid">
       <div class="detail-card">
-        <h3>State-by-State</h3>
-        <p>Regulations for every US state, organized by species and water body for quick lookup.</p>
+        <h3>GPS Auto-Detect</h3>
+        <p>Tap one button and your state is detected automatically — no scrolling through a long dropdown.</p>
       </div>
       <div class="detail-card">
-        <h3>Bag & Size Limits</h3>
-        <p>Instantly see daily bag limits, minimum size requirements, and possession limits.</p>
+        <h3>Status Badges</h3>
+        <p>Each species card shows Open, Closed, or Restricted status with color-coded borders so you know at a glance.</p>
       </div>
       <div class="detail-card">
-        <h3>Season Dates</h3>
-        <p>Know exactly when seasons open and close for each species in your area.</p>
+        <h3>Limits & Seasons</h3>
+        <p>Min/max length, daily bag limits, and season dates organized in a clean 2-column grid for each species.</p>
       </div>
       <div class="detail-card">
-        <h3>License Info</h3>
-        <p>Links to official state license portals so you can purchase or renew on the spot.</p>
+        <h3>Species Filter</h3>
+        <p>Type to filter species instantly — find the exact regulation you need without scrolling through the full list.</p>
+      </div>
+      <div class="detail-card">
+        <h3>AI Regulation Summary</h3>
+        <p>Get an AI-generated plain-English summary of key rules, special restrictions, and links to official sources.</p>
+      </div>
+      <div class="detail-card">
+        <h3>License Links</h3>
+        <p>Direct links to your state's official license portal so you can purchase or renew on the spot.</p>
       </div>
     </div>
   </section>

@@ -103,7 +103,7 @@
     }
     .phone-frame {
       width: 300px;
-      min-height: 540px;
+      min-height: 640px;
       background: #1a1a2e;
       border-radius: 36px;
       padding: 12px;
@@ -113,7 +113,7 @@
       background: #f5f5f5;
       border-radius: 26px;
       overflow: hidden;
-      min-height: 516px;
+      min-height: 616px;
     }
     .phone-status-bar {
       background: #1b4332;
@@ -219,83 +219,140 @@
     .lp-footer p { color: #95d5b2; font-size: 0.78rem; }
 
     /* Page-specific mockup styles */
-    .weather-card {
+    .fc-hero {
       background: linear-gradient(135deg, #2d6a4f, #40916c);
-      border-radius: 12px;
-      padding: 0.85rem;
+      border-radius: 10px;
+      padding: 0.65rem 0.75rem;
       color: #fff;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      border-left: 4px solid #4caf50;
     }
-    .weather-temp {
+    .fc-hero-score {
       font-size: 2rem;
       font-weight: 800;
+      color: #66bb6a;
       line-height: 1;
-      margin-bottom: 0.15rem;
     }
-    .weather-cond {
-      font-size: 0.75rem;
-      opacity: 0.9;
-      margin-bottom: 0.35rem;
-    }
-    .weather-details {
-      display: flex;
-      gap: 0.75rem;
-      font-size: 0.6rem;
-      opacity: 0.85;
-    }
-    .activity-bar {
-      background: #fff;
-      border-radius: 10px;
-      padding: 0.55rem 0.75rem;
+    .fc-hero-meta { flex: 1; }
+    .fc-hero-label { font-size: 0.7rem; opacity: 0.8; }
+    .fc-hero-rec { font-size: 0.72rem; font-weight: 600; line-height: 1.3; }
+    .fc-conditions {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.3rem;
       margin-bottom: 0.5rem;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
     }
-    .activity-label {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .fc-cond {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 0.35rem;
+      text-align: center;
+    }
+    .fc-cond .cv { font-size: 0.8rem; font-weight: 700; color: #333; }
+    .fc-cond .cl { font-size: 0.55rem; color: #888; }
+    .fc-bite {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 10px;
+      padding: 0.55rem 0.65rem;
+      margin-bottom: 0.5rem;
+    }
+    .fc-bite-header {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #333;
       margin-bottom: 0.3rem;
     }
-    .activity-label span:first-child {
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: #333;
+    .fc-bite-gauge {
+      height: 10px;
+      background: #e0e0e0;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-bottom: 0.35rem;
     }
-    .activity-label span:last-child {
-      font-size: 0.65rem;
-      font-weight: 700;
+    .fc-bite-fill {
+      height: 100%;
+      border-radius: 5px;
+      background: linear-gradient(90deg, #e76f51, #e9c46a, #43a047);
     }
-    .activity-track {
-      background: #e8e8e8;
-      border-radius: 6px;
-      height: 14px;
+    .fc-factor {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      margin-bottom: 0.15rem;
+    }
+    .fc-factor-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .fc-factor-name { font-size: 0.65rem; color: #555; flex: 1; }
+    .fc-factor-bar {
+      width: 60px; height: 5px;
+      background: #eee;
+      border-radius: 3px;
       overflow: hidden;
     }
-    .activity-fill {
-      height: 100%;
-      border-radius: 6px;
+    .fc-factor-fill { height: 100%; border-radius: 3px; }
+    .fc-moon {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 10px;
+      padding: 0.55rem 0.65rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
-    .activity-fill.high { background: linear-gradient(90deg, #43a047, #66bb6a); }
-    .activity-fill.medium { background: linear-gradient(90deg, #f9a825, #fdd835); }
-    .activity-fill.low { background: linear-gradient(90deg, #e65100, #ff6d00); }
-    .best-times {
+    .fc-moon-emoji { font-size: 1.4rem; }
+    .fc-moon-info { flex: 1; }
+    .fc-moon-phase { font-size: 0.75rem; font-weight: 700; color: #333; display: block; }
+    .fc-moon-illum { font-size: 0.6rem; color: #888; }
+    .fc-species {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 10px;
+      padding: 0.55rem 0.65rem;
+      margin-bottom: 0.5rem;
+    }
+    .fc-species-title { font-size: 0.7rem; font-weight: 700; color: #333; margin-bottom: 0.3rem; }
+    .fc-sp-row {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      margin-bottom: 0.2rem;
+    }
+    .fc-sp-name { font-size: 0.65rem; color: #333; width: 60px; flex-shrink: 0; }
+    .fc-sp-bar {
+      flex: 1;
+      height: 8px;
+      background: #e8f5e9;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .fc-sp-fill { height: 100%; border-radius: 4px; }
+    .fc-sp-fill.ideal { background: #43a047; }
+    .fc-sp-fill.good { background: #e9c46a; }
+    .fc-sp-fill.poor { background: #e76f51; }
+    .fc-sp-label { font-size: 0.55rem; color: #888; width: 30px; text-align: right; }
+    .fc-best {
       background: #d8f3dc;
       border-radius: 10px;
-      padding: 0.55rem 0.75rem;
-      font-size: 0.65rem;
+      padding: 0.5rem 0.65rem;
+      font-size: 0.7rem;
       color: #1b4332;
-      line-height: 1.4;
-      margin-top: 0.25rem;
-    }
-    .best-times strong {
-      font-size: 0.65rem;
+      font-weight: 600;
     }
 
     @media (max-width: 600px) {
       .hero { padding: 3rem 1.25rem 2rem; }
       .hero h1 { font-size: 1.6rem; }
-      .phone-frame { width: 270px; min-height: 480px; }
-      .phone-screen { min-height: 456px; }
+      .phone-frame { width: 270px; min-height: 580px; }
+      .phone-screen { min-height: 556px; }
       .details, .cta-section { padding: 2rem 1rem; }
     }
   </style>
@@ -331,44 +388,51 @@
         </div>
         <div class="phone-header">Fishing Forecast</div>
         <div class="phone-body">
-          <div class="weather-card">
-            <div class="weather-temp">68&deg;</div>
-            <div class="weather-cond">Partly Cloudy</div>
-            <div class="weather-details">
-              <span>Wind: 8 mph SW</span>
-              <span>Pressure: 30.1 &uarr;</span>
+          <!-- Should I Fish? -->
+          <div class="fc-hero">
+            <div class="fc-hero-score">8</div>
+            <div class="fc-hero-meta">
+              <div class="fc-hero-label">Should I Fish?</div>
+              <div class="fc-hero-rec">Great day — falling pressure + overcast skies = active bite</div>
             </div>
           </div>
-          <div class="activity-bar">
-            <div class="activity-label">
-              <span>Bass Activity</span>
-              <span style="color:#43a047;">88%</span>
-            </div>
-            <div class="activity-track">
-              <div class="activity-fill high" style="width:88%;"></div>
+          <!-- Conditions -->
+          <div class="fc-conditions">
+            <div class="fc-cond"><div class="cv">68&deg;F</div><div class="cl">Temp</div></div>
+            <div class="fc-cond"><div class="cv">8 mph</div><div class="cl">Wind</div></div>
+            <div class="fc-cond"><div class="cv">1008</div><div class="cl">Pressure</div></div>
+            <div class="fc-cond"><div class="cv">78%</div><div class="cl">Clouds</div></div>
+            <div class="fc-cond"><div class="cv">65%</div><div class="cl">Humidity</div></div>
+            <div class="fc-cond"><div class="cv">SW</div><div class="cl">Direction</div></div>
+          </div>
+          <!-- Bite Score -->
+          <div class="fc-bite">
+            <div class="fc-bite-header">Bite Score: 7/10 — Good</div>
+            <div class="fc-bite-gauge"><div class="fc-bite-fill" style="width:70%"></div></div>
+            <div class="fc-factor"><div class="fc-factor-dot" style="background:#2e7d32"></div><div class="fc-factor-name">Moon Phase</div><div class="fc-factor-bar"><div class="fc-factor-fill" style="width:80%;background:#2e7d32"></div></div></div>
+            <div class="fc-factor"><div class="fc-factor-dot" style="background:#2e7d32"></div><div class="fc-factor-name">Pressure</div><div class="fc-factor-bar"><div class="fc-factor-fill" style="width:90%;background:#2e7d32"></div></div></div>
+            <div class="fc-factor"><div class="fc-factor-dot" style="background:#f9a825"></div><div class="fc-factor-name">Wind</div><div class="fc-factor-bar"><div class="fc-factor-fill" style="width:55%;background:#f9a825"></div></div></div>
+            <div class="fc-factor"><div class="fc-factor-dot" style="background:#2e7d32"></div><div class="fc-factor-name">Cloud Cover</div><div class="fc-factor-bar"><div class="fc-factor-fill" style="width:85%;background:#2e7d32"></div></div></div>
+          </div>
+          <!-- Moon -->
+          <div class="fc-moon">
+            <span class="fc-moon-emoji">&#127765;</span>
+            <div class="fc-moon-info">
+              <span class="fc-moon-phase">Waxing Gibbous</span>
+              <span class="fc-moon-illum">72% illumination</span>
             </div>
           </div>
-          <div class="activity-bar">
-            <div class="activity-label">
-              <span>Trout Activity</span>
-              <span style="color:#f9a825;">62%</span>
-            </div>
-            <div class="activity-track">
-              <div class="activity-fill medium" style="width:62%;"></div>
-            </div>
+          <!-- Species Activity -->
+          <div class="fc-species">
+            <div class="fc-species-title">Species Activity (65&deg;F water)</div>
+            <div class="fc-sp-row"><span class="fc-sp-name">Bass</span><div class="fc-sp-bar"><div class="fc-sp-fill ideal" style="width:88%"></div></div><span class="fc-sp-label">Ideal</span></div>
+            <div class="fc-sp-row"><span class="fc-sp-name">Trout</span><div class="fc-sp-bar"><div class="fc-sp-fill good" style="width:60%"></div></div><span class="fc-sp-label">Good</span></div>
+            <div class="fc-sp-row"><span class="fc-sp-name">Walleye</span><div class="fc-sp-bar"><div class="fc-sp-fill ideal" style="width:78%"></div></div><span class="fc-sp-label">Ideal</span></div>
+            <div class="fc-sp-row"><span class="fc-sp-name">Crappie</span><div class="fc-sp-bar"><div class="fc-sp-fill good" style="width:65%"></div></div><span class="fc-sp-label">Good</span></div>
+            <div class="fc-sp-row"><span class="fc-sp-name">Catfish</span><div class="fc-sp-bar"><div class="fc-sp-fill poor" style="width:35%"></div></div><span class="fc-sp-label">Cold</span></div>
           </div>
-          <div class="activity-bar">
-            <div class="activity-label">
-              <span>Catfish Activity</span>
-              <span style="color:#e65100;">35%</span>
-            </div>
-            <div class="activity-track">
-              <div class="activity-fill low" style="width:35%;"></div>
-            </div>
-          </div>
-          <div class="best-times">
-            <strong>Best Times:</strong> 6:15 AM &ndash; 8:30 AM &middot; 5:45 PM &ndash; 7:00 PM
-          </div>
+          <!-- Best Times -->
+          <div class="fc-best">Best: 6:15 AM – 8:30 AM &middot; 5:45 PM – 7:00 PM</div>
         </div>
       </div>
     </div>
@@ -379,20 +443,44 @@
     <h2>How It Works</h2>
     <div class="details-grid">
       <div class="detail-card">
-        <h3>Real-Time Weather</h3>
-        <p>Current conditions, wind, pressure, temperature, and hourly forecasts tailored for anglers.</p>
+        <h3>"Should I Fish?" Score</h3>
+        <p>Get a 1–10 rating with a plain-English recommendation based on current conditions at your location.</p>
       </div>
       <div class="detail-card">
-        <h3>Solunar Data</h3>
-        <p>Major and minor feeding periods based on moon phase and position for peak bite windows.</p>
+        <h3>Bite Score & Factor Breakdown</h3>
+        <p>See how moon phase, barometric pressure, wind, and cloud cover each contribute to fish activity.</p>
       </div>
       <div class="detail-card">
-        <h3>Species Activity</h3>
-        <p>AI-powered activity ratings for common species based on weather, water temp, and seasonal patterns.</p>
+        <h3>Moon & Solunar Windows</h3>
+        <p>Major and minor feeding periods based on moon phase and illumination for peak bite windows.</p>
       </div>
       <div class="detail-card">
-        <h3>Best Time Alerts</h3>
-        <p>Get notified when conditions are perfect for your target species at your favorite spots.</p>
+        <h3>Species Activity by Water Temp</h3>
+        <p>See Ideal, Good, or Cold ratings for bass, trout, walleye, crappie, catfish, and more based on water temperature.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Conditions at a Glance</h3>
+        <p>Temperature, wind speed & direction, barometric pressure, cloud cover, and humidity in a quick-scan grid.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Best Times to Fish</h3>
+        <p>Morning and evening bite windows calculated from weather, solunar data, and species preferences.</p>
+      </div>
+      <div class="detail-card">
+        <h3>7-Day Forecast</h3>
+        <p>See daily bite scores across the week so you can pick the best day to hit the water.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Insect Hatch Module</h3>
+        <p>See which insects are hatching, their activity levels, recommended fly patterns, and hatch times throughout the day.</p>
+      </div>
+      <div class="detail-card">
+        <h3>Seasonal Species Calendar</h3>
+        <p>AI-generated seasonal calendar showing which species are active and what patterns to expect month by month.</p>
+      </div>
+      <div class="detail-card">
+        <h3>AI Lure &amp; Technique Recs</h3>
+        <p>Get AI-powered recommendations for the best lures and techniques based on current conditions at your location.</p>
       </div>
     </div>
   </section>
