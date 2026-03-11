@@ -4,6 +4,9 @@ const nodemailer = require('nodemailer');
 
 admin.initializeApp();
 
+// ── CORS configuration ──
+const ALLOWED_ORIGINS = ['https://catchdaddy.net', 'https://www.catchdaddy.net'];
+
 // ── Per-user rate limiting ──
 const rateLimitCache = new Map(); // { uid: { count, windowStart } }
 const RATE_WINDOW_MS = 60 * 1000; // 1 minute window
@@ -18,6 +21,12 @@ function isRateLimited(uid, maxPerMinute) {
   entry.count++;
   if (entry.count > maxPerMinute) return true;
   return false;
+}
+
+// IP-based rate limiting for unauthenticated endpoints
+function isIpRateLimited(req, maxPerMinute) {
+  const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.ip || 'unknown';
+  return isRateLimited(`ip:${ip}`, maxPerMinute);
 }
 
 // Clean up stale entries every 5 minutes
@@ -55,7 +64,7 @@ async function verifyAuth(req) {
  * Client sends the full Gemini request body; function adds the key and forwards.
  */
 exports.geminiProxy = onRequest(
-  { cors: true, region: 'us-west1', maxInstances: 20 },
+  { cors: ALLOWED_ORIGINS, region: 'us-west1', maxInstances: 20 },
   async (req, res) => {
     if (req.method !== 'POST') {
       res.status(405).json({ error: 'Method not allowed' });
@@ -117,7 +126,7 @@ exports.geminiProxy = onRequest(
  * Client sends { textQuery, maxResultCount, fieldMask }.
  */
 exports.placesProxy = onRequest(
-  { cors: true, region: 'us-west1', maxInstances: 10 },
+  { cors: ALLOWED_ORIGINS, region: 'us-west1', maxInstances: 10 },
   async (req, res) => {
     if (req.method !== 'POST') {
       res.status(405).json({ error: 'Method not allowed' });
@@ -176,10 +185,16 @@ exports.placesProxy = onRequest(
  * No auth required — this is for pre-launch capture from the landing page.
  */
 exports.subscribeEmail = onRequest(
-  { cors: true, region: 'us-west1', maxInstances: 5 },
+  { cors: ALLOWED_ORIGINS, region: 'us-west1', maxInstances: 5 },
   async (req, res) => {
     if (req.method !== 'POST') {
       res.status(405).json({ error: 'Method not allowed' });
+      return;
+    }
+
+    // Rate limit: 5 subscribe attempts per minute per IP
+    if (isIpRateLimited(req, 5)) {
+      res.status(429).json({ error: 'Too many requests. Please try again later.' });
       return;
     }
 
@@ -385,10 +400,11 @@ function parseRows(html) {
 }
 
 exports.utahStocking = onRequest(
-  { cors: true, region: 'us-west1' },
+  { cors: ALLOWED_ORIGINS, region: 'us-west1' },
   async (req, res) => {
-    const year = req.query.y || new Date().getFullYear();
-    const url = `https://dwrapps.utah.gov/fishstocking/FishAjax?y=${encodeURIComponent(year)}&sort=date&sortorder=desc`;
+    const rawYear = req.query.y || String(new Date().getFullYear());
+    const year = /^\d{4}$/.test(rawYear) ? rawYear : String(new Date().getFullYear());
+    const url = `https://dwrapps.utah.gov/fishstocking/FishAjax?y=${year}&sort=date&sortorder=desc`;
 
     try {
       const response = await fetch(url);
@@ -409,7 +425,7 @@ exports.utahStocking = onRequest(
 );
 
 exports.idahoStocking = onRequest(
-  { cors: true, region: 'us-west1' },
+  { cors: ALLOWED_ORIGINS, region: 'us-west1' },
   async (req, res) => {
     const url =
       'https://idfg.idaho.gov/ifwis/fishingplanner/api/2.0/stocking/?limit=2000&sort=stocked&order=desc';
@@ -448,7 +464,7 @@ exports.idahoStocking = onRequest(
  * Fetches the print-friendly HTML table and returns parsed JSON.
  */
 exports.oregonStocking = onRequest(
-  { cors: true, region: 'us-west1' },
+  { cors: ALLOWED_ORIGINS, region: 'us-west1' },
   async (req, res) => {
     const url = 'https://myodfw.com/fishing/species/trout/stocking-schedule-print';
 
@@ -475,7 +491,7 @@ exports.oregonStocking = onRequest(
  * Fetches the HTML table from the stocking schedule page.
  */
 exports.virginiaStocking = onRequest(
-  { cors: true, region: 'us-west1' },
+  { cors: ALLOWED_ORIGINS, region: 'us-west1' },
   async (req, res) => {
     const url = 'https://dwr.virginia.gov/fishing/trout-stocking-schedule/';
 
@@ -557,7 +573,7 @@ function parseVirginiaTable(html) {
  * Fetches from their plantsearchgrid JSON API.
  */
 exports.montanaStocking = onRequest(
-  { cors: true, region: 'us-west1' },
+  { cors: ALLOWED_ORIGINS, region: 'us-west1' },
   async (req, res) => {
     const now = new Date();
     const sixMonthsAgo = new Date(now);
@@ -614,7 +630,7 @@ exports.montanaStocking = onRequest(
  * Fetches from their GetFishTable JSON API.
  */
 exports.michiganStocking = onRequest(
-  { cors: true, region: 'us-west1' },
+  { cors: ALLOWED_ORIGINS, region: 'us-west1' },
   async (req, res) => {
     const now = new Date();
     const year = now.getFullYear();
@@ -710,7 +726,7 @@ function parseMichiganTable(html) {
  * Fetches from their LoadResults JSON API.
  */
 exports.wisconsinStocking = onRequest(
-  { cors: true, region: 'us-west1' },
+  { cors: ALLOWED_ORIGINS, region: 'us-west1' },
   async (req, res) => {
     const year = new Date().getFullYear();
     const url =
@@ -802,7 +818,7 @@ function parseWisconsinTable(html) {
  * Fetches HTML table from ncpaws.org OnlineSchedule page.
  */
 exports.ncStocking = onRequest(
-  { cors: true, region: 'us-west1' },
+  { cors: ALLOWED_ORIGINS, region: 'us-west1' },
   async (req, res) => {
     const url =
       'https://ncpaws.org/PAWS/Fish/Stocking/Schedule/OnlineSchedule.aspx';
@@ -886,7 +902,7 @@ function parseNcTable(html) {
  * Fetches HTML tables from the TWRA stocking page.
  */
 exports.tennesseeStocking = onRequest(
-  { cors: true, region: 'us-west1' },
+  { cors: ALLOWED_ORIGINS, region: 'us-west1' },
   async (req, res) => {
     const url =
       'https://www.tn.gov/twra/fishing/trout-information-stockings.html';
@@ -973,7 +989,7 @@ function parseTennesseeTable(html) {
  * Fetches the default results page from nrm.dfg.ca.gov/fishplants.
  */
 exports.californiaStocking = onRequest(
-  { cors: true, region: 'us-west1' },
+  { cors: ALLOWED_ORIGINS, region: 'us-west1' },
   async (req, res) => {
     const url = 'https://nrm.dfg.ca.gov/fishplants/Default.aspx';
 
@@ -1055,7 +1071,7 @@ function parseCaliforniaTable(html) {
  * Fetches the daily stocking page and parses the update list.
  */
 exports.wvStocking = onRequest(
-  { cors: true, region: 'us-west1' },
+  { cors: ALLOWED_ORIGINS, region: 'us-west1' },
   async (req, res) => {
     const url = 'https://wvdnr.gov/fishing/fish-stocking/';
 

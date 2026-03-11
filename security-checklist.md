@@ -27,9 +27,9 @@
 - [x] Update Firebase SDK and other packages to latest stable versions
 
 ## 6. Penetration Testing
-- [ ] Run OWASP ZAP (or similar) automated vulnerability scan
-- [ ] Do a manual review of location data handling
-- [ ] Basic pen test before launch
+- [x] Run OWASP ZAP (or similar) automated vulnerability scan
+- [x] Do a manual review of location data handling
+- [x] Basic pen test before launch
 
 ## 7. Final Review (in order)
 - [ ] Lock down Firebase rules
