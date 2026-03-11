@@ -25,6 +25,26 @@
           "function": "idahoStocking"
         },
         {
+          "source": "/api/oregon-stocking",
+          "function": "oregonStocking"
+        },
+        {
+          "source": "/api/virginia-stocking",
+          "function": "virginiaStocking"
+        },
+        {
+          "source": "/api/montana-stocking",
+          "function": "montanaStocking"
+        },
+        {
+          "source": "/api/michigan-stocking",
+          "function": "michiganStocking"
+        },
+        {
+          "source": "/api/wisconsin-stocking",
+          "function": "wisconsinStocking"
+        },
+        {
           "source": "/api/gemini",
           "function": "geminiProxy"
         },

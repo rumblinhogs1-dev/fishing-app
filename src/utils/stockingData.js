@@ -316,6 +316,69 @@ function parseUtahJson(json, sheetName) {
   return entries;
 }
 
+/**
+ * Parse JSON from a Socrata Open Data API (SODA) endpoint.
+ * Used for Washington (data.wa.gov) and New York (data.ny.gov).
+ * Each state passes a fieldMap to map its column names to our standard fields.
+ */
+function parseSodaJson(json, sheetName, fieldMap) {
+  const entries = [];
+  const cutoff = new Date();
+  cutoff.setFullYear(cutoff.getFullYear() - 1);
+
+  for (const record of json) {
+    const rawDate = record[fieldMap.date];
+    if (!rawDate) continue;
+
+    // Parse ISO date (2026-03-09T00:00:00.000) or descriptive date
+    let weekStart;
+    if (rawDate.includes('T')) {
+      weekStart = new Date(rawDate);
+    } else {
+      // Try to parse descriptive dates like "April - first week"
+      const monthMatch = rawDate.match(/^(\w+)/);
+      if (monthMatch) {
+        const monthIdx = MONTH_NAMES.indexOf(monthMatch[1].toLowerCase());
+        if (monthIdx >= 0) {
+          const year = record[fieldMap.year] ? parseInt(record[fieldMap.year], 10) : new Date().getFullYear();
+          weekStart = new Date(year, monthIdx, 1);
+        }
+      }
+    }
+    if (!weekStart || isNaN(weekStart.getTime())) continue;
+    if (weekStart < cutoff) continue;
+
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekEnd.getDate() + 6);
+
+    const waterBody = normalizeName(record[fieldMap.waterBody] || '');
+    if (!waterBody) continue;
+
+    const species = record[fieldMap.species] ? [record[fieldMap.species]] : ['Trout'];
+    const region = record[fieldMap.region] || '';
+
+    const entry = {
+      waterBody,
+      region,
+      species,
+      weekStart,
+      weekEnd,
+      sheetName,
+    };
+
+    if (fieldMap.quantity && record[fieldMap.quantity]) {
+      entry.quantity = parseInt(record[fieldMap.quantity], 10) || null;
+    }
+    if (fieldMap.size && record[fieldMap.size]) {
+      entry.length = record[fieldMap.size];
+    }
+
+    entries.push(entry);
+  }
+
+  return entries;
+}
+
 /** Normalize water body names for matching */
 export function normalizeName(name) {
   return name
@@ -349,6 +412,13 @@ export async function fetchStockingData({ sheets, cacheKey, format = 'grid', for
 
   const results = await Promise.allSettled(
     sheets.map(async (sheet) => {
+      if (format === 'soda-json') {
+        const url = sheet.url.replace('CURRENT_YEAR', new Date().getFullYear());
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error(`${sheet.name}: ${resp.status}`);
+        const json = await resp.json();
+        return parseSodaJson(json, sheet.name, sheet.fieldMap);
+      }
       if (format === 'proxy-json') {
         const url = sheet.url.replace('CURRENT_YEAR', new Date().getFullYear());
         const resp = await fetch(url);

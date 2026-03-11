@@ -384,3 +384,417 @@ exports.idahoStocking = onRequest(
     }
   }
 );
+
+/**
+ * Proxy Oregon ODFW trout stocking schedule.
+ * Fetches the print-friendly HTML table and returns parsed JSON.
+ */
+exports.oregonStocking = onRequest(
+  { cors: true, region: 'us-west1' },
+  async (req, res) => {
+    const url = 'https://myodfw.com/fishing/species/trout/stocking-schedule-print';
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        res.status(502).json({ error: `ODFW returned ${response.status}` });
+        return;
+      }
+
+      const html = await response.text();
+      const entries = parseOregonTable(html);
+
+      res.set('Cache-Control', 'public, max-age=86400');
+      res.json(entries);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
+
+/**
+ * Proxy Virginia DWR trout stocking schedule.
+ * Fetches the HTML table from the stocking schedule page.
+ */
+exports.virginiaStocking = onRequest(
+  { cors: true, region: 'us-west1' },
+  async (req, res) => {
+    const url = 'https://dwr.virginia.gov/fishing/trout-stocking-schedule/';
+
+    try {
+      const response = await fetch(url, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CatchDaddy/1.0)' },
+      });
+      if (!response.ok) {
+        res.status(502).json({ error: `VA DWR returned ${response.status}` });
+        return;
+      }
+
+      const html = await response.text();
+      const entries = parseVirginiaTable(html);
+
+      res.set('Cache-Control', 'public, max-age=86400');
+      res.json(entries);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
+
+function parseVirginiaTable(html) {
+  const entries = [];
+  // Find the stocking table
+  const tableMatch = html.match(/<table[^>]*id=["']stocking-table["'][^>]*>([\s\S]*?)<\/table>/i)
+    || html.match(/<table[^>]*>([\s\S]*?)<\/table>/i);
+  if (!tableMatch) return entries;
+
+  const tableHtml = tableMatch[1];
+  const trRegex = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
+  const tdRegex = /<td[^>]*>([\s\S]*?)<\/td>/gi;
+
+  let trMatch;
+  while ((trMatch = trRegex.exec(tableHtml)) !== null) {
+    const rowHtml = trMatch[1];
+    if (rowHtml.includes('<th')) continue; // skip header rows
+
+    const cells = [];
+    let tdMatch;
+    tdRegex.lastIndex = 0;
+    while ((tdMatch = tdRegex.exec(rowHtml)) !== null) {
+      cells.push(tdMatch[1].replace(/<[^>]*>/g, '').trim());
+    }
+
+    if (cells.length < 3) continue;
+
+    // VA table typically has: Date, Water, County, Species, Category
+    const date = cells[0];
+    const waterBody = cells[1];
+    const county = cells[2] || '';
+    const species = cells[3] || 'Trout';
+
+    if (!waterBody || !date) continue;
+
+    // Normalize date to MM/DD/YYYY
+    let normalizedDate = date;
+    const dateMatch = date.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+    if (dateMatch) {
+      normalizedDate = `${dateMatch[1].padStart(2, '0')}/${dateMatch[2].padStart(2, '0')}/${dateMatch[3]}`;
+    }
+
+    entries.push({
+      waterBody,
+      county,
+      species,
+      quantity: 0,
+      length: '',
+      date: normalizedDate,
+    });
+  }
+
+  return entries;
+}
+
+/**
+ * Proxy Montana FWP fish stocking data.
+ * Fetches from their plantsearchgrid JSON API.
+ */
+exports.montanaStocking = onRequest(
+  { cors: true, region: 'us-west1' },
+  async (req, res) => {
+    const now = new Date();
+    const sixMonthsAgo = new Date(now);
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+
+    const fmt = (d) =>
+      `${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}-${String(d.getFullYear()).slice(-2)}`;
+
+    const url = 'https://myfwp.mt.gov/fishMT/plants/plantsearchgrid';
+
+    try {
+      const params = new URLSearchParams();
+      params.append('startDate', fmt(sixMonthsAgo));
+      params.append('endDate', fmt(now));
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Agent': 'Mozilla/5.0 (compatible; CatchDaddy/1.0)',
+        },
+        body: params.toString(),
+      });
+
+      if (!response.ok) {
+        res.status(502).json({ error: `MT FWP returned ${response.status}` });
+        return;
+      }
+
+      const data = await response.json();
+      const rows = data.data || [];
+
+      const entries = rows
+        .filter((r) => r.waterName && r.datePlanted)
+        .map((r) => ({
+          waterBody: r.waterName,
+          county: r.county || r.region || '',
+          species: r.speciesName || r.strainName || 'Trout',
+          quantity: parseInt(r.fishCount, 10) || 0,
+          length: r.fishSize || '',
+          date: r.datePlanted,
+        }));
+
+      res.set('Cache-Control', 'public, max-age=86400');
+      res.json(entries);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
+
+/**
+ * Proxy Michigan DNR fish stocking data.
+ * Fetches from their GetFishTable JSON API.
+ */
+exports.michiganStocking = onRequest(
+  { cors: true, region: 'us-west1' },
+  async (req, res) => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const url = 'https://www2.dnr.state.mi.us/fishstock/FishStock/Default/GetFishTable';
+
+    try {
+      const params = new URLSearchParams();
+      params.append('County', '');
+      params.append('WaterBody', '');
+      params.append('Species', '');
+      params.append('StartMonth', '1');
+      params.append('StartYear', String(year));
+      params.append('EndMonth', String(now.getMonth() + 1));
+      params.append('EndYear', String(year));
+      params.append('OrderBy', 'Stock Date');
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Agent': 'Mozilla/5.0 (compatible; CatchDaddy/1.0)',
+        },
+        body: params.toString(),
+      });
+
+      if (!response.ok) {
+        res.status(502).json({ error: `MI DNR returned ${response.status}` });
+        return;
+      }
+
+      const html = await response.text();
+      const entries = parseMichiganTable(html);
+
+      res.set('Cache-Control', 'public, max-age=86400');
+      res.json(entries);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
+
+function parseMichiganTable(html) {
+  const entries = [];
+  const trRegex = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
+  const tdRegex = /<td[^>]*>([\s\S]*?)<\/td>/gi;
+
+  let trMatch;
+  while ((trMatch = trRegex.exec(html)) !== null) {
+    const rowHtml = trMatch[1];
+    if (rowHtml.includes('<th')) continue;
+
+    const cells = [];
+    let tdMatch;
+    tdRegex.lastIndex = 0;
+    while ((tdMatch = tdRegex.exec(rowHtml)) !== null) {
+      cells.push(tdMatch[1].replace(/<[^>]*>/g, '').trim());
+    }
+
+    if (cells.length < 4) continue;
+
+    // MI table: County, Water Body, Species, Strain, Stock Date, Number, Avg Length
+    const county = cells[0] || '';
+    const waterBody = cells[1] || '';
+    const species = cells[2] || '';
+    const date = cells[4] || '';
+    const quantity = parseInt((cells[5] || '0').replace(/,/g, ''), 10) || 0;
+    const length = cells[6] || '';
+
+    if (!waterBody || !date) continue;
+
+    // Normalize date
+    let normalizedDate = date;
+    const dateMatch = date.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+    if (dateMatch) {
+      normalizedDate = `${dateMatch[1].padStart(2, '0')}/${dateMatch[2].padStart(2, '0')}/${dateMatch[3]}`;
+    }
+
+    entries.push({
+      waterBody,
+      county,
+      species,
+      quantity,
+      length,
+      date: normalizedDate,
+    });
+  }
+
+  return entries;
+}
+
+/**
+ * Proxy Wisconsin DNR fish stocking data.
+ * Fetches from their LoadResults JSON API.
+ */
+exports.wisconsinStocking = onRequest(
+  { cors: true, region: 'us-west1' },
+  async (req, res) => {
+    const year = new Date().getFullYear();
+    const url =
+      'https://apps.dnr.wi.gov/fisheriesmanagement/Public/Summary/LoadResults';
+
+    try {
+      const params = new URLSearchParams();
+      params.append('STOCKING_YEAR', String(year));
+      params.append('SPECIES_NAME', '');
+      params.append('COUNTY_CODE', '');
+      params.append('STOCKED_WB_NAME', '');
+      params.append('LOCAL_WB_NAME', '');
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Agent': 'Mozilla/5.0 (compatible; CatchDaddy/1.0)',
+        },
+        body: params.toString(),
+      });
+
+      if (!response.ok) {
+        res.status(502).json({ error: `WI DNR returned ${response.status}` });
+        return;
+      }
+
+      const html = await response.text();
+      const entries = parseWisconsinTable(html);
+
+      res.set('Cache-Control', 'public, max-age=86400');
+      res.json(entries);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
+
+function parseWisconsinTable(html) {
+  const entries = [];
+  const trRegex = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
+  const tdRegex = /<td[^>]*>([\s\S]*?)<\/td>/gi;
+
+  let trMatch;
+  while ((trMatch = trRegex.exec(html)) !== null) {
+    const rowHtml = trMatch[1];
+    if (rowHtml.includes('<th')) continue;
+
+    const cells = [];
+    let tdMatch;
+    tdRegex.lastIndex = 0;
+    while ((tdMatch = tdRegex.exec(rowHtml)) !== null) {
+      cells.push(tdMatch[1].replace(/<[^>]*>/g, '').trim());
+    }
+
+    if (cells.length < 4) continue;
+
+    // WI table: County, Waterbody, Species, Strain, Stock Date, Number, Avg Size
+    const county = cells[0] || '';
+    const waterBody = cells[1] || '';
+    const species = cells[2] || '';
+    const date = cells[4] || '';
+    const quantity = parseInt((cells[5] || '0').replace(/,/g, ''), 10) || 0;
+    const length = cells[6] || '';
+
+    if (!waterBody || !date) continue;
+
+    let normalizedDate = date;
+    const dateMatch = date.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+    if (dateMatch) {
+      normalizedDate = `${dateMatch[1].padStart(2, '0')}/${dateMatch[2].padStart(2, '0')}/${dateMatch[3]}`;
+    }
+
+    entries.push({
+      waterBody,
+      county,
+      species,
+      quantity,
+      length,
+      date: normalizedDate,
+    });
+  }
+
+  return entries;
+}
+
+function parseOregonTable(html) {
+  const entries = [];
+  const trRegex = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
+  const cellRegex = /<t[dh][^>]*>([\s\S]*?)<\/t[dh]>/gi;
+
+  let trMatch;
+  let headerFound = false;
+  while ((trMatch = trRegex.exec(html)) !== null) {
+    const rowHtml = trMatch[1];
+    const cells = [];
+    let cellMatch;
+    cellRegex.lastIndex = 0;
+    while ((cellMatch = cellRegex.exec(rowHtml)) !== null) {
+      cells.push(cellMatch[1].replace(/<[^>]*>/g, '').trim());
+    }
+
+    // Skip until we find the header row
+    if (!headerFound) {
+      if (cells.some((c) => c.toLowerCase().includes('week of'))) {
+        headerFound = true;
+      }
+      continue;
+    }
+
+    if (cells.length < 5) continue;
+
+    // Columns: Week of, Waterbody, Zone/Office, Legals, Trophy, Brood, Fingerling, Total
+    const weekOf = cells[0];
+    const waterBody = cells[1];
+    const region = cells[2];
+    const total = parseInt((cells[cells.length - 1] || '0').replace(/,/g, ''), 10) || 0;
+
+    if (!waterBody || !weekOf) continue;
+
+    // Parse "Mar. 09-13, 2026"
+    const dateMatch = weekOf.match(/(\w+)\.?\s+(\d+)-\d+,?\s*(\d{4})/);
+    let date = '';
+    if (dateMatch) {
+      const monthAbbr = dateMatch[1].toLowerCase();
+      const monthMap = { jan: '01', feb: '02', mar: '03', apr: '04', may: '05', jun: '06', jul: '07', aug: '08', sep: '09', oct: '10', nov: '11', dec: '12' };
+      const mm = monthMap[monthAbbr] || '01';
+      const dd = dateMatch[2].padStart(2, '0');
+      date = `${mm}/${dd}/${dateMatch[3]}`;
+    }
+
+    if (!date) continue;
+
+    entries.push({
+      waterBody,
+      county: region,
+      species: 'Trout',
+      quantity: total,
+      length: '',
+      date,
+    });
+  }
+
+  return entries;
+}
