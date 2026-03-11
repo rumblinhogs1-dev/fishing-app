@@ -1,3 +1,4 @@
+import { auth } from '../firebase';
 import { getApiKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
 
 const CACHE_KEY = 'fishing-app-local-guide-cache-v5';
@@ -48,8 +49,9 @@ function buildFallback() {
 }
 
 export async function getLocalRecommendations(location, apiKey) {
+  const isAuthenticated = !!auth?.currentUser;
   const key = apiKey || getApiKey();
-  if (!key?.trim()) {
+  if (!key?.trim() && !isAuthenticated) {
     throw new Error('API key is required.');
   }
   if (!location?.trim()) {

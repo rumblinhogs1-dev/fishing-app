@@ -33,7 +33,7 @@ export function getPlacesApiKey() {
 }
 
 export function hasPlacesApiKey() {
-  return !!getPlacesApiKey();
+  return !!getPlacesApiKey() || !!auth?.currentUser;
 }
 
 function getCacheKey(location) {
@@ -145,8 +145,9 @@ async function searchCategory(query, location, apiKey) {
  * Returns an object with the same category keys as the old Gemini response.
  */
 export async function getPlacesRecommendations(location) {
+  const isAuthenticated = !!auth?.currentUser;
   const apiKey = getPlacesApiKey();
-  if (!apiKey?.trim()) {
+  if (!apiKey?.trim() && !isAuthenticated) {
     throw new Error('Google Places API key is required.');
   }
   if (!location?.trim()) {
