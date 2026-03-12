@@ -1,0 +1,92 @@
+/**
+ * Static coordinate lookup for California stocked waters.
+ * These are fixed public waters — no runtime geocoding needed.
+ */
+const CA_WATERS = {
+  // Sierra Nevada
+  'convict lake': { lat: 37.5890, lng: -118.8520 },
+  'crowley lake': { lat: 37.5620, lng: -118.7310 },
+  'june lake': { lat: 37.7810, lng: -119.0750 },
+  'gull lake': { lat: 37.7650, lng: -119.0670 },
+  'silver lake': { lat: 37.7790, lng: -119.1270 },
+  'grant lake': { lat: 37.8080, lng: -119.1030 },
+  'mammoth creek': { lat: 37.6340, lng: -118.9670 },
+  'hot creek': { lat: 37.6610, lng: -118.8290 },
+  'owens river': { lat: 37.3690, lng: -118.5210 },
+  'pleasant valley reservoir': { lat: 37.4220, lng: -118.5110 },
+  'bishop creek': { lat: 37.2310, lng: -118.5620 },
+  'south lake': { lat: 37.1730, lng: -118.5640 },
+  'sabrina lake': { lat: 37.2120, lng: -118.6130 },
+  'north lake': { lat: 37.2350, lng: -118.6310 },
+  'rock creek lake': { lat: 37.4530, lng: -118.7410 },
+  'pine creek': { lat: 37.3830, lng: -118.6830 },
+  'virginia lakes': { lat: 38.0470, lng: -119.2540 },
+  'twin lakes bridgeport': { lat: 38.1560, lng: -119.3440 },
+  'bridgeport reservoir': { lat: 38.2560, lng: -119.2190 },
+
+  // Lake Tahoe Area
+  'lake tahoe': { lat: 39.0968, lng: -120.0324 },
+  'donner lake': { lat: 39.3220, lng: -120.2400 },
+  'stampede reservoir': { lat: 39.4710, lng: -120.1100 },
+  'boca reservoir': { lat: 39.3870, lng: -120.1010 },
+  'prosser creek reservoir': { lat: 39.3780, lng: -120.1410 },
+  'martis creek lake': { lat: 39.3260, lng: -120.1130 },
+  'truckee river': { lat: 39.3270, lng: -120.1830 },
+  'independence lake': { lat: 39.4310, lng: -120.2640 },
+  'jackson meadows reservoir': { lat: 39.5230, lng: -120.4580 },
+  'french meadows reservoir': { lat: 39.1180, lng: -120.4930 },
+  'hell hole reservoir': { lat: 39.0760, lng: -120.4230 },
+
+  // Northern California
+  'shasta lake': { lat: 40.7520, lng: -122.3520 },
+  'trinity lake': { lat: 40.9680, lng: -122.7680 },
+  'whiskeytown lake': { lat: 40.6180, lng: -122.5410 },
+  'lewiston lake': { lat: 40.7340, lng: -122.7900 },
+  'hat creek': { lat: 40.8330, lng: -121.4990 },
+  'fall river': { lat: 41.0210, lng: -121.4370 },
+  'pit river': { lat: 41.0140, lng: -121.4950 },
+  'mccloud river': { lat: 41.1340, lng: -122.1310 },
+  'upper sacramento river': { lat: 41.0910, lng: -122.3370 },
+  'lake siskiyou': { lat: 41.2560, lng: -122.3590 },
+  'iron gate reservoir': { lat: 41.9350, lng: -122.4490 },
+  'lake almanor': { lat: 40.2610, lng: -121.1750 },
+  'butt valley reservoir': { lat: 40.1640, lng: -121.1750 },
+  'eagle lake': { lat: 40.6300, lng: -120.7440 },
+
+  // Central Valley & Foothills
+  'folsom lake': { lat: 38.7130, lng: -121.1530 },
+  'nimbus basin': { lat: 38.6350, lng: -121.2280 },
+  'american river': { lat: 38.5920, lng: -121.5050 },
+  'rancho seco lake': { lat: 38.3440, lng: -121.1210 },
+  'amador lake': { lat: 38.4180, lng: -120.8330 },
+  'camanche reservoir': { lat: 38.2280, lng: -120.9050 },
+  'pardee reservoir': { lat: 38.2530, lng: -120.8430 },
+  'new melones reservoir': { lat: 37.9530, lng: -120.5210 },
+  'don pedro reservoir': { lat: 37.7140, lng: -120.4170 },
+  'turlock lake': { lat: 37.6130, lng: -120.6080 },
+  'san luis reservoir': { lat: 37.0630, lng: -121.0830 },
+  'los vaqueros reservoir': { lat: 37.7620, lng: -121.7350 },
+
+  // Southern California
+  'lake arrowhead': { lat: 34.2620, lng: -117.1900 },
+  'big bear lake': { lat: 34.2390, lng: -116.8810 },
+  'silverwood lake': { lat: 34.3000, lng: -117.3290 },
+  'lake gregory': { lat: 34.2270, lng: -117.2520 },
+  'lake perris': { lat: 33.8620, lng: -117.1720 },
+  'lake elsinore': { lat: 33.6680, lng: -117.3310 },
+  'diamond valley lake': { lat: 33.6970, lng: -117.0080 },
+  'lake hemet': { lat: 33.6570, lng: -116.7660 },
+  'lake cuyamaca': { lat: 32.9810, lng: -116.5660 },
+  'lake wohlford': { lat: 33.1700, lng: -117.0040 },
+  'dixon lake': { lat: 33.1530, lng: -117.0640 },
+  'lake poway': { lat: 32.9760, lng: -117.0400 },
+  'lake jennings': { lat: 32.8520, lng: -116.8800 },
+  'santa ana river lakes': { lat: 33.8490, lng: -117.6700 },
+  'irvine lake': { lat: 33.7850, lng: -117.7340 },
+  'lake castaic': { lat: 34.5430, lng: -118.6210 },
+  'pyramid lake': { lat: 34.6430, lng: -118.7620 },
+  'castaic lagoon': { lat: 34.5190, lng: -118.6260 },
+  'lake cachuma': { lat: 34.5870, lng: -119.9810 },
+};
+
+export default CA_WATERS;

@@ -61,6 +61,18 @@
           "function": "wvStocking"
         },
         {
+          "source": "/api/maryland-stocking",
+          "function": "marylandStocking"
+        },
+        {
+          "source": "/api/sc-stocking",
+          "function": "scStocking"
+        },
+        {
+          "source": "/api/iowa-stocking",
+          "function": "iowaStocking"
+        },
+        {
           "source": "/api/gemini",
           "function": "geminiProxy"
         },

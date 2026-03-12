@@ -256,6 +256,153 @@ export const STOCKING_STATES = {
     cacheKey: 'wi-stocking-v1',
     getCoordinates: () => import('../data/wiWaterCoordinates.js'),
   },
+  nc: {
+    code: 'nc',
+    name: 'North Carolina',
+    agency: 'NCWRC',
+    agencyUrl: 'https://ncpaws.org/PAWS/Fish/Stocking/Schedule/OnlineSchedule.aspx',
+    subtitle:
+      'NCWRC daily trout stocking schedule for North Carolina streams and rivers.',
+    disclaimer:
+      'Stocking data sourced from NCWRC public schedule. Updated daily after noon. Always verify with NCWRC before planning a trip.',
+    bottomDisclaimer:
+      'Data sourced from publicly available NCWRC stocking schedules. CatchDaddy is not affiliated with NC Wildlife Resources Commission.',
+    format: 'proxy-json',
+    sheets: [
+      {
+        name: 'NC Trout Stocking',
+        url: '/api/nc-stocking',
+      },
+    ],
+    cacheKey: 'nc-stocking-v1',
+    getCoordinates: () => import('../data/ncWaterCoordinates.js'),
+  },
+  tn: {
+    code: 'tn',
+    name: 'Tennessee',
+    agency: 'TWRA',
+    agencyUrl: 'https://www.tn.gov/twra/fishing/trout-information-stockings.html',
+    subtitle:
+      'TWRA trout stocking schedule for Tennessee tailwaters, streams, and lakes.',
+    disclaimer:
+      'Stocking data sourced from TWRA public schedule. Always verify with TWRA before planning a trip.',
+    bottomDisclaimer:
+      'Data sourced from publicly available TWRA stocking schedules. CatchDaddy is not affiliated with Tennessee Wildlife Resources Agency.',
+    format: 'proxy-json',
+    sheets: [
+      {
+        name: 'TN Trout Stocking',
+        url: '/api/tennessee-stocking',
+      },
+    ],
+    cacheKey: 'tn-stocking-v1',
+    getCoordinates: () => import('../data/tnWaterCoordinates.js'),
+  },
+  ca: {
+    code: 'ca',
+    name: 'California',
+    agency: 'CDFW',
+    agencyUrl: 'https://nrm.dfg.ca.gov/fishplants/',
+    subtitle:
+      'CDFW real-time fish planting reports for California lakes, rivers, and streams.',
+    disclaimer:
+      'Fish plant data updated in real-time by CDFW hatchery staff. Always verify with CDFW before planning a trip.',
+    bottomDisclaimer:
+      'Data sourced from publicly available CDFW fish planting records. CatchDaddy is not affiliated with California Department of Fish & Wildlife.',
+    format: 'proxy-json',
+    sheets: [
+      {
+        name: 'CA Fish Plants',
+        url: '/api/california-stocking',
+      },
+    ],
+    cacheKey: 'ca-stocking-v1',
+    getCoordinates: () => import('../data/caWaterCoordinates.js'),
+  },
+  wv: {
+    code: 'wv',
+    name: 'West Virginia',
+    agency: 'WVDNR',
+    agencyUrl: 'https://wvdnr.gov/fishing/fish-stocking/',
+    subtitle:
+      'WVDNR daily trout stocking updates for West Virginia streams, rivers, and lakes.',
+    disclaimer:
+      'Stocking data sourced from WVDNR daily updates. Always verify with WVDNR before planning a trip.',
+    bottomDisclaimer:
+      'Data sourced from publicly available WVDNR stocking updates. CatchDaddy is not affiliated with West Virginia Division of Natural Resources.',
+    format: 'proxy-json',
+    sheets: [
+      {
+        name: 'WV Trout Stocking',
+        url: '/api/wv-stocking',
+      },
+    ],
+    cacheKey: 'wv-stocking-v1',
+    getCoordinates: () => import('../data/wvWaterCoordinates.js'),
+  },
+  md: {
+    code: 'md',
+    name: 'Maryland',
+    agency: 'DNR',
+    agencyUrl: 'https://dnr.maryland.gov/fisheries/pages/trout/stocking-schedule.aspx',
+    subtitle:
+      'Maryland DNR trout stocking reports for streams, lakes, and ponds across Maryland.',
+    disclaimer:
+      'Stocking data sourced from Maryland DNR public API. Always verify with MD DNR before planning a trip.',
+    bottomDisclaimer:
+      'Data sourced from publicly available Maryland DNR stocking records. CatchDaddy is not affiliated with Maryland Department of Natural Resources.',
+    format: 'proxy-json',
+    sheets: [
+      {
+        name: 'MD Trout Stocking',
+        url: '/api/maryland-stocking',
+      },
+    ],
+    cacheKey: 'md-stocking-v1',
+    getCoordinates: () => import('../data/mdWaterCoordinates.js'),
+  },
+  sc: {
+    code: 'sc',
+    name: 'South Carolina',
+    agency: 'SCDNR',
+    agencyUrl: 'https://www.dnr.sc.gov/fish/stocking/',
+    subtitle:
+      'South Carolina DNR weekly trout stocking results for rivers and lakes.',
+    disclaimer:
+      'Stocking data sourced from SCDNR weekly reports. Always verify with SCDNR before planning a trip.',
+    bottomDisclaimer:
+      'Data sourced from publicly available SC DNR stocking results. CatchDaddy is not affiliated with South Carolina Department of Natural Resources.',
+    format: 'proxy-json',
+    sheets: [
+      {
+        name: 'SC Trout Stocking',
+        url: '/api/sc-stocking',
+      },
+    ],
+    cacheKey: 'sc-stocking-v1',
+    getCoordinates: () => import('../data/scWaterCoordinates.js'),
+  },
+  ia: {
+    code: 'ia',
+    name: 'Iowa',
+    agency: 'DNR',
+    agencyUrl: 'https://www.iowadnr.gov/things-do/fishing/where-fish/trout-fishing',
+    subtitle:
+      'Iowa DNR community trout stocking schedule for urban fishing ponds and lakes.',
+    disclaimer:
+      'Stocking data sourced from Iowa DNR community trout program. Always verify with IA DNR before planning a trip.',
+    bottomDisclaimer:
+      'Data sourced from publicly available Iowa DNR stocking schedules. CatchDaddy is not affiliated with Iowa Department of Natural Resources.',
+    format: 'proxy-json',
+    sheets: [
+      {
+        name: 'IA Community Trout',
+        url: '/api/iowa-stocking',
+      },
+    ],
+    cacheKey: 'ia-stocking-v1',
+    getCoordinates: () => import('../data/iaWaterCoordinates.js'),
+  },
   ny: {
     code: 'ny',
     name: 'New York',

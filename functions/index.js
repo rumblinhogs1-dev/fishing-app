@@ -1187,6 +1187,245 @@ function parseWvStocking(html) {
   return entries;
 }
 
+/**
+ * Proxy Maryland DNR trout stocking data.
+ * Fetches from their clean JSON REST API.
+ */
+exports.marylandStocking = onRequest(
+  { cors: true, region: 'us-west1' },
+  async (req, res) => {
+    const url =
+      'https://webapps02.dnr.state.md.us/DNRTroutStockingAPI/api/RecentStockings';
+
+    try {
+      const response = await fetch(url, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CatchDaddy/1.0)' },
+      });
+      if (!response.ok) {
+        res.status(502).json({ error: `MD DNR returned ${response.status}` });
+        return;
+      }
+
+      const data = await response.json();
+      const entries = (Array.isArray(data) ? data : [])
+        .filter((r) => r.LOCATION && r.ActivityDate)
+        .map((r) => {
+          // ActivityDate: "2026-03-10T00:00:00" → "03/10/2026"
+          let date = '';
+          const dm = (r.ActivityDate || '').match(/(\d{4})-(\d{2})-(\d{2})/);
+          if (dm) date = `${dm[2]}/${dm[3]}/${dm[1]}`;
+
+          return {
+            waterBody: r.LOCATION,
+            county: r.County || '',
+            species: r.Species || 'Trout',
+            quantity: parseInt(r.NumOfFish, 10) || 0,
+            length: '',
+            date,
+          };
+        });
+
+      res.set('Cache-Control', 'public, max-age=86400');
+      res.json(entries);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
+
+/**
+ * Proxy South Carolina DNR trout stocking data.
+ * Fetches the stocking results HTML table.
+ */
+exports.scStocking = onRequest(
+  { cors: true, region: 'us-west1' },
+  async (req, res) => {
+    const url = 'https://www.dnr.sc.gov/fish/stocking/results.html';
+
+    try {
+      const response = await fetch(url, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CatchDaddy/1.0)' },
+      });
+      if (!response.ok) {
+        res.status(502).json({ error: `SC DNR returned ${response.status}` });
+        return;
+      }
+
+      const html = await response.text();
+      const entries = parseScTable(html);
+
+      res.set('Cache-Control', 'public, max-age=86400');
+      res.json(entries);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
+
+function parseScTable(html) {
+  const entries = [];
+  const trRegex = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
+  const tdRegex = /<td[^>]*>([\s\S]*?)<\/td>/gi;
+
+  let trMatch;
+  while ((trMatch = trRegex.exec(html)) !== null) {
+    const rowHtml = trMatch[1];
+    if (rowHtml.includes('<th')) continue;
+
+    const cells = [];
+    let tdMatch;
+    tdRegex.lastIndex = 0;
+    while ((tdMatch = tdRegex.exec(rowHtml)) !== null) {
+      cells.push(tdMatch[1].replace(/<[^>]*>/g, '').trim());
+    }
+
+    if (cells.length < 2) continue;
+
+    // SC table: Day (date), River/Lake, Total count
+    const dateRaw = cells[0] || '';
+    const waterBody = cells[1] || '';
+    const quantity =
+      parseInt((cells[2] || '0').replace(/,/g, ''), 10) || 0;
+
+    if (!waterBody) continue;
+
+    let date = '';
+    const dm = dateRaw.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/);
+    if (dm) {
+      const yr = dm[3].length === 2 ? '20' + dm[3] : dm[3];
+      date = `${dm[1].padStart(2, '0')}/${dm[2].padStart(2, '0')}/${yr}`;
+    } else {
+      // Try "March 10, 2026" format
+      const monthMap = {
+        january: '01', february: '02', march: '03', april: '04',
+        may: '05', june: '06', july: '07', august: '08',
+        september: '09', october: '10', november: '11', december: '12',
+      };
+      const longDate = dateRaw.match(
+        /(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),?\s*(\d{4})/i
+      );
+      if (longDate) {
+        date = `${monthMap[longDate[1].toLowerCase()]}/${longDate[2].padStart(2, '0')}/${longDate[3]}`;
+      } else {
+        const now = new Date();
+        date = `${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')}/${now.getFullYear()}`;
+      }
+    }
+
+    entries.push({
+      waterBody,
+      county: '',
+      species: 'Trout',
+      quantity,
+      length: '',
+      date,
+    });
+  }
+
+  return entries;
+}
+
+/**
+ * Proxy Iowa DNR community trout stocking schedule.
+ * Fetches the HTML table from the community stocking page.
+ */
+exports.iowaStocking = onRequest(
+  { cors: true, region: 'us-west1' },
+  async (req, res) => {
+    const url =
+      'https://www.iowadnr.gov/things-do/fishing/where-fish/trout-fishing/community-trout-stocking-schedule';
+
+    try {
+      const response = await fetch(url, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CatchDaddy/1.0)' },
+      });
+      if (!response.ok) {
+        res.status(502).json({ error: `IA DNR returned ${response.status}` });
+        return;
+      }
+
+      const html = await response.text();
+      const entries = parseIowaTable(html);
+
+      res.set('Cache-Control', 'public, max-age=86400');
+      res.json(entries);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
+
+function parseIowaTable(html) {
+  const entries = [];
+  const trRegex = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
+  const tdRegex = /<td[^>]*>([\s\S]*?)<\/td>/gi;
+
+  let trMatch;
+  while ((trMatch = trRegex.exec(html)) !== null) {
+    const rowHtml = trMatch[1];
+    if (rowHtml.includes('<th')) continue;
+
+    const cells = [];
+    let tdMatch;
+    tdRegex.lastIndex = 0;
+    while ((tdMatch = tdRegex.exec(rowHtml)) !== null) {
+      cells.push(tdMatch[1].replace(/<[^>]*>/g, '').trim());
+    }
+
+    if (cells.length < 2) continue;
+
+    // IA table: Waterbody, Location (city), Spring dates, Winter dates
+    const waterBody = cells[0] || '';
+    const location = cells[1] || '';
+
+    if (!waterBody) continue;
+
+    // Parse spring and winter stocking dates from remaining cells
+    for (let i = 2; i < cells.length; i++) {
+      const dateStr = cells[i];
+      if (!dateStr || dateStr === '-' || dateStr === 'N/A') continue;
+
+      // Dates may be like "March 15, 10am" or "3/15/2026"
+      let date = '';
+      const slashDate = dateStr.match(
+        /(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/
+      );
+      if (slashDate) {
+        const yr =
+          slashDate[3].length === 2 ? '20' + slashDate[3] : slashDate[3];
+        date = `${slashDate[1].padStart(2, '0')}/${slashDate[2].padStart(2, '0')}/${yr}`;
+      } else {
+        const monthMap = {
+          january: '01', february: '02', march: '03', april: '04',
+          may: '05', june: '06', july: '07', august: '08',
+          september: '09', october: '10', november: '11', december: '12',
+        };
+        const longDate = dateStr.match(
+          /(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})/i
+        );
+        if (longDate) {
+          const mm = monthMap[longDate[1].toLowerCase()];
+          const dd = longDate[2].padStart(2, '0');
+          date = `${mm}/${dd}/${new Date().getFullYear()}`;
+        }
+      }
+
+      if (!date) continue;
+
+      entries.push({
+        waterBody,
+        county: location,
+        species: 'Trout',
+        quantity: 0,
+        length: '',
+        date,
+      });
+    }
+  }
+
+  return entries;
+}
+
 function parseOregonTable(html) {
   const entries = [];
   const trRegex = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
