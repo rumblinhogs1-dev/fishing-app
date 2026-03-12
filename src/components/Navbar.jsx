@@ -1,9 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { STOCKING_STATES } from '../config/stockingStates';
 import UserMenu from './UserMenu';
 import NotificationBell from './NotificationBell';
 import styles from './Navbar.module.css';
+
+const stockingEntries = Object.values(STOCKING_STATES)
+  .sort((a, b) => a.name.localeCompare(b.name));
 
 export default function Navbar({ onSearchOpen }) {
   const { user } = useAuth();
@@ -103,22 +107,12 @@ export default function Navbar({ onSearchOpen }) {
             </svg>
           </button>
           {stockingOpen && (
-            <div className={styles.dropdownMenu}>
-              <NavLink to="/stocking/az" className={styles.dropdownItem} onClick={() => { setStockingOpen(false); setMenuOpen(false); }}>
-                Arizona
-              </NavLink>
-              <NavLink to="/stocking/co" className={styles.dropdownItem} onClick={() => { setStockingOpen(false); setMenuOpen(false); }}>
-                Colorado
-              </NavLink>
-              <NavLink to="/stocking/id" className={styles.dropdownItem} onClick={() => { setStockingOpen(false); setMenuOpen(false); }}>
-                Idaho
-              </NavLink>
-              <NavLink to="/stocking/nm" className={styles.dropdownItem} onClick={() => { setStockingOpen(false); setMenuOpen(false); }}>
-                New Mexico
-              </NavLink>
-              <NavLink to="/stocking/ut" className={styles.dropdownItem} onClick={() => { setStockingOpen(false); setMenuOpen(false); }}>
-                Utah
-              </NavLink>
+            <div className={`${styles.dropdownMenu} ${styles.stockingMenu}`}>
+              {stockingEntries.map((s) => (
+                <NavLink key={s.code} to={`/stocking/${s.code}`} className={styles.dropdownItem} onClick={() => { setStockingOpen(false); setMenuOpen(false); }}>
+                  {s.name}
+                </NavLink>
+              ))}
             </div>
           )}
         </div>

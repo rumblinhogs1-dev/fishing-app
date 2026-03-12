@@ -1192,7 +1192,7 @@ function parseWvStocking(html) {
  * Fetches from their clean JSON REST API.
  */
 exports.marylandStocking = onRequest(
-  { cors: true, region: 'us-west1' },
+  { cors: ALLOWED_ORIGINS, region: 'us-west1' },
   async (req, res) => {
     const url =
       'https://webapps02.dnr.state.md.us/DNRTroutStockingAPI/api/RecentStockings';
@@ -1238,7 +1238,7 @@ exports.marylandStocking = onRequest(
  * Fetches the stocking results HTML table.
  */
 exports.scStocking = onRequest(
-  { cors: true, region: 'us-west1' },
+  { cors: ALLOWED_ORIGINS, region: 'us-west1' },
   async (req, res) => {
     const url = 'https://www.dnr.sc.gov/fish/stocking/results.html';
 
@@ -1330,7 +1330,7 @@ function parseScTable(html) {
  * Fetches the HTML table from the community stocking page.
  */
 exports.iowaStocking = onRequest(
-  { cors: true, region: 'us-west1' },
+  { cors: ALLOWED_ORIGINS, region: 'us-west1' },
   async (req, res) => {
     const url =
       'https://www.iowadnr.gov/things-do/fishing/where-fish/trout-fishing/community-trout-stocking-schedule';

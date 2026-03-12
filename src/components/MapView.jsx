@@ -545,9 +545,9 @@ function StockingLayer() {
                 Stocked: {m.species.join(', ')}
               </div>
               {m.region && <div style={{ fontSize: '0.75rem', color: '#888' }}>{m.region}</div>}
-              <a href={`/stocking/${m.stateCode}`} style={{ fontSize: '0.75rem', color: '#2d6a4f' }}>
+              <Link to={`/stocking/${m.stateCode}`} style={{ fontSize: '0.75rem', color: '#2d6a4f' }}>
                 View Full Schedule
-              </a>
+              </Link>
             </div>
           </Popup>
         </Marker>

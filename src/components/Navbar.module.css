@@ -152,6 +152,17 @@
   overflow: hidden;
 }
 
+.stockingMenu {
+  max-height: 360px;
+  overflow-y: auto;
+  columns: 2;
+  min-width: 280px;
+}
+
+.stockingMenu .dropdownItem {
+  break-inside: avoid;
+}
+
 .dropdownItem {
   display: block;
   padding: 0.6rem 1rem;

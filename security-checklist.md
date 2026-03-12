@@ -32,8 +32,8 @@
 - [x] Basic pen test before launch
 
 ## 7. Final Review (in order)
-- [ ] Lock down Firebase rules
-- [ ] Audit permissions and data collection
-- [ ] Run automated vulnerability scans
-- [ ] Manual review: privacy policy vs actual app behavior
+- [x] Lock down Firebase rules
+- [x] Audit permissions and data collection
+- [x] Run automated vulnerability scans
+- [x] Manual review: privacy policy vs actual app behavior
 - [ ] Submit to app stores and address feedback
