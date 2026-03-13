@@ -1,4 +1,4 @@
-import { getApiKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
+import { getApiKey, hasEnvKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
 
 const CACHE_KEY = 'fishing-app-hatch-cache';
 const CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
@@ -69,7 +69,7 @@ export async function getInsectHatch({ waterBodyName, lat, lng, waterTemp, month
   if (cached) return cached;
 
   const key = getApiKey();
-  if (!key?.trim()) {
+  if (!key?.trim() && !hasEnvKey()) {
     return getFallbackData();
   }
 

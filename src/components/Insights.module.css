@@ -73,6 +73,36 @@
   text-align: center;
 }
 
+.recordCardClickable {
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.recordCardClickable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(45, 106, 79, 0.2);
+}
+
+.recordCardClickable:active {
+  transform: translateY(0);
+}
+
+.recordThumb {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-bottom: 0.5rem;
+}
+
+.recordTap {
+  font-size: 0.7rem;
+  color: #2d6a4f;
+  margin-top: 0.35rem;
+  display: block;
+  opacity: 0.6;
+}
+
 .recordValue {
   font-size: 1.5rem;
   font-weight: 700;

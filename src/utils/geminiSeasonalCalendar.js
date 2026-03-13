@@ -1,4 +1,4 @@
-import { getApiKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
+import { getApiKey, hasEnvKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
 
 const CACHE_KEY = 'fishing-app-seasonal-calendar-cache';
 const CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
@@ -67,7 +67,7 @@ export async function getSeasonalCalendar({ waterBodyName, lat, lng }) {
   if (cached) return cached;
 
   const key = getApiKey();
-  if (!key?.trim()) {
+  if (!key?.trim() && !hasEnvKey()) {
     return getFallbackData(waterBodyName);
   }
 

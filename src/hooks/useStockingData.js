@@ -17,7 +17,7 @@ export function useStockingData(stateConfig) {
     setLoading(true);
     setError(null);
 
-    fetchStockingData({ sheets: stateConfig.sheets, cacheKey: stateConfig.cacheKey, format: stateConfig.format })
+    fetchStockingData({ sheets: stateConfig.sheets, cacheKey: stateConfig.cacheKey, format: stateConfig.format, proxyUrl: stateConfig.proxyUrl })
       .then((entries) => {
         if (!cancelled) {
           setData(entries);

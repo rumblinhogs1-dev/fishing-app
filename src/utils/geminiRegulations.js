@@ -1,8 +1,8 @@
-import { getApiKey, API_URL, fetchWithRetry } from './gemini';
+import { getApiKey, hasEnvKey, API_URL, fetchWithRetry } from './gemini';
 
 export async function getRegulationSummary({ state, species, location }, apiKey) {
   const key = apiKey || getApiKey();
-  if (!key?.trim()) throw new Error('API key is required.');
+  if (!key?.trim() && !hasEnvKey()) throw new Error('API key is required.');
 
   const context = [
     state && `State: ${state}`,

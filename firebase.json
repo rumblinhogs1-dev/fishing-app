@@ -8,7 +8,7 @@
   },
   "functions": {
     "source": "functions",
-    "runtime": "nodejs20"
+    "runtime": "nodejs22"
   },
   "hosting": [
     {
@@ -71,6 +71,14 @@
         {
           "source": "/api/iowa-stocking",
           "function": "iowaStocking"
+        },
+        {
+          "source": "/api/arizona-stocking",
+          "function": "arizonaStocking"
+        },
+        {
+          "source": "/api/colorado-stocking",
+          "function": "coloradoStocking"
         },
         {
           "source": "/api/gemini",

@@ -10,28 +10,23 @@ export const STOCKING_STATES = {
       'Stocking schedules are tentative and subject to change due to weather, fish availability, and water conditions. Always verify with AZGFD before planning a trip.',
     bottomDisclaimer:
       'Data sourced from publicly available AZGFD stocking schedules. CatchDaddy is not affiliated with Arizona Game & Fish Department.',
-    format: 'grid',
+    format: 'proxy-grid',
     sheets: [
       {
         name: 'Community Fishing',
-        id: '1xJYPRrX2Gb7ACr6HxPB7mlsCw9K8NvClLfBIw7qjTcA',
-        gid: '1486391694',
         type: 'community',
       },
       {
         name: 'Winter Stocking',
-        id: '1PZuTV-zi5vMdxaMSnGx6c-QxeQQm-6DRQJJPKAZDjZM',
-        gid: '1253509900',
         type: 'winter',
       },
       {
         name: 'Spring/Summer',
-        id: '1S5wsDfGzEInV64UKjUPzexAe2KOO1KocfB4dJH7oVrs',
-        gid: '0',
         type: 'springsummer',
       },
     ],
-    cacheKey: 'az-stocking-v1',
+    proxyUrl: '/api/arizona-stocking',
+    cacheKey: 'az-stocking-v2',
     getCoordinates: () => import('../data/azWaterCoordinates.js'),
   },
   co: {
@@ -45,17 +40,14 @@ export const STOCKING_STATES = {
       'Stocking reports reflect weekly summaries and may not include exact dates. Always verify with CPW before planning a trip.',
     bottomDisclaimer:
       'Data sourced from publicly available CPW stocking reports. CatchDaddy is not affiliated with Colorado Parks & Wildlife.',
-    format: 'list',
+    format: 'proxy-json',
     sheets: [
       {
-        name: '2025 Stocking',
-        id: '2PACX-1vSRURGSiGWRaPnJoz11cq0pTTaFPzIWGumsJONymkYmAmrGxYslI1f86qn2iad1R7iQzOhSlBV8rwWK',
-        gid: '757471397',
-        type: 'flat',
-        published: true,
+        name: 'CO Stocking',
+        url: '/api/colorado-stocking',
       },
     ],
-    cacheKey: 'co-stocking-v1',
+    cacheKey: 'co-stocking-v2',
     getCoordinates: () => import('../data/coWaterCoordinates.js'),
   },
   id: {

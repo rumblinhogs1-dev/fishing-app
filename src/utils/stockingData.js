@@ -388,7 +388,7 @@ export function normalizeName(name) {
 }
 
 /** Fetch and parse all stocking sheets */
-export async function fetchStockingData({ sheets, cacheKey, format = 'grid', forceRefresh = false } = {}) {
+export async function fetchStockingData({ sheets, cacheKey, format = 'grid', proxyUrl, forceRefresh = false } = {}) {
   if (!sheets || !cacheKey) {
     throw new Error('fetchStockingData requires sheets and cacheKey');
   }
@@ -408,6 +408,30 @@ export async function fetchStockingData({ sheets, cacheKey, format = 'grid', for
         }
       }
     } catch { /* ignore */ }
+  }
+
+  // proxy-grid: fetch all CSVs via a single Cloud Function, parse client-side
+  if (format === 'proxy-grid' && proxyUrl) {
+    try {
+      const resp = await fetch(proxyUrl);
+      if (!resp.ok) throw new Error(`Proxy returned ${resp.status}`);
+      const csvSheets = await resp.json();
+      const allEntries = [];
+      for (const csvSheet of csvSheets) {
+        const matchingConfig = sheets.find((s) => s.name === csvSheet.name) || {};
+        const rows = parseCSV(csvSheet.csv);
+        const entries = parseSheet(rows, matchingConfig.type || 'community', csvSheet.name);
+        allEntries.push(...entries);
+      }
+      if (allEntries.length > 0) {
+        try {
+          localStorage.setItem(cacheKey, JSON.stringify({ data: allEntries, timestamp: Date.now(), errors: [] }));
+        } catch { /* ignore */ }
+      }
+      return allEntries;
+    } catch (err) {
+      throw new Error('Failed to load stocking data: ' + sheets.map((s) => s.name).join(', '));
+    }
   }
 
   const results = await Promise.allSettled(

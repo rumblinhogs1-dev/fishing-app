@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getConservationStats } from '../utils/conservation';
 import { SkeletonStats } from './Skeleton';
 import UpgradePrompt from './UpgradePrompt';
@@ -369,6 +370,8 @@ export default function Insights({ catches }) {
 }
 
 function RecordsTab({ data }) {
+  const navigate = useNavigate();
+
   return (
     <div className={styles.section}>
       <h3 className={styles.sectionTitle}>Personal Bests</h3>
@@ -378,17 +381,31 @@ function RecordsTab({ data }) {
           <span className={styles.recordLabel}>Total Catches</span>
         </div>
         {data.heaviest && (
-          <div className={styles.recordCard}>
+          <div
+            className={`${styles.recordCard} ${styles.recordCardClickable}`}
+            onClick={() => navigate(`/catch/${data.heaviest.id}`)}
+          >
+            {(data.heaviest.imageUrl || data.heaviest.image) && (
+              <img src={data.heaviest.imageUrl || data.heaviest.image} alt={data.heaviest.species} className={styles.recordThumb} />
+            )}
             <span className={styles.recordValue}>{data.heaviest.weight} lbs</span>
             <span className={styles.recordLabel}>Heaviest Catch</span>
             <span className={styles.recordSub}>{data.heaviest.species}</span>
+            <span className={styles.recordTap}>Tap to view</span>
           </div>
         )}
         {data.longest && (
-          <div className={styles.recordCard}>
+          <div
+            className={`${styles.recordCard} ${styles.recordCardClickable}`}
+            onClick={() => navigate(`/catch/${data.longest.id}`)}
+          >
+            {(data.longest.imageUrl || data.longest.image) && (
+              <img src={data.longest.imageUrl || data.longest.image} alt={data.longest.species} className={styles.recordThumb} />
+            )}
             <span className={styles.recordValue}>{data.longest.length} in</span>
             <span className={styles.recordLabel}>Longest Catch</span>
             <span className={styles.recordSub}>{data.longest.species}</span>
+            <span className={styles.recordTap}>Tap to view</span>
           </div>
         )}
         {data.bestDay && (

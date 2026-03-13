@@ -174,7 +174,7 @@ export function resizeImage(file) {
  * @returns {Promise<object>} - parsed identification result
  */
 export async function identifyFish(imageDataUrl, apiKey) {
-  if (!apiKey?.trim()) {
+  if (!apiKey?.trim() && !hasEnvKey()) {
     throw new Error('API key is required. Set VITE_GEMINI_API_KEY in your .env file or enter it manually.');
   }
   if (!imageDataUrl) {

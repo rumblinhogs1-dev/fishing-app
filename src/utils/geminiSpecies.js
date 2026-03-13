@@ -1,4 +1,4 @@
-import { getApiKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
+import { getApiKey, hasEnvKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
 import { IDEAL_TEMP_RANGES } from './solunar';
 
 const CACHE_KEY = 'fishing-app-species-cache-v3';
@@ -63,7 +63,7 @@ export async function getLocalSpecies({ waterBodyName, lat, lng }) {
   if (cached) return cached;
 
   const key = getApiKey();
-  if (!key?.trim()) {
+  if (!key?.trim() && !hasEnvKey()) {
     return getFallbackResult();
   }
 

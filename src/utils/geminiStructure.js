@@ -1,4 +1,4 @@
-import { getApiKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
+import { getApiKey, hasEnvKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
 const CACHE_KEY = 'fishing-app-structure-cache';
 const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 
@@ -38,7 +38,7 @@ export async function getStructureHints({ waterBodyName, lat, lng }) {
   if (cached) return cached;
 
   const key = getApiKey();
-  if (!key?.trim()) {
+  if (!key?.trim() && !hasEnvKey()) {
     throw new Error('API key is required for structure analysis.');
   }
 

@@ -1,4 +1,4 @@
-import { getApiKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
+import { getApiKey, hasEnvKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
 
 const CACHE_KEY = 'fishing-app-recommendations-cache';
 const CACHE_TTL = 2 * 60 * 60 * 1000; // 2 hours
@@ -62,7 +62,7 @@ function buildFallback(conditions) {
 
 export async function getRecommendations({ species, location, weather, waterTemp, flowRate, season }, apiKey) {
   const key = apiKey || getApiKey();
-  if (!key?.trim()) {
+  if (!key?.trim() && !hasEnvKey()) {
     throw new Error('API key is required.');
   }
 

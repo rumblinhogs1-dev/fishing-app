@@ -1,8 +1,8 @@
-import { getApiKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
+import { getApiKey, hasEnvKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
 
 export async function identifyLure(imageDataUrl, apiKey) {
   const key = apiKey || getApiKey();
-  if (!key?.trim()) {
+  if (!key?.trim() && !hasEnvKey()) {
     throw new Error('API key is required. Set VITE_GEMINI_API_KEY in your .env file or enter it manually.');
   }
   if (!imageDataUrl) {
