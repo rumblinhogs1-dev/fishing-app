@@ -72,6 +72,25 @@ export default function CatchDetail() {
             createdAt: snap.data().createdAt?.toDate?.()?.toISOString() || null,
           };
           setEntry(catchData);
+
+          // Try to recover missing imageUrl from Firebase Storage
+          if (!catchData.imageUrl && !catchData.image && catchData.userId) {
+            try {
+              const { getDownloadURL, ref } = await import('firebase/storage');
+              const { storage } = await import('../firebase');
+              const storageRef = ref(storage, `users/${catchData.userId}/catches/${id}/photo.jpg`);
+              const url = await getDownloadURL(storageRef);
+              if (url) {
+                setEntry((prev) => ({ ...prev, imageUrl: url }));
+                // Persist the fix so it doesn't need recovery again
+                const { updateDoc } = await import('firebase/firestore');
+                updateDoc(doc(db, 'catches', id), { imageUrl: url }).catch(() => {});
+              }
+            } catch {
+              // No image in Storage either
+            }
+          }
+
           // Fetch author's public field preferences if viewing someone else's catch
           if (catchData.userId && catchData.userId !== user?.uid) {
             const userSnap = await getDoc(doc(db, 'users', catchData.userId));

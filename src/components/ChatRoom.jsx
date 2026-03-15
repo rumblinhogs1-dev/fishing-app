@@ -5,6 +5,7 @@ import { useMessages } from '../hooks/useChat';
 import { sendMessage, sendMessageWithImage, getGroupDoc } from '../utils/chat';
 import { getUserProfile } from '../utils/friends';
 import { submitReport } from '../utils/reports';
+import { checkContent } from '../utils/contentFilter';
 import ReportModal from './ReportModal';
 import styles from './ChatRoom.module.css';
 
@@ -67,6 +68,7 @@ export default function ChatRoom() {
   const [group, setGroup] = useState(null);
   const [partnerName, setPartnerName] = useState('');
   const [reportingMsgId, setReportingMsgId] = useState(null);
+  const [filterWarning, setFilterWarning] = useState('');
   const endRef = useRef(null);
   const imageInputRef = useRef(null);
 
@@ -124,6 +126,18 @@ export default function ChatRoom() {
   async function handleSend(e) {
     e.preventDefault();
     if ((!text.trim() && !imagePreview) || !user) return;
+
+    // Content moderation check
+    if (text.trim()) {
+      const result = checkContent(text.trim());
+      if (result.blocked) {
+        setFilterWarning(result.reason);
+        setTimeout(() => setFilterWarning(''), 5000);
+        return;
+      }
+    }
+
+    setFilterWarning('');
     setSending(true);
     try {
       if (imagePreview) {
@@ -207,6 +221,9 @@ export default function ChatRoom() {
         </div>
       )}
 
+      {filterWarning && (
+        <div className={styles.filterWarning}>{filterWarning}</div>
+      )}
       <form onSubmit={handleSend} className={styles.inputRow}>
         <button
           type="button"

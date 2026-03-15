@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useComments } from '../hooks/useComments';
 import { addComment, deleteComment } from '../utils/comments';
 import { submitReport } from '../utils/reports';
+import { checkContent } from '../utils/contentFilter';
 import ReportModal from './ReportModal';
 import styles from './CommentsSection.module.css';
 
@@ -13,10 +14,20 @@ export default function CommentsSection({ catchId }) {
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
   const [reportingId, setReportingId] = useState(null);
+  const [filterWarning, setFilterWarning] = useState('');
 
   async function handleSubmit(e) {
     e.preventDefault();
     if (!text.trim() || !user) return;
+
+    const result = checkContent(text.trim());
+    if (result.blocked) {
+      setFilterWarning(result.reason);
+      setTimeout(() => setFilterWarning(''), 5000);
+      return;
+    }
+
+    setFilterWarning('');
     setSending(true);
     try {
       await addComment(catchId, user.uid, user.displayName || 'Angler', text.trim());
@@ -65,6 +76,9 @@ export default function CommentsSection({ catchId }) {
         </div>
       )}
 
+      {filterWarning && (
+        <div className={styles.filterWarning}>{filterWarning}</div>
+      )}
       {user ? (
         <form onSubmit={handleSubmit} className={styles.form}>
           <input

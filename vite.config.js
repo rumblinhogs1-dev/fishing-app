@@ -22,6 +22,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp}'],
+        importScripts: ['sw-custom.js'],
         skipWaiting: true,
         clientsClaim: true,
         runtimeCaching: [

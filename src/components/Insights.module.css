@@ -15,6 +15,7 @@
   overflow-x: auto;
   margin-bottom: 1.5rem;
   padding-bottom: 0.25rem;
+  -webkit-overflow-scrolling: touch;
 }
 
 .tab {
@@ -123,6 +124,42 @@
   display: block;
 }
 
+/* PB details in species list */
+.pbDetails {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.pbLink {
+  font-size: 0.75rem;
+  color: #2d6a4f;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+}
+
+.pbLink:hover {
+  color: #1b4332;
+}
+
+.showMoreBtn {
+  display: block;
+  margin: 0.75rem auto 0;
+  padding: 0.4rem 1rem;
+  background: #e8f5e9;
+  color: #2d6a4f;
+  border: none;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.showMoreBtn:hover {
+  background: #d0e1fd;
+}
+
 /* Ranked list */
 .rankedList {
   list-style: none;
@@ -140,6 +177,11 @@
 
 .rankedItem:last-child {
   border-bottom: none;
+}
+
+.rankedItemExpandable {
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .rankedName {
@@ -214,6 +256,282 @@
   justify-content: center;
 }
 
+.chartDescription {
+  font-size: 0.78rem;
+  color: #888;
+  margin: -0.5rem 0 0.75rem;
+}
+
+.detailSubHeading {
+  font-size: 0.85rem;
+  color: #555;
+  margin: 1rem 0 0.5rem;
+  font-weight: 600;
+}
+
+/* Heatmap */
+.heatmapWrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Species / filter select */
+.speciesSelect {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #333;
+  background: #fff;
+  margin-bottom: 0.75rem;
+  text-transform: capitalize;
+}
+
+/* Lure enhancements */
+.lureSpeciesLine {
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: 2px;
+}
+
+.lureSummary {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin-top: 0.25rem;
+}
+
+.lureTag {
+  font-size: 0.7rem;
+  background: #e8f5e9;
+  color: #2d6a4f;
+  padding: 0.1rem 0.45rem;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.lureSeasons {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  margin-top: 0.3rem;
+}
+
+.seasonPill {
+  font-size: 0.7rem;
+  background: #f0f0f0;
+  color: #555;
+  padding: 0.1rem 0.4rem;
+  border-radius: 8px;
+  text-transform: capitalize;
+}
+
+/* Location enhancements */
+.locationHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+.locationMeta {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.expandArrow {
+  font-size: 0.7rem;
+  color: #999;
+}
+
+.locationDetail {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #eee;
+}
+
+.detailSubHead {
+  font-size: 0.8rem;
+  color: #555;
+  margin: 0 0 0.4rem;
+  font-weight: 600;
+}
+
+.tagList {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+/* Patterns */
+.patternsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+.patternCard {
+  background: linear-gradient(135deg, #f8faf9, #f5f5f5);
+  border-radius: 10px;
+  padding: 1rem;
+  border-left: 3px solid #2d6a4f;
+}
+
+.patternTags {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.patternTag {
+  font-size: 0.7rem;
+  color: #fff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.patternInsight {
+  font-size: 0.85rem;
+  color: #333;
+  margin: 0 0 0.4rem;
+  line-height: 1.4;
+}
+
+.patternMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.patternMultiplier {
+  background: #2d6a4f;
+  color: #fff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+/* AI Coach */
+.coachIntro {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0 0 1rem;
+}
+
+.suggestedQuestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.suggestedBtn {
+  padding: 0.5rem 0.9rem;
+  background: #e8f5e9;
+  color: #2d6a4f;
+  border: 1px solid #c8e6c9;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.suggestedBtn:hover {
+  background: #c8e6c9;
+}
+
+.chatMessages {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.chatBubble {
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  max-width: 85%;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.chatBubbleUser {
+  background: #2d6a4f;
+  color: #fff;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.chatBubbleAI {
+  background: #f0f4f0;
+  color: #333;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+.typingDots {
+  color: #888;
+  font-style: italic;
+}
+
+.chatInputRow {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.chatInput {
+  flex: 1;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  outline: none;
+}
+
+.chatInput:focus {
+  border-color: #2d6a4f;
+}
+
+.chatSendBtn {
+  padding: 0.6rem 1.2rem;
+  background: #2d6a4f;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.chatSendBtn:hover:not(:disabled) {
+  background: #1b4332;
+}
+
+.chatSendBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 @media (max-width: 600px) {
   .tabs {
     gap: 0.2rem;
@@ -230,5 +548,9 @@
 
   .conditionsGrid {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .chatBubble {
+    max-width: 92%;
   }
 }

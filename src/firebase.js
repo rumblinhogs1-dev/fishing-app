@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { getAnalytics, isSupported } from 'firebase/analytics';
 
@@ -18,7 +18,9 @@ export const firebaseConfigured = !!firebaseConfig.apiKey && !!firebaseConfig.pr
 const app = firebaseConfigured ? initializeApp(firebaseConfig) : null;
 
 export const auth = app ? getAuth(app) : null;
-export const db = app ? getFirestore(app) : null;
+export const db = app ? initializeFirestore(app, {
+  localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
+}) : null;
 export const storage = app ? getStorage(app) : null;
 export const analytics = app ? isSupported().then(yes => yes ? getAnalytics(app) : null).catch(() => null) : null;
 export default app;

@@ -1,4 +1,12 @@
 .container { max-width: 700px; margin: 2rem auto; padding: 0 1rem; }
+
+.backBtn {
+  background: none; border: none; color: #2d6a4f; font-size: 0.95rem;
+  font-weight: 600; cursor: pointer; padding: 0.25rem 0; margin-bottom: 0.5rem;
+  display: inline-flex; align-items: center; gap: 0.25rem;
+}
+.backBtn:hover { color: #1b4332; text-decoration: underline; }
+
 .heading { color: #1b4332; margin: 0 0 1rem; }
 
 .searchRow {

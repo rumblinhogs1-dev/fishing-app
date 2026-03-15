@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CatchDaddy — AI-Powered Fishing Community</title>
-  <meta name="description" content="Log catches, identify fish with AI, explore local guides, and connect with anglers worldwide. Free to start." />
+  <title>CatchDaddy — Fish Smarter. Catch More. Have Fun.</title>
+  <meta name="description" content="Snap a photo, AI does the rest — species ID, weather, lure matching, and local intel. Your AI fishing companion. Free to start." />
 
   <!-- Open Graph -->
-  <meta property="og:title" content="CatchDaddy — AI-Powered Fishing Community" />
-  <meta property="og:description" content="Log catches, identify fish with AI, explore local guides, and connect with anglers worldwide." />
+  <meta property="og:title" content="CatchDaddy — Fish Smarter. Catch More. Have Fun." />
+  <meta property="og:description" content="Snap a photo, AI does the rest — species ID, weather, lure matching, and local intel. Your AI fishing companion." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://catchdaddy.net/fishing-app/logo-512.png" />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="CatchDaddy" />
-  <meta name="twitter:description" content="AI-Powered Fishing Community" />
+  <meta name="twitter:description" content="Snap a photo, AI does the rest. Your AI fishing companion." />
 
   <link rel="icon" type="image/svg+xml" href="/fishing-app/assets/logo-icon.svg" />
 
@@ -36,6 +36,7 @@
       color: #222;
       background: #fefae0;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
     a { text-decoration: none; }
 
@@ -227,7 +228,7 @@
     }
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(270px, 100%), 1fr));
       gap: 1.25rem;
     }
     a.feature-card {
@@ -1425,7 +1426,7 @@
     }
     .pricing-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
       gap: 1.25rem;
       max-width: 960px;
       margin: 0 auto;
@@ -1759,22 +1760,65 @@
     }
     .lp-contact a:hover { text-decoration: underline; }
 
-    /* ── Mobile ── */
-    @media (max-width: 600px) {
-      .hero { padding: 3.5rem 1.25rem 3rem; }
-      .hero h1 { font-size: 1.85rem; }
-      .hero p { font-size: 1rem; }
-      .how-it-works, .features, .faq, .pricing, .stores { padding: 2.5rem 1rem; }
-      .steps { flex-direction: column; align-items: center; }
-      .step-connector { display: none; }
+    /* ── Tablet ── */
+    @media (max-width: 768px) {
       .mockup-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
       .phone-mockup { width: 200px; }
       .phone-screen { height: 340px; }
-      .features-grid { grid-template-columns: 1fr; }
-      .pricing-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+      .privacy-data h2 { font-size: 1.6rem; }
+      .pd-card { padding: 1.5rem; }
     }
+
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+      .nav { padding: 0.5rem 1rem; }
+      .nav-brand { font-size: 1rem; }
+      .nav-brand img { width: 36px; height: 36px; }
+      .nav-cta { font-size: 0.8rem; padding: 0.4rem 1rem; }
+      .hero { padding: 3rem 1.25rem 2.5rem; }
+      .hero-logo { width: 90px; height: 90px; }
+      .hero h1 { font-size: 1.85rem; }
+      .hero p { font-size: 0.95rem; margin-bottom: 1.75rem; }
+      .cta-btn { font-size: 1rem; padding: 0.75rem 2rem; }
+      .how-it-works, .features, .faq, .pricing, .stores { padding: 2.5rem 1rem; }
+      .how-it-works h2, .features h2, .faq h2, .pricing h2, .privacy-data h2,
+      .email-capture h2 { font-size: 1.5rem; }
+      .steps { flex-direction: column; align-items: center; }
+      .step-connector { display: none; }
+      .features-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 100%; }
+      .pd-columns { grid-template-columns: 1fr; }
+      .pd-card { padding: 1.25rem; }
+      .email-capture { padding: 3rem 1rem; }
+      .email-capture .ec-sub { font-size: 0.95rem; }
+      .stores h2 { font-size: 1.25rem; }
+      .store-badge { font-size: 0.8rem; padding: 0.55rem 1rem; }
+    }
+
     @media (max-width: 480px) {
       .mockup-grid { grid-template-columns: 1fr; }
+      .hero { padding: 2.5rem 1rem 2rem; }
+      .hero-logo { width: 80px; height: 80px; border-radius: 18px; }
+      .hero h1 { font-size: 1.6rem; }
+      .hero p { font-size: 0.9rem; }
+      .cta-btn { font-size: 0.95rem; padding: 0.7rem 1.75rem; width: 100%; }
+      .phone-mockup { width: 220px; }
+      .phone-screen { height: 380px; }
+      a.feature-card { padding: 1.25rem 1rem; }
+      .faq summary { font-size: 0.85rem; padding: 0.85rem 1rem; }
+      .faq details p { padding: 0 1rem 0.85rem; font-size: 0.85rem; }
+      .price-card { padding: 1.5rem 1.25rem; }
+    }
+
+    @media (max-width: 360px) {
+      .nav-brand { font-size: 0.9rem; gap: 0.35rem; }
+      .nav-brand img { width: 32px; height: 32px; }
+      .nav-cta { font-size: 0.75rem; padding: 0.35rem 0.75rem; }
+      .hero h1 { font-size: 1.4rem; }
+      .hero-tagline { font-size: 0.6rem; letter-spacing: 3px; }
+      .step { min-width: 160px; }
     }
   </style>
 </head>
@@ -1792,35 +1836,35 @@
   <!-- Hero -->
   <section class="hero">
     <img src="/fishing-app/assets/logo-icon.svg" alt="CatchDaddy logo" class="hero-logo" />
-    <p class="hero-tagline">Smart Fishing Companion</p>
-    <h1>CatchDaddy</h1>
+    <p class="hero-tagline">Your AI Fishing Companion</p>
+    <h1>Fish Smarter. Catch More. Have Fun.</h1>
     <p>
-      The AI-powered fishing companion that keeps your spots private and turns your catch data into a competitive edge. Log catches, ID fish and lures with AI, track trends, and fish smarter.
+      Snap a photo and AI handles the rest — instant species ID, lure matching, weather, and local intel. Your spots stay private. Your data works for you.
     </p>
-    <a href="/fishing-app/auth" class="cta-btn">Get Started Free</a>
+    <a href="/fishing-app/auth" class="cta-btn">Start Fishing Smarter — Free</a>
   </section>
 
   <!-- How It Works -->
   <section class="how-it-works">
-    <h2>How It Works</h2>
-    <p class="subtitle">Get on the water in minutes</p>
+    <h2>Three Steps to Better Fishing</h2>
+    <p class="subtitle">Set up in 30 seconds, fish smarter forever</p>
     <div class="steps">
       <div class="step">
         <div class="step-number">1</div>
-        <h3>Sign Up Free</h3>
-        <p>Create your account in seconds with email or Google. No credit card needed.</p>
+        <h3>Drop a Line</h3>
+        <p>Sign up with email or Google — no credit card, no catch. Takes 30 seconds.</p>
         <span class="step-connector"></span>
       </div>
       <div class="step">
         <div class="step-number">2</div>
-        <h3>Log Your Catches</h3>
-        <p>Snap a photo, add details, and let AI identify the species. Build your fishing journal.</p>
+        <h3>Snap &amp; Log</h3>
+        <p>Take a photo — AI instantly IDs the fish, fills in weather, water temp, and location. You just fish.</p>
         <span class="step-connector"></span>
       </div>
       <div class="step">
         <div class="step-number">3</div>
-        <h3>Connect &amp; Compete</h3>
-        <p>Share with the community, climb leaderboards, and join fishing challenges.</p>
+        <h3>Own the Leaderboard</h3>
+        <p>Compare catches, climb rankings, and prove who's really the best angler in the crew.</p>
       </div>
     </div>
   </section>
@@ -1828,7 +1872,7 @@
   <!-- Features -->
   <section class="features">
     <div class="features-inner">
-      <h2>Everything You Need on the Water</h2>
+      <h2>Loaded With Firepower</h2>
 
       <!-- Mockup Feature Cards -->
       <div class="mockup-grid">
@@ -1904,8 +1948,8 @@
             </div>
           </div>
           <div class="mockup-card-label">
-            <h3>AI Catch Logging</h3>
-            <p>AI auto-fills species, weight, length, location, weather, water temp, and lure from one photo.</p>
+            <h3>One Photo. Done.</h3>
+            <p>Snap a pic and AI fills in species, weight, location, weather, water temp, and lure. You just reel.</p>
             <span class="learn-more">Learn more &rarr;</span>
           </div>
         </a>
@@ -1974,8 +2018,8 @@
             </div>
           </div>
           <div class="mockup-card-label">
-            <h3>AI Fish Identification</h3>
-            <p>Snap a photo and get species, confidence score, size estimates, habitat info, and more.</p>
+            <h3>What Did I Just Catch?</h3>
+            <p>AI tells you the species, confidence score, estimated size, habitat info, and fun facts in seconds.</p>
             <span class="learn-more">Learn more &rarr;</span>
           </div>
         </a>
@@ -2020,8 +2064,8 @@
             </div>
           </div>
           <div class="mockup-card-label">
-            <h3>Interactive Maps</h3>
-            <p>Plot catches, discover hotspots with heatmaps, and explore 10+ map layers.</p>
+            <h3>Your Honey Holes, Mapped</h3>
+            <p>Plot every catch, see heatmaps of your hotspots, and explore 10+ layers including satellite and topo.</p>
             <span class="learn-more">Learn more &rarr;</span>
           </div>
         </a>
@@ -2050,8 +2094,8 @@
             </div>
           </div>
           <div class="mockup-card-label">
-            <h3>Fishing Community</h3>
-            <p>Share catches, compete on leaderboards, join challenges, and chat with fellow anglers.</p>
+            <h3>The Fishing Community</h3>
+            <p>Share catches, climb leaderboards, join challenges, and connect with anglers who love it as much as you do.</p>
             <span class="learn-more">Learn more &rarr;</span>
           </div>
         </a>
@@ -2107,8 +2151,8 @@
             </div>
           </div>
           <div class="mockup-card-label">
-            <h3>Fishing Forecast</h3>
-            <p>"Should I Fish?" scores, bite factors, solunar windows, and species activity.</p>
+            <h3>Should I Fish Today?</h3>
+            <p>Get a straight answer with bite scores, solunar windows, pressure trends, and species activity.</p>
             <span class="learn-more">Learn more &rarr;</span>
           </div>
         </a>
@@ -2162,8 +2206,8 @@
             </div>
           </div>
           <div class="mockup-card-label">
-            <h3>Stocking Reports</h3>
-            <p>Real-time stocking data for AZ, CO, ID, NM, and UT with timelines and map pins.</p>
+            <h3>Know Before They're Gone</h3>
+            <p>Real-time stocking data across 19 states — see what got dumped, where, and when.</p>
             <span class="learn-more">Learn more &rarr;</span>
           </div>
         </a>
@@ -2198,8 +2242,8 @@
             </div>
           </div>
           <div class="mockup-card-label">
-            <h3>AI Lure Identification</h3>
-            <p>Photo any lure or fly and get the name, type, species matches, and technique tips.</p>
+            <h3>Name That Lure</h3>
+            <p>Snap a pic of any lure or fly — AI tells you the name, type, what it catches, and how to fish it.</p>
             <span class="learn-more">Learn more &rarr;</span>
           </div>
         </a>
@@ -2255,8 +2299,8 @@
             </div>
           </div>
           <div class="mockup-card-label">
-            <h3>AI Local Guide</h3>
-            <p>AI-powered fishing tips, regulation links, and nearby businesses with Google ratings.</p>
+            <h3>Local Intel, Instant</h3>
+            <p>AI-powered tips for your spot, nearby bait shops with ratings, and regulation links — no Googling.</p>
             <span class="learn-more">Learn more &rarr;</span>
           </div>
         </a>
@@ -2322,8 +2366,8 @@
             </div>
           </div>
           <div class="mockup-card-label">
-            <h3>Regulations Lookup</h3>
-            <p>GPS auto-detect your state, see species limits with open/closed status, and AI summaries.</p>
+            <h3>Stay Legal, Stay Fishing</h3>
+            <p>GPS detects your state, shows bag limits and seasons, and AI explains the fine print so you don't have to.</p>
             <span class="learn-more">Learn more &rarr;</span>
           </div>
         </a>
@@ -2397,8 +2441,8 @@
             </div>
           </div>
           <div class="mockup-card-label">
-            <h3>Trip Planner</h3>
-            <p>Weather, members, itineraries, expense tracking, and group chat — all in one trip.</p>
+            <h3>Plan the Perfect Trip</h3>
+            <p>Weather, crew, itinerary, expense splits, and group chat — one place so nobody flakes.</p>
             <span class="learn-more">Learn more &rarr;</span>
           </div>
         </a>
@@ -2500,43 +2544,43 @@
             </div>
           </div>
           <div class="mockup-card-label">
-            <h3>Insect Hatch Tracker</h3>
-            <p>Real-time hatch predictions, peak times, species detail, and AI fly pattern matching.</p>
+            <h3>Match the Hatch</h3>
+            <p>Real-time hatch predictions, peak windows, bug details, and AI-matched fly patterns. Trout nerds, rejoice.</p>
             <span class="learn-more">Learn more &rarr;</span>
           </div>
         </a>
       </div>
 
       <!-- And More -->
-      <h3 class="more-features-heading">And More...</h3>
+      <h3 class="more-features-heading">But Wait, There's More</h3>
       <div class="features-grid">
         <a href="/features/stats-insights.html" class="feature-card">
           <div class="feature-icon">
             <svg viewBox="0 0 24 24" width="24" height="24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
           </div>
-          <h3>Stats &amp; Insights</h3>
-          <p>Visualize your fishing data with charts, personal records, seasonal trends, and AI-powered insights.</p>
+          <h3>See What's Working</h3>
+          <p>Charts, personal bests, seasonal trends, and AI insights that show you exactly when and how you catch the most.</p>
         </a>
         <a href="/features/conservation.html" class="feature-card">
           <div class="feature-icon">
             <svg viewBox="0 0 24 24" width="24" height="24"><path d="M6.05 8.05c-2.73 2.73-2.73 7.17 0 9.9C7.42 19.32 9.21 20 11 20s3.58-.68 4.95-2.05C19.43 14.47 20 4 20 4S9.53 4.57 6.05 8.05zm8.49 8.49c-.95.94-2.2 1.46-3.54 1.46-.89 0-1.73-.25-2.48-.68.92-1.07 2.18-2.36 3.88-3.71l-1.28-1.52c-2.02 1.6-3.44 3.07-4.44 4.26-.63-1.2-.63-2.66.04-3.87.67-1.22 2.69-3.31 6.87-4.68-1.37 4.18-3.46 6.2-4.68 6.87 1.79-1.2 3.7-1.89 5.07-1.89.75 0 1.34.19 1.67.52.58.58.58 1.52.01 2.09l-1.12 1.15z"/></svg>
           </div>
-          <h3>Conservation Guide</h3>
-          <p>Learn eco-friendly fishing practices, track your conservation impact, and earn green badges.</p>
+          <h3>Fish Responsibly</h3>
+          <p>Eco-friendly tips, track your release rate, and earn conservation badges. Leave the water better than you found it.</p>
         </a>
         <a href="/features/social.html" class="feature-card">
           <div class="feature-icon">
             <svg viewBox="0 0 24 24" width="24" height="24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
           </div>
-          <h3>Friends &amp; Chat</h3>
-          <p>Connect with fishing buddies, send direct messages, and coordinate trips with group chats.</p>
+          <h3>Your Fishing Crew</h3>
+          <p>Add buddies, DM your fishing intel, and coordinate trips with group chat. No more texting five people separately.</p>
         </a>
         <a href="/features/sonar-import.html" class="feature-card">
           <div class="feature-icon">
             <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.22.21-1.79L11 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
           </div>
-          <h3>Sonar Import</h3>
-          <p>Import sonar data from your fish finder and overlay it on interactive maps for deeper insight.</p>
+          <h3>Bring Your Sonar</h3>
+          <p>Import fish finder data and overlay it on your maps. See structure, depth, and fish — all in one view.</p>
         </a>
       </div>
     </div>
@@ -2616,7 +2660,7 @@
 
       <details>
         <summary>What states have stocking data?</summary>
-        <p>We currently provide real-time stocking reports for Arizona, Colorado, Idaho, New Mexico, and Utah — updated daily from official state wildlife agencies. More states are being added regularly.</p>
+        <p>We currently provide real-time stocking reports for 19 states — AZ, CA, CO, IA, ID, MD, MI, MT, NC, NM, NY, OR, SC, TN, UT, VA, WA, WI, and WV — updated daily from official state wildlife agencies. More states are being added regularly.</p>
       </details>
 
       <details>
@@ -2696,8 +2740,8 @@
 
   <!-- Email Capture -->
   <section class="email-capture" id="notify">
-    <h2>Get Notified at Launch</h2>
-    <p class="ec-sub">Be the first to know when CatchDaddy goes live. Early subscribers get exclusive perks.</p>
+    <h2>Get In Early. Fish First.</h2>
+    <p class="ec-sub">Join the waitlist and be first on the water when we launch. Early anglers get founding member perks.</p>
     <form class="ec-form" id="subscribe-form" onsubmit="handleSubscribe(event)">
       <input type="email" id="subscribe-email" placeholder="you@example.com" required autocomplete="email" />
       <button type="submit" id="subscribe-btn">Notify Me</button>

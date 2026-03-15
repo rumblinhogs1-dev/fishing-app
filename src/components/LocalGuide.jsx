@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { getLocalRecommendations } from '../utils/geminiLocal';
 import { getPlacesRecommendations, hasPlacesApiKey } from '../utils/googlePlaces';
 import { getGPSLocation, reverseGeocode } from '../utils/weather';
@@ -80,6 +80,7 @@ async function fetchAllData(loc) {
 }
 
 export default function LocalGuide() {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [location, setLocation] = useState('');
   const [results, setResults] = useState(null);
@@ -158,6 +159,7 @@ export default function LocalGuide() {
 
   return (
     <div className={styles.container}>
+      <button className={styles.backBtn} onClick={() => navigate(-1)}>&larr; Back</button>
       <h2 className={styles.heading}>Local Guide</h2>
       <UpgradePrompt feature="localGuide" featureLabel="Local Guide">
 

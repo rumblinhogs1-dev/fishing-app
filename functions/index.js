@@ -1,4 +1,5 @@
 const { onRequest } = require('firebase-functions/v2/https');
+const { onDocumentCreated } = require('firebase-functions/v2/firestore');
 const admin = require('firebase-admin');
 const nodemailer = require('nodemailer');
 
@@ -1538,3 +1539,98 @@ function parseOregonTable(html) {
 
   return entries;
 }
+
+// ── Gemini Content Moderation (Layer 2) ──
+// Fires on new messages and comments, screens via Gemini for toxicity.
+
+async function moderateText(text) {
+  const geminiKey = process.env.GEMINI_API_KEY;
+  if (!geminiKey || !text || text.length < 2) return { flagged: false };
+
+  try {
+    const resp = await fetch(GEMINI_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': geminiKey,
+      },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: `You are a content moderator for a family-friendly fishing app. Analyze the following user-generated message and determine if it should be flagged. Flag for: hate speech, harassment, threats, sexually explicit content, or severe profanity. Do NOT flag for: mild language, fishing slang, friendly trash talk, or competitive banter. Respond with JSON only: {"flagged": true/false, "reason": "brief reason or null"}\n\nMessage: "${text}"` }] }],
+        generationConfig: { temperature: 0, maxOutputTokens: 100 },
+      }),
+    });
+    if (!resp.ok) return { flagged: false };
+    const data = await resp.json();
+    const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    const match = raw.match(/\{[\s\S]*\}/);
+    if (match) {
+      const parsed = JSON.parse(match[0]);
+      return { flagged: !!parsed.flagged, reason: parsed.reason || null };
+    }
+  } catch {
+    // Moderation failure should not block messages
+  }
+  return { flagged: false };
+}
+
+// Moderate new chat messages
+exports.moderateMessage = onDocumentCreated(
+  { document: 'messages/{messageId}', region: 'us-west1' },
+  async (event) => {
+    const snap = event.data;
+    if (!snap) return;
+    const msg = snap.data();
+    if (!msg.text) return;
+
+    const result = await moderateText(msg.text);
+    if (result.flagged) {
+      const db = admin.firestore();
+      await db.collection('messages').doc(snap.id).update({
+        flagged: true,
+        flagReason: result.reason || 'Content policy violation',
+        originalText: msg.text,
+        text: '[This message was removed for violating community guidelines]',
+      });
+      await db.collection('moderationLog').add({
+        contentType: 'message',
+        contentId: snap.id,
+        userId: msg.userId,
+        originalText: msg.text,
+        reason: result.reason,
+        action: 'removed',
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+    }
+  }
+);
+
+// Moderate new comments
+exports.moderateComment = onDocumentCreated(
+  { document: 'comments/{commentId}', region: 'us-west1' },
+  async (event) => {
+    const snap = event.data;
+    if (!snap) return;
+    const comment = snap.data();
+    if (!comment.text) return;
+
+    const result = await moderateText(comment.text);
+    if (result.flagged) {
+      const db = admin.firestore();
+      await db.collection('comments').doc(snap.id).update({
+        flagged: true,
+        flagReason: result.reason || 'Content policy violation',
+        originalText: comment.text,
+        text: '[This comment was removed for violating community guidelines]',
+      });
+      await db.collection('moderationLog').add({
+        contentType: 'comment',
+        contentId: snap.id,
+        userId: comment.userId,
+        originalText: comment.text,
+        reason: result.reason,
+        action: 'removed',
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+    }
+  }
+);

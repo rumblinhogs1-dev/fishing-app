@@ -7,7 +7,7 @@ import {
 } from '../utils/firestore';
 import { uploadCatchImage } from '../utils/firebaseStorage';
 import { notifyFriendCatch } from '../utils/notifications';
-import { cacheCatches, getCachedCatches } from '../utils/offlineStorage';
+import { cacheCatches, getCachedCatches, addPendingOp, getPendingOpsCount } from '../utils/offlineStorage';
 import { trackCatchLogged } from '../utils/usageTracking';
 import { trackContributionPoints } from '../utils/contributionPoints';
 
@@ -15,6 +15,7 @@ export function useFirestoreCatches(user) {
   const userId = user?.uid;
   const [catches, setCatches] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [pendingCount, setPendingCount] = useState(0);
 
   // Load IndexedDB cache first for instant display
   useEffect(() => {
@@ -37,6 +38,20 @@ export function useFirestoreCatches(user) {
       cacheCatches(data).catch(() => {});
     });
     return unsub;
+  }, [userId]);
+
+  // Track pending ops count
+  useEffect(() => {
+    if (!userId) return;
+    let cancelled = false;
+    const check = () => {
+      getPendingOpsCount().then((count) => {
+        if (!cancelled) setPendingCount(count);
+      }).catch(() => {});
+    };
+    check();
+    const interval = setInterval(check, 5000);
+    return () => { cancelled = true; clearInterval(interval); };
   }, [userId]);
 
   // One-time repair: fix catches with missing imageUrl from DataMigration or offline sync
@@ -87,6 +102,22 @@ export function useFirestoreCatches(user) {
     data.authorDisplayName = user?.displayName || 'Angler';
     data.authorPhotoURL = user?.photoURL || null;
 
+    // Offline: queue the operation
+    if (!navigator.onLine) {
+      await addPendingOp({
+        type: 'create',
+        collection: 'catches',
+        docId: null,
+        data: { image, lureImage, ...data },
+        userId,
+      });
+      // Optimistic local update
+      const tempId = `pending_${Date.now()}`;
+      const tempCatch = { ...data, id: tempId, imageUrl: image || '', _pendingSync: true, createdAt: new Date().toISOString() };
+      setCatches((prev) => [tempCatch, ...prev]);
+      return tempId;
+    }
+
     // Create doc first, then upload images to Storage
     const catchId = await fsAddCatch(userId, data);
     trackCatchLogged(userId).catch(() => {});
@@ -119,6 +150,23 @@ export function useFirestoreCatches(user) {
   const updateCatch = useCallback(async (id, updates) => {
     const { image, lureImage, ...data } = updates;
 
+    // Offline: queue the update with optimistic local change
+    if (!navigator.onLine) {
+      setCatches((prev) => prev.map((c) => c.id === id ? { ...c, ...data, _pendingSync: true } : c));
+      // Update IndexedDB cache
+      getCachedCatches().then((cached) => {
+        cacheCatches(cached.map((c) => c.id === id ? { ...c, ...data } : c));
+      }).catch(() => {});
+      await addPendingOp({
+        type: 'update',
+        collection: 'catches',
+        docId: id,
+        data: { image, lureImage, ...data },
+        userId,
+      });
+      return;
+    }
+
     if (image && image.startsWith('data:')) {
       try {
         const url = await uploadCatchImage(userId, id, image);
@@ -144,12 +192,28 @@ export function useFirestoreCatches(user) {
   }, [userId]);
 
   const deleteCatch = useCallback(async (id) => {
+    // Offline: queue the delete with optimistic local removal
+    if (!navigator.onLine) {
+      setCatches((prev) => prev.filter((c) => c.id !== id));
+      getCachedCatches().then((cached) => {
+        cacheCatches(cached.filter((c) => c.id !== id));
+      }).catch(() => {});
+      await addPendingOp({
+        type: 'delete',
+        collection: 'catches',
+        docId: id,
+        data: {},
+        userId,
+      });
+      return;
+    }
+
     await fsDeleteCatch(id);
-  }, []);
+  }, [userId]);
 
   const getCatch = useCallback((id) => {
     return catches.find((c) => c.id === id) || null;
   }, [catches]);
 
-  return { catches, loading, addCatch, updateCatch, deleteCatch, getCatch };
+  return { catches, loading, addCatch, updateCatch, deleteCatch, getCatch, pendingCount };
 }

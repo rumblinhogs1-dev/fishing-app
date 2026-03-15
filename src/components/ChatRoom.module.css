@@ -119,6 +119,16 @@
   justify-content: center;
 }
 
+.filterWarning {
+  background: #fff3e0;
+  color: #e65100;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  border-radius: 8px;
+  margin: 0 0.5rem 0.25rem;
+  text-align: center;
+}
+
 .inputRow {
   display: flex;
   gap: 0.5rem;

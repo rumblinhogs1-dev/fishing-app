@@ -19,6 +19,7 @@
 
 .text { margin: 0; font-size: 0.9rem; color: #444; line-height: 1.4; }
 
+.filterWarning { background: #fff3e0; color: #e65100; padding: 0.4rem 0.6rem; font-size: 0.78rem; border-radius: 6px; margin-bottom: 0.5rem; text-align: center; }
 .form { display: flex; gap: 0.5rem; }
 .input { flex: 1; padding: 0.5rem 0.75rem; border: 1.5px solid #ccc; border-radius: 8px; font-size: 0.9rem; font-family: inherit; }
 .input:focus { outline: none; border-color: #2d6a4f; }

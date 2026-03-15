@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getApiKey } from '../utils/gemini';
+import { getApiKey, hasEnvKey } from '../utils/gemini';
 import { getRecommendations } from '../utils/geminiRecommend';
 import { getGPSLocation, reverseGeocode, fetchWeather, fetchWaterData } from '../utils/weather';
 import { createCooldown } from '../utils/rateLimit';
@@ -61,7 +61,7 @@ export default function LureRecommendations() {
   async function handleSubmit(e) {
     e.preventDefault();
     const key = getApiKey();
-    if (!key) {
+    if (!key && !hasEnvKey()) {
       setError('No API key configured. Go to Fish ID page to set your Gemini API key.');
       return;
     }
