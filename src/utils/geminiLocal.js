@@ -1,5 +1,5 @@
 import { auth } from '../firebase';
-import { getApiKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
+import { getApiKey, API_URL, fetchWithRetry, extractJSON, getResponseText } from './gemini';
 
 const CACHE_KEY = 'fishing-app-local-guide-cache-v5';
 const CACHE_TTL = 2 * 60 * 60 * 1000; // 2 hours
@@ -106,7 +106,7 @@ Required JSON format:
     return buildFallback();
   }
 
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  const text = getResponseText(data);
   if (!text) {
     return buildFallback();
   }

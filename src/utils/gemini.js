@@ -106,6 +106,19 @@ export async function fetchWithRetry(url, options, apiKey) {
 }
 
 /**
+ * Extract the response text from a Gemini API response.
+ * Gemini 2.5 Flash returns thinking/reasoning in earlier parts — this
+ * finds the last non-thought text part (the actual answer).
+ */
+export function getResponseText(data) {
+  const parts = data?.candidates?.[0]?.content?.parts || [];
+  // Prefer the last non-thought text part; fall back to any text part
+  return parts.filter(p => !p.thought).map(p => p.text).filter(Boolean).pop()
+    || parts.map(p => p.text).filter(Boolean).pop()
+    || '';
+}
+
+/**
  * Robustly extract a JSON object from Gemini's text response.
  * Handles markdown code fences, preamble text, trailing commas, etc.
  */
@@ -243,7 +256,7 @@ The confidence should be 0-100 representing how certain you are of the identific
 
   const data = await res.json();
 
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  const text = getResponseText(data);
   if (!text) {
     const finishReason = data.candidates?.[0]?.finishReason;
     if (finishReason === 'SAFETY') {

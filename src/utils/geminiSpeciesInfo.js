@@ -1,4 +1,4 @@
-import { API_URL, fetchWithRetry } from './gemini';
+import { API_URL, fetchWithRetry, getResponseText } from './gemini';
 const CACHE_KEY = 'fishing-species-info-cache';
 const CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
 const MAX_CACHE = 50;
@@ -74,7 +74,7 @@ Respond ONLY with valid JSON in this exact format (no markdown, no code fences):
   }
 
   const data = await res.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  const text = getResponseText(data);
   if (!text) throw new Error('No species info returned.');
 
   const cleaned = text.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();

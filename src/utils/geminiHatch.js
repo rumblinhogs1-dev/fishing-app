@@ -1,4 +1,4 @@
-import { getApiKey, hasEnvKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
+import { getApiKey, hasEnvKey, API_URL, fetchWithRetry, extractJSON, getResponseText } from './gemini';
 
 const CACHE_KEY = 'fishing-app-hatch-cache';
 const CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
@@ -118,7 +118,7 @@ Provide 3-5 insects in currentHatches that are active now. Provide all 5 time pe
     }
 
     const data = await res.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    const text = getResponseText(data);
     if (!text) throw new Error('No response received.');
 
     const result = extractJSON(text);

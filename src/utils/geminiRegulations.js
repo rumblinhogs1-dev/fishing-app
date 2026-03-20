@@ -1,4 +1,4 @@
-import { getApiKey, hasEnvKey, API_URL, fetchWithRetry } from './gemini';
+import { getApiKey, hasEnvKey, API_URL, fetchWithRetry, getResponseText } from './gemini';
 
 export async function getRegulationSummary({ state, species, location }, apiKey) {
   const key = apiKey || getApiKey();
@@ -52,7 +52,7 @@ Respond ONLY with valid JSON (no markdown, no code fences):
   }
 
   const data = await res.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  const text = getResponseText(data);
   if (!text) throw new Error('No response received.');
 
   const cleaned = text.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();

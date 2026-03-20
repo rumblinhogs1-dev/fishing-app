@@ -1,4 +1,4 @@
-import { getApiKey, hasEnvKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
+import { getApiKey, hasEnvKey, API_URL, fetchWithRetry, extractJSON, getResponseText } from './gemini';
 
 const CACHE_KEY = 'fishing-app-recommendations-cache';
 const CACHE_TTL = 2 * 60 * 60 * 1000; // 2 hours
@@ -132,7 +132,7 @@ Provide 3-5 recommendations sorted by confidence (highest first). Confidence sho
     return buildFallback({ season });
   }
 
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  const text = getResponseText(data);
   if (!text) {
     return buildFallback({ season });
   }

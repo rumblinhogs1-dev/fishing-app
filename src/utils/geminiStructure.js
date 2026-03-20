@@ -1,4 +1,4 @@
-import { getApiKey, hasEnvKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
+import { getApiKey, hasEnvKey, API_URL, fetchWithRetry, extractJSON, getResponseText } from './gemini';
 const CACHE_KEY = 'fishing-app-structure-cache';
 const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 
@@ -81,7 +81,7 @@ Provide 4-6 structure types most relevant to this water body. Be specific to the
   }
 
   const data = await res.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  const text = getResponseText(data);
   if (!text) throw new Error('No response received.');
 
   const result = extractJSON(text);

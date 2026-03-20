@@ -1561,7 +1561,9 @@ async function moderateText(text) {
     });
     if (!resp.ok) return { flagged: false };
     const data = await resp.json();
-    const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    const parts = data.candidates?.[0]?.content?.parts || [];
+    const raw = parts.filter(p => !p.thought).map(p => p.text).filter(Boolean).pop()
+      || parts.map(p => p.text).filter(Boolean).pop() || '';
     const match = raw.match(/\{[\s\S]*\}/);
     if (match) {
       const parsed = JSON.parse(match[0]);
@@ -1631,6 +1633,123 @@ exports.moderateComment = onDocumentCreated(
         action: 'removed',
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
       });
+    }
+  }
+);
+
+// ── Email notification on new user reports ──
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || process.env.SMTP_USER;
+
+exports.notifyOnReport = onDocumentCreated(
+  { document: 'reports/{reportId}', region: 'us-west1' },
+  async (event) => {
+    const snap = event.data;
+    if (!snap) return;
+    const report = snap.data();
+
+    // Look up reporter name
+    let reporterName = 'Unknown user';
+    try {
+      const userDoc = await admin.firestore().collection('users').doc(report.reportedBy).get();
+      if (userDoc.exists) {
+        reporterName = userDoc.data().displayName || userDoc.data().email || reporterName;
+      }
+    } catch {}
+
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+
+    const html = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="margin:0;padding:0;background:#f4f4f4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:24px 0;">
+    <tr><td align="center">
+      <table width="560" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:12px;overflow:hidden;max-width:560px;width:100%;">
+        <tr><td style="background:#1b4332;padding:20px 24px;text-align:center;">
+          <h2 style="margin:0;color:#e9c46a;font-size:18px;">CatchDaddy Moderation Alert</h2>
+        </td></tr>
+        <tr><td style="padding:24px;">
+          <p style="margin:0 0 16px;font-size:15px;color:#333;">A user has flagged content for review.</p>
+          <table width="100%" cellpadding="8" cellspacing="0" style="font-size:14px;color:#444;border-collapse:collapse;">
+            <tr style="border-bottom:1px solid #eee;"><td style="font-weight:600;color:#888;width:110px;">Type</td><td>${report.contentType}</td></tr>
+            <tr style="border-bottom:1px solid #eee;"><td style="font-weight:600;color:#888;">Reason</td><td>${report.reason}</td></tr>
+            ${report.details ? `<tr style="border-bottom:1px solid #eee;"><td style="font-weight:600;color:#888;">Details</td><td>${report.details}</td></tr>` : ''}
+            <tr style="border-bottom:1px solid #eee;"><td style="font-weight:600;color:#888;">Reported by</td><td>${reporterName}</td></tr>
+            <tr><td style="font-weight:600;color:#888;">Report ID</td><td style="font-family:monospace;font-size:12px;">${snap.id}</td></tr>
+          </table>
+          <div style="margin-top:24px;text-align:center;">
+            <a href="https://catchdaddy.net/fishing-app/admin/moderation"
+               style="display:inline-block;padding:10px 24px;background:#2d6a4f;color:#fff;border-radius:6px;text-decoration:none;font-weight:600;font-size:14px;">
+              Review in Dashboard
+            </a>
+          </div>
+        </td></tr>
+        <tr><td style="padding:16px 24px;background:#f8f9fa;text-align:center;font-size:12px;color:#999;">
+          CatchDaddy Moderation &bull; catchdaddy.net
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+
+    try {
+      await transporter.sendMail({
+        from: `"CatchDaddy Moderation" <${process.env.SMTP_USER}>`,
+        to: ADMIN_EMAIL,
+        subject: `[CatchDaddy] New ${report.contentType} report: ${report.reason}`,
+        html,
+      });
+    } catch (err) {
+      console.error('Failed to send moderation email:', err);
+    }
+  }
+);
+
+// ── Email notification on auto-moderated content ──
+exports.notifyOnAutoMod = onDocumentCreated(
+  { document: 'moderationLog/{logId}', region: 'us-west1' },
+  async (event) => {
+    const snap = event.data;
+    if (!snap) return;
+    const entry = snap.data();
+
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+
+    try {
+      await transporter.sendMail({
+        from: `"CatchDaddy Moderation" <${process.env.SMTP_USER}>`,
+        to: ADMIN_EMAIL,
+        subject: `[CatchDaddy] AI removed a ${entry.contentType}: ${entry.reason || 'policy violation'}`,
+        html: `
+<div style="font-family:-apple-system,sans-serif;max-width:500px;margin:20px auto;padding:20px;background:#fff;border-radius:10px;border:1px solid #eee;">
+  <h3 style="color:#d32f2f;margin:0 0 12px;">Auto-Moderated ${entry.contentType}</h3>
+  <p style="margin:4px 0;"><strong>Reason:</strong> ${entry.reason || '—'}</p>
+  <p style="margin:4px 0;"><strong>Original text:</strong></p>
+  <div style="background:#fdecea;padding:10px;border-radius:6px;border-left:3px solid #d32f2f;margin:8px 0;font-size:14px;">${entry.originalText}</div>
+  <p style="margin:4px 0;font-size:13px;color:#888;">User ID: ${entry.userId}</p>
+  <a href="https://catchdaddy.net/fishing-app/admin/moderation" style="display:inline-block;margin-top:12px;padding:8px 18px;background:#2d6a4f;color:#fff;border-radius:6px;text-decoration:none;font-size:13px;font-weight:600;">View Dashboard</a>
+</div>`,
+      });
+    } catch (err) {
+      console.error('Failed to send auto-mod email:', err);
     }
   }
 );

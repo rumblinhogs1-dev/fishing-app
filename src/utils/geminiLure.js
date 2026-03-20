@@ -1,4 +1,4 @@
-import { getApiKey, hasEnvKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
+import { getApiKey, hasEnvKey, API_URL, fetchWithRetry, extractJSON, getResponseText } from './gemini';
 
 export async function identifyLure(imageDataUrl, apiKey) {
   const key = apiKey || getApiKey();
@@ -54,7 +54,7 @@ If no lure, fly, or bait is visible, respond with:
   }
 
   const data = await res.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  const text = getResponseText(data);
   if (!text) {
     throw new Error('No response received from Gemini. Please try a different photo.');
   }

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { getApiKey, hasEnvKey, API_URL, fetchWithRetry, extractJSON } from '../../utils/gemini';
+import { getApiKey, hasEnvKey, API_URL, fetchWithRetry, extractJSON, getResponseText } from '../../utils/gemini';
 import { buildCatchSummary } from '../../utils/insightsCompute';
 import styles from '../Insights.module.css';
 
@@ -71,7 +71,7 @@ Today's date: ${new Date().toLocaleDateString('en-US', { weekday: 'long', month:
       }
 
       const json = await res.json();
-      const answer = json.candidates?.[0]?.content?.parts?.[0]?.text || 'No response received.';
+      const answer = getResponseText(json) || 'No response received.';
 
       setMessages((prev) => [...prev, { role: 'assistant', text: answer }]);
     } catch (err) {

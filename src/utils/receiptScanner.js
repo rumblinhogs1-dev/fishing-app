@@ -1,4 +1,4 @@
-import { getApiKey, hasEnvKey, fetchWithRetry, API_URL } from './gemini';
+import { getApiKey, hasEnvKey, fetchWithRetry, API_URL, getResponseText } from './gemini';
 
 /**
  * Scan a receipt image using Gemini AI and extract expense data.
@@ -60,7 +60,7 @@ If you cannot read the receipt clearly, respond with:
     throw new Error(data.error?.message || 'Failed to scan receipt');
   }
 
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  const text = getResponseText(data);
   // Extract JSON from response (may be wrapped in markdown code blocks)
   const jsonMatch = text.match(/\{[\s\S]*\}/);
   if (!jsonMatch) {

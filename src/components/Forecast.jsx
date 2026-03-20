@@ -612,10 +612,13 @@ export default function Forecast() {
     setError(null);
     // Reset water body info when location changes
     setFcCalendarData(null);
+    setFcCalendarLoading(false);
     setFcCalendarError('');
     setFcRecsData(null);
+    setFcRecsLoading(false);
     setFcRecsError('');
     setFcHatchData(null);
+    setFcHatchLoading(false);
     setFcHatchError('');
     setLocalSpecies(null);
     setForecastCoords({ lat, lng });

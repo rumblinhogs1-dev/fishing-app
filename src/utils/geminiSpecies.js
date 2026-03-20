@@ -1,7 +1,7 @@
-import { getApiKey, hasEnvKey, API_URL, fetchWithRetry, extractJSON } from './gemini';
+import { getApiKey, hasEnvKey, API_URL, fetchWithRetry, extractJSON, getResponseText } from './gemini';
 import { IDEAL_TEMP_RANGES } from './solunar';
 
-const CACHE_KEY = 'fishing-app-species-cache-v3';
+const CACHE_KEY = 'fishing-app-species-cache-v4';
 const CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 const DEFAULT_SPECIES_KEYS = ['largemouth_bass', 'rainbow_trout', 'walleye', 'crappie', 'channel_catfish'];
@@ -76,11 +76,17 @@ export async function getLocalSpecies({ waterBodyName, lat, lng }) {
       {
         parts: [
           {
-            text: `You are an expert fisheries biologist with deep knowledge of specific lakes, rivers, and reservoirs. Given the following water body, return the sport fish species present there ranked by estimated population size (highest population first).
+            text: `You are an expert fisheries biologist. Given the following water body, return ONLY the sport fish species that are confirmed present there — either naturally occurring, stocked by the state wildlife agency, or well-documented by anglers.
 
 ${locationDesc}
 
-Return up to 8 species that are actually present in this water body, ranked from highest population to lowest. Consider ALL categories: bass, trout, panfish (crappie, bluegill, sunfish), catfish, walleye/sauger, pike/musky, carp, striped/hybrid bass, and any other locally important species. Do not over-represent any single category — include the full diversity of what lives there.
+IMPORTANT:
+- Do NOT guess or assume species based on the region. Only include species you are confident actually live in THIS specific water body.
+- Check if this water body is stocked by the state (e.g. many Arizona rivers are stocked with rainbow trout in winter).
+- Consider what anglers commonly catch here based on fishing reports.
+- If unsure about a species, leave it out. Accuracy matters more than completeness.
+
+Return up to 8 species ranked by how commonly they are caught here (most common first).
 
 For each species provide its ideal and good water temperature ranges in Fahrenheit.
 
@@ -92,8 +98,8 @@ Rules:
 - label is the common display name
 - ideal is [min, max] in °F for peak feeding activity
 - good is [min, max] in °F for the broader active range
-- Only include species actually present in this water body
-- Rank by estimated population in this water body, highest first`,
+- Only include species confirmed present in this specific water body
+- Rank by how commonly caught, most common first`,
           },
         ],
       },
@@ -112,7 +118,7 @@ Rules:
     }
 
     const data = await res.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    const text = getResponseText(data);
     if (!text) return getFallbackResult();
 
     const result = extractJSON(text);
