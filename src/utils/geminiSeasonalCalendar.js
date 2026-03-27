@@ -1,6 +1,6 @@
 import { getApiKey, hasEnvKey, API_URL, fetchWithRetry, extractJSON, getResponseText } from './gemini';
 
-const CACHE_KEY = 'fishing-app-seasonal-calendar-cache';
+const CACHE_KEY = 'fishing-app-seasonal-calendar-cache-v2';
 const CACHE_TTL = 30 * 24 * 60 * 60 * 1000; // 30 days
 
 function getCacheKey(lat, lng) {
@@ -105,21 +105,27 @@ Provide all 12 months. Quality should be 1-10 (1=poor, 10=excellent). Be specifi
     }, key);
 
     if (!res.ok) {
+      console.warn('[SeasonalCalendar] API returned', res.status);
       return getFallbackData(waterBodyName);
     }
 
     const data = await res.json();
     const text = getResponseText(data);
-    if (!text) return getFallbackData(waterBodyName);
+    if (!text) {
+      console.warn('[SeasonalCalendar] Empty response text', data);
+      return getFallbackData(waterBodyName);
+    }
 
     const result = extractJSON(text);
     if (!result || !Array.isArray(result.months)) {
+      console.warn('[SeasonalCalendar] Failed to parse JSON', text?.slice(0, 200));
       return getFallbackData(waterBodyName);
     }
 
     setCache(cacheKey, result);
     return result;
-  } catch {
+  } catch (err) {
+    console.warn('[SeasonalCalendar] Error:', err.message);
     return getFallbackData(waterBodyName);
   }
 }
