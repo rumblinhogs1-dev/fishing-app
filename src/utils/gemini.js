@@ -227,6 +227,9 @@ The confidence should be 0-100 representing how certain you are of the identific
         ],
       },
     ],
+    generationConfig: {
+      thinkingConfig: { thinkingBudget: 1024 },
+    },
   };
 
   const res = await fetchWithRetry(API_URL, {

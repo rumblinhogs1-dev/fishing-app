@@ -36,6 +36,9 @@ If no lure, fly, or bait is visible, respond with:
         ],
       },
     ],
+    generationConfig: {
+      thinkingConfig: { thinkingBudget: 1024 },
+    },
   };
 
   const res = await fetchWithRetry(API_URL, {

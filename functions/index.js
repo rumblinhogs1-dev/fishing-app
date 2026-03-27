@@ -65,7 +65,7 @@ async function verifyAuth(req) {
  * Client sends the full Gemini request body; function adds the key and forwards.
  */
 exports.geminiProxy = onRequest(
-  { cors: ALLOWED_ORIGINS, region: 'us-west1', maxInstances: 20 },
+  { cors: ALLOWED_ORIGINS, region: 'us-west1', maxInstances: 20, minInstances: 1 },
   async (req, res) => {
     if (req.method !== 'POST') {
       res.status(405).json({ error: 'Method not allowed' });
@@ -127,7 +127,7 @@ exports.geminiProxy = onRequest(
  * Client sends { textQuery, maxResultCount, fieldMask }.
  */
 exports.placesProxy = onRequest(
-  { cors: ALLOWED_ORIGINS, region: 'us-west1', maxInstances: 10 },
+  { cors: ALLOWED_ORIGINS, region: 'us-west1', maxInstances: 10, minInstances: 1 },
   async (req, res) => {
     if (req.method !== 'POST') {
       res.status(405).json({ error: 'Method not allowed' });

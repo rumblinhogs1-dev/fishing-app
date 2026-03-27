@@ -98,6 +98,9 @@ export default function CatchForm({ existing, onSubmit }) {
     const lng = location.state?.lng;
     if (lat != null && lng != null) {
       fetchLocationData(lat, lng);
+    } else if (!existing) {
+      // Auto-fetch GPS location on mount for new catches
+      handleGetLocation();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

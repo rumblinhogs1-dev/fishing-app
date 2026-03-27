@@ -2,7 +2,7 @@ import { auth } from '../firebase';
 import { getApiKey, API_URL, fetchWithRetry, extractJSON, getResponseText } from './gemini';
 
 const CACHE_KEY = 'fishing-app-local-guide-cache-v5';
-const CACHE_TTL = 2 * 60 * 60 * 1000; // 2 hours
+const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 const MAX_CACHE_ENTRIES = 30;
 
 function getCacheKey(location) {
