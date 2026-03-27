@@ -1,7 +1,7 @@
 import { getApiKey, hasEnvKey, API_URL, fetchWithRetry, extractJSON, getResponseText } from './gemini';
 
 const CACHE_KEY = 'fishing-app-hatch-cache';
-const CACHE_TTL = 30 * 24 * 60 * 60 * 1000; // 30 days
+const CACHE_TTL = 10 * 24 * 60 * 60 * 1000; // 10 days
 
 function getCacheKey(lat, lng) {
   return `${Math.round(lat * 100) / 100},${Math.round(lng * 100) / 100}`;
