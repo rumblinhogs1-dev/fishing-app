@@ -1,7 +1,7 @@
 .form {
   max-width: 640px;
   margin: 2rem auto;
-  background: #fff;
+  background: var(--color-white);
   border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
@@ -9,7 +9,58 @@
 
 .heading {
   margin: 0 0 1.5rem;
-  color: #1b4332;
+  color: var(--color-green-900);
+}
+
+/* Quick ID section */
+.quickIdSection {
+  margin-bottom: 1.25rem;
+  background: linear-gradient(135deg, var(--color-green-50), #f0f7f4);
+  border: 1.5px solid var(--color-green-100);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.quickIdHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-green-900);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.quickIdHint {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--color-gray-400);
+  margin-left: auto;
+}
+
+.quickIdCards {
+  display: flex;
+  gap: 1rem;
+}
+
+.quickIdCard {
+  flex: 1;
+  background: var(--color-white);
+  border: 1.5px solid var(--color-gray-150);
+  border-radius: 10px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.quickIdCardLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-green-700);
 }
 
 .gpsSection {
@@ -24,8 +75,8 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.6rem 1rem;
-  background: linear-gradient(135deg, #2d6a4f, #1b4332);
-  color: #fff;
+  background: linear-gradient(135deg, var(--color-green-700), var(--color-green-900));
+  color: var(--color-white);
   border: none;
   border-radius: 8px;
   font-size: 0.9rem;
@@ -49,7 +100,7 @@
   width: 16px;
   height: 16px;
   border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #fff;
+  border-top-color: var(--color-white);
   border-radius: 50%;
   animation: gpsSpin 0.7s linear infinite;
 }
@@ -60,13 +111,13 @@
 
 .gpsCoords {
   font-size: 0.8rem;
-  color: #4caf50;
+  color: var(--color-green-300);
   font-weight: 500;
 }
 
 .gpsError {
   font-size: 0.8rem;
-  color: #d32f2f;
+  color: var(--color-red-700);
 }
 
 .gpsFallback {
@@ -77,7 +128,7 @@
 
 .gpsFallbackLabel {
   font-size: 0.8rem;
-  color: #555;
+  color: var(--color-gray-700);
   font-weight: 500;
 }
 
@@ -90,7 +141,7 @@
 
 .gpsFallbackInput {
   padding: 0.45rem 0.65rem;
-  border: 1.5px solid #ccc;
+  border: 1.5px solid var(--color-gray-200);
   border-radius: 8px;
   font-size: 0.85rem;
   width: 120px;
@@ -100,14 +151,14 @@
 
 .gpsFallbackInput:focus {
   outline: none;
-  border-color: #2d6a4f;
+  border-color: var(--color-green-700);
   box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
 }
 
 .gpsFallbackBtn {
   padding: 0.45rem 0.85rem;
-  background: #2d6a4f;
-  color: #fff;
+  background: var(--color-green-700);
+  color: var(--color-white);
   border: none;
   border-radius: 8px;
   font-size: 0.85rem;
@@ -118,7 +169,7 @@
 }
 
 .gpsFallbackBtn:hover:not(:disabled) {
-  background: #1b4332;
+  background: var(--color-green-900);
 }
 
 .gpsFallbackBtn:disabled {
@@ -129,14 +180,14 @@
 .stationInfo {
   margin-top: 0.5rem;
   font-size: 0.8rem;
-  color: #888;
+  color: var(--color-gray-400);
   font-style: italic;
 }
 
 /* Release toggle */
 .releaseToggle {
-  background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
-  border: 1.5px solid #c8e6c9;
+  background: linear-gradient(135deg, var(--color-green-50), var(--color-green-bg-light));
+  border: 1.5px solid var(--color-green-100);
   border-radius: 10px;
   padding: 0.85rem 1rem;
   margin-bottom: 1.25rem;
@@ -151,7 +202,7 @@
 .releaseLabel {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #2e7d32;
+  color: var(--color-green-600);
   flex: 1;
 }
 
@@ -160,7 +211,7 @@
   width: 48px;
   height: 26px;
   border-radius: 13px;
-  background: #ccc;
+  background: var(--color-gray-200);
   border: none;
   cursor: pointer;
   transition: background 0.25s;
@@ -169,7 +220,7 @@
 }
 
 .toggleOn {
-  background: #2e7d32;
+  background: var(--color-green-600);
 }
 
 .toggleKnob {
@@ -179,7 +230,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--color-white);
   transition: transform 0.25s;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
@@ -192,7 +243,7 @@
   display: block;
   margin-top: 0.35rem;
   font-size: 0.78rem;
-  color: #558b2f;
+  color: var(--color-green-alt-500);
 }
 
 .grid {
@@ -210,13 +261,13 @@
 .field span {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #444;
+  color: var(--color-gray-800);
 }
 
 .field input,
 .field textarea {
   padding: 0.55rem 0.75rem;
-  border: 1.5px solid #ccc;
+  border: 1.5px solid var(--color-gray-200);
   border-radius: 8px;
   font-size: 0.95rem;
   transition: border-color 0.2s;
@@ -226,7 +277,7 @@
 .field input:focus,
 .field textarea:focus {
   outline: none;
-  border-color: #2d6a4f;
+  border-color: var(--color-green-700);
   box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
 }
 
@@ -242,8 +293,8 @@
 
 .submitBtn {
   padding: 0.65rem 1.5rem;
-  background: #2d6a4f;
-  color: #fff;
+  background: var(--color-green-700);
+  color: var(--color-white);
   border: none;
   border-radius: 8px;
   font-size: 1rem;
@@ -253,14 +304,14 @@
 }
 
 .submitBtn:hover {
-  background: #1b4332;
+  background: var(--color-green-900);
 }
 
 .cancelBtn {
   padding: 0.65rem 1.5rem;
   background: transparent;
-  color: #666;
-  border: 1.5px solid #ccc;
+  color: var(--color-gray-600);
+  border: 1.5px solid var(--color-gray-200);
   border-radius: 8px;
   font-size: 1rem;
   cursor: pointer;
@@ -268,7 +319,7 @@
 }
 
 .cancelBtn:hover {
-  background: #f5f5f5;
+  background: var(--color-gray-50);
 }
 
 .visibilityRow {
@@ -278,19 +329,14 @@
 
 .visibilityRow select {
   padding: 0.55rem 0.75rem;
-  border: 1.5px solid #ccc;
+  border: 1.5px solid var(--color-gray-200);
   border-radius: 8px;
   font-size: 0.95rem;
   font-family: inherit;
   width: 100%;
 }
 
-.lureIdField {
-  grid-column: 1 / -1;
-}
-
 .lureInfo {
-  grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
@@ -298,7 +344,7 @@
 
 .lureInfoLabel {
   font-size: 0.8rem;
-  color: #888;
+  color: var(--color-gray-400);
 }
 
 .lureTags {
@@ -308,8 +354,8 @@
 }
 
 .lureTag {
-  background: #fff8e1;
-  color: #e65100;
+  background: var(--color-yellow-50);
+  color: var(--color-orange-900);
   padding: 0.2rem 0.6rem;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -317,23 +363,20 @@
 }
 
 .fishIdStatus {
-  grid-column: 1 / -1;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   font-size: 0.85rem;
-  color: #2d6a4f;
+  color: var(--color-green-700);
   font-weight: 500;
 }
 
 .fishIdError {
-  grid-column: 1 / -1;
   font-size: 0.8rem;
-  color: #d32f2f;
+  color: var(--color-red-700);
 }
 
 .fishIdInfo {
-  grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
@@ -341,7 +384,7 @@
 
 .fishIdLabel {
   font-size: 0.8rem;
-  color: #888;
+  color: var(--color-gray-400);
 }
 
 .fishIdTags {
@@ -351,8 +394,8 @@
 }
 
 .fishIdTag {
-  background: #e8f5e9;
-  color: #2e7d32;
+  background: var(--color-green-50);
+  color: var(--color-green-600);
   padding: 0.2rem 0.6rem;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -360,8 +403,8 @@
 }
 
 .fishIdConfidence {
-  background: #d8f3dc;
-  color: #1565c0;
+  background: var(--color-green-25);
+  color: var(--color-blue-600);
   padding: 0.2rem 0.6rem;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -370,7 +413,6 @@
 
 /* Phase 2: Fish ID section */
 .fishIdSection {
-  grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -385,7 +427,7 @@
 .confidenceBarTrack {
   flex: 1;
   height: 8px;
-  background: #e0e0e0;
+  background: var(--color-gray-150);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -396,14 +438,14 @@
   transition: width 0.4s ease;
 }
 
-.confidenceHigh { background: #4caf50; }
-.confidenceMed { background: #ff9800; }
-.confidenceLow { background: #d32f2f; }
+.confidenceHigh { background: var(--color-green-300); }
+.confidenceMed { background: var(--color-orange-500); }
+.confidenceLow { background: var(--color-red-700); }
 
 .confidenceBarLabel {
   font-size: 0.8rem;
   font-weight: 600;
-  color: #555;
+  color: var(--color-gray-700);
   white-space: nowrap;
 }
 
@@ -416,7 +458,7 @@
 
 .suggestionsLabel {
   font-size: 0.8rem;
-  color: #888;
+  color: var(--color-gray-400);
   font-weight: 500;
 }
 
@@ -432,8 +474,8 @@
   align-items: center;
   gap: 0.15rem;
   padding: 0.5rem 1rem;
-  background: #f8f9fa;
-  border: 1.5px solid #e0e0e0;
+  background: var(--color-gray-bg-warm);
+  border: 1.5px solid var(--color-gray-150);
   border-radius: 10px;
   cursor: pointer;
   transition: border-color 0.2s, background 0.2s;
@@ -441,19 +483,19 @@
 }
 
 .suggestionCard:hover {
-  border-color: #2d6a4f;
-  background: #e8f5e9;
+  border-color: var(--color-green-700);
+  background: var(--color-green-50);
 }
 
 .suggestionSpecies {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #333;
+  color: var(--color-gray-900);
 }
 
 .suggestionConf {
   font-size: 0.7rem;
-  color: #888;
+  color: var(--color-gray-400);
 }
 
 /* Confirm / Correct */
@@ -466,7 +508,7 @@
 .confirmLabel {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #444;
+  color: var(--color-gray-800);
 }
 
 .confirmBtns {
@@ -487,17 +529,17 @@
 }
 
 .confirmYes {
-  background: #e8f5e9;
-  color: #2e7d32;
-  border-color: #4caf50;
+  background: var(--color-green-50);
+  color: var(--color-green-600);
+  border-color: var(--color-green-300);
 }
 
 .confirmYes:hover { opacity: 0.85; }
 
 .confirmNo {
-  background: #fdecea;
-  color: #c62828;
-  border-color: #d32f2f;
+  background: var(--color-red-50);
+  color: var(--color-red-800);
+  border-color: var(--color-red-700);
 }
 
 .confirmNo:hover { opacity: 0.85; }
@@ -511,7 +553,7 @@
 .correctionLabel {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #444;
+  color: var(--color-gray-800);
 }
 
 .correctionInputRow {
@@ -522,7 +564,7 @@
 .correctionInput {
   flex: 1;
   padding: 0.45rem 0.65rem;
-  border: 1.5px solid #ccc;
+  border: 1.5px solid var(--color-gray-200);
   border-radius: 8px;
   font-size: 0.9rem;
   font-family: inherit;
@@ -531,14 +573,14 @@
 
 .correctionInput:focus {
   outline: none;
-  border-color: #2d6a4f;
+  border-color: var(--color-green-700);
   box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
 }
 
 .correctionBtn {
   padding: 0.45rem 1rem;
-  background: #2d6a4f;
-  color: #fff;
+  background: var(--color-green-700);
+  color: var(--color-white);
   border: none;
   border-radius: 8px;
   font-size: 0.85rem;
@@ -548,13 +590,21 @@
   transition: background 0.2s;
 }
 
-.correctionBtn:hover:not(:disabled) { background: #1b4332; }
+.correctionBtn:hover:not(:disabled) { background: var(--color-green-900); }
 .correctionBtn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 @media (max-width: 600px) {
   .form {
     margin: 1rem;
     padding: 1.25rem;
+  }
+
+  .quickIdCards {
+    flex-direction: column;
+  }
+
+  .quickIdHint {
+    display: none;
   }
 
   .grid {

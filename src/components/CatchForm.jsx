@@ -292,7 +292,127 @@ export default function CatchForm({ existing, onSubmit }) {
     <form className={styles.form} onSubmit={handleSubmit}>
       <h2 className={styles.heading}>{existing ? 'Edit Catch' : 'Log a Catch'}</h2>
 
-      {/* GPS Button */}
+      {/* Step 1: Quick ID Section — photos first for fastest logging */}
+      <div className={styles.quickIdSection}>
+        <div className={styles.quickIdHeader}>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+          <span>Quick ID</span>
+          <span className={styles.quickIdHint}>Snap photos to auto-fill your catch</span>
+        </div>
+
+        <div className={styles.quickIdCards}>
+          {/* Fish Photo + AI ID */}
+          <div className={styles.quickIdCard}>
+            <div className={styles.quickIdCardLabel}>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm0 2C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-11v6h2v-6h3l-4-4-4 4h3z"/></svg>
+              Fish Photo
+            </div>
+            <ImageUpload image={form.image} onChange={handleImageChange} />
+            {photoError && (
+              <div className={styles.fishIdError}>{photoError}</div>
+            )}
+
+            {fishIdLoading && (
+              <div className={styles.fishIdStatus}>
+                <span className={styles.gpsSpinner} /> Identifying fish...
+              </div>
+            )}
+            {fishIdError && (
+              <div className={styles.fishIdError}>{fishIdError}</div>
+            )}
+            {fishIdResult && fishIdResult.confidence > 0 && !fishIdLoading && (
+              <div className={styles.fishIdSection}>
+                <div className={styles.fishIdInfo}>
+                  <span className={styles.fishIdLabel}>AI-identified fish:</span>
+                  <div className={styles.fishIdTags}>
+                    <span className={styles.fishIdTag}>{fishIdResult.species}</span>
+                    {fishIdResult.estimatedWeight && <span className={styles.fishIdTag}>{fishIdResult.estimatedWeight}</span>}
+                    {fishIdResult.estimatedLength && <span className={styles.fishIdTag}>{fishIdResult.estimatedLength}</span>}
+                    {fishIdResult.estimatedAge && <span className={styles.fishIdTag}>Age: {fishIdResult.estimatedAge}</span>}
+                  </div>
+                </div>
+
+                <div className={styles.confidenceBarWrap}>
+                  <div className={styles.confidenceBarTrack}>
+                    <div
+                      className={`${styles.confidenceBarFill} ${
+                        fishIdResult.confidence >= 80 ? styles.confidenceHigh :
+                        fishIdResult.confidence >= 50 ? styles.confidenceMed :
+                        styles.confidenceLow
+                      }`}
+                      style={{ width: `${fishIdResult.confidence}%` }}
+                    />
+                  </div>
+                  <span className={styles.confidenceBarLabel}>{fishIdResult.confidence}% confidence</span>
+                </div>
+
+                {fishIdResult.confidence < 80 && fishIdConfirmed === null && fishIdResult.alternatives?.length > 0 && (
+                  <div className={styles.suggestions}>
+                    <span className={styles.suggestionsLabel}>Could also be:</span>
+                    <div className={styles.suggestionCards}>
+                      <button type="button" className={styles.suggestionCard} onClick={() => handleSuggestionSelect(fishIdResult.species)}>
+                        <span className={styles.suggestionSpecies}>{fishIdResult.species}</span>
+                        <span className={styles.suggestionConf}>{fishIdResult.confidence}%</span>
+                      </button>
+                      {fishIdResult.alternatives.map((alt, i) => (
+                        <button type="button" key={i} className={styles.suggestionCard} onClick={() => handleSuggestionSelect(alt.species)}>
+                          <span className={styles.suggestionSpecies}>{alt.species}</span>
+                          <span className={styles.suggestionConf}>{alt.confidence}%</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {fishIdConfirmed === null && fishIdResult.confidence >= 80 && (
+                  <div className={styles.confirmRow}>
+                    <span className={styles.confirmLabel}>Is this correct?</span>
+                    <div className={styles.confirmBtns}>
+                      <button type="button" className={styles.confirmYes} onClick={handleConfirmYes}>Yes</button>
+                      <button type="button" className={styles.confirmNo} onClick={handleConfirmNo}>No</button>
+                    </div>
+                  </div>
+                )}
+
+                {fishIdConfirmed === false && (
+                  <div className={styles.correctionRow}>
+                    <label className={styles.correctionLabel}>What species is it?</label>
+                    <div className={styles.correctionInputRow}>
+                      <input type="text" className={styles.correctionInput} value={correctedSpecies} onChange={(e) => setCorrectedSpecies(e.target.value)} placeholder="Enter correct species..." />
+                      <button type="button" className={styles.correctionBtn} onClick={handleCorrectionSubmit} disabled={!correctedSpecies.trim()}>Update</button>
+                    </div>
+                  </div>
+                )}
+
+                {fishIdConfirmed !== null && (
+                  <SpeciesInfoCard speciesName={form.species} />
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Lure Photo + AI ID */}
+          <div className={styles.quickIdCard}>
+            <div className={styles.quickIdCardLabel}>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20c2.21 0 4-1.79 4-4h-2a2 2 0 0 1-2 2 2.13 2.13 0 0 1-1.53-.67L12 4h2l-1 4h4l-1 4h4L17 8z"/></svg>
+              Lure Photo
+            </div>
+            <QuickLureId onIdentified={handleLureIdentified} />
+            {form.lureName && (
+              <div className={styles.lureInfo}>
+                <span className={styles.lureInfoLabel}>AI-identified lure:</span>
+                <div className={styles.lureTags}>
+                  <span className={styles.lureTag}>{form.lureName}</span>
+                  {form.lureType && <span className={styles.lureTag}>{form.lureType}</span>}
+                  {form.lureColor && <span className={styles.lureTag}>{form.lureColor}</span>}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Step 2: GPS auto-fill */}
       <div className={styles.gpsSection}>
         <button type="button" className={styles.gpsBtn} onClick={handleGetLocation} disabled={gpsLoading}>
           {gpsLoading ? (
@@ -314,24 +434,8 @@ export default function CatchForm({ existing, onSubmit }) {
             <span className={styles.gpsError}>{gpsError}</span>
             <span className={styles.gpsFallbackLabel}>Enter coordinates manually:</span>
             <div className={styles.gpsFallbackRow}>
-              <input
-                className={styles.gpsFallbackInput}
-                name="lat"
-                type="number"
-                step="any"
-                placeholder="Latitude"
-                value={form.lat}
-                onChange={handleChange}
-              />
-              <input
-                className={styles.gpsFallbackInput}
-                name="lng"
-                type="number"
-                step="any"
-                placeholder="Longitude"
-                value={form.lng}
-                onChange={handleChange}
-              />
+              <input className={styles.gpsFallbackInput} name="lat" type="number" step="any" placeholder="Latitude" value={form.lat} onChange={handleChange} />
+              <input className={styles.gpsFallbackInput} name="lng" type="number" step="any" placeholder="Longitude" value={form.lng} onChange={handleChange} />
               <button type="button" className={styles.gpsFallbackBtn} onClick={handleManualCoords} disabled={gpsLoading}>
                 {gpsLoading ? 'Loading...' : 'Fetch Data'}
               </button>
@@ -342,6 +446,7 @@ export default function CatchForm({ existing, onSubmit }) {
 
       <RegulationBadge lat={form.lat} lng={form.lng} species={form.species} />
 
+      {/* Step 3: Catch details — most pre-filled by AI + GPS */}
       <div className={styles.releaseToggle}>
         <div className={styles.releaseHeader}>
           <svg viewBox="0 0 24 24" width="20" height="20" fill="#2e7d32">
@@ -379,6 +484,11 @@ export default function CatchForm({ existing, onSubmit }) {
         </label>
 
         <label className={styles.field}>
+          <span>Bait / Lure</span>
+          <input name="bait" value={form.bait} onChange={handleChange} placeholder="e.g. Plastic worm" />
+        </label>
+
+        <label className={styles.field}>
           <span>Location</span>
           <input name="location" value={form.location} onChange={handleChange} placeholder="e.g. Lake Travis" />
         </label>
@@ -407,136 +517,6 @@ export default function CatchForm({ existing, onSubmit }) {
           <span>Depth (ft)</span>
           <input name="depth" type="number" step="0.1" min="0" value={form.depth} onChange={handleChange} placeholder="Depth at catch location" />
         </label>
-
-        <label className={styles.field}>
-          <span>Bait / Lure</span>
-          <input name="bait" value={form.bait} onChange={handleChange} placeholder="e.g. Plastic worm" />
-        </label>
-
-        <div className={styles.lureIdField}>
-          <QuickLureId onIdentified={handleLureIdentified} />
-        </div>
-
-        {form.lureName && (
-          <div className={styles.lureInfo}>
-            <span className={styles.lureInfoLabel}>AI-identified lure:</span>
-            <div className={styles.lureTags}>
-              <span className={styles.lureTag}>{form.lureName}</span>
-              {form.lureType && <span className={styles.lureTag}>{form.lureType}</span>}
-              {form.lureColor && <span className={styles.lureTag}>{form.lureColor}</span>}
-            </div>
-          </div>
-        )}
-
-        <ImageUpload image={form.image} onChange={handleImageChange} />
-        {photoError && (
-          <div className={styles.fishIdError}>{photoError}</div>
-        )}
-
-        {fishIdLoading && (
-          <div className={styles.fishIdStatus}>
-            <span className={styles.gpsSpinner} /> Identifying fish...
-          </div>
-        )}
-        {fishIdError && (
-          <div className={styles.fishIdError}>{fishIdError}</div>
-        )}
-        {fishIdResult && fishIdResult.confidence > 0 && !fishIdLoading && (
-          <div className={styles.fishIdSection}>
-            <div className={styles.fishIdInfo}>
-              <span className={styles.fishIdLabel}>AI-identified fish:</span>
-              <div className={styles.fishIdTags}>
-                <span className={styles.fishIdTag}>{fishIdResult.species}</span>
-                {fishIdResult.estimatedWeight && <span className={styles.fishIdTag}>{fishIdResult.estimatedWeight}</span>}
-                {fishIdResult.estimatedLength && <span className={styles.fishIdTag}>{fishIdResult.estimatedLength}</span>}
-                {fishIdResult.estimatedAge && <span className={styles.fishIdTag}>Age: {fishIdResult.estimatedAge}</span>}
-              </div>
-            </div>
-
-            {/* Confidence bar */}
-            <div className={styles.confidenceBarWrap}>
-              <div className={styles.confidenceBarTrack}>
-                <div
-                  className={`${styles.confidenceBarFill} ${
-                    fishIdResult.confidence >= 80 ? styles.confidenceHigh :
-                    fishIdResult.confidence >= 50 ? styles.confidenceMed :
-                    styles.confidenceLow
-                  }`}
-                  style={{ width: `${fishIdResult.confidence}%` }}
-                />
-              </div>
-              <span className={styles.confidenceBarLabel}>{fishIdResult.confidence}% confidence</span>
-            </div>
-
-            {/* Suggestion cards when confidence < 80 and not confirmed */}
-            {fishIdResult.confidence < 80 && fishIdConfirmed === null && fishIdResult.alternatives?.length > 0 && (
-              <div className={styles.suggestions}>
-                <span className={styles.suggestionsLabel}>Could also be:</span>
-                <div className={styles.suggestionCards}>
-                  <button
-                    type="button"
-                    className={styles.suggestionCard}
-                    onClick={() => handleSuggestionSelect(fishIdResult.species)}
-                  >
-                    <span className={styles.suggestionSpecies}>{fishIdResult.species}</span>
-                    <span className={styles.suggestionConf}>{fishIdResult.confidence}%</span>
-                  </button>
-                  {fishIdResult.alternatives.map((alt, i) => (
-                    <button
-                      type="button"
-                      key={i}
-                      className={styles.suggestionCard}
-                      onClick={() => handleSuggestionSelect(alt.species)}
-                    >
-                      <span className={styles.suggestionSpecies}>{alt.species}</span>
-                      <span className={styles.suggestionConf}>{alt.confidence}%</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Confirm / Correct prompt */}
-            {fishIdConfirmed === null && fishIdResult.confidence >= 80 && (
-              <div className={styles.confirmRow}>
-                <span className={styles.confirmLabel}>Is this correct?</span>
-                <div className={styles.confirmBtns}>
-                  <button type="button" className={styles.confirmYes} onClick={handleConfirmYes}>Yes</button>
-                  <button type="button" className={styles.confirmNo} onClick={handleConfirmNo}>No</button>
-                </div>
-              </div>
-            )}
-
-            {/* Correction input */}
-            {fishIdConfirmed === false && (
-              <div className={styles.correctionRow}>
-                <label className={styles.correctionLabel}>What species is it?</label>
-                <div className={styles.correctionInputRow}>
-                  <input
-                    type="text"
-                    className={styles.correctionInput}
-                    value={correctedSpecies}
-                    onChange={(e) => setCorrectedSpecies(e.target.value)}
-                    placeholder="Enter correct species..."
-                  />
-                  <button
-                    type="button"
-                    className={styles.correctionBtn}
-                    onClick={handleCorrectionSubmit}
-                    disabled={!correctedSpecies.trim()}
-                  >
-                    Update
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Species info card after confirmation */}
-            {fishIdConfirmed !== null && (
-              <SpeciesInfoCard speciesName={form.species} />
-            )}
-          </div>
-        )}
       </div>
 
       {form.waterStation && (
