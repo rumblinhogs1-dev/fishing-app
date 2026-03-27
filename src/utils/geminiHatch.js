@@ -1,7 +1,7 @@
 import { getApiKey, hasEnvKey, API_URL, fetchWithRetry, extractJSON, getResponseText } from './gemini';
 
 const CACHE_KEY = 'fishing-app-hatch-cache';
-const CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
+const CACHE_TTL = 30 * 24 * 60 * 60 * 1000; // 30 days
 
 function getCacheKey(lat, lng) {
   return `${Math.round(lat * 100) / 100},${Math.round(lng * 100) / 100}`;
@@ -99,6 +99,9 @@ Provide 3-5 insects in currentHatches that are active now. Provide all 5 time pe
         ],
       },
     ],
+    generationConfig: {
+      thinkingConfig: { thinkingBudget: 1024 },
+    },
   };
 
   try {
