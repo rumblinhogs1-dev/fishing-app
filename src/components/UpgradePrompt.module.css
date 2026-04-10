@@ -13,7 +13,7 @@
 
 .card {
   text-align: center;
-  background: #fff;
+  background: var(--color-white);
   border-radius: 16px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
   padding: 2.5rem 2rem;
@@ -27,21 +27,21 @@
 
 .title {
   font-size: 1.25rem;
-  color: #333;
+  color: var(--color-gray-900);
   margin: 0 0 0.75rem;
 }
 
 .description {
   font-size: 0.9rem;
-  color: #666;
+  color: var(--color-gray-600);
   line-height: 1.55;
   margin: 0 0 1.5rem;
 }
 
 .upgradeBtn {
   display: inline-block;
-  background: linear-gradient(135deg, #2d6a4f, #1b4332);
-  color: #fff;
+  background: linear-gradient(135deg, var(--color-green-700), var(--color-green-900));
+  color: var(--color-white);
   border: none;
   border-radius: 10px;
   padding: 0.75rem 2rem;
@@ -62,8 +62,8 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-  border: 1px solid #a5d6a7;
+  background: linear-gradient(135deg, var(--color-green-50), var(--color-green-100));
+  border: 1px solid var(--color-green-200);
   border-radius: 10px;
   padding: 0.6rem 1rem;
   margin-bottom: 1rem;
@@ -72,8 +72,8 @@
 
 .softBadge {
   display: inline-block;
-  background: linear-gradient(135deg, #2d6a4f, #1b4332);
-  color: #fff;
+  background: linear-gradient(135deg, var(--color-green-700), var(--color-green-900));
+  color: var(--color-white);
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -84,15 +84,15 @@
 
 .softText {
   font-size: 0.85rem;
-  color: #2e7d32;
+  color: var(--color-green-600);
   font-weight: 500;
   flex: 1;
 }
 
 .softUpgradeBtn {
   background: none;
-  border: 1px solid #2d6a4f;
-  color: #2d6a4f;
+  border: 1px solid var(--color-green-700);
+  color: var(--color-green-700);
   font-size: 0.8rem;
   font-weight: 600;
   font-family: inherit;
@@ -103,15 +103,15 @@
 }
 
 .softUpgradeBtn:hover {
-  background: #2d6a4f;
-  color: #fff;
+  background: var(--color-green-700);
+  color: var(--color-white);
 }
 
 /* Inline premium badge pill */
 .inlineBadge {
   display: inline-block;
-  background: linear-gradient(135deg, #2d6a4f, #1b4332);
-  color: #fff;
+  background: linear-gradient(135deg, var(--color-green-700), var(--color-green-900));
+  color: var(--color-white);
   font-size: 0.6rem;
   font-weight: 700;
   text-transform: uppercase;

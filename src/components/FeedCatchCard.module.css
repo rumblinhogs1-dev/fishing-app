@@ -1,5 +1,5 @@
 .card {
-  background: #fff;
+  background: var(--color-white);
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
   overflow: hidden;
@@ -23,8 +23,8 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #2d6a4f;
-  color: #fff;
+  background: var(--color-green-700);
+  color: var(--color-white);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -44,11 +44,11 @@
   margin: -0.2rem;
   transition: background 0.15s;
 }
-.authorLink:hover { background: #f5f8ff; }
-.authorLink:hover .authorName { color: #2d6a4f; }
+.authorLink:hover { background: var(--color-blue-bg-2); }
+.authorLink:hover .authorName { color: var(--color-green-700); }
 .authorInfo { flex: 1; display: flex; flex-direction: column; }
-.authorName { font-weight: 600; color: #222; font-size: 0.9rem; transition: color 0.15s; }
-.authorDate { font-size: 0.75rem; color: #888; }
+.authorName { font-weight: 600; color: var(--color-black); font-size: 0.9rem; transition: color 0.15s; }
+.authorDate { font-size: 0.75rem; color: var(--color-gray-400); }
 
 .visibilityBadge {
   padding: 0.2rem 0.5rem;
@@ -56,33 +56,33 @@
   font-size: 0.7rem;
   font-weight: 600;
   text-transform: capitalize;
-  background: #e8f5e9;
-  color: #2d6a4f;
+  background: var(--color-green-50);
+  color: var(--color-green-700);
 }
 
 .photo {
   width: 100%;
   max-height: 400px;
   object-fit: contain;
-  background: #f0f0f0;
+  background: var(--color-gray-75);
   display: block;
 }
 
 .body { padding: 1rem; }
-.species { margin: 0 0 0.5rem; color: #1b4332; font-size: 1.1rem; }
+.species { margin: 0 0 0.5rem; color: var(--color-green-900); font-size: 1.1rem; }
 
 .details { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.5rem; }
-.tag { background: #e8f5e9; color: #2d6a4f; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
-.lureTag { background: #fff8e1; color: #e65100; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
+.tag { background: var(--color-green-50); color: var(--color-green-700); padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
+.lureTag { background: var(--color-yellow-50); color: var(--color-orange-900); padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
 
-.releasedTag { background: #e8f5e9; color: #2e7d32; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
+.releasedTag { background: var(--color-green-50); color: var(--color-green-600); padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
 
-.notes { margin: 0.5rem 0; color: #555; font-size: 0.85rem; line-height: 1.4; }
-.viewLink { color: #2d6a4f; font-size: 0.85rem; font-weight: 500; text-decoration: none; }
+.notes { margin: 0.5rem 0; color: var(--color-gray-700); font-size: 0.85rem; line-height: 1.4; }
+.viewLink { color: var(--color-green-700); font-size: 0.85rem; font-weight: 500; text-decoration: none; }
 .viewLink:hover { text-decoration: underline; }
 
 .reactionsRow {
   margin-top: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--color-gray-75);
 }

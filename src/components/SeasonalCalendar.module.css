@@ -27,7 +27,7 @@
 
 .barLabel {
   font-size: 0.65rem;
-  color: #888;
+  color: var(--color-gray-400);
   margin-top: 3px;
 }
 
@@ -36,7 +36,7 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: #2d6a4f;
+  background: var(--color-green-700);
   margin-top: 2px;
 }
 
@@ -48,18 +48,18 @@
 }
 
 .calendarBest {
-  color: #2e7d32;
+  color: var(--color-green-600);
   font-weight: 600;
 }
 
 .calendarWorst {
-  color: #c62828;
+  color: var(--color-red-800);
   font-weight: 600;
 }
 
 .calendarSummary {
   font-size: 0.82rem;
-  color: #555;
+  color: var(--color-gray-700);
   line-height: 1.4;
   margin: 0;
 }

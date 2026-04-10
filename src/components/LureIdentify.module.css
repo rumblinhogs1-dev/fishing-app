@@ -5,29 +5,29 @@
 }
 
 .heading {
-  color: #1b4332;
+  color: var(--color-green-900);
   margin: 0 0 0.25rem;
 }
 
 .subtext {
-  color: #666;
+  color: var(--color-gray-600);
   font-size: 0.9rem;
   margin: 0 0 1.5rem;
 }
 
 .keySection { margin-bottom: 1.5rem; }
 .keyStatus { display: flex; align-items: center; gap: 0.75rem; }
-.keyBadge { background: #e8f5e9; color: #2e7d32; padding: 0.25rem 0.7rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
-.keyToggle { background: none; border: none; color: #2d6a4f; font-size: 0.85rem; cursor: pointer; padding: 0; }
+.keyBadge { background: var(--color-green-50); color: var(--color-green-600); padding: 0.25rem 0.7rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+.keyToggle { background: none; border: none; color: var(--color-green-700); font-size: 0.85rem; cursor: pointer; padding: 0; }
 .keyToggle:hover { text-decoration: underline; }
 .keyInput { display: flex; flex-direction: column; gap: 0.4rem; }
-.keyLabel { font-size: 0.85rem; font-weight: 600; color: #444; }
+.keyLabel { font-size: 0.85rem; font-weight: 600; color: var(--color-gray-800); }
 .keyRow { display: flex; gap: 0.5rem; }
-.keyField { flex: 1; padding: 0.5rem 0.75rem; border: 1.5px solid #ccc; border-radius: 8px; font-size: 0.9rem; font-family: inherit; }
-.keyField:focus { outline: none; border-color: #2d6a4f; box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12); }
-.keyDone { padding: 0.5rem 1rem; background: #2d6a4f; color: #fff; border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
-.keyDone:hover { background: #1b4332; }
-.keyHelp { font-size: 0.8rem; color: #2d6a4f; }
+.keyField { flex: 1; padding: 0.5rem 0.75rem; border: 1.5px solid var(--color-gray-200); border-radius: 8px; font-size: 0.9rem; font-family: inherit; }
+.keyField:focus { outline: none; border-color: var(--color-green-700); box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12); }
+.keyDone { padding: 0.5rem 1rem; background: var(--color-green-700); color: var(--color-white); border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+.keyDone:hover { background: var(--color-green-900); }
+.keyHelp { font-size: 0.8rem; color: var(--color-green-700); }
 
 .uploadArea {
   display: flex;
@@ -44,20 +44,20 @@
   gap: 0.5rem;
   padding: 2rem 1rem;
   border-radius: 12px;
-  border: 2px dashed #bbb;
-  background: #fff;
+  border: 2px dashed var(--color-gray-250);
+  background: var(--color-white);
   cursor: pointer;
   transition: border-color 0.2s, background 0.2s, color 0.2s;
-  color: #666;
+  color: var(--color-gray-600);
   font-size: 0.9rem;
   font-weight: 500;
 }
 
 .cameraBtn:hover,
 .uploadBtn:hover {
-  border-color: #ff9800;
-  background: #fff8e1;
-  color: #e65100;
+  border-color: var(--color-orange-500);
+  background: var(--color-yellow-50);
+  color: var(--color-orange-900);
 }
 
 .hiddenInput { display: none; }
@@ -92,7 +92,7 @@
   border-radius: 50%;
   border: none;
   background: rgba(0, 0, 0, 0.6);
-  color: #fff;
+  color: var(--color-white);
   font-size: 1.3rem;
   line-height: 1;
   cursor: pointer;
@@ -108,8 +108,8 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 2rem;
-  background: linear-gradient(135deg, #ff9800, #e65100);
-  color: #fff;
+  background: linear-gradient(135deg, var(--color-orange-500), var(--color-orange-900));
+  color: var(--color-white);
   border: none;
   border-radius: 10px;
   font-size: 1.05rem;
@@ -125,7 +125,7 @@
   width: 18px;
   height: 18px;
   border: 2.5px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #fff;
+  border-top-color: var(--color-white);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
@@ -133,8 +133,8 @@
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .error {
-  background: #fdecea;
-  color: #c62828;
+  background: var(--color-red-50);
+  color: var(--color-red-800);
   padding: 0.75rem 1rem;
   border-radius: 8px;
   font-size: 0.9rem;
@@ -142,7 +142,7 @@
 }
 
 .resultCard {
-  background: #fff;
+  background: var(--color-white);
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   overflow: hidden;
@@ -153,23 +153,23 @@
   justify-content: space-between;
   align-items: flex-start;
   padding: 1.25rem;
-  background: linear-gradient(135deg, #fff8e1, #fff3e0);
+  background: linear-gradient(135deg, var(--color-yellow-50), var(--color-orange-50));
 }
 
 .lureName {
   margin: 0;
   font-size: 1.3rem;
-  color: #e65100;
+  color: var(--color-orange-900);
 }
 
 .lureType {
   font-size: 0.85rem;
-  color: #888;
+  color: var(--color-gray-400);
 }
 
 .categoryBadge {
-  background: #ff9800;
-  color: #fff;
+  background: var(--color-orange-500);
+  color: var(--color-white);
   padding: 0.3rem 0.75rem;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -191,14 +191,14 @@
   flex-direction: column;
   gap: 0.15rem;
   padding: 0.75rem;
-  background: #f8f9fa;
+  background: var(--color-gray-bg-warm);
   border-radius: 10px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--color-gray-150);
 }
 
 .detailLabel {
   font-size: 0.7rem;
-  color: #888;
+  color: var(--color-gray-400);
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
@@ -206,20 +206,20 @@
 .detailValue {
   font-size: 1rem;
   font-weight: 700;
-  color: #333;
+  color: var(--color-gray-900);
 }
 
 .section { margin-bottom: 1rem; }
 .section:last-child { margin-bottom: 0; }
-.section h4 { margin: 0 0 0.3rem; font-size: 0.85rem; color: #e65100; text-transform: uppercase; letter-spacing: 0.3px; }
-.section p { margin: 0; color: #444; font-size: 0.9rem; line-height: 1.5; }
+.section h4 { margin: 0 0 0.3rem; font-size: 0.85rem; color: var(--color-orange-900); text-transform: uppercase; letter-spacing: 0.3px; }
+.section p { margin: 0; color: var(--color-gray-800); font-size: 0.9rem; line-height: 1.5; }
 
 .speciesTags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-.speciesTag { background: #e8f5e9; color: #2e7d32; padding: 0.25rem 0.65rem; border-radius: 20px; font-size: 0.8rem; font-weight: 500; }
+.speciesTag { background: var(--color-green-50); color: var(--color-green-600); padding: 0.25rem 0.65rem; border-radius: 20px; font-size: 0.8rem; font-weight: 500; }
 
 .noResult {
   text-align: center;
-  color: #888;
+  color: var(--color-gray-400);
   padding: 1.5rem;
   font-size: 0.95rem;
 }

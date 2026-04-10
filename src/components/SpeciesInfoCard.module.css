@@ -1,8 +1,8 @@
 .card {
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--color-gray-150);
   border-radius: 10px;
   overflow: hidden;
-  background: #fff;
+  background: var(--color-white);
 }
 
 .toggle {
@@ -11,29 +11,29 @@
   gap: 0.5rem;
   width: 100%;
   padding: 0.7rem 1rem;
-  background: #f8f9fa;
+  background: var(--color-gray-bg-warm);
   border: none;
   cursor: pointer;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #2d6a4f;
+  color: var(--color-green-700);
   font-family: inherit;
   text-align: left;
   transition: background 0.2s;
 }
 
 .toggle:hover {
-  background: #e8f5e9;
+  background: var(--color-green-50);
 }
 
 .toggleIcon {
   font-size: 0.7rem;
-  color: #888;
+  color: var(--color-gray-400);
 }
 
 .content {
   padding: 1rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--color-gray-150);
 }
 
 .loading {
@@ -41,7 +41,7 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.85rem;
-  color: #2d6a4f;
+  color: var(--color-green-700);
   font-weight: 500;
 }
 
@@ -50,7 +50,7 @@
   width: 16px;
   height: 16px;
   border: 2px solid rgba(45, 106, 79, 0.3);
-  border-top-color: #2d6a4f;
+  border-top-color: var(--color-green-700);
   border-radius: 50%;
   animation: speciesSpin 0.7s linear infinite;
 }
@@ -61,7 +61,7 @@
 
 .error {
   font-size: 0.8rem;
-  color: #d32f2f;
+  color: var(--color-red-700);
 }
 
 .grid {
@@ -82,7 +82,7 @@
 
 .label {
   font-size: 0.7rem;
-  color: #888;
+  color: var(--color-gray-400);
   text-transform: uppercase;
   letter-spacing: 0.3px;
   font-weight: 600;
@@ -90,7 +90,7 @@
 
 .value {
   font-size: 0.9rem;
-  color: #333;
+  color: var(--color-gray-900);
   line-height: 1.4;
 }
 

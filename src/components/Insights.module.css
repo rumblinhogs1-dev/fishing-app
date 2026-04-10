@@ -5,7 +5,7 @@
 }
 
 .heading {
-  color: #1b4332;
+  color: var(--color-green-900);
   margin: 0 0 1.5rem;
 }
 
@@ -21,8 +21,8 @@
 .tab {
   padding: 0.5rem 0.9rem;
   border: none;
-  background: #e8f5e9;
-  color: #2d6a4f;
+  background: var(--color-green-50);
+  color: var(--color-green-700);
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 500;
@@ -32,16 +32,16 @@
 }
 
 .tab:hover {
-  background: #d0e1fd;
+  background: var(--color-blue-75);
 }
 
 .tabActive {
-  background: #2d6a4f;
-  color: #fff;
+  background: var(--color-green-700);
+  color: var(--color-white);
 }
 
 .section {
-  background: #fff;
+  background: var(--color-white);
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
@@ -50,13 +50,13 @@
 
 .sectionTitle {
   margin: 0 0 1rem;
-  color: #333;
+  color: var(--color-gray-900);
   font-size: 1.1rem;
 }
 
 .empty {
   text-align: center;
-  color: #888;
+  color: var(--color-gray-400);
   padding: 2rem;
 }
 
@@ -68,7 +68,7 @@
 }
 
 .recordCard {
-  background: linear-gradient(135deg, #e8f5e9, #f5f5f5);
+  background: linear-gradient(135deg, var(--color-green-50), var(--color-gray-50));
   border-radius: 10px;
   padding: 1.25rem;
   text-align: center;
@@ -98,7 +98,7 @@
 
 .recordTap {
   font-size: 0.7rem;
-  color: #2d6a4f;
+  color: var(--color-green-700);
   margin-top: 0.35rem;
   display: block;
   opacity: 0.6;
@@ -107,20 +107,20 @@
 .recordValue {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #2d6a4f;
+  color: var(--color-green-700);
   display: block;
 }
 
 .recordLabel {
   font-size: 0.8rem;
-  color: #666;
+  color: var(--color-gray-600);
   margin-top: 0.25rem;
   display: block;
 }
 
 .recordSub {
   font-size: 0.75rem;
-  color: #999;
+  color: var(--color-gray-350);
   display: block;
 }
 
@@ -133,22 +133,22 @@
 
 .pbLink {
   font-size: 0.75rem;
-  color: #2d6a4f;
+  color: var(--color-green-700);
   cursor: pointer;
   text-decoration: underline;
   text-decoration-style: dotted;
 }
 
 .pbLink:hover {
-  color: #1b4332;
+  color: var(--color-green-900);
 }
 
 .showMoreBtn {
   display: block;
   margin: 0.75rem auto 0;
   padding: 0.4rem 1rem;
-  background: #e8f5e9;
-  color: #2d6a4f;
+  background: var(--color-green-50);
+  color: var(--color-green-700);
   border: none;
   border-radius: 16px;
   font-size: 0.8rem;
@@ -157,7 +157,7 @@
 }
 
 .showMoreBtn:hover {
-  background: #d0e1fd;
+  background: var(--color-blue-75);
 }
 
 /* Ranked list */
@@ -172,7 +172,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.6rem 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-gray-100);
 }
 
 .rankedItem:last-child {
@@ -190,8 +190,8 @@
 }
 
 .rankedBadge {
-  background: #e8f5e9;
-  color: #2d6a4f;
+  background: var(--color-green-50);
+  color: var(--color-green-700);
   padding: 0.15rem 0.6rem;
   border-radius: 12px;
   font-size: 0.8rem;
@@ -219,7 +219,7 @@
 }
 
 .conditionCard {
-  background: #f8f9fa;
+  background: var(--color-gray-bg-warm);
   border-radius: 10px;
   padding: 1rem;
   text-align: center;
@@ -228,13 +228,13 @@
 .conditionValue {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #333;
+  color: var(--color-gray-900);
   display: block;
 }
 
 .conditionLabel {
   font-size: 0.78rem;
-  color: #888;
+  color: var(--color-gray-400);
   margin-top: 0.2rem;
   display: block;
 }
@@ -242,7 +242,7 @@
 /* Sub-section heading */
 .subHeading {
   font-size: 0.95rem;
-  color: #555;
+  color: var(--color-gray-700);
   margin: 1.5rem 0 0.75rem;
 }
 
@@ -258,13 +258,13 @@
 
 .chartDescription {
   font-size: 0.78rem;
-  color: #888;
+  color: var(--color-gray-400);
   margin: -0.5rem 0 0.75rem;
 }
 
 .detailSubHeading {
   font-size: 0.85rem;
-  color: #555;
+  color: var(--color-gray-700);
   margin: 1rem 0 0.5rem;
   font-weight: 600;
 }
@@ -281,11 +281,11 @@
   width: 100%;
   max-width: 300px;
   padding: 0.5rem 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-gray-175);
   border-radius: 8px;
   font-size: 0.85rem;
-  color: #333;
-  background: #fff;
+  color: var(--color-gray-900);
+  background: var(--color-white);
   margin-bottom: 0.75rem;
   text-transform: capitalize;
 }
@@ -293,7 +293,7 @@
 /* Lure enhancements */
 .lureSpeciesLine {
   font-size: 0.75rem;
-  color: #888;
+  color: var(--color-gray-400);
   margin-top: 2px;
 }
 
@@ -306,8 +306,8 @@
 
 .lureTag {
   font-size: 0.7rem;
-  background: #e8f5e9;
-  color: #2d6a4f;
+  background: var(--color-green-50);
+  color: var(--color-green-700);
   padding: 0.1rem 0.45rem;
   border-radius: 8px;
   font-weight: 500;
@@ -322,8 +322,8 @@
 
 .seasonPill {
   font-size: 0.7rem;
-  background: #f0f0f0;
-  color: #555;
+  background: var(--color-gray-75);
+  color: var(--color-gray-700);
   padding: 0.1rem 0.4rem;
   border-radius: 8px;
   text-transform: capitalize;
@@ -344,23 +344,23 @@
   flex-wrap: wrap;
   margin-top: 0.25rem;
   font-size: 0.75rem;
-  color: #888;
+  color: var(--color-gray-400);
 }
 
 .expandArrow {
   font-size: 0.7rem;
-  color: #999;
+  color: var(--color-gray-350);
 }
 
 .locationDetail {
   margin-top: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--color-gray-100);
 }
 
 .detailSubHead {
   font-size: 0.8rem;
-  color: #555;
+  color: var(--color-gray-700);
   margin: 0 0 0.4rem;
   font-weight: 600;
 }
@@ -380,10 +380,10 @@
 }
 
 .patternCard {
-  background: linear-gradient(135deg, #f8faf9, #f5f5f5);
+  background: linear-gradient(135deg, var(--color-green-bg-wash), var(--color-gray-50));
   border-radius: 10px;
   padding: 1rem;
-  border-left: 3px solid #2d6a4f;
+  border-left: 3px solid var(--color-green-700);
 }
 
 .patternTags {
@@ -395,7 +395,7 @@
 
 .patternTag {
   font-size: 0.7rem;
-  color: #fff;
+  color: var(--color-white);
   padding: 0.15rem 0.5rem;
   border-radius: 10px;
   font-weight: 500;
@@ -404,7 +404,7 @@
 
 .patternInsight {
   font-size: 0.85rem;
-  color: #333;
+  color: var(--color-gray-900);
   margin: 0 0 0.4rem;
   line-height: 1.4;
 }
@@ -414,12 +414,12 @@
   justify-content: space-between;
   align-items: center;
   font-size: 0.75rem;
-  color: #888;
+  color: var(--color-gray-400);
 }
 
 .patternMultiplier {
-  background: #2d6a4f;
-  color: #fff;
+  background: var(--color-green-700);
+  color: var(--color-white);
   padding: 0.15rem 0.5rem;
   border-radius: 10px;
   font-weight: 700;
@@ -429,7 +429,7 @@
 /* AI Coach */
 .coachIntro {
   font-size: 0.85rem;
-  color: #666;
+  color: var(--color-gray-600);
   margin: 0 0 1rem;
 }
 
@@ -442,9 +442,9 @@
 
 .suggestedBtn {
   padding: 0.5rem 0.9rem;
-  background: #e8f5e9;
-  color: #2d6a4f;
-  border: 1px solid #c8e6c9;
+  background: var(--color-green-50);
+  color: var(--color-green-700);
+  border: 1px solid var(--color-green-100);
   border-radius: 20px;
   font-size: 0.8rem;
   cursor: pointer;
@@ -452,7 +452,7 @@
 }
 
 .suggestedBtn:hover {
-  background: #c8e6c9;
+  background: var(--color-green-100);
 }
 
 .chatMessages {
@@ -475,21 +475,21 @@
 }
 
 .chatBubbleUser {
-  background: #2d6a4f;
-  color: #fff;
+  background: var(--color-green-700);
+  color: var(--color-white);
   align-self: flex-end;
   border-bottom-right-radius: 4px;
 }
 
 .chatBubbleAI {
-  background: #f0f4f0;
-  color: #333;
+  background: var(--color-gray-bg-green);
+  color: var(--color-gray-900);
   align-self: flex-start;
   border-bottom-left-radius: 4px;
 }
 
 .typingDots {
-  color: #888;
+  color: var(--color-gray-400);
   font-style: italic;
 }
 
@@ -501,20 +501,20 @@
 .chatInput {
   flex: 1;
   padding: 0.6rem 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-gray-175);
   border-radius: 20px;
   font-size: 0.85rem;
   outline: none;
 }
 
 .chatInput:focus {
-  border-color: #2d6a4f;
+  border-color: var(--color-green-700);
 }
 
 .chatSendBtn {
   padding: 0.6rem 1.2rem;
-  background: #2d6a4f;
-  color: #fff;
+  background: var(--color-green-700);
+  color: var(--color-white);
   border: none;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -524,7 +524,7 @@
 }
 
 .chatSendBtn:hover:not(:disabled) {
-  background: #1b4332;
+  background: var(--color-green-900);
 }
 
 .chatSendBtn:disabled {

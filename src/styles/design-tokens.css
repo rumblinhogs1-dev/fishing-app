@@ -1,0 +1,53 @@
+/*
+ * CatchDaddy Design Tokens
+ * ========================
+ * Simplified semantic token system for cross-platform consistency.
+ * Import AFTER variables.css — these map semantic names to the raw palette.
+ * Migrate components from raw --color-* vars to these --token-* vars over time.
+ *
+ * Total: 28 tokens (down from 94 raw variables)
+ */
+
+:root {
+  /* ===== Primary ===== */
+  --token-primary:          var(--color-green-700);   /* #2d6a4f — buttons, links, active */
+  --token-primary-dark:     var(--color-green-900);   /* #1b4332 — headings, nav bg */
+  --token-primary-hover:    var(--color-green-800);   /* #245c3e — button hover */
+  --token-primary-light:    var(--color-green-50);    /* #e8f5e9 — selected/hover bg */
+
+  /* ===== Semantic Status ===== */
+  --token-success:          var(--color-green-600);   /* #2e7d32 */
+  --token-success-bg:       var(--color-green-50);    /* #e8f5e9 */
+  --token-error:            var(--color-red-700);     /* #d32f2f */
+  --token-error-dark:       var(--color-red-800);     /* #c62828 — toasts */
+  --token-error-bg:         var(--color-red-50);      /* #fdecea */
+  --token-warning:          var(--color-orange-500);  /* #ff9800 */
+  --token-warning-text:     var(--color-orange-900);  /* #e65100 */
+  --token-warning-bg:       var(--color-orange-50);   /* #fff3e0 */
+  --token-info:             var(--color-blue-600);    /* #1565c0 */
+  --token-info-bg:          var(--color-blue-bg-1);   /* #f0f6ff */
+
+  /* ===== Gold / Premium ===== */
+  --token-gold:             var(--color-gold-600);    /* #d4a017 — achievements */
+  --token-gold-dark:        var(--color-gold-700);    /* #b8860b */
+
+  /* ===== Text ===== */
+  --token-text:             var(--color-black);       /* #222 — body */
+  --token-text-secondary:   var(--color-gray-700);    /* #555 */
+  --token-text-muted:       var(--color-gray-400);    /* #888 — placeholders */
+  --token-text-disabled:    var(--color-gray-300);    /* #aaa */
+
+  /* ===== Surfaces & Backgrounds ===== */
+  --token-bg-page:          var(--color-gray-bg-cool); /* #f0f4f8 */
+  --token-bg-surface:       var(--color-white);        /* #fff — cards */
+  --token-bg-elevated:      var(--color-gray-50);      /* #f5f5f5 — nested cards */
+  --token-bg-hover:         var(--color-gray-75);      /* #f0f0f0 */
+
+  /* ===== Borders & Dividers ===== */
+  --token-border:           var(--color-gray-175);    /* #ddd */
+  --token-border-light:     var(--color-gray-150);    /* #e0e0e0 */
+  --token-divider:          var(--color-gray-150);    /* #e0e0e0 */
+
+  /* ===== White ===== */
+  --token-white:            var(--color-white);       /* #fff */
+}

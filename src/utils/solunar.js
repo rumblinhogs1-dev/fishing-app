@@ -294,8 +294,9 @@ function isInWindow(curMin, startMin, endMin) {
 }
 
 function formatMinutes(totalMin) {
-  const h = Math.floor(((totalMin % 1440) + 1440) % 1440 / 60);
-  const m = Math.round(totalMin % 60);
+  const rounded = ((Math.round(totalMin) % 1440) + 1440) % 1440;
+  const h = Math.floor(rounded / 60);
+  const m = rounded % 60;
   const ampm = h >= 12 ? 'PM' : 'AM';
   const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
   return `${h12}:${String(m).padStart(2, '0')} ${ampm}`;

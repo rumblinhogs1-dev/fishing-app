@@ -8,7 +8,7 @@
 .label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #444;
+  color: var(--color-gray-800);
 }
 
 .buttons {
@@ -27,16 +27,16 @@
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s;
-  border: 1.5px dashed #bbb;
-  background: #fafafa;
-  color: #444;
+  border: 1.5px dashed var(--color-gray-250);
+  background: var(--color-gray-bg-neutral);
+  color: var(--color-gray-800);
 }
 
 .cameraBtn:hover,
 .uploadBtn:hover {
-  background: #e8f5e9;
-  border-color: #2d6a4f;
-  color: #2d6a4f;
+  background: var(--color-green-50);
+  border-color: var(--color-green-700);
+  color: var(--color-green-700);
 }
 
 .cameraBtn svg,
@@ -58,7 +58,7 @@
   width: 100%;
   border-radius: 8px;
   display: block;
-  border: 1.5px solid #ddd;
+  border: 1.5px solid var(--color-gray-175);
 }
 
 .removeBtn {
@@ -70,7 +70,7 @@
   border-radius: 50%;
   border: none;
   background: rgba(0, 0, 0, 0.6);
-  color: #fff;
+  color: var(--color-white);
   font-size: 1.2rem;
   line-height: 1;
   cursor: pointer;

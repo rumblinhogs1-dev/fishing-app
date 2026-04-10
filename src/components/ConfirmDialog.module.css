@@ -10,7 +10,7 @@
 }
 
 .modal {
-  background: #fff;
+  background: var(--color-white);
   border-radius: 12px;
   padding: 1.5rem;
   width: 100%;
@@ -21,7 +21,7 @@
 .message {
   margin: 0 0 1.25rem;
   font-size: 1rem;
-  color: #333;
+  color: var(--color-gray-900);
   line-height: 1.5;
 }
 
@@ -33,10 +33,10 @@
 
 .cancelBtn {
   padding: 0.6rem 1.25rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-gray-175);
   border-radius: 8px;
-  background: #fff;
-  color: #666;
+  background: var(--color-white);
+  color: var(--color-gray-600);
   font-weight: 500;
   font-size: 0.9rem;
   cursor: pointer;
@@ -44,15 +44,15 @@
 }
 
 .cancelBtn:hover {
-  background: #f5f5f5;
+  background: var(--color-gray-50);
 }
 
 .confirmBtn {
   padding: 0.6rem 1.25rem;
   border: none;
   border-radius: 8px;
-  background: #2d6a4f;
-  color: #fff;
+  background: var(--color-green-700);
+  color: var(--color-white);
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;
@@ -60,15 +60,15 @@
 }
 
 .confirmBtn:hover {
-  background: #1565c0;
+  background: var(--color-blue-600);
 }
 
 .confirmBtnDestructive {
   padding: 0.6rem 1.25rem;
   border: none;
   border-radius: 8px;
-  background: #d32f2f;
-  color: #fff;
+  background: var(--color-red-700);
+  color: var(--color-white);
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;
@@ -76,5 +76,5 @@
 }
 
 .confirmBtnDestructive:hover {
-  background: #b71c1c;
+  background: var(--color-red-900);
 }

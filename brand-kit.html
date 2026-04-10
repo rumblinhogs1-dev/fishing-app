@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CatchDaddy Brand Kit</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f8f9fa; color: #222; line-height: 1.6; }
+  .page { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+  h1 { font-family: 'Fredoka', sans-serif; font-size: 2.4rem; color: #1b4332; margin-bottom: 4px; }
+  .subtitle { color: #666; font-size: 1rem; margin-bottom: 40px; }
+  h2 { font-size: 1.4rem; color: #1b4332; margin: 48px 0 16px; border-bottom: 2px solid #e8f5e9; padding-bottom: 8px; }
+  h3 { font-size: 1rem; color: #555; margin: 24px 0 12px; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* Logo Section */
+  .logo-row { display: flex; gap: 32px; flex-wrap: wrap; align-items: center; margin: 24px 0; }
+  .logo-card { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); text-align: center; }
+  .logo-card.dark { background: #1b4332; }
+  .logo-card.light { background: #fff; border: 1px solid #ddd; }
+  .logo-card img, .logo-card svg { max-height: 120px; }
+  .logo-card p { margin-top: 12px; font-size: 0.85rem; color: #888; }
+  .logo-card.dark p { color: #95d5b2; }
+
+  /* Color Palette */
+  .palette-section { margin: 16px 0; }
+  .color-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+  .color-swatch { border-radius: 10px; overflow: hidden; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+  .color-swatch .swatch { height: 72px; position: relative; }
+  .color-swatch .info { padding: 10px 12px; }
+  .color-swatch .info .name { font-size: 0.75rem; color: #888; margin-bottom: 2px; }
+  .color-swatch .info .hex { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.85rem; font-weight: 600; color: #333; }
+  .color-swatch .info .usage { font-size: 0.7rem; color: #aaa; margin-top: 2px; }
+
+  /* Typography */
+  .type-sample { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin: 12px 0; }
+  .type-sample .fredoka { font-family: 'Fredoka', sans-serif; }
+  .type-sample .label { font-size: 0.75rem; color: #888; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* Download Buttons */
+  .download-row { display: flex; gap: 12px; flex-wrap: wrap; margin: 16px 0; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none; text-decoration: none; transition: all 0.2s; }
+  .btn-primary { background: #2d6a4f; color: #fff; }
+  .btn-primary:hover { background: #1b4332; }
+  .btn-outline { background: #fff; color: #2d6a4f; border: 2px solid #2d6a4f; }
+  .btn-outline:hover { background: #e8f5e9; }
+
+  /* Brand Values */
+  .brand-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 16px 0; }
+  .brand-card { background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .brand-card strong { color: #1b4332; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; }
+    .btn, .download-row { display: none !important; }
+    .page { padding: 20px; }
+    h2 { page-break-before: auto; }
+    .color-grid { grid-template-columns: repeat(5, 1fr); }
+  }
+
+  .clearfix::after { content: ''; display: table; clear: both; }
+  .note { background: #fff8e1; border-left: 4px solid #d4a017; padding: 12px 16px; border-radius: 0 8px 8px 0; font-size: 0.85rem; color: #555; margin: 16px 0; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <h1>CatchDaddy Brand Kit</h1>
+  <p class="subtitle">Brand guidelines, color palette, and logo assets &mdash; catchdaddy.net</p>
+
+  <!-- ============ LOGOS ============ -->
+  <h2>Logo</h2>
+
+  <div class="logo-row">
+    <div class="logo-card dark" style="flex:1; min-width:220px;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" style="max-width:280px;">
+        <defs>
+          <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1b4332"/><stop offset="100%" stop-color="#2d6a4f"/></linearGradient>
+          <linearGradient id="gold2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#e9c46a"/><stop offset="100%" stop-color="#d4a373"/></linearGradient>
+          <linearGradient id="green2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#52b788"/><stop offset="100%" stop-color="#40916c"/></linearGradient>
+        </defs>
+        <circle cx="150" cy="70" r="48" fill="none" stroke="url(#gold2)" stroke-width="2.5"/>
+        <circle cx="150" cy="70" r="42" fill="none" stroke="url(#gold2)" stroke-width="1" opacity="0.3"/>
+        <g transform="translate(139, 68) scale(1.4)">
+          <path d="M-22 0 Q-12 -16 5 -12 Q18 -8 28 0 Q18 8 5 12 Q-12 16 -22 0 Z" fill="url(#gold2)" opacity="0.9"/>
+          <path d="M28 0 L38 -9 L38 9 Z" fill="url(#gold2)" opacity="0.9"/>
+          <circle cx="-6" cy="-3" r="3" fill="#1b4332"/>
+          <path d="M-2 -4 Q3 -6 8 -4" fill="none" stroke="url(#green2)" stroke-width="0.8" opacity="0.6"/>
+          <path d="M0 0 Q5 -2 10 0" fill="none" stroke="url(#green2)" stroke-width="0.8" opacity="0.5"/>
+          <path d="M-2 4 Q3 2 8 4" fill="none" stroke="url(#green2)" stroke-width="0.8" opacity="0.4"/>
+        </g>
+        <line x1="40" y1="132" x2="100" y2="132" stroke="url(#gold2)" stroke-width="1" opacity="0.25"/>
+        <line x1="200" y1="132" x2="260" y2="132" stroke="url(#gold2)" stroke-width="1" opacity="0.25"/>
+        <text x="150" y="148" font-family="'Fredoka', sans-serif" font-size="28" font-weight="bold" fill="#fefae0" letter-spacing="5" text-anchor="middle">CATCH</text>
+        <text x="150" y="172" font-family="'Fredoka', sans-serif" font-size="28" font-weight="bold" fill="url(#gold2)" letter-spacing="5" text-anchor="middle">DADDY</text>
+        <text x="150" y="192" font-family="'Helvetica Neue', sans-serif" font-size="8" fill="#95d5b2" letter-spacing="4" text-anchor="middle">SMART FISHING COMPANION</text>
+      </svg>
+      <p>Full Logo &mdash; dark background</p>
+    </div>
+
+    <div class="logo-card light" style="flex:0 0 160px;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" style="max-width:120px;">
+        <defs>
+          <linearGradient id="aiBg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1b4332"/><stop offset="100%" stop-color="#2d6a4f"/></linearGradient>
+          <linearGradient id="aiGold" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#e9c46a"/><stop offset="100%" stop-color="#d4a373"/></linearGradient>
+          <linearGradient id="aiGreen" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#52b788"/><stop offset="100%" stop-color="#40916c"/></linearGradient>
+        </defs>
+        <rect x="0" y="0" width="160" height="160" rx="36" fill="url(#aiBg)"/>
+        <circle cx="80" cy="62" r="38" fill="none" stroke="url(#aiGold)" stroke-width="2"/>
+        <circle cx="80" cy="62" r="33" fill="none" stroke="url(#aiGold)" stroke-width="0.8" opacity="0.3"/>
+        <g transform="translate(71, 62) scale(1.1)">
+          <path d="M-22 0 Q-12 -16 5 -12 Q18 -8 28 0 Q18 8 5 12 Q-12 16 -22 0 Z" fill="url(#aiGold)" opacity="0.9"/>
+          <path d="M28 0 L38 -9 L38 9 Z" fill="url(#aiGold)" opacity="0.9"/>
+          <circle cx="-6" cy="-3" r="2.5" fill="#1b4332"/>
+          <path d="M-2 -4 Q3 -6 8 -4" fill="none" stroke="url(#aiGreen)" stroke-width="0.7" opacity="0.6"/>
+          <path d="M0 0 Q5 -2 10 0" fill="none" stroke="url(#aiGreen)" stroke-width="0.7" opacity="0.5"/>
+          <path d="M-2 4 Q3 2 8 4" fill="none" stroke="url(#aiGreen)" stroke-width="0.7" opacity="0.4"/>
+        </g>
+        <text x="80" y="118" font-family="'Fredoka', sans-serif" font-size="13" font-weight="bold" fill="#fefae0" text-anchor="middle" letter-spacing="3">CATCH</text>
+        <text x="80" y="134" font-family="'Fredoka', sans-serif" font-size="13" font-weight="bold" fill="url(#aiGold)" text-anchor="middle" letter-spacing="3">DADDY</text>
+      </svg>
+      <p>App Icon</p>
+    </div>
+  </div>
+
+  <h3>Download Logo Files</h3>
+  <div class="download-row">
+    <a class="btn btn-primary" id="dl-full-svg" href="#">Full Logo (SVG)</a>
+    <a class="btn btn-primary" id="dl-icon-svg" href="#">App Icon (SVG)</a>
+    <a class="btn btn-outline" id="dl-full-png" href="#">Full Logo (PNG 1200px)</a>
+    <a class="btn btn-outline" id="dl-icon-png-512" href="#">Icon (PNG 512px)</a>
+    <a class="btn btn-outline" id="dl-icon-png-192" href="#">Icon (PNG 192px)</a>
+    <a class="btn btn-outline" id="dl-icon-png-1024" href="#">Icon (PNG 1024px)</a>
+  </div>
+  <div class="note">To save this entire page as a PDF: <strong>Ctrl+P</strong> (or Cmd+P) &rarr; "Save as PDF".</div>
+
+  <!-- ============ BRAND IDENTITY ============ -->
+  <h2>Brand Identity</h2>
+  <div class="brand-row">
+    <div class="brand-card">
+      <strong>Name</strong><br>CatchDaddy
+    </div>
+    <div class="brand-card">
+      <strong>Tagline</strong><br>Smart Fishing Companion
+    </div>
+    <div class="brand-card">
+      <strong>Domain</strong><br>catchdaddy.net
+    </div>
+    <div class="brand-card">
+      <strong>Email</strong><br>support@catchdaddy.net
+    </div>
+  </div>
+
+  <!-- ============ TYPOGRAPHY ============ -->
+  <h2>Typography</h2>
+  <div class="type-sample">
+    <p class="label">Display / Logo Font</p>
+    <p class="fredoka" style="font-size:2rem; font-weight:700; color:#1b4332;">Fredoka Bold</p>
+    <p class="fredoka" style="font-size:1.2rem; font-weight:600; color:#2d6a4f; margin-top:4px;">Fredoka SemiBold</p>
+    <p style="font-size:0.8rem; color:#888; margin-top:8px;">Used for: logo wordmark, headings, badges</p>
+  </div>
+  <div class="type-sample">
+    <p class="label">UI / Body Font</p>
+    <p style="font-size:1.4rem; color:#222;">System UI / Segoe UI / -apple-system</p>
+    <p style="font-size:0.8rem; color:#888; margin-top:8px;">Used for: body text, buttons, labels, inputs</p>
+  </div>
+
+  <!-- ============ COLOR PALETTE ============ -->
+  <h2>Color Palette</h2>
+
+  <!-- Primary Brand -->
+  <h3>Primary Brand Colors</h3>
+  <div class="color-grid">
+    <div class="color-swatch"><div class="swatch" style="background:#1b4332;"></div><div class="info"><div class="name">Green 900</div><div class="hex">#1B4332</div><div class="usage">Headings, nav bg</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#2d6a4f;"></div><div class="info"><div class="name">Green 700</div><div class="hex">#2D6A4F</div><div class="usage">PRIMARY &mdash; buttons, links</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#e8f5e9;"></div><div class="info"><div class="name">Green 50</div><div class="hex">#E8F5E9</div><div class="usage">Hover / selected bg</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:linear-gradient(135deg,#e9c46a,#d4a373);"></div><div class="info"><div class="name">Gold Gradient</div><div class="hex">#E9C46A &rarr; #D4A373</div><div class="usage">Logo accent, premium</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#fefae0;"></div><div class="info"><div class="name">Cream</div><div class="hex">#FEFAE0</div><div class="usage">Logo "CATCH" text</div></div></div>
+  </div>
+
+  <!-- Extended Greens -->
+  <h3>Greens</h3>
+  <div class="color-grid">
+    <div class="color-swatch"><div class="swatch" style="background:#1b4332;"></div><div class="info"><div class="hex">#1B4332</div><div class="usage">900 &mdash; darkest</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#245c3e;"></div><div class="info"><div class="hex">#245C3E</div><div class="usage">800</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#2d6a4f;"></div><div class="info"><div class="hex">#2D6A4F</div><div class="usage">700 &mdash; primary</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#2e7d32;"></div><div class="info"><div class="hex">#2E7D32</div><div class="usage">600 &mdash; success</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#388e3c;"></div><div class="info"><div class="hex">#388E3C</div><div class="usage">500</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#4caf50;"></div><div class="info"><div class="hex">#4CAF50</div><div class="usage">300</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#a5d6a7;"></div><div class="info"><div class="hex">#A5D6A7</div><div class="usage">200</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#c8e6c9;"></div><div class="info"><div class="hex">#C8E6C9</div><div class="usage">100</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#e8f5e9;"></div><div class="info"><div class="hex">#E8F5E9</div><div class="usage">50 &mdash; hover bg</div></div></div>
+  </div>
+
+  <!-- Semantic -->
+  <h3>Semantic Colors</h3>
+  <div class="color-grid">
+    <div class="color-swatch"><div class="swatch" style="background:#d32f2f;"></div><div class="info"><div class="hex">#D32F2F</div><div class="usage">Error / destructive</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#c62828;"></div><div class="info"><div class="hex">#C62828</div><div class="usage">Error toast</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#fdecea;"></div><div class="info"><div class="hex">#FDECEA</div><div class="usage">Error bg</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#ff9800;"></div><div class="info"><div class="hex">#FF9800</div><div class="usage">Warning</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#e65100;"></div><div class="info"><div class="hex">#E65100</div><div class="usage">Warning text</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#fff3e0;"></div><div class="info"><div class="hex">#FFF3E0</div><div class="usage">Warning bg</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#1565c0;"></div><div class="info"><div class="hex">#1565C0</div><div class="usage">Info</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#2e7d32;"></div><div class="info"><div class="hex">#2E7D32</div><div class="usage">Success</div></div></div>
+  </div>
+
+  <!-- Golds -->
+  <h3>Golds &amp; Yellows</h3>
+  <div class="color-grid">
+    <div class="color-swatch"><div class="swatch" style="background:#d4a017;"></div><div class="info"><div class="hex">#D4A017</div><div class="usage">Gold &mdash; achievements</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#b8860b;"></div><div class="info"><div class="hex">#B8860B</div><div class="usage">Dark gold</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#e9c46a;"></div><div class="info"><div class="hex">#E9C46A</div><div class="usage">Logo gold (light)</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#d4a373;"></div><div class="info"><div class="hex">#D4A373</div><div class="usage">Logo gold (dark)</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#fff8e1;"></div><div class="info"><div class="hex">#FFF8E1</div><div class="usage">Yellow bg</div></div></div>
+  </div>
+
+  <!-- Neutrals -->
+  <h3>Neutrals</h3>
+  <div class="color-grid">
+    <div class="color-swatch"><div class="swatch" style="background:#222;"></div><div class="info"><div class="hex">#222222</div><div class="usage">Body text</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#333;"></div><div class="info"><div class="hex">#333333</div><div class="usage">Secondary text</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#555;"></div><div class="info"><div class="hex">#555555</div><div class="usage">Medium text</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#888;"></div><div class="info"><div class="hex">#888888</div><div class="usage">Muted / placeholder</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#ccc;"></div><div class="info"><div class="hex">#CCCCCC</div><div class="usage">Borders</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#ddd;"></div><div class="info"><div class="hex">#DDDDDD</div><div class="usage">Light borders</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#e0e0e0;"></div><div class="info"><div class="hex">#E0E0E0</div><div class="usage">Dividers</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#f0f0f0;"></div><div class="info"><div class="hex">#F0F0F0</div><div class="usage">Light bg</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#f5f5f5;"></div><div class="info"><div class="hex">#F5F5F5</div><div class="usage">Card bg</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#f0f4f8; border:1px solid #e0e0e0;"></div><div class="info"><div class="hex">#F0F4F8</div><div class="usage">Page bg</div></div></div>
+    <div class="color-swatch"><div class="swatch" style="background:#fff; border:1px solid #e0e0e0;"></div><div class="info"><div class="hex">#FFFFFF</div><div class="usage">White</div></div></div>
+  </div>
+
+  <!-- ============ LOGO USAGE ============ -->
+  <h2>Logo Usage Guidelines</h2>
+  <div class="brand-row">
+    <div class="brand-card">
+      <strong>Minimum Size</strong><br>
+      App icon: 48px<br>
+      Full logo: 120px wide
+    </div>
+    <div class="brand-card">
+      <strong>Clear Space</strong><br>
+      Maintain padding equal to the height of the "C" in CATCH around all sides
+    </div>
+    <div class="brand-card">
+      <strong>Backgrounds</strong><br>
+      Use on dark green (#1B4332) or dark backgrounds only. Never place on light backgrounds without the dark container.
+    </div>
+    <div class="brand-card">
+      <strong>Don't</strong><br>
+      Stretch, rotate, recolor, add drop shadows, or place on busy backgrounds
+    </div>
+  </div>
+
+  <!-- ============ APP ICON SIZES ============ -->
+  <h2>Required Icon Sizes</h2>
+  <table style="width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+    <thead><tr style="background:#1b4332; color:#fff; text-align:left;">
+      <th style="padding:12px 16px;">Platform</th><th style="padding:12px 16px;">Size</th><th style="padding:12px 16px;">Usage</th>
+    </tr></thead>
+    <tbody>
+      <tr><td style="padding:10px 16px; border-bottom:1px solid #eee;">Web (PWA)</td><td style="padding:10px 16px; border-bottom:1px solid #eee;">192x192, 512x512</td><td style="padding:10px 16px; border-bottom:1px solid #eee;">manifest icons</td></tr>
+      <tr><td style="padding:10px 16px; border-bottom:1px solid #eee;">Android</td><td style="padding:10px 16px; border-bottom:1px solid #eee;">48, 72, 96, 144, 192, 512</td><td style="padding:10px 16px; border-bottom:1px solid #eee;">launcher icons (mdpi&ndash;xxxhdpi)</td></tr>
+      <tr><td style="padding:10px 16px; border-bottom:1px solid #eee;">iOS</td><td style="padding:10px 16px; border-bottom:1px solid #eee;">180, 1024</td><td style="padding:10px 16px; border-bottom:1px solid #eee;">app icon, App Store</td></tr>
+      <tr><td style="padding:10px 16px; border-bottom:1px solid #eee;">Google Play</td><td style="padding:10px 16px; border-bottom:1px solid #eee;">512x512</td><td style="padding:10px 16px; border-bottom:1px solid #eee;">store listing</td></tr>
+      <tr><td style="padding:10px 16px; border-bottom:1px solid #eee;">Apple App Store</td><td style="padding:10px 16px; border-bottom:1px solid #eee;">1024x1024</td><td style="padding:10px 16px; border-bottom:1px solid #eee;">store listing</td></tr>
+      <tr><td style="padding:10px 16px;">Favicon</td><td style="padding:10px 16px;">32x32, 16x16</td><td style="padding:10px 16px;">browser tab</td></tr>
+    </tbody>
+  </table>
+
+</div>
+
+<script>
+// ---- SVG sources ----
+const iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+  <defs>
+    <linearGradient id="aiBg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1b4332"/><stop offset="100%" stop-color="#2d6a4f"/></linearGradient>
+    <linearGradient id="aiGold" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#e9c46a"/><stop offset="100%" stop-color="#d4a373"/></linearGradient>
+    <linearGradient id="aiGreen" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#52b788"/><stop offset="100%" stop-color="#40916c"/></linearGradient>
+  </defs>
+  <rect x="0" y="0" width="160" height="160" rx="36" fill="url(#aiBg)"/>
+  <circle cx="80" cy="62" r="38" fill="none" stroke="url(#aiGold)" stroke-width="2"/>
+  <circle cx="80" cy="62" r="33" fill="none" stroke="url(#aiGold)" stroke-width="0.8" opacity="0.3"/>
+  <g transform="translate(71, 62) scale(1.1)">
+    <path d="M-22 0 Q-12 -16 5 -12 Q18 -8 28 0 Q18 8 5 12 Q-12 16 -22 0 Z" fill="url(#aiGold)" opacity="0.9"/>
+    <path d="M28 0 L38 -9 L38 9 Z" fill="url(#aiGold)" opacity="0.9"/>
+    <circle cx="-6" cy="-3" r="2.5" fill="#1b4332"/>
+    <path d="M-2 -4 Q3 -6 8 -4" fill="none" stroke="url(#aiGreen)" stroke-width="0.7" opacity="0.6"/>
+    <path d="M0 0 Q5 -2 10 0" fill="none" stroke="url(#aiGreen)" stroke-width="0.7" opacity="0.5"/>
+    <path d="M-2 4 Q3 2 8 4" fill="none" stroke="url(#aiGreen)" stroke-width="0.7" opacity="0.4"/>
+  </g>
+  <text x="80" y="118" font-family="'Fredoka', sans-serif" font-size="13" font-weight="bold" fill="#fefae0" text-anchor="middle" letter-spacing="3">CATCH</text>
+  <text x="80" y="134" font-family="'Fredoka', sans-serif" font-size="13" font-weight="bold" fill="url(#aiGold)" text-anchor="middle" letter-spacing="3">DADDY</text>
+</svg>`;
+
+const fullSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1b4332"/><stop offset="100%" stop-color="#2d6a4f"/></linearGradient>
+    <linearGradient id="gold2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#e9c46a"/><stop offset="100%" stop-color="#d4a373"/></linearGradient>
+    <linearGradient id="green2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#52b788"/><stop offset="100%" stop-color="#40916c"/></linearGradient>
+  </defs>
+  <rect x="0" y="0" width="300" height="200" rx="12" fill="url(#bg2)"/>
+  <circle cx="150" cy="70" r="48" fill="none" stroke="url(#gold2)" stroke-width="2.5"/>
+  <circle cx="150" cy="70" r="42" fill="none" stroke="url(#gold2)" stroke-width="1" opacity="0.3"/>
+  <g transform="translate(139, 68) scale(1.4)">
+    <path d="M-22 0 Q-12 -16 5 -12 Q18 -8 28 0 Q18 8 5 12 Q-12 16 -22 0 Z" fill="url(#gold2)" opacity="0.9"/>
+    <path d="M28 0 L38 -9 L38 9 Z" fill="url(#gold2)" opacity="0.9"/>
+    <circle cx="-6" cy="-3" r="3" fill="#1b4332"/>
+    <path d="M-2 -4 Q3 -6 8 -4" fill="none" stroke="url(#green2)" stroke-width="0.8" opacity="0.6"/>
+    <path d="M0 0 Q5 -2 10 0" fill="none" stroke="url(#green2)" stroke-width="0.8" opacity="0.5"/>
+    <path d="M-2 4 Q3 2 8 4" fill="none" stroke="url(#green2)" stroke-width="0.8" opacity="0.4"/>
+  </g>
+  <line x1="40" y1="132" x2="100" y2="132" stroke="url(#gold2)" stroke-width="1" opacity="0.25"/>
+  <line x1="200" y1="132" x2="260" y2="132" stroke="url(#gold2)" stroke-width="1" opacity="0.25"/>
+  <text x="150" y="148" font-family="'Fredoka', sans-serif" font-size="28" font-weight="bold" fill="#fefae0" letter-spacing="5" text-anchor="middle">CATCH</text>
+  <text x="150" y="172" font-family="'Fredoka', sans-serif" font-size="28" font-weight="bold" fill="url(#gold2)" letter-spacing="5" text-anchor="middle">DADDY</text>
+  <text x="150" y="192" font-family="'Helvetica Neue', sans-serif" font-size="8" fill="#95d5b2" letter-spacing="4" text-anchor="middle">SMART FISHING COMPANION</text>
+</svg>`;
+
+// ---- Download helpers ----
+function downloadBlob(blob, filename) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function downloadSVG(svgString, filename) {
+  downloadBlob(new Blob([svgString], {type: 'image/svg+xml'}), filename);
+}
+
+function svgToPNG(svgString, width, height, filename) {
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  const svgBlob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
+  const url = URL.createObjectURL(svgBlob);
+  img.onload = () => {
+    ctx.drawImage(img, 0, 0, width, height);
+    URL.revokeObjectURL(url);
+    canvas.toBlob(blob => downloadBlob(blob, filename), 'image/png');
+  };
+  img.src = url;
+}
+
+// ---- Wire up buttons ----
+document.getElementById('dl-full-svg').addEventListener('click', e => { e.preventDefault(); downloadSVG(fullSVG, 'catchdaddy-logo-full.svg'); });
+document.getElementById('dl-icon-svg').addEventListener('click', e => { e.preventDefault(); downloadSVG(iconSVG, 'catchdaddy-icon.svg'); });
+document.getElementById('dl-full-png').addEventListener('click', e => { e.preventDefault(); svgToPNG(fullSVG, 1200, 800, 'catchdaddy-logo-full-1200.png'); });
+document.getElementById('dl-icon-png-512').addEventListener('click', e => { e.preventDefault(); svgToPNG(iconSVG, 512, 512, 'catchdaddy-icon-512.png'); });
+document.getElementById('dl-icon-png-192').addEventListener('click', e => { e.preventDefault(); svgToPNG(iconSVG, 192, 192, 'catchdaddy-icon-192.png'); });
+document.getElementById('dl-icon-png-1024').addEventListener('click', e => { e.preventDefault(); svgToPNG(iconSVG, 1024, 1024, 'catchdaddy-icon-1024.png'); });
+</script>
+</body>
+</html>

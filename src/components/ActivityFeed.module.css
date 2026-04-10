@@ -4,7 +4,7 @@
   padding: 0 1rem;
 }
 
-.heading { color: #1b4332; margin: 0 0 1rem; }
+.heading { color: var(--color-green-900); margin: 0 0 1rem; }
 
 .tabs {
   display: flex;
@@ -14,22 +14,22 @@
 
 .tab {
   padding: 0.5rem 1.25rem;
-  border: 1.5px solid #ccc;
+  border: 1.5px solid var(--color-gray-200);
   border-radius: 20px;
-  background: #fff;
-  color: #666;
+  background: var(--color-white);
+  color: var(--color-gray-600);
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
 }
 
-.tab:hover { border-color: #2d6a4f; color: #2d6a4f; }
+.tab:hover { border-color: var(--color-green-700); color: var(--color-green-700); }
 
 .tabActive {
-  background: #2d6a4f !important;
-  color: #fff !important;
-  border-color: #2d6a4f !important;
+  background: var(--color-green-700) !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-green-700) !important;
 }
 
 .feedList {
@@ -38,16 +38,16 @@
   gap: 1rem;
 }
 
-.empty { text-align: center; color: #888; padding: 3rem 1rem; }
-.loadingText { text-align: center; color: #888; padding: 1rem; }
+.empty { text-align: center; color: var(--color-gray-400); padding: 3rem 1rem; }
+.loadingText { text-align: center; color: var(--color-gray-400); padding: 1rem; }
 
 .loadMoreBtn {
   display: block;
   margin: 1.5rem auto;
   padding: 0.6rem 2rem;
-  background: #fff;
-  border: 1.5px solid #2d6a4f;
-  color: #2d6a4f;
+  background: var(--color-white);
+  border: 1.5px solid var(--color-green-700);
+  color: var(--color-green-700);
   border-radius: 8px;
   font-size: 0.9rem;
   font-weight: 600;
@@ -55,7 +55,7 @@
   transition: background 0.2s;
 }
 
-.loadMoreBtn:hover { background: #e8f5e9; }
+.loadMoreBtn:hover { background: var(--color-green-50); }
 
 .filters {
   display: flex;
@@ -66,25 +66,25 @@
 
 .filterSelect {
   padding: 0.5rem 0.75rem;
-  border: 1.5px solid #ddd;
+  border: 1.5px solid var(--color-gray-175);
   border-radius: 8px;
   font-size: 0.85rem;
-  background: #fff;
-  color: #333;
+  background: var(--color-white);
+  color: var(--color-gray-900);
   min-width: 160px;
   cursor: pointer;
 }
 
 .filterSelect:focus {
   outline: none;
-  border-color: #2d6a4f;
+  border-color: var(--color-green-700);
 }
 
 .filterSearch {
   flex: 1;
   min-width: 180px;
   padding: 0.5rem 0.75rem;
-  border: 1.5px solid #ddd;
+  border: 1.5px solid var(--color-gray-175);
   border-radius: 8px;
   font-size: 0.85rem;
   font-family: inherit;
@@ -92,7 +92,7 @@
 
 .filterSearch:focus {
   outline: none;
-  border-color: #2d6a4f;
+  border-color: var(--color-green-700);
   box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
 }
 
@@ -102,7 +102,7 @@
 
 .endText {
   text-align: center;
-  color: #aaa;
+  color: var(--color-gray-300);
   font-size: 0.85rem;
   padding: 1.5rem;
 }

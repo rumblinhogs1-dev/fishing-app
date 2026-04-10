@@ -7,11 +7,11 @@
 .heading {
   margin: 0 0 0.25rem;
   font-size: 1.4rem;
-  color: #222;
+  color: var(--color-black);
 }
 
 .subtitle {
-  color: #888;
+  color: var(--color-gray-400);
   font-size: 0.85rem;
   margin: 0 0 1.25rem;
 }
@@ -20,15 +20,15 @@
   padding: 0.65rem 0.85rem;
   margin-bottom: 1.25rem;
   border-radius: 8px;
-  background: #fff8e1;
-  border: 1px solid #ffe0b2;
+  background: var(--color-yellow-50);
+  border: 1px solid var(--color-orange-100);
   font-size: 0.8rem;
   line-height: 1.45;
-  color: #6d4c00;
+  color: var(--color-gold-500);
 }
 
 .topDisclaimer strong {
-  color: #e65100;
+  color: var(--color-orange-900);
 }
 
 .modeToggle {
@@ -40,25 +40,25 @@
 .modeBtn {
   flex: 1;
   padding: 0.6rem;
-  border: 1.5px solid #ddd;
+  border: 1.5px solid var(--color-gray-175);
   border-radius: 8px;
-  background: #fafafa;
+  background: var(--color-gray-bg-neutral);
   font-size: 0.85rem;
   font-weight: 600;
-  color: #555;
+  color: var(--color-gray-700);
   cursor: pointer;
   transition: all 0.15s;
 }
 
 .modeBtn:hover {
-  border-color: #2d6a4f;
-  color: #2d6a4f;
+  border-color: var(--color-green-700);
+  color: var(--color-green-700);
 }
 
 .modeBtnActive {
-  border-color: #2d6a4f;
-  background: #e8f5e9;
-  color: #2d6a4f;
+  border-color: var(--color-green-700);
+  background: var(--color-green-50);
+  color: var(--color-green-700);
 }
 
 .gpsSection {
@@ -74,10 +74,10 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 0.7rem;
-  border: 1.5px dashed #2d6a4f;
+  border: 1.5px dashed var(--color-green-700);
   border-radius: 8px;
-  background: #f8fbff;
-  color: #2d6a4f;
+  background: var(--color-blue-bg-3);
+  color: var(--color-green-700);
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;
@@ -85,7 +85,7 @@
 }
 
 .gpsBtn:hover {
-  background: #e8f5e9;
+  background: var(--color-green-50);
 }
 
 .gpsBtn:disabled {
@@ -97,7 +97,7 @@
   display: inline-block;
   width: 16px;
   height: 16px;
-  border: 2px solid #2d6a4f;
+  border: 2px solid var(--color-green-700);
   border-top-color: transparent;
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
@@ -109,13 +109,13 @@
 
 .gpsInfo {
   font-size: 0.8rem;
-  color: #888;
+  color: var(--color-gray-400);
   text-align: center;
 }
 
 .gpsError {
   font-size: 0.8rem;
-  color: #d32f2f;
+  color: var(--color-red-700);
   text-align: center;
 }
 
@@ -126,11 +126,11 @@
 .stateSelect {
   width: 100%;
   padding: 0.6rem;
-  border: 1.5px solid #ddd;
+  border: 1.5px solid var(--color-gray-175);
   border-radius: 8px;
   font-size: 0.9rem;
-  color: #333;
-  background: #fff;
+  color: var(--color-gray-900);
+  background: var(--color-white);
 }
 
 .stateHeader {
@@ -139,18 +139,18 @@
   align-items: center;
   margin-bottom: 0.75rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-gray-100);
 }
 
 .stateName {
   margin: 0;
   font-size: 1.1rem;
-  color: #222;
+  color: var(--color-black);
 }
 
 .agencyLink {
   font-size: 0.75rem;
-  color: #2d6a4f;
+  color: var(--color-green-700);
   text-decoration: none;
 }
 
@@ -165,13 +165,13 @@
   padding: 0.5rem 0.75rem;
   margin-bottom: 1rem;
   border-radius: 8px;
-  background: #fff8e1;
+  background: var(--color-yellow-50);
   font-size: 0.8rem;
-  color: #e65100;
+  color: var(--color-orange-900);
 }
 
 .licenseLink {
-  color: #e65100;
+  color: var(--color-orange-900);
   font-weight: 600;
 }
 
@@ -185,7 +185,7 @@
 .aiSection {
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--color-gray-100);
 }
 
 .aiBtn {
@@ -193,8 +193,8 @@
   padding: 0.7rem;
   border: none;
   border-radius: 8px;
-  background: #2d6a4f;
-  color: #fff;
+  background: var(--color-green-700);
+  color: var(--color-white);
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
@@ -202,7 +202,7 @@
 }
 
 .aiBtn:hover {
-  background: #1558b0;
+  background: var(--color-blue-700);
 }
 
 .aiBtn:disabled {
@@ -214,14 +214,14 @@
   margin-top: 1rem;
   padding: 1rem;
   border-radius: 8px;
-  background: #f8fbff;
-  border: 1px solid #e0e0e0;
+  background: var(--color-blue-bg-3);
+  border: 1px solid var(--color-gray-150);
 }
 
 .aiSummary {
   font-size: 0.85rem;
   line-height: 1.5;
-  color: #333;
+  color: var(--color-gray-900);
   margin: 0 0 0.75rem;
 }
 
@@ -237,22 +237,22 @@
 .aiRuleItem {
   padding: 0.4rem 0.6rem;
   border-radius: 6px;
-  background: #fff;
+  background: var(--color-white);
   font-size: 0.8rem;
-  color: #444;
-  border-left: 3px solid #2d6a4f;
+  color: var(--color-gray-800);
+  border-left: 3px solid var(--color-green-700);
 }
 
-.aiRuleItem[data-type="limit"] { border-left-color: #4caf50; }
-.aiRuleItem[data-type="season"] { border-left-color: #ff9800; }
-.aiRuleItem[data-type="gear"] { border-left-color: #9c27b0; }
-.aiRuleItem[data-type="license"] { border-left-color: #2d6a4f; }
+.aiRuleItem[data-type="limit"] { border-left-color: var(--color-green-300); }
+.aiRuleItem[data-type="season"] { border-left-color: var(--color-orange-500); }
+.aiRuleItem[data-type="gear"] { border-left-color: var(--color-purple-500); }
+.aiRuleItem[data-type="license"] { border-left-color: var(--color-green-700); }
 
 .aiSource {
   display: block;
   margin-top: 0.5rem;
   font-size: 0.75rem;
-  color: #2d6a4f;
+  color: var(--color-green-700);
   text-decoration: none;
 }
 
@@ -263,7 +263,7 @@
 .aiDisclaimer {
   margin-top: 0.5rem;
   font-size: 0.7rem;
-  color: #aaa;
+  color: var(--color-gray-300);
   font-style: italic;
 }
 
@@ -271,19 +271,19 @@
   margin-top: 0.75rem;
   padding: 0.5rem 0.75rem;
   border-radius: 8px;
-  background: #fdecea;
+  background: var(--color-red-50);
   font-size: 0.8rem;
-  color: #d32f2f;
+  color: var(--color-red-700);
 }
 
 .disclaimer {
   margin-top: 1rem;
   padding: 0.75rem;
   border-radius: 8px;
-  background: #fafafa;
-  border: 1px solid #eee;
+  background: var(--color-gray-bg-neutral);
+  border: 1px solid var(--color-gray-100);
   font-size: 0.75rem;
-  color: #999;
+  color: var(--color-gray-350);
   font-style: italic;
   text-align: center;
 }
@@ -291,7 +291,7 @@
 .empty {
   text-align: center;
   padding: 2rem;
-  color: #aaa;
+  color: var(--color-gray-300);
   font-size: 0.9rem;
 }
 
@@ -302,12 +302,12 @@
 .filterInput {
   width: 100%;
   padding: 0.5rem 0.75rem;
-  border: 1.5px solid #ddd;
+  border: 1.5px solid var(--color-gray-175);
   border-radius: 8px;
   font-size: 0.85rem;
   box-sizing: border-box;
 }
 
 .filterInput::placeholder {
-  color: #bbb;
+  color: var(--color-gray-250);
 }

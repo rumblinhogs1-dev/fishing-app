@@ -1,0 +1,239 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 16px;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-green-900);
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: var(--color-gray-600);
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--color-gray-150);
+}
+
+.tab {
+  padding: 10px 20px;
+  border: none;
+  background: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-gray-600);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.2s;
+}
+
+.tab:hover {
+  color: var(--color-green-700);
+}
+
+.tab.active {
+  color: var(--color-green-700);
+  border-bottom-color: var(--color-green-700);
+}
+
+/* Filters */
+.filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.filterBtn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--color-gray-200);
+  background: var(--color-white);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-gray-700);
+  cursor: pointer;
+  text-transform: capitalize;
+  transition: all 0.2s;
+}
+
+.filterBtn:hover {
+  border-color: var(--color-green-700);
+  color: var(--color-green-700);
+}
+
+.filterBtn.activeFilter {
+  background: var(--color-green-700);
+  border-color: var(--color-green-700);
+  color: var(--color-white);
+}
+
+/* Cards */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card {
+  background: var(--color-white);
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--color-gray-50);
+  border-bottom: 1px solid var(--color-gray-150);
+}
+
+.cardMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--color-gray-600);
+}
+
+.cardId {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.75rem;
+  color: var(--color-gray-400);
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cardBody {
+  padding: 14px 16px;
+}
+
+.field {
+  margin-bottom: 10px;
+}
+
+.field:last-child {
+  margin-bottom: 0;
+}
+
+.fieldLabel {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.fieldValue {
+  font-size: 0.85rem;
+  color: var(--color-gray-900);
+}
+
+.fieldRow {
+  display: flex;
+  gap: 24px;
+}
+
+.mono {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.8rem;
+}
+
+.flaggedText {
+  background: var(--color-red-50);
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: block;
+  font-size: 0.85rem;
+  border-left: 3px solid var(--color-red-700);
+}
+
+.muted {
+  color: var(--color-gray-400);
+}
+
+/* Actions */
+.cardActions {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--color-gray-150);
+  background: var(--color-gray-50);
+}
+
+.reviewBtn {
+  padding: 7px 16px;
+  border-radius: 6px;
+  border: none;
+  background: var(--color-green-700);
+  color: var(--color-white);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.reviewBtn:hover {
+  background: var(--color-green-900);
+}
+
+.dismissBtn {
+  padding: 7px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--color-gray-200);
+  background: var(--color-white);
+  color: var(--color-gray-700);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dismissBtn:hover {
+  border-color: var(--color-red-700);
+  color: var(--color-red-700);
+}
+
+/* States */
+.loading {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--color-gray-600);
+  font-size: 0.9rem;
+}
+
+.empty {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--color-gray-400);
+}
+
+.empty p {
+  font-size: 0.95rem;
+}

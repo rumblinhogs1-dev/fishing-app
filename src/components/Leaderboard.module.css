@@ -4,7 +4,7 @@
   padding: 0 1rem;
 }
 
-.heading { color: #1b4332; margin: 0 0 1rem; }
+.heading { color: var(--color-green-900); margin: 0 0 1rem; }
 
 .tabs {
   display: flex;
@@ -14,22 +14,22 @@
 
 .tab {
   padding: 0.5rem 1.25rem;
-  border: 1.5px solid #ccc;
+  border: 1.5px solid var(--color-gray-200);
   border-radius: 20px;
-  background: #fff;
-  color: #666;
+  background: var(--color-white);
+  color: var(--color-gray-600);
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
 }
 
-.tab:hover { border-color: #2d6a4f; color: #2d6a4f; }
+.tab:hover { border-color: var(--color-green-700); color: var(--color-green-700); }
 
 .tabActive {
-  background: #2d6a4f !important;
-  color: #fff !important;
-  border-color: #2d6a4f !important;
+  background: var(--color-green-700) !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-green-700) !important;
 }
 
 .categories {
@@ -41,10 +41,10 @@
 
 .categoryBtn {
   padding: 0.4rem 1rem;
-  border: 1.5px solid #ddd;
+  border: 1.5px solid var(--color-gray-175);
   border-radius: 8px;
-  background: #fff;
-  color: #555;
+  background: var(--color-white);
+  color: var(--color-gray-700);
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
@@ -52,28 +52,28 @@
 }
 
 .categoryBtn:hover {
-  border-color: #2d6a4f;
-  color: #2d6a4f;
+  border-color: var(--color-green-700);
+  color: var(--color-green-700);
 }
 
 .categoryActive {
-  background: #e8f5e9 !important;
-  color: #2d6a4f !important;
-  border-color: #2d6a4f !important;
+  background: var(--color-green-50) !important;
+  color: var(--color-green-700) !important;
+  border-color: var(--color-green-700) !important;
 }
 
 .regionLabel {
   font-size: 0.85rem;
-  color: #2d6a4f;
+  color: var(--color-green-700);
   font-weight: 500;
   margin: -0.5rem 0 1rem;
 }
 
-.loadingText { text-align: center; color: #888; padding: 2rem; }
-.empty { text-align: center; color: #888; padding: 3rem 1rem; }
+.loadingText { text-align: center; color: var(--color-gray-400); padding: 2rem; }
+.empty { text-align: center; color: var(--color-gray-400); padding: 3rem 1rem; }
 
 .rankList {
-  background: #fff;
+  background: var(--color-white);
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
   overflow: hidden;
@@ -84,7 +84,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-gray-75);
 }
 
 .rankRow:last-child {
@@ -92,8 +92,8 @@
 }
 
 .rankHighlight {
-  border-left: 3px solid #2d6a4f;
-  background: #f0f6ff;
+  border-left: 3px solid var(--color-green-700);
+  background: var(--color-blue-bg-1);
 }
 
 .rankNum {
@@ -101,7 +101,7 @@
   text-align: center;
   font-weight: 700;
   font-size: 1rem;
-  color: #888;
+  color: var(--color-gray-400);
   flex-shrink: 0;
 }
 
@@ -117,8 +117,8 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #2d6a4f;
-  color: #fff;
+  background: var(--color-green-700);
+  color: var(--color-white);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -134,7 +134,7 @@
 
 .rankName {
   font-weight: 600;
-  color: #222;
+  color: var(--color-black);
   text-decoration: none;
   font-size: 0.9rem;
   display: flex;
@@ -142,11 +142,11 @@
   gap: 0.4rem;
 }
 
-.rankName:hover { color: #2d6a4f; }
+.rankName:hover { color: var(--color-green-700); }
 
 .youBadge {
-  background: #2d6a4f;
-  color: #fff;
+  background: var(--color-green-700);
+  color: var(--color-white);
   font-size: 0.65rem;
   font-weight: 700;
   padding: 0.1rem 0.4rem;
@@ -155,13 +155,13 @@
 
 .rankSpecies {
   font-size: 0.75rem;
-  color: #888;
+  color: var(--color-gray-400);
 }
 
 .rankValue {
   font-weight: 700;
   font-size: 0.95rem;
-  color: #1b4332;
+  color: var(--color-green-900);
   white-space: nowrap;
 }
 

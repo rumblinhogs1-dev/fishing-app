@@ -10,7 +10,7 @@
 }
 
 .modal {
-  background: #fff;
+  background: var(--color-white);
   border-radius: 12px;
   padding: 1.5rem;
   width: 100%;
@@ -20,14 +20,14 @@
 
 .title {
   margin: 0 0 0.25rem;
-  color: #1b4332;
+  color: var(--color-green-900);
   font-size: 1.2rem;
 }
 
 .coords {
   margin: 0 0 1rem;
   font-size: 0.8rem;
-  color: #888;
+  color: var(--color-gray-400);
   font-family: monospace;
 }
 
@@ -35,7 +35,7 @@
   display: block;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #333;
+  color: var(--color-gray-900);
   margin-bottom: 0.75rem;
 }
 
@@ -45,7 +45,7 @@
   width: 100%;
   margin-top: 0.3rem;
   padding: 0.6rem 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-gray-175);
   border-radius: 8px;
   font-size: 0.95rem;
   font-family: inherit;
@@ -55,7 +55,7 @@
 .input:focus,
 .textarea:focus {
   outline: none;
-  border-color: #2d6a4f;
+  border-color: var(--color-green-700);
   box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
 }
 
@@ -72,10 +72,10 @@
 
 .cancelBtn {
   padding: 0.5rem 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-gray-175);
   border-radius: 8px;
-  background: #fff;
-  color: #666;
+  background: var(--color-white);
+  color: var(--color-gray-600);
   font-weight: 500;
   font-size: 0.9rem;
   cursor: pointer;
@@ -83,15 +83,15 @@
 }
 
 .cancelBtn:hover {
-  background: #f5f5f5;
+  background: var(--color-gray-50);
 }
 
 .saveBtn {
   padding: 0.5rem 1.25rem;
   border: none;
   border-radius: 8px;
-  background: #d4a017;
-  color: #fff;
+  background: var(--color-gold-600);
+  color: var(--color-white);
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;
@@ -99,7 +99,7 @@
 }
 
 .saveBtn:hover {
-  background: #b8860b;
+  background: var(--color-gold-700);
 }
 
 .saveBtn:disabled {

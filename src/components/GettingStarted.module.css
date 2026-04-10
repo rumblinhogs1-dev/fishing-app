@@ -1,6 +1,6 @@
 .card {
-  background: #fff;
-  border: 1px solid #e0e0e0;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-150);
   border-radius: 12px;
   padding: 1rem 1.25rem;
   margin-bottom: 1rem;
@@ -17,21 +17,21 @@
 .title {
   margin: 0;
   font-size: 1.05rem;
-  color: #1b4332;
+  color: var(--color-green-900);
 }
 
 .closeBtn {
   background: none;
   border: none;
   font-size: 1.4rem;
-  color: #999;
+  color: var(--color-gray-350);
   cursor: pointer;
   padding: 0 0.25rem;
   line-height: 1;
 }
 
 .closeBtn:hover {
-  color: #333;
+  color: var(--color-gray-900);
 }
 
 .progressWrap {
@@ -44,21 +44,21 @@
 .progressTrack {
   flex: 1;
   height: 6px;
-  background: #e8eaf6;
+  background: var(--color-indigo-50);
   border-radius: 3px;
   overflow: hidden;
 }
 
 .progressFill {
   height: 100%;
-  background: #2d6a4f;
+  background: var(--color-green-700);
   border-radius: 3px;
   transition: width 0.3s ease;
 }
 
 .progressText {
   font-size: 0.8rem;
-  color: #888;
+  color: var(--color-gray-400);
   white-space: nowrap;
 }
 
@@ -73,7 +73,7 @@
   align-items: center;
   gap: 0.6rem;
   padding: 0.5rem 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-gray-75);
 }
 
 .item:last-child {
@@ -84,7 +84,7 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  border: 2px solid #ddd;
+  border: 2px solid var(--color-gray-175);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -95,27 +95,27 @@
 }
 
 .itemDone .check {
-  background: #4caf50;
-  border-color: #4caf50;
-  color: #fff;
+  background: var(--color-green-300);
+  border-color: var(--color-green-300);
+  color: var(--color-white);
 }
 
 .label {
   flex: 1;
   font-size: 0.9rem;
-  color: #333;
+  color: var(--color-gray-900);
 }
 
 .itemDone .label {
   text-decoration: line-through;
-  color: #999;
+  color: var(--color-gray-350);
 }
 
 .goBtn {
   padding: 0.25rem 0.75rem;
   border-radius: 6px;
-  background: #e8eaf6;
-  color: #2d6a4f;
+  background: var(--color-indigo-50);
+  color: var(--color-green-700);
   font-size: 0.8rem;
   font-weight: 600;
   text-decoration: none;
@@ -123,5 +123,5 @@
 }
 
 .goBtn:hover {
-  background: #c5cae9;
+  background: var(--color-indigo-100);
 }

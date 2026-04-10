@@ -5,6 +5,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { ConfirmProvider } from './contexts/ConfirmContext';
 import * as Sentry from '@sentry/react';
+import './styles/variables.css';
 import App from './App.jsx';
 
 Sentry.init({

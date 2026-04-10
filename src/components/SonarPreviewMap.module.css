@@ -3,7 +3,7 @@
   height: 300px;
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid var(--border, #e0e0e0);
+  border: 1px solid var(--border, var(--color-gray-150));
 }
 
 .container :global(.leaflet-container) {

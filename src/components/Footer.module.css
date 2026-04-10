@@ -2,8 +2,8 @@
   text-align: center;
   padding: 1.5rem 1rem;
   margin-top: 2rem;
-  border-top: 1px solid #ddd;
-  background: #f8f9fa;
+  border-top: 1px solid var(--color-gray-175);
+  background: var(--color-gray-bg-warm);
 }
 
 .links {
@@ -16,7 +16,7 @@
 }
 
 .links a {
-  color: #2d6a4f;
+  color: var(--color-green-700);
   text-decoration: none;
   font-size: 0.85rem;
   font-weight: 500;
@@ -27,12 +27,12 @@
 }
 
 .divider {
-  color: #ccc;
+  color: var(--color-gray-200);
   font-size: 0.8rem;
 }
 
 .copy {
-  color: #888;
+  color: var(--color-gray-400);
   font-size: 0.78rem;
   margin: 0;
 }
@@ -41,13 +41,13 @@
 .subscribe {
   margin-bottom: 1.25rem;
   padding-bottom: 1.25rem;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--color-gray-175);
 }
 
 .subHeading {
   font-size: 0.9rem;
   font-weight: 700;
-  color: #1b4332;
+  color: var(--color-green-900);
   margin-bottom: 0.5rem;
 }
 
@@ -61,7 +61,7 @@
 .subInput {
   flex: 1;
   padding: 0.55rem 0.75rem;
-  border: 1.5px solid #ccc;
+  border: 1.5px solid var(--color-gray-200);
   border-radius: 8px;
   font-size: 0.85rem;
   outline: none;
@@ -69,12 +69,12 @@
 }
 
 .subInput:focus {
-  border-color: #2d6a4f;
+  border-color: var(--color-green-700);
 }
 
 .subBtn {
-  background: #2d6a4f;
-  color: #fff;
+  background: var(--color-green-700);
+  color: var(--color-white);
   font-weight: 700;
   font-size: 0.85rem;
   padding: 0.55rem 1.1rem;
@@ -86,7 +86,7 @@
 }
 
 .subBtn:hover {
-  background: #1b4332;
+  background: var(--color-green-900);
 }
 
 .subBtn:disabled {
@@ -95,13 +95,13 @@
 }
 
 .subSuccess {
-  color: #2d6a4f;
+  color: var(--color-green-700);
   font-size: 0.8rem;
   margin-top: 0.4rem;
 }
 
 .subError {
-  color: #e76f51;
+  color: var(--color-red-500);
   font-size: 0.8rem;
   margin-top: 0.4rem;
 }
@@ -110,17 +110,17 @@
 .contact {
   margin-bottom: 0.75rem;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--color-gray-175);
 }
 
 .contact p {
   font-size: 0.85rem;
-  color: #555;
+  color: var(--color-gray-700);
   margin: 0 0 0.2rem;
 }
 
 .contact a {
-  color: #2d6a4f;
+  color: var(--color-green-700);
   font-weight: 600;
   font-size: 0.85rem;
 }

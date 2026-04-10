@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CatchDaddy Brand Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8f9fa; color: #222; line-height: 1.6; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { max-width: 860px; margin: 0 auto; padding: 48px 28px; }
+  .header { text-align: center; margin-bottom: 48px; padding-bottom: 32px; border-bottom: 3px solid #2d6a4f; }
+  .header h1 { font-family: 'Fredoka', sans-serif; font-size: 2.2rem; color: #1b4332; }
+  .header p { color: #666; margin-top: 4px; }
+  .header .date { font-size: 0.8rem; color: #999; margin-top: 8px; }
+  h2 { font-size: 1.3rem; color: #1b4332; margin: 44px 0 16px; padding-bottom: 6px; border-bottom: 2px solid #e8f5e9; }
+  h3 { font-size: 0.85rem; color: #888; margin: 20px 0 10px; text-transform: uppercase; letter-spacing: 1.5px; }
+  .section-num { color: #2d6a4f; font-weight: 700; margin-right: 6px; }
+
+  /* Logo */
+  .logo-grid { display: flex; gap: 24px; flex-wrap: wrap; margin: 16px 0; }
+  .logo-box { border-radius: 12px; padding: 28px; text-align: center; flex: 1; min-width: 200px; }
+  .logo-box.dark { background: linear-gradient(135deg, #1b4332, #2d6a4f); }
+  .logo-box.light { background: #fff; border: 1px solid #ddd; }
+  .logo-box svg { max-width: 100%; }
+  .logo-box .caption { font-size: 0.8rem; color: #888; margin-top: 12px; }
+  .logo-box.dark .caption { color: #95d5b2; }
+
+  /* Color swatches */
+  .token-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin: 12px 0; }
+  .token { border-radius: 8px; overflow: hidden; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .token .swatch { height: 56px; display: flex; align-items: flex-end; padding: 0 10px 6px; }
+  .token .swatch span { font-size: 0.7rem; font-weight: 600; padding: 2px 6px; border-radius: 3px; }
+  .token .swatch .light-label { color: rgba(255,255,255,0.9); }
+  .token .swatch .dark-label { color: rgba(0,0,0,0.5); }
+  .token .meta { padding: 8px 10px; }
+  .token .meta .name { font-size: 0.75rem; font-weight: 600; color: #333; }
+  .token .meta .hex { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.8rem; color: #555; }
+  .token .meta .role { font-size: 0.7rem; color: #999; margin-top: 2px; }
+
+  /* Compact palette row */
+  .palette-row { display: flex; gap: 0; margin: 12px 0; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .palette-row .chip { flex: 1; height: 48px; display: flex; align-items: center; justify-content: center; }
+  .palette-row .chip span { font-size: 0.6rem; font-weight: 600; }
+
+  /* Typography */
+  .type-row { background: #fff; border-radius: 10px; padding: 20px 24px; margin: 10px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .type-row .label { font-size: 0.7rem; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .fredoka { font-family: 'Fredoka', sans-serif; }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin: 12px 0; font-size: 0.85rem; }
+  thead { background: #1b4332; color: #fff; }
+  th { padding: 10px 14px; text-align: left; font-weight: 600; }
+  td { padding: 9px 14px; border-bottom: 1px solid #f0f0f0; }
+  tr:last-child td { border-bottom: none; }
+
+  /* Info boxes */
+  .info-box { background: #fff; border-left: 4px solid #2d6a4f; border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 12px 0; font-size: 0.85rem; }
+  .info-box strong { color: #1b4332; }
+
+  /* Do/Don't */
+  .rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .rule-card { border-radius: 8px; padding: 16px; font-size: 0.85rem; }
+  .rule-card.do { background: #e8f5e9; border: 1px solid #c8e6c9; }
+  .rule-card.dont { background: #fdecea; border: 1px solid #ffcdd2; }
+  .rule-card .rule-title { font-weight: 700; margin-bottom: 6px; }
+  .rule-card.do .rule-title { color: #2e7d32; }
+  .rule-card.dont .rule-title { color: #d32f2f; }
+  .rule-card ul { margin: 0; padding-left: 18px; color: #444; }
+  .rule-card li { margin: 3px 0; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; }
+    .page { padding: 20px; }
+    .token-grid { grid-template-columns: repeat(4, 1fr); }
+    h2 { break-before: auto; }
+  }
+  @media (max-width: 600px) {
+    .rules-grid { grid-template-columns: 1fr; }
+    .token-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>CatchDaddy</h1>
+    <p>Brand Reference &amp; Design Token Spec</p>
+    <p class="date">Last updated: March 2026 &bull; catchdaddy.net</p>
+  </div>
+
+  <!-- ===== 1. BRAND IDENTITY ===== -->
+  <h2><span class="section-num">1.</span> Brand Identity</h2>
+  <table>
+    <tr><td style="width:140px;"><strong>App Name</strong></td><td>CatchDaddy</td></tr>
+    <tr><td><strong>Tagline</strong></td><td>Smart Fishing Companion</td></tr>
+    <tr><td><strong>Domain</strong></td><td>catchdaddy.net</td></tr>
+    <tr><td><strong>Support Email</strong></td><td>support@catchdaddy.net</td></tr>
+    <tr><td><strong>Platforms</strong></td><td>Web (PWA), iOS, Android</td></tr>
+  </table>
+
+  <!-- ===== 2. LOGO ===== -->
+  <h2><span class="section-num">2.</span> Logo</h2>
+
+  <div class="logo-grid">
+    <div class="logo-box dark">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" style="max-width:260px;">
+        <defs>
+          <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1b4332"/><stop offset="100%" stop-color="#2d6a4f"/></linearGradient>
+          <linearGradient id="gd" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#e9c46a"/><stop offset="100%" stop-color="#d4a373"/></linearGradient>
+          <linearGradient id="gg" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#52b788"/><stop offset="100%" stop-color="#40916c"/></linearGradient>
+        </defs>
+        <circle cx="150" cy="70" r="48" fill="none" stroke="url(#gd)" stroke-width="2.5"/>
+        <circle cx="150" cy="70" r="42" fill="none" stroke="url(#gd)" stroke-width="1" opacity="0.3"/>
+        <g transform="translate(139, 68) scale(1.4)">
+          <path d="M-22 0 Q-12 -16 5 -12 Q18 -8 28 0 Q18 8 5 12 Q-12 16 -22 0 Z" fill="url(#gd)" opacity="0.9"/>
+          <path d="M28 0 L38 -9 L38 9 Z" fill="url(#gd)" opacity="0.9"/>
+          <circle cx="-6" cy="-3" r="3" fill="#1b4332"/>
+          <path d="M-2 -4 Q3 -6 8 -4" fill="none" stroke="url(#gg)" stroke-width="0.8" opacity="0.6"/>
+          <path d="M0 0 Q5 -2 10 0" fill="none" stroke="url(#gg)" stroke-width="0.8" opacity="0.5"/>
+          <path d="M-2 4 Q3 2 8 4" fill="none" stroke="url(#gg)" stroke-width="0.8" opacity="0.4"/>
+        </g>
+        <line x1="40" y1="132" x2="100" y2="132" stroke="url(#gd)" stroke-width="1" opacity="0.25"/>
+        <line x1="200" y1="132" x2="260" y2="132" stroke="url(#gd)" stroke-width="1" opacity="0.25"/>
+        <text x="150" y="148" font-family="'Fredoka', sans-serif" font-size="28" font-weight="bold" fill="#fefae0" letter-spacing="5" text-anchor="middle">CATCH</text>
+        <text x="150" y="172" font-family="'Fredoka', sans-serif" font-size="28" font-weight="bold" fill="url(#gd)" letter-spacing="5" text-anchor="middle">DADDY</text>
+        <text x="150" y="192" font-family="'Helvetica Neue', sans-serif" font-size="8" fill="#95d5b2" letter-spacing="4" text-anchor="middle">SMART FISHING COMPANION</text>
+      </svg>
+      <p class="caption">Full Logo &mdash; dark bg only</p>
+    </div>
+    <div class="logo-box light" style="flex:0 0 180px;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" style="max-width:120px;">
+        <defs>
+          <linearGradient id="ib" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1b4332"/><stop offset="100%" stop-color="#2d6a4f"/></linearGradient>
+          <linearGradient id="ig" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#e9c46a"/><stop offset="100%" stop-color="#d4a373"/></linearGradient>
+          <linearGradient id="igr" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#52b788"/><stop offset="100%" stop-color="#40916c"/></linearGradient>
+        </defs>
+        <rect width="160" height="160" rx="36" fill="url(#ib)"/>
+        <circle cx="80" cy="62" r="38" fill="none" stroke="url(#ig)" stroke-width="2"/>
+        <circle cx="80" cy="62" r="33" fill="none" stroke="url(#ig)" stroke-width="0.8" opacity="0.3"/>
+        <g transform="translate(71, 62) scale(1.1)">
+          <path d="M-22 0 Q-12 -16 5 -12 Q18 -8 28 0 Q18 8 5 12 Q-12 16 -22 0 Z" fill="url(#ig)" opacity="0.9"/>
+          <path d="M28 0 L38 -9 L38 9 Z" fill="url(#ig)" opacity="0.9"/>
+          <circle cx="-6" cy="-3" r="2.5" fill="#1b4332"/>
+          <path d="M-2 -4 Q3 -6 8 -4" fill="none" stroke="url(#igr)" stroke-width="0.7" opacity="0.6"/>
+          <path d="M0 0 Q5 -2 10 0" fill="none" stroke="url(#igr)" stroke-width="0.7" opacity="0.5"/>
+          <path d="M-2 4 Q3 2 8 4" fill="none" stroke="url(#igr)" stroke-width="0.7" opacity="0.4"/>
+        </g>
+        <text x="80" y="118" font-family="'Fredoka', sans-serif" font-size="13" font-weight="bold" fill="#fefae0" text-anchor="middle" letter-spacing="3">CATCH</text>
+        <text x="80" y="134" font-family="'Fredoka', sans-serif" font-size="13" font-weight="bold" fill="url(#ig)" text-anchor="middle" letter-spacing="3">DADDY</text>
+      </svg>
+      <p class="caption">App Icon</p>
+    </div>
+  </div>
+
+  <h3>Logo Specs</h3>
+  <table>
+    <thead><tr><th>Rule</th><th>Detail</th></tr></thead>
+    <tbody>
+      <tr><td>Min size &mdash; full logo</td><td>120px wide</td></tr>
+      <tr><td>Min size &mdash; icon</td><td>48px</td></tr>
+      <tr><td>Clear space</td><td>Height of the "C" in CATCH on all sides</td></tr>
+      <tr><td>Background</td><td>Dark green (#1B4332) or dark only. Never on light bg without dark container.</td></tr>
+      <tr><td>File formats</td><td>SVG (primary), PNG for raster needs</td></tr>
+    </tbody>
+  </table>
+
+  <div class="rules-grid">
+    <div class="rule-card do">
+      <div class="rule-title">Do</div>
+      <ul>
+        <li>Use on dark green or dark backgrounds</li>
+        <li>Maintain clear space</li>
+        <li>Use provided SVG files</li>
+        <li>Scale proportionally</li>
+      </ul>
+    </div>
+    <div class="rule-card dont">
+      <div class="rule-title">Don't</div>
+      <ul>
+        <li>Stretch or rotate</li>
+        <li>Recolor any element</li>
+        <li>Add drop shadows or effects</li>
+        <li>Place on busy/photo backgrounds</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Required Icon Sizes</h3>
+  <table>
+    <thead><tr><th>Platform</th><th>Sizes (px)</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td>Web / PWA</td><td>192, 512</td><td>manifest icons</td></tr>
+      <tr><td>Android</td><td>48, 72, 96, 144, 192, 512</td><td>mdpi &ndash; xxxhdpi</td></tr>
+      <tr><td>iOS</td><td>180, 1024</td><td>app icon, App Store</td></tr>
+      <tr><td>Favicon</td><td>16, 32</td><td>browser tab</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ===== 3. DESIGN TOKENS ===== -->
+  <h2><span class="section-num">3.</span> Design Tokens (28 total)</h2>
+  <div class="info-box">
+    <strong>Cross-platform rule:</strong> Only these 28 tokens need to be replicated on each platform (CSS, Swift/UIColor, Kotlin/Compose). The old 94-color raw palette stays in <code>variables.css</code> for backwards compatibility during migration.
+  </div>
+
+  <h3>Primary</h3>
+  <div class="token-grid">
+    <div class="token"><div class="swatch" style="background:#2d6a4f;"><span class="light-label">PRIMARY</span></div><div class="meta"><div class="name">--token-primary</div><div class="hex">#2D6A4F</div><div class="role">Buttons, links, active states</div></div></div>
+    <div class="token"><div class="swatch" style="background:#1b4332;"><span class="light-label">PRIMARY DARK</span></div><div class="meta"><div class="name">--token-primary-dark</div><div class="hex">#1B4332</div><div class="role">Headings, nav background</div></div></div>
+    <div class="token"><div class="swatch" style="background:#245c3e;"><span class="light-label">PRIMARY HOVER</span></div><div class="meta"><div class="name">--token-primary-hover</div><div class="hex">#245C3E</div><div class="role">Button hover state</div></div></div>
+    <div class="token"><div class="swatch" style="background:#e8f5e9;"><span class="dark-label">PRIMARY LIGHT</span></div><div class="meta"><div class="name">--token-primary-light</div><div class="hex">#E8F5E9</div><div class="role">Selected / hover bg</div></div></div>
+  </div>
+
+  <h3>Status</h3>
+  <div class="token-grid">
+    <div class="token"><div class="swatch" style="background:#2e7d32;"><span class="light-label">SUCCESS</span></div><div class="meta"><div class="name">--token-success</div><div class="hex">#2E7D32</div><div class="role">Confirmations, toasts</div></div></div>
+    <div class="token"><div class="swatch" style="background:#e8f5e9;"><span class="dark-label">SUCCESS BG</span></div><div class="meta"><div class="name">--token-success-bg</div><div class="hex">#E8F5E9</div><div class="role">Success background</div></div></div>
+    <div class="token"><div class="swatch" style="background:#d32f2f;"><span class="light-label">ERROR</span></div><div class="meta"><div class="name">--token-error</div><div class="hex">#D32F2F</div><div class="role">Destructive actions</div></div></div>
+    <div class="token"><div class="swatch" style="background:#c62828;"><span class="light-label">ERROR DARK</span></div><div class="meta"><div class="name">--token-error-dark</div><div class="hex">#C62828</div><div class="role">Error toasts</div></div></div>
+    <div class="token"><div class="swatch" style="background:#fdecea;"><span class="dark-label">ERROR BG</span></div><div class="meta"><div class="name">--token-error-bg</div><div class="hex">#FDECEA</div><div class="role">Error background tint</div></div></div>
+    <div class="token"><div class="swatch" style="background:#ff9800;"><span class="light-label">WARNING</span></div><div class="meta"><div class="name">--token-warning</div><div class="hex">#FF9800</div><div class="role">Warning icon / accent</div></div></div>
+    <div class="token"><div class="swatch" style="background:#e65100;"><span class="light-label">WARNING TEXT</span></div><div class="meta"><div class="name">--token-warning-text</div><div class="hex">#E65100</div><div class="role">Warning label text</div></div></div>
+    <div class="token"><div class="swatch" style="background:#fff3e0;"><span class="dark-label">WARNING BG</span></div><div class="meta"><div class="name">--token-warning-bg</div><div class="hex">#FFF3E0</div><div class="role">Warning background tint</div></div></div>
+    <div class="token"><div class="swatch" style="background:#1565c0;"><span class="light-label">INFO</span></div><div class="meta"><div name="name">--token-info</div><div class="hex">#1565C0</div><div class="role">Info toasts, links</div></div></div>
+    <div class="token"><div class="swatch" style="background:#f0f6ff;"><span class="dark-label">INFO BG</span></div><div class="meta"><div class="name">--token-info-bg</div><div class="hex">#F0F6FF</div><div class="role">Info background tint</div></div></div>
+  </div>
+
+  <h3>Gold / Premium</h3>
+  <div class="token-grid">
+    <div class="token"><div class="swatch" style="background:#d4a017;"><span class="light-label">GOLD</span></div><div class="meta"><div class="name">--token-gold</div><div class="hex">#D4A017</div><div class="role">Achievements, premium</div></div></div>
+    <div class="token"><div class="swatch" style="background:#b8860b;"><span class="light-label">GOLD DARK</span></div><div class="meta"><div class="name">--token-gold-dark</div><div class="hex">#B8860B</div><div class="role">Gold hover / pressed</div></div></div>
+  </div>
+
+  <h3>Text</h3>
+  <div class="token-grid">
+    <div class="token"><div class="swatch" style="background:#222;"><span class="light-label">TEXT</span></div><div class="meta"><div class="name">--token-text</div><div class="hex">#222222</div><div class="role">Body text</div></div></div>
+    <div class="token"><div class="swatch" style="background:#555;"><span class="light-label">TEXT SECONDARY</span></div><div class="meta"><div class="name">--token-text-secondary</div><div class="hex">#555555</div><div class="role">Secondary / sub text</div></div></div>
+    <div class="token"><div class="swatch" style="background:#888;"><span class="light-label">TEXT MUTED</span></div><div class="meta"><div class="name">--token-text-muted</div><div class="hex">#888888</div><div class="role">Placeholders, hints</div></div></div>
+    <div class="token"><div class="swatch" style="background:#aaa;"><span class="light-label">TEXT DISABLED</span></div><div class="meta"><div class="name">--token-text-disabled</div><div class="hex">#AAAAAA</div><div class="role">Disabled text</div></div></div>
+  </div>
+
+  <h3>Surfaces &amp; Backgrounds</h3>
+  <div class="token-grid">
+    <div class="token"><div class="swatch" style="background:#f0f4f8; border: 1px solid #ddd;"><span class="dark-label">PAGE BG</span></div><div class="meta"><div class="name">--token-bg-page</div><div class="hex">#F0F4F8</div><div class="role">Page background</div></div></div>
+    <div class="token"><div class="swatch" style="background:#fff; border: 1px solid #ddd;"><span class="dark-label">SURFACE</span></div><div class="meta"><div class="name">--token-bg-surface</div><div class="hex">#FFFFFF</div><div class="role">Cards, panels</div></div></div>
+    <div class="token"><div class="swatch" style="background:#f5f5f5; border: 1px solid #ddd;"><span class="dark-label">ELEVATED</span></div><div class="meta"><div class="name">--token-bg-elevated</div><div class="hex">#F5F5F5</div><div class="role">Nested cards, wells</div></div></div>
+    <div class="token"><div class="swatch" style="background:#f0f0f0; border: 1px solid #ddd;"><span class="dark-label">HOVER</span></div><div class="meta"><div class="name">--token-bg-hover</div><div class="hex">#F0F0F0</div><div class="role">List item hover</div></div></div>
+  </div>
+
+  <h3>Borders</h3>
+  <div class="token-grid">
+    <div class="token"><div class="swatch" style="background:#ddd;"><span class="dark-label">BORDER</span></div><div class="meta"><div class="name">--token-border</div><div class="hex">#DDDDDD</div><div class="role">Default borders</div></div></div>
+    <div class="token"><div class="swatch" style="background:#e0e0e0;"><span class="dark-label">DIVIDER</span></div><div class="meta"><div class="name">--token-divider</div><div class="hex">#E0E0E0</div><div class="role">Section dividers</div></div></div>
+  </div>
+
+  <!-- ===== 4. TOKEN QUICK REFERENCE ===== -->
+  <h2><span class="section-num">4.</span> Token Quick-Reference Table</h2>
+  <table>
+    <thead><tr><th>Token</th><th>Hex</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td><code>--token-primary</code></td><td>#2D6A4F</td><td>Buttons, links</td></tr>
+      <tr><td><code>--token-primary-dark</code></td><td>#1B4332</td><td>Headings, nav bg</td></tr>
+      <tr><td><code>--token-primary-hover</code></td><td>#245C3E</td><td>Button hover</td></tr>
+      <tr><td><code>--token-primary-light</code></td><td>#E8F5E9</td><td>Selected bg</td></tr>
+      <tr><td><code>--token-success</code></td><td>#2E7D32</td><td>Success</td></tr>
+      <tr><td><code>--token-success-bg</code></td><td>#E8F5E9</td><td>Success bg</td></tr>
+      <tr><td><code>--token-error</code></td><td>#D32F2F</td><td>Error / destructive</td></tr>
+      <tr><td><code>--token-error-dark</code></td><td>#C62828</td><td>Error toast</td></tr>
+      <tr><td><code>--token-error-bg</code></td><td>#FDECEA</td><td>Error bg</td></tr>
+      <tr><td><code>--token-warning</code></td><td>#FF9800</td><td>Warning</td></tr>
+      <tr><td><code>--token-warning-text</code></td><td>#E65100</td><td>Warning text</td></tr>
+      <tr><td><code>--token-warning-bg</code></td><td>#FFF3E0</td><td>Warning bg</td></tr>
+      <tr><td><code>--token-info</code></td><td>#1565C0</td><td>Info</td></tr>
+      <tr><td><code>--token-info-bg</code></td><td>#F0F6FF</td><td>Info bg</td></tr>
+      <tr><td><code>--token-gold</code></td><td>#D4A017</td><td>Achievements</td></tr>
+      <tr><td><code>--token-gold-dark</code></td><td>#B8860B</td><td>Gold hover</td></tr>
+      <tr><td><code>--token-text</code></td><td>#222222</td><td>Body text</td></tr>
+      <tr><td><code>--token-text-secondary</code></td><td>#555555</td><td>Sub text</td></tr>
+      <tr><td><code>--token-text-muted</code></td><td>#888888</td><td>Placeholders</td></tr>
+      <tr><td><code>--token-text-disabled</code></td><td>#AAAAAA</td><td>Disabled</td></tr>
+      <tr><td><code>--token-bg-page</code></td><td>#F0F4F8</td><td>Page bg</td></tr>
+      <tr><td><code>--token-bg-surface</code></td><td>#FFFFFF</td><td>Cards</td></tr>
+      <tr><td><code>--token-bg-elevated</code></td><td>#F5F5F5</td><td>Nested cards</td></tr>
+      <tr><td><code>--token-bg-hover</code></td><td>#F0F0F0</td><td>Hover bg</td></tr>
+      <tr><td><code>--token-border</code></td><td>#DDDDDD</td><td>Borders</td></tr>
+      <tr><td><code>--token-divider</code></td><td>#E0E0E0</td><td>Dividers</td></tr>
+      <tr><td><code>--token-white</code></td><td>#FFFFFF</td><td>White</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ===== 5. TYPOGRAPHY ===== -->
+  <h2><span class="section-num">5.</span> Typography</h2>
+  <div class="type-row">
+    <div class="label">Display / Logo Font</div>
+    <p class="fredoka" style="font-size:2rem; font-weight:700; color:#1b4332;">Fredoka Bold</p>
+    <p class="fredoka" style="font-size:1.2rem; font-weight:600; color:#2d6a4f; margin-top:4px;">Fredoka SemiBold</p>
+    <p style="font-size:0.8rem; color:#888; margin-top:8px;">Logo wordmark, headings, badges, feature titles</p>
+  </div>
+  <div class="type-row">
+    <div class="label">UI / Body Font</div>
+    <p style="font-size:1.4rem; color:#222;">-apple-system, BlinkMacSystemFont, Segoe UI, Roboto</p>
+    <p style="font-size:0.8rem; color:#888; margin-top:8px;">Body text, buttons, labels, inputs &mdash; system font stack</p>
+  </div>
+  <div class="type-row">
+    <div class="label">Monospace</div>
+    <p style="font-family:'SF Mono','Fira Code',monospace; font-size:1.1rem; color:#222;">SF Mono / Fira Code</p>
+    <p style="font-size:0.8rem; color:#888; margin-top:8px;">Code snippets, hex values, data labels</p>
+  </div>
+
+  <!-- ===== 6. LOGO COLORS ===== -->
+  <h2><span class="section-num">6.</span> Logo-Only Colors</h2>
+  <div class="info-box">These colors appear <strong>only</strong> in the logo SVG and are not part of the UI token system.</div>
+  <div class="token-grid">
+    <div class="token"><div class="swatch" style="background:linear-gradient(135deg,#e9c46a,#d4a373);"><span class="dark-label">GOLD GRAD</span></div><div class="meta"><div class="hex">#E9C46A &rarr; #D4A373</div><div class="role">Fish, rings, "DADDY" text</div></div></div>
+    <div class="token"><div class="swatch" style="background:linear-gradient(180deg,#52b788,#40916c);"><span class="light-label">GREEN GRAD</span></div><div class="meta"><div class="hex">#52B788 &rarr; #40916C</div><div class="role">Fish scale lines</div></div></div>
+    <div class="token"><div class="swatch" style="background:#fefae0;"><span class="dark-label">CREAM</span></div><div class="meta"><div class="hex">#FEFAE0</div><div class="role">"CATCH" text</div></div></div>
+    <div class="token"><div class="swatch" style="background:#95d5b2;"><span class="dark-label">MINT</span></div><div class="meta"><div class="hex">#95D5B2</div><div class="role">Tagline text</div></div></div>
+  </div>
+
+  <!-- ===== 7. MIGRATION NOTES ===== -->
+  <h2><span class="section-num">7.</span> Migration Notes</h2>
+  <div class="info-box">
+    <strong>Current state:</strong> 94 raw color variables in <code>variables.css</code>. 29 are used in only 1 file.<br><br>
+    <strong>Target:</strong> Components use <code>--token-*</code> semantic names. Raw <code>--color-*</code> vars remain for backwards compatibility until fully migrated.<br><br>
+    <strong>How to migrate:</strong> Import <code>design-tokens.css</code> after <code>variables.css</code> in <code>main.jsx</code>. When editing a component, replace <code>var(--color-green-700)</code> with <code>var(--token-primary)</code>, etc. No big-bang rewrite needed.
+  </div>
+
+  <!-- Footer -->
+  <div style="margin-top: 48px; padding-top: 20px; border-top: 1px solid #e0e0e0; text-align: center; font-size: 0.75rem; color: #aaa;">
+    CatchDaddy Brand Reference &bull; March 2026 &bull; Save as PDF: Ctrl/Cmd+P &rarr; "Save as PDF"
+  </div>
+
+</div>
+</body>
+</html>

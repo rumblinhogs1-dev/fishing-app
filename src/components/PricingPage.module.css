@@ -6,13 +6,13 @@
 
 .heading {
   text-align: center;
-  color: #1b4332;
+  color: var(--color-green-900);
   margin: 0 0 0.5rem;
 }
 
 .subheading {
   text-align: center;
-  color: #666;
+  color: var(--color-gray-600);
   font-size: 0.95rem;
   margin: 0 0 1.5rem;
   max-width: 500px;
@@ -32,20 +32,20 @@
 .toggleActive {
   font-size: 0.9rem;
   font-weight: 700;
-  color: #1b4332;
+  color: var(--color-green-900);
 }
 
 .toggleInactive {
   font-size: 0.9rem;
   font-weight: 500;
-  color: #999;
+  color: var(--color-gray-350);
 }
 
 .toggleDiscount {
   font-size: 0.72rem;
   font-weight: 700;
-  color: #2d6a4f;
-  background: #e8f5e9;
+  color: var(--color-green-700);
+  background: var(--color-green-50);
   padding: 0.15rem 0.5rem;
   border-radius: 10px;
   margin-left: 0.3rem;
@@ -56,7 +56,7 @@
   width: 48px;
   height: 26px;
   border-radius: 13px;
-  background: #ccc;
+  background: var(--color-gray-200);
   border: none;
   cursor: pointer;
   padding: 0;
@@ -64,7 +64,7 @@
 }
 
 .toggleSwitch:hover {
-  background: #bbb;
+  background: var(--color-gray-250);
 }
 
 .toggleKnob {
@@ -74,7 +74,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--color-white);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s;
 }
@@ -92,8 +92,8 @@
 }
 
 .card {
-  background: #fff;
-  border: 2px solid #e0e0e0;
+  background: var(--color-white);
+  border: 2px solid var(--color-gray-150);
   border-radius: 16px;
   padding: 2rem 1.5rem;
   display: flex;
@@ -108,12 +108,12 @@
 }
 
 .popular {
-  border-color: #2d6a4f;
+  border-color: var(--color-green-700);
   box-shadow: 0 4px 20px rgba(45, 106, 79, 0.15);
 }
 
 .current {
-  border-color: #2e7d32;
+  border-color: var(--color-green-600);
 }
 
 .badge {
@@ -121,8 +121,8 @@
   top: -12px;
   left: 50%;
   transform: translateX(-50%);
-  background: #2d6a4f;
-  color: #fff;
+  background: var(--color-green-700);
+  color: var(--color-white);
   font-size: 0.75rem;
   font-weight: 600;
   padding: 0.25rem 1rem;
@@ -135,8 +135,8 @@
   top: -12px;
   left: 50%;
   transform: translateX(-50%);
-  background: #2e7d32;
-  color: #fff;
+  background: var(--color-green-600);
+  color: var(--color-white);
   font-size: 0.75rem;
   font-weight: 600;
   padding: 0.25rem 1rem;
@@ -146,12 +146,12 @@
 
 .tierName {
   font-size: 1.35rem;
-  color: #333;
+  color: var(--color-gray-900);
   margin: 0 0 0.25rem;
 }
 
 .tierDesc {
-  color: #888;
+  color: var(--color-gray-400);
   font-size: 0.85rem;
   margin: 0 0 1.25rem;
 }
@@ -166,19 +166,19 @@
 .priceCurrency {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #333;
+  color: var(--color-gray-900);
 }
 
 .priceAmount {
   font-size: 2.25rem;
   font-weight: 800;
-  color: #333;
+  color: var(--color-gray-900);
   line-height: 1;
 }
 
 .pricePeriod {
   font-size: 0.85rem;
-  color: #888;
+  color: var(--color-gray-400);
   margin-left: 2px;
 }
 
@@ -186,8 +186,8 @@
   display: inline-block;
   font-size: 0.78rem;
   font-weight: 600;
-  color: #2d6a4f;
-  background: #e8f5e9;
+  color: var(--color-green-700);
+  background: var(--color-green-50);
   padding: 0.2rem 0.6rem;
   border-radius: 10px;
   margin-bottom: 0.75rem;
@@ -205,7 +205,7 @@
   align-items: flex-start;
   gap: 0.5rem;
   font-size: 0.88rem;
-  color: #555;
+  color: var(--color-gray-700);
   padding: 0.35rem 0;
   line-height: 1.4;
 }
@@ -218,10 +218,10 @@
 .selectBtn {
   width: 100%;
   padding: 0.75rem;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--color-gray-150);
   border-radius: 10px;
-  background: #fff;
-  color: #333;
+  background: var(--color-white);
+  color: var(--color-gray-900);
   font-size: 0.95rem;
   font-weight: 600;
   font-family: inherit;
@@ -230,8 +230,8 @@
 }
 
 .selectBtn:hover:not(:disabled) {
-  border-color: #2d6a4f;
-  color: #2d6a4f;
+  border-color: var(--color-green-700);
+  color: var(--color-green-700);
 }
 
 .selectBtn:disabled {
@@ -240,14 +240,14 @@
 }
 
 .selectBtnPopular {
-  background: linear-gradient(135deg, #2d6a4f, #1b4332);
-  color: #fff;
+  background: linear-gradient(135deg, var(--color-green-700), var(--color-green-900));
+  color: var(--color-white);
   border-color: transparent;
 }
 
 .selectBtnPopular:hover:not(:disabled) {
   border-color: transparent;
-  color: #fff;
+  color: var(--color-white);
   box-shadow: 0 4px 12px rgba(45, 106, 79, 0.35);
 }
 
@@ -259,26 +259,26 @@
 
 .faqHeading {
   text-align: center;
-  color: #1b4332;
+  color: var(--color-green-900);
   font-size: 1.3rem;
   margin: 0 0 1rem;
 }
 
 .faqItem {
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-gray-100);
   padding: 0.75rem 0;
 }
 
 .faqItem summary {
   font-weight: 600;
-  color: #333;
+  color: var(--color-gray-900);
   font-size: 0.9rem;
   cursor: pointer;
   padding: 0.25rem 0;
 }
 
 .faqItem p {
-  color: #666;
+  color: var(--color-gray-600);
   font-size: 0.85rem;
   line-height: 1.5;
   margin: 0.5rem 0 0;

@@ -4,8 +4,8 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 0.4rem 1rem;
-  background: #ff9800;
-  color: #fff;
+  background: var(--color-orange-500);
+  color: var(--color-white);
   font-size: 0.8rem;
   font-weight: 600;
   text-align: center;
@@ -17,8 +17,8 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 0.4rem 1rem;
-  background: #4caf50;
-  color: #fff;
+  background: var(--color-green-300);
+  color: var(--color-white);
   font-size: 0.8rem;
   font-weight: 600;
   text-align: center;
@@ -31,8 +31,8 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 0.4rem 1rem;
-  background: #2196f3;
-  color: #fff;
+  background: var(--color-blue-400);
+  color: var(--color-white);
   font-size: 0.8rem;
   font-weight: 600;
   text-align: center;
@@ -45,8 +45,8 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 0.4rem 1rem;
-  background: #ff9800;
-  color: #fff;
+  background: var(--color-orange-500);
+  color: var(--color-white);
   font-size: 0.8rem;
   font-weight: 600;
   text-align: center;
@@ -54,7 +54,7 @@
 }
 
 .pendingBanner:hover {
-  background: #f57c00;
+  background: var(--color-orange-700);
 }
 
 .spinner {

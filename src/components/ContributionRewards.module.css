@@ -12,13 +12,13 @@
 .pointsLabel {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #444;
+  color: var(--color-gray-800);
 }
 
 .pointsValue {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #2d6a4f;
+  color: var(--color-green-700);
 }
 
 .progressWrap {
@@ -28,21 +28,21 @@
 .progressTrack {
   width: 100%;
   height: 6px;
-  background: #e0e0e0;
+  background: var(--color-gray-150);
   border-radius: 3px;
   overflow: hidden;
 }
 
 .progressFill {
   height: 100%;
-  background: #2d6a4f;
+  background: var(--color-green-700);
   border-radius: 3px;
   transition: width 0.4s ease;
 }
 
 .progressLabel {
   font-size: 0.7rem;
-  color: #888;
+  color: var(--color-gray-400);
   display: block;
   margin-top: 0.2rem;
 }
@@ -60,7 +60,7 @@
   text-align: center;
   padding: 0.6rem 0.3rem;
   border-radius: 10px;
-  background: #fff;
+  background: var(--color-white);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
   transition: transform 0.2s;
 }
@@ -70,17 +70,17 @@
 }
 
 .badgeEarned {
-  border: 2px solid #4caf50;
+  border: 2px solid var(--color-green-300);
 }
 
 .badgeLocked {
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--color-gray-150);
   opacity: 0.6;
 }
 
 .badgeCelebrate {
   animation: celebrate 0.8s ease;
-  border-color: #ffd600;
+  border-color: var(--color-yellow-500);
   box-shadow: 0 0 12px rgba(255, 214, 0, 0.5);
 }
 
@@ -104,12 +104,12 @@
 .badgeName {
   font-size: 0.72rem;
   font-weight: 700;
-  color: #333;
+  color: var(--color-gray-900);
 }
 
 .badgeDesc {
   font-size: 0.65rem;
-  color: #888;
+  color: var(--color-gray-400);
   margin-top: 0.1rem;
 }
 

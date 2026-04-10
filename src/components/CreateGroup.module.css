@@ -3,7 +3,7 @@
 .backBtn {
   background: none;
   border: none;
-  color: #2d6a4f;
+  color: var(--color-green-700);
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
@@ -13,21 +13,21 @@
   align-items: center;
   gap: 0.25rem;
 }
-.backBtn:hover { color: #1b4332; }
+.backBtn:hover { color: var(--color-green-900); }
 
-.heading { color: #1b4332; margin: 0 0 1.5rem; }
-.empty { text-align: center; padding: 3rem; color: #888; }
+.heading { color: var(--color-green-900); margin: 0 0 1.5rem; }
+.empty { text-align: center; padding: 3rem; color: var(--color-gray-400); }
 
-.form { background: #fff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08); }
+.form { background: var(--color-white); border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08); }
 
 .field { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 1.25rem; }
-.field span { font-size: 0.85rem; font-weight: 600; color: #444; }
-.field input { padding: 0.55rem 0.75rem; border: 1.5px solid #ccc; border-radius: 8px; font-size: 0.95rem; font-family: inherit; }
-.field input:focus { outline: none; border-color: #2d6a4f; box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12); }
+.field span { font-size: 0.85rem; font-weight: 600; color: var(--color-gray-800); }
+.field input { padding: 0.55rem 0.75rem; border: 1.5px solid var(--color-gray-200); border-radius: 8px; font-size: 0.95rem; font-family: inherit; }
+.field input:focus { outline: none; border-color: var(--color-green-700); box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12); }
 
 .membersSection { margin-bottom: 1.25rem; }
-.membersLabel { display: block; font-size: 0.85rem; font-weight: 600; color: #444; margin-bottom: 0.5rem; }
-.noFriends { color: #888; font-size: 0.9rem; margin: 0; }
+.membersLabel { display: block; font-size: 0.85rem; font-weight: 600; color: var(--color-gray-800); margin-bottom: 0.5rem; }
+.noFriends { color: var(--color-gray-400); font-size: 0.9rem; margin: 0; }
 
 .membersList { display: flex; flex-direction: column; gap: 0.35rem; max-height: 250px; overflow-y: auto; }
 
@@ -36,19 +36,19 @@
   align-items: center;
   gap: 0.6rem;
   padding: 0.5rem 0.75rem;
-  border: 1.5px solid #e0e0e0;
+  border: 1.5px solid var(--color-gray-150);
   border-radius: 8px;
   cursor: pointer;
   transition: border-color 0.2s, background 0.2s;
 }
-.memberItem:hover { border-color: #2d6a4f; }
-.selected { border-color: #2d6a4f; background: #e8f5e9; }
+.memberItem:hover { border-color: var(--color-green-700); }
+.selected { border-color: var(--color-green-700); background: var(--color-green-50); }
 
 .checkbox { display: none; }
 .memberAvatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
-.memberInitial { width: 32px; height: 32px; border-radius: 50%; background: #2d6a4f; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; flex-shrink: 0; }
-.memberName { font-size: 0.9rem; font-weight: 500; color: #222; }
+.memberInitial { width: 32px; height: 32px; border-radius: 50%; background: var(--color-green-700); color: var(--color-white); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; flex-shrink: 0; }
+.memberName { font-size: 0.9rem; font-weight: 500; color: var(--color-black); }
 
-.createBtn { width: 100%; padding: 0.7rem; background: #2d6a4f; color: #fff; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; }
-.createBtn:hover:not(:disabled) { background: #1b4332; }
+.createBtn { width: 100%; padding: 0.7rem; background: var(--color-green-700); color: var(--color-white); border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+.createBtn:hover:not(:disabled) { background: var(--color-green-900); }
 .createBtn:disabled { opacity: 0.5; cursor: not-allowed; }

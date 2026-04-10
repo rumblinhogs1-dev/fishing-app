@@ -26,7 +26,7 @@
   gap: 0.75rem;
   padding: 0.75rem 1rem;
   border-radius: 8px;
-  color: #fff;
+  color: var(--color-white);
   font-size: 0.9rem;
   font-weight: 500;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
@@ -37,15 +37,15 @@
 }
 
 .success {
-  background: #2e7d32;
+  background: var(--color-green-600);
 }
 
 .error {
-  background: #c62828;
+  background: var(--color-red-800);
 }
 
 .info {
-  background: #1565c0;
+  background: var(--color-blue-600);
 }
 
 .message {
@@ -64,7 +64,7 @@
 }
 
 .closeBtn:hover {
-  color: #fff;
+  color: var(--color-white);
 }
 
 @media (max-width: 600px) {

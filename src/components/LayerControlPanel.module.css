@@ -9,7 +9,7 @@
 }
 
 .panel {
-  background: #fff;
+  background: var(--color-white);
   border-radius: 16px 16px 0 0;
   width: 100%;
   max-width: 420px;
@@ -30,14 +30,14 @@
   margin: 0;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #222;
+  color: var(--color-black);
 }
 
 .closeBtn {
   background: none;
   border: none;
   cursor: pointer;
-  color: #888;
+  color: var(--color-gray-400);
   padding: 4px;
   display: flex;
   align-items: center;
@@ -47,7 +47,7 @@
 }
 
 .closeBtn:hover {
-  background: #f0f0f0;
+  background: var(--color-gray-75);
 }
 
 .section {
@@ -58,7 +58,7 @@
   display: block;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #888;
+  color: var(--color-gray-400);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 0.5rem;
@@ -72,10 +72,10 @@
 .basemapBtn {
   flex: 1;
   padding: 0.5rem 0.5rem;
-  border: 1.5px solid #ddd;
+  border: 1.5px solid var(--color-gray-175);
   border-radius: 8px;
-  background: #fff;
-  color: #555;
+  background: var(--color-white);
+  color: var(--color-gray-700);
   font-size: 0.82rem;
   font-weight: 500;
   cursor: pointer;
@@ -83,14 +83,14 @@
 }
 
 .basemapBtn:hover {
-  border-color: #2d6a4f;
-  color: #2d6a4f;
+  border-color: var(--color-green-700);
+  color: var(--color-green-700);
 }
 
 .basemapActive {
-  background: #e8f5e9;
-  border-color: #2d6a4f;
-  color: #2d6a4f;
+  background: var(--color-green-50);
+  border-color: var(--color-green-700);
+  color: var(--color-green-700);
 }
 
 .toggleRow {
@@ -98,7 +98,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.6rem 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-gray-75);
 }
 
 .toggleRow:last-child {
@@ -114,12 +114,12 @@
 
 .toggleLabel {
   font-size: 0.9rem;
-  color: #333;
+  color: var(--color-gray-900);
 }
 
 .toggleDesc {
   font-size: 0.72rem;
-  color: #999;
+  color: var(--color-gray-350);
 }
 
 .toggleSwitch {
@@ -127,7 +127,7 @@
   width: 44px;
   height: 24px;
   border-radius: 12px;
-  background: #ccc;
+  background: var(--color-gray-200);
   border: none;
   cursor: pointer;
   transition: background 0.2s;
@@ -136,7 +136,7 @@
 }
 
 .toggleOn {
-  background: #2d6a4f;
+  background: var(--color-green-700);
 }
 
 .toggleKnob {
@@ -146,7 +146,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--color-white);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s;
 }

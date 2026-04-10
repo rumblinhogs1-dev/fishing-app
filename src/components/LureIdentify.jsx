@@ -43,7 +43,7 @@ export default function LureIdentify() {
   async function identify() {
     if (!image) return;
     const key = getApiKey() || apiKey;
-    if (!key.trim()) {
+    if (!key.trim() && !hasEnvKey()) {
       setShowKeyInput(true);
       setError('Please enter your Gemini API key first.');
       return;

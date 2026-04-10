@@ -7,7 +7,7 @@
 .backBtn {
   background: none;
   border: none;
-  color: #2d6a4f;
+  color: var(--color-green-700);
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
@@ -17,7 +17,7 @@
   align-items: center;
   gap: 0.25rem;
 }
-.backBtn:hover { color: #1b4332; }
+.backBtn:hover { color: var(--color-green-900); }
 
 .headerRow {
   display: flex;
@@ -27,14 +27,14 @@
 }
 
 .heading {
-  color: #1b4332;
+  color: var(--color-green-900);
   margin: 0;
 }
 
 .markAllBtn {
   padding: 0.4rem 0.85rem;
-  background: #e8f5e9;
-  color: #2d6a4f;
+  background: var(--color-green-50);
+  color: var(--color-green-700);
   border: none;
   border-radius: 8px;
   font-size: 0.82rem;
@@ -44,19 +44,19 @@
 }
 
 .markAllBtn:hover {
-  background: #d0e1fd;
+  background: var(--color-blue-75);
 }
 
 .empty {
   text-align: center;
-  color: #888;
+  color: var(--color-gray-400);
   padding: 3rem;
 }
 
 .emptyState {
   text-align: center;
   padding: 4rem 1rem;
-  color: #888;
+  color: var(--color-gray-400);
 }
 
 .emptyState p {
@@ -65,7 +65,7 @@
 }
 
 .list {
-  background: #fff;
+  background: var(--color-white);
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
   overflow: hidden;
@@ -76,7 +76,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.85rem 1rem;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-gray-75);
   width: 100%;
   text-align: left;
   background: none;
@@ -93,15 +93,15 @@
 }
 
 .item:hover {
-  background: #f8f9fa;
+  background: var(--color-gray-bg-warm);
 }
 
 .unread {
-  background: #f0f6ff;
+  background: var(--color-blue-bg-1);
 }
 
 .unread:hover {
-  background: #e3edfc;
+  background: var(--color-blue-bg-7);
 }
 
 .iconWrap {
@@ -124,7 +124,7 @@
 
 .message {
   font-size: 0.88rem;
-  color: #333;
+  color: var(--color-gray-900);
   line-height: 1.35;
 }
 
@@ -134,14 +134,14 @@
 
 .time {
   font-size: 0.75rem;
-  color: #888;
+  color: var(--color-gray-400);
 }
 
 .dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #2d6a4f;
+  background: var(--color-green-700);
   flex-shrink: 0;
 }
 

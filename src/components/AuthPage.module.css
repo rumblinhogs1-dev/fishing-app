@@ -9,7 +9,7 @@
 .card {
   width: 100%;
   max-width: 420px;
-  background: #fff;
+  background: var(--color-white);
   border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
@@ -22,12 +22,12 @@
 
 .heading {
   margin: 0 0 0.25rem;
-  color: #1b4332;
+  color: var(--color-green-900);
 }
 
 .subtext {
   margin: 0;
-  color: #666;
+  color: var(--color-gray-600);
   font-size: 0.9rem;
 }
 
@@ -38,19 +38,19 @@
   justify-content: center;
   gap: 0.75rem;
   padding: 0.7rem;
-  background: #fff;
-  border: 1.5px solid #ddd;
+  background: var(--color-white);
+  border: 1.5px solid var(--color-gray-175);
   border-radius: 8px;
   font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s;
-  color: #333;
+  color: var(--color-gray-900);
 }
 
 .googleBtn:hover:not(:disabled) {
-  background: #f8f9fa;
-  border-color: #bbb;
+  background: var(--color-gray-bg-warm);
+  border-color: var(--color-gray-250);
 }
 
 .googleBtn:disabled {
@@ -63,7 +63,7 @@
   align-items: center;
   gap: 1rem;
   margin: 1.25rem 0;
-  color: #999;
+  color: var(--color-gray-350);
   font-size: 0.85rem;
 }
 
@@ -72,7 +72,7 @@
   content: '';
   flex: 1;
   height: 1px;
-  background: #e0e0e0;
+  background: var(--color-gray-150);
 }
 
 .form {
@@ -90,12 +90,12 @@
 .field span {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #444;
+  color: var(--color-gray-800);
 }
 
 .field input {
   padding: 0.55rem 0.75rem;
-  border: 1.5px solid #ccc;
+  border: 1.5px solid var(--color-gray-200);
   border-radius: 8px;
   font-size: 0.95rem;
   transition: border-color 0.2s;
@@ -104,21 +104,21 @@
 
 .field input:focus {
   outline: none;
-  border-color: #2d6a4f;
+  border-color: var(--color-green-700);
   box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
 }
 
 .error {
-  background: #fdecea;
-  color: #c62828;
+  background: var(--color-red-50);
+  color: var(--color-red-800);
   padding: 0.6rem 0.75rem;
   border-radius: 8px;
   font-size: 0.85rem;
 }
 
 .success {
-  background: #e8f5e9;
-  color: #2e7d32;
+  background: var(--color-green-50);
+  color: var(--color-green-600);
   padding: 0.6rem 0.75rem;
   border-radius: 8px;
   font-size: 0.85rem;
@@ -126,8 +126,8 @@
 
 .submitBtn {
   padding: 0.7rem;
-  background: #2d6a4f;
-  color: #fff;
+  background: var(--color-green-700);
+  color: var(--color-white);
   border: none;
   border-radius: 8px;
   font-size: 1rem;
@@ -138,7 +138,7 @@
 }
 
 .submitBtn:hover:not(:disabled) {
-  background: #1b4332;
+  background: var(--color-green-900);
 }
 
 .submitBtn:disabled {
@@ -153,13 +153,13 @@
   gap: 0.4rem;
   margin-top: 1.25rem;
   font-size: 0.9rem;
-  color: #666;
+  color: var(--color-gray-600);
 }
 
 .switchBtn {
   background: none;
   border: none;
-  color: #2d6a4f;
+  color: var(--color-green-700);
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
@@ -177,14 +177,14 @@
   padding: 0.6rem;
   background: none;
   border: none;
-  color: #888;
+  color: var(--color-gray-400);
   font-size: 0.85rem;
   cursor: pointer;
   text-align: center;
 }
 
 .guestBtn:hover {
-  color: #555;
+  color: var(--color-gray-700);
   text-decoration: underline;
 }
 
@@ -199,11 +199,11 @@
 }
 
 .rulePassed {
-  color: #2e7d32;
+  color: var(--color-green-600);
 }
 
 .ruleFailed {
-  color: #999;
+  color: var(--color-gray-350);
 }
 
 @media (max-width: 600px) {

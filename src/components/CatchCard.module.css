@@ -1,5 +1,5 @@
 .card {
-  background: #fff;
+  background: var(--color-white);
   border-radius: 12px;
   padding: 1.25rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
@@ -12,7 +12,7 @@
   margin: -1.25rem -1.25rem 0.75rem;
   display: block;
   object-fit: contain;
-  background: #f0f0f0;
+  background: var(--color-gray-75);
   max-height: 300px;
 }
 
@@ -29,7 +29,7 @@
 
 .species {
   margin: 0;
-  color: #1b4332;
+  color: var(--color-green-900);
   font-size: 1.15rem;
 }
 
@@ -51,7 +51,7 @@
 }
 
 .editBtn {
-  color: #2d6a4f;
+  color: var(--color-green-700);
 }
 
 .editBtn:hover {
@@ -59,7 +59,7 @@
 }
 
 .deleteBtn {
-  color: #d32f2f;
+  color: var(--color-red-700);
   font-size: 1.3rem;
 }
 
@@ -75,8 +75,8 @@
 }
 
 .tag {
-  background: #e8f5e9;
-  color: #2d6a4f;
+  background: var(--color-green-50);
+  color: var(--color-green-700);
   padding: 0.2rem 0.6rem;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -84,8 +84,8 @@
 }
 
 .lureTag {
-  background: #fff8e1;
-  color: #e65100;
+  background: var(--color-yellow-50);
+  color: var(--color-orange-900);
   padding: 0.2rem 0.6rem;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -93,8 +93,8 @@
 }
 
 .waterTag {
-  background: #e0f2f1;
-  color: #00796b;
+  background: var(--color-teal-50);
+  color: var(--color-teal-700);
   padding: 0.2rem 0.6rem;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -103,7 +103,7 @@
 
 .notes {
   margin: 0.75rem 0 0;
-  color: #555;
+  color: var(--color-gray-700);
   font-size: 0.9rem;
   line-height: 1.4;
 }
@@ -113,7 +113,7 @@
   gap: 0.75rem;
   margin-top: 0.75rem;
   font-size: 0.8rem;
-  color: #888;
+  color: var(--color-gray-400);
   align-items: center;
 }
 
@@ -123,8 +123,8 @@
   font-size: 0.7rem;
   font-weight: 600;
   text-transform: capitalize;
-  background: #f3e5f5;
-  color: #7b1fa2;
+  background: var(--color-purple-50);
+  color: var(--color-purple-700);
 }
 
 .visibilityToggle {
@@ -147,7 +147,7 @@
   position: relative;
   width: 32px;
   height: 18px;
-  background: #ccc;
+  background: var(--color-gray-200);
   border-radius: 9px;
   transition: background 0.2s;
   flex-shrink: 0;
@@ -160,13 +160,13 @@
   left: 2px;
   width: 14px;
   height: 14px;
-  background: #fff;
+  background: var(--color-white);
   border-radius: 50%;
   transition: transform 0.2s;
 }
 
 .toggleInput:checked + .toggleSlider {
-  background: #2d6a4f;
+  background: var(--color-green-700);
 }
 
 .toggleInput:checked + .toggleSlider::after {
@@ -176,5 +176,5 @@
 .toggleLabel {
   font-size: 0.7rem;
   font-weight: 600;
-  color: #888;
+  color: var(--color-gray-400);
 }

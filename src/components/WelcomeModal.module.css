@@ -10,7 +10,7 @@
 }
 
 .modal {
-  background: #fff;
+  background: var(--color-white);
   border-radius: 12px;
   padding: 2rem 1.5rem 1.5rem;
   width: 100%;
@@ -36,13 +36,13 @@
 .title {
   margin: 0 0 0.5rem;
   font-size: 1.3rem;
-  color: #1b4332;
+  color: var(--color-green-900);
 }
 
 .desc {
   margin: 0;
   font-size: 0.95rem;
-  color: #555;
+  color: var(--color-gray-700);
   line-height: 1.5;
 }
 
@@ -58,14 +58,14 @@
   height: 10px;
   border-radius: 50%;
   border: none;
-  background: #ddd;
+  background: var(--color-gray-175);
   padding: 0;
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .dotActive {
-  background: #2d6a4f;
+  background: var(--color-green-700);
 }
 
 .actions {
@@ -76,10 +76,10 @@
 
 .skipBtn {
   padding: 0.6rem 1.25rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-gray-175);
   border-radius: 8px;
-  background: #fff;
-  color: #666;
+  background: var(--color-white);
+  color: var(--color-gray-600);
   font-weight: 500;
   font-size: 0.9rem;
   cursor: pointer;
@@ -87,15 +87,15 @@
 }
 
 .skipBtn:hover {
-  background: #f5f5f5;
+  background: var(--color-gray-50);
 }
 
 .nextBtn {
   padding: 0.6rem 1.5rem;
   border: none;
   border-radius: 8px;
-  background: #2d6a4f;
-  color: #fff;
+  background: var(--color-green-700);
+  color: var(--color-white);
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;
@@ -103,5 +103,5 @@
 }
 
 .nextBtn:hover {
-  background: #1565c0;
+  background: var(--color-blue-600);
 }

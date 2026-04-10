@@ -7,11 +7,11 @@
 .heading {
   margin: 0 0 0.25rem;
   font-size: 1.4rem;
-  color: #2d6a4f;
+  color: var(--color-green-700);
 }
 
 .subtitle {
-  color: #888;
+  color: var(--color-gray-400);
   font-size: 0.85rem;
   margin: 0 0 1.25rem;
 }
@@ -20,22 +20,22 @@
   padding: 0.65rem 0.85rem;
   margin-bottom: 1.25rem;
   border-radius: 8px;
-  background: #fff8e1;
-  border: 1px solid #ffe0b2;
+  background: var(--color-yellow-50);
+  border: 1px solid var(--color-orange-100);
   font-size: 0.8rem;
   line-height: 1.45;
-  color: #6d4c00;
+  color: var(--color-gold-500);
 }
 
 .disclaimer strong {
-  color: #e65100;
+  color: var(--color-orange-900);
 }
 
 /* Loading / Error */
 .loading {
   text-align: center;
   padding: 3rem 1rem;
-  color: #888;
+  color: var(--color-gray-400);
   font-size: 0.95rem;
 }
 
@@ -43,7 +43,7 @@
   display: inline-block;
   width: 24px;
   height: 24px;
-  border: 3px solid #2d6a4f;
+  border: 3px solid var(--color-green-700);
   border-top-color: transparent;
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
@@ -57,7 +57,7 @@
 .error {
   text-align: center;
   padding: 2rem;
-  color: #d32f2f;
+  color: var(--color-red-700);
   font-size: 0.9rem;
 }
 
@@ -67,8 +67,8 @@
   padding: 0.5rem 1.25rem;
   border: none;
   border-radius: 8px;
-  background: #2d6a4f;
-  color: #fff;
+  background: var(--color-green-700);
+  color: var(--color-white);
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
@@ -82,7 +82,7 @@
 .weekHeading {
   font-size: 1rem;
   font-weight: 700;
-  color: #2d6a4f;
+  color: var(--color-green-700);
   margin: 0 0 0.75rem;
   display: flex;
   align-items: center;
@@ -93,7 +93,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #43a047;
+  background: var(--color-green-400);
   display: inline-block;
   animation: pulse 1.5s ease-in-out infinite;
 }
@@ -112,14 +112,14 @@
 .weekCard {
   padding: 0.75rem;
   border-radius: 10px;
-  background: #e8f5e9;
-  border: 1px solid #c8e6c9;
+  background: var(--color-green-50);
+  border: 1px solid var(--color-green-100);
 }
 
 .weekCardWater {
   font-weight: 700;
   font-size: 0.9rem;
-  color: #1b5e20;
+  color: var(--color-green-alt-900);
   margin: 0 0 0.25rem;
 }
 
@@ -140,27 +140,27 @@
 }
 
 .speciesTrout {
-  background: #e3f2fd;
-  color: #1565c0;
+  background: var(--color-blue-50);
+  color: var(--color-blue-600);
 }
 
 .speciesCatfish {
-  background: #f3e5f5;
-  color: #7b1fa2;
+  background: var(--color-purple-50);
+  color: var(--color-purple-700);
 }
 
 .weekCardRegion {
   font-size: 0.72rem;
-  color: #666;
+  color: var(--color-gray-600);
   margin-top: 0.35rem;
 }
 
 .emptyWeek {
   padding: 1rem;
   text-align: center;
-  color: #999;
+  color: var(--color-gray-350);
   font-size: 0.85rem;
-  border: 1px dashed #ddd;
+  border: 1px dashed var(--color-gray-175);
   border-radius: 8px;
 }
 
@@ -174,30 +174,30 @@
 .searchInput {
   flex: 1;
   padding: 0.55rem 0.75rem;
-  border: 1.5px solid #ddd;
+  border: 1.5px solid var(--color-gray-175);
   border-radius: 8px;
   font-size: 0.85rem;
   box-sizing: border-box;
 }
 
 .searchInput::placeholder {
-  color: #bbb;
+  color: var(--color-gray-250);
 }
 
 .regionSelect {
   padding: 0.55rem 0.75rem;
-  border: 1.5px solid #ddd;
+  border: 1.5px solid var(--color-gray-175);
   border-radius: 8px;
   font-size: 0.85rem;
-  color: #333;
-  background: #fff;
+  color: var(--color-gray-900);
+  background: var(--color-white);
   min-width: 120px;
 }
 
 /* Region Accordion */
 .regionGroup {
   margin-bottom: 1rem;
-  border: 1px solid #e8e8e8;
+  border: 1px solid var(--color-gray-125);
   border-radius: 10px;
   overflow: hidden;
 }
@@ -207,23 +207,23 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.65rem 0.85rem;
-  background: #f5f5f5;
+  background: var(--color-gray-50);
   border: none;
   width: 100%;
   text-align: left;
   cursor: pointer;
   font-size: 0.9rem;
   font-weight: 700;
-  color: #333;
+  color: var(--color-gray-900);
 }
 
 .regionHeader:hover {
-  background: #eeeeee;
+  background: var(--color-gray-100-alt);
 }
 
 .regionChevron {
   transition: transform 0.2s;
-  color: #888;
+  color: var(--color-gray-400);
 }
 
 .regionChevronOpen {
@@ -233,7 +233,7 @@
 .regionCount {
   font-size: 0.75rem;
   font-weight: 400;
-  color: #888;
+  color: var(--color-gray-400);
   margin-left: 0.5rem;
 }
 
@@ -243,7 +243,7 @@
 
 .waterRow {
   padding: 0;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--color-gray-75);
 }
 
 .waterToggle {
@@ -259,13 +259,13 @@
 }
 
 .waterToggle:hover {
-  background: #f9f9f9;
+  background: var(--color-gray-10);
 }
 
 .waterName {
   font-weight: 600;
   font-size: 0.85rem;
-  color: #222;
+  color: var(--color-black);
 }
 
 .waterMeta {
@@ -277,13 +277,13 @@
 
 .waterCount {
   font-size: 0.72rem;
-  color: #999;
+  color: var(--color-gray-350);
   font-weight: 400;
 }
 
 .waterChevron {
   transition: transform 0.2s;
-  color: #aaa;
+  color: var(--color-gray-300);
 }
 
 .waterChevronOpen {
@@ -305,20 +305,20 @@
   padding: 0.35rem 0.5rem;
   border-radius: 6px;
   border-left: 3px solid transparent;
-  background: #fafafa;
+  background: var(--color-gray-bg-neutral);
 }
 
 .eventDate {
   font-size: 0.78rem;
   font-weight: 600;
-  color: #444;
+  color: var(--color-gray-800);
   white-space: nowrap;
   min-width: 130px;
 }
 
 .eventCurrent {
-  border-left-color: #43a047;
-  background: #e8f5e9;
+  border-left-color: var(--color-green-400);
+  background: var(--color-green-50);
 }
 
 .eventPast {
@@ -334,15 +334,15 @@
   cursor: pointer;
   font-weight: inherit;
   font-size: inherit;
-  color: #2d6a4f;
+  color: var(--color-green-700);
   text-decoration: underline;
   text-decoration-color: rgba(45, 106, 79, 0.35);
   text-underline-offset: 2px;
 }
 
 .waterLink:hover {
-  color: #1b5e20;
-  text-decoration-color: #1b5e20;
+  color: var(--color-green-alt-900);
+  text-decoration-color: var(--color-green-alt-900);
 }
 
 .mapIcon {
@@ -362,7 +362,7 @@
   margin-top: 1.5rem;
   padding: 0.75rem;
   font-size: 0.8rem;
-  color: #2d6a4f;
+  color: var(--color-green-700);
   text-decoration: none;
 }
 
@@ -374,10 +374,10 @@
   margin-top: 0.5rem;
   padding: 0.75rem;
   border-radius: 8px;
-  background: #fafafa;
-  border: 1px solid #eee;
+  background: var(--color-gray-bg-neutral);
+  border: 1px solid var(--color-gray-100);
   font-size: 0.75rem;
-  color: #999;
+  color: var(--color-gray-350);
   font-style: italic;
   text-align: center;
 }

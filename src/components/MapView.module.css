@@ -10,14 +10,14 @@
   align-items: center;
   justify-content: flex-end;
   padding: 0.5rem 1rem;
-  background: #fff;
-  border-bottom: 1px solid #e0e0e0;
+  background: var(--color-white);
+  border-bottom: 1px solid var(--color-gray-150);
   z-index: 500;
 }
 
 .badge {
-  background: #e8f5e9;
-  color: #2d6a4f;
+  background: var(--color-green-50);
+  color: var(--color-green-700);
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -38,19 +38,19 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--color-white);
   border: 2px solid rgba(0, 0, 0, 0.15);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #2d6a4f;
+  color: var(--color-green-700);
   transition: background 0.2s, transform 0.15s;
 }
 
 .recenterBtn:hover {
-  background: #f0f4f8;
+  background: var(--color-gray-bg-cool);
   transform: scale(1.05);
 }
 
@@ -63,19 +63,19 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--color-white);
   border: 2px solid rgba(0, 0, 0, 0.15);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #2d6a4f;
+  color: var(--color-green-700);
   transition: background 0.2s, transform 0.15s;
 }
 
 .layerBtn:hover {
-  background: #f0f4f8;
+  background: var(--color-gray-bg-cool);
   transform: scale(1.05);
 }
 
@@ -88,19 +88,19 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--color-white);
   border: 2px solid rgba(0, 0, 0, 0.15);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #0097a7;
+  color: var(--color-teal-600);
   transition: background 0.2s, transform 0.15s;
 }
 
 .waterInfoBtn:hover {
-  background: #f0f4f8;
+  background: var(--color-gray-bg-cool);
   transform: scale(1.05);
 }
 
@@ -113,19 +113,19 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--color-white);
   border: 2px solid rgba(0, 0, 0, 0.15);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #2d6a4f;
+  color: var(--color-green-700);
   transition: background 0.2s, transform 0.15s;
 }
 
 .heatPanelBtn:hover {
-  background: #f0f4f8;
+  background: var(--color-gray-bg-cool);
   transform: scale(1.05);
 }
 
@@ -138,19 +138,19 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--color-white);
   border: 2px solid rgba(0, 0, 0, 0.15);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #2e7d32;
+  color: var(--color-green-600);
   transition: background 0.2s, transform 0.15s;
 }
 
 .structureBtn:hover {
-  background: #f0f4f8;
+  background: var(--color-gray-bg-cool);
   transform: scale(1.05);
 }
 
@@ -163,13 +163,13 @@
 
 .gaugePopup strong {
   display: block;
-  color: #0097a7;
+  color: var(--color-teal-600);
   font-size: 0.9rem;
   margin-bottom: 0.25rem;
 }
 
 .gaugePopup div {
-  color: #444;
+  color: var(--color-gray-800);
 }
 
 /* Popup styles */
@@ -190,7 +190,7 @@
 }
 
 .popupSpecies {
-  color: #1b4332;
+  color: var(--color-green-900);
   font-size: 1rem;
   display: block;
   margin-bottom: 0.25rem;
@@ -200,19 +200,19 @@
   display: flex;
   gap: 0.5rem;
   font-size: 0.8rem;
-  color: #555;
+  color: var(--color-gray-700);
   margin-bottom: 0.25rem;
   flex-wrap: wrap;
 }
 
 .popupDate {
   font-size: 0.78rem;
-  color: #888;
+  color: var(--color-gray-400);
 }
 
 .popupWeather {
   font-size: 0.78rem;
-  color: #888;
+  color: var(--color-gray-400);
   margin-bottom: 0.5rem;
 }
 
@@ -225,7 +225,7 @@
 
 .popupLink {
   font-size: 0.8rem;
-  color: #2d6a4f;
+  color: var(--color-green-700);
   text-decoration: none;
   font-weight: 500;
 }
@@ -236,9 +236,9 @@
 
 .popupSaveBtn {
   font-size: 0.8rem;
-  color: #d4a017;
+  color: var(--color-gold-600);
   background: none;
-  border: 1px solid #d4a017;
+  border: 1px solid var(--color-gold-600);
   border-radius: 4px;
   padding: 0.15rem 0.5rem;
   cursor: pointer;
@@ -247,7 +247,7 @@
 }
 
 .popupSaveBtn:hover {
-  background: #fff8e1;
+  background: var(--color-yellow-50);
 }
 
 /* Spot popup */
@@ -256,7 +256,7 @@
 }
 
 .spotPopup strong {
-  color: #d4a017;
+  color: var(--color-gold-600);
   font-size: 0.95rem;
   display: block;
   margin-bottom: 0.25rem;
@@ -264,7 +264,7 @@
 
 .spotPopup p {
   font-size: 0.8rem;
-  color: #555;
+  color: var(--color-gray-700);
   margin: 0 0 0.4rem;
 }
 
@@ -281,7 +281,7 @@
 }
 
 .signInCard {
-  background: #fff;
+  background: var(--color-white);
   border-radius: 12px;
   padding: 1.5rem;
   text-align: center;
@@ -290,15 +290,15 @@
 
 .signInCard p {
   margin: 0 0 1rem;
-  color: #333;
+  color: var(--color-gray-900);
   font-weight: 500;
 }
 
 .signInLink {
   display: inline-block;
   padding: 0.5rem 1.5rem;
-  background: #2d6a4f;
-  color: #fff;
+  background: var(--color-green-700);
+  color: var(--color-white);
   border-radius: 8px;
   text-decoration: none;
   font-weight: 600;
@@ -307,10 +307,10 @@
 
 .cancelBtn {
   padding: 0.5rem 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-gray-175);
   border-radius: 8px;
-  background: #fff;
-  color: #666;
+  background: var(--color-white);
+  color: var(--color-gray-600);
   cursor: pointer;
 }
 
@@ -323,7 +323,7 @@
   justify-content: center;
   padding: 2rem;
   text-align: center;
-  color: #555;
+  color: var(--color-gray-700);
 }
 
 .placeholderIcon {
@@ -334,7 +334,7 @@
 .placeholderTitle {
   margin: 0 0 0.5rem;
   font-size: 1.3rem;
-  color: #333;
+  color: var(--color-gray-900);
 }
 
 .placeholderText {
@@ -342,7 +342,7 @@
   margin: 0 0 1.5rem;
   font-size: 0.95rem;
   line-height: 1.5;
-  color: #777;
+  color: var(--color-gray-500-alt);
 }
 
 .placeholderLinks {
@@ -352,8 +352,8 @@
 
 .placeholderLink {
   padding: 0.6rem 1.2rem;
-  background: #e8f5e9;
-  color: #2d6a4f;
+  background: var(--color-green-50);
+  color: var(--color-green-700);
   border-radius: 8px;
   text-decoration: none;
   font-weight: 600;
@@ -362,7 +362,7 @@
 }
 
 .placeholderLink:hover {
-  background: #d2e3fc;
+  background: var(--color-blue-bg-6);
 }
 
 /* Location search box */
@@ -378,7 +378,7 @@
 .searchInputWrap {
   display: flex;
   align-items: center;
-  background: #fff;
+  background: var(--color-white);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   border: 2px solid rgba(0, 0, 0, 0.15);
@@ -397,7 +397,7 @@
 }
 
 .searchInput::placeholder {
-  color: #999;
+  color: var(--color-gray-350);
 }
 
 .searchBtn {
@@ -408,16 +408,16 @@
   border: none;
   padding: 0.5rem 0.6rem;
   cursor: pointer;
-  color: #2d6a4f;
+  color: var(--color-green-700);
   transition: color 0.2s;
 }
 
 .searchBtn:hover:not(:disabled) {
-  color: #1b4332;
+  color: var(--color-green-900);
 }
 
 .searchBtn:disabled {
-  color: #bbb;
+  color: var(--color-gray-250);
   cursor: default;
 }
 
@@ -429,21 +429,21 @@
   border: none;
   padding: 0 0.4rem;
   cursor: pointer;
-  color: #999;
+  color: var(--color-gray-350);
   font-size: 1.2rem;
   line-height: 1;
   transition: color 0.2s;
 }
 
 .searchClear:hover {
-  color: #333;
+  color: var(--color-gray-900);
 }
 
 .searchError {
   margin-top: 4px;
   padding: 0.25rem 0.75rem;
   font-size: 0.78rem;
-  color: #d32f2f;
+  color: var(--color-red-700);
   background: rgba(255, 255, 255, 0.95);
   border-radius: 6px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);

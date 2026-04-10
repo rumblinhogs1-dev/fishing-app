@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { getApiKey, resizeImage } from '../utils/gemini';
+import { getApiKey, hasEnvKey, resizeImage } from '../utils/gemini';
 import { identifyLure } from '../utils/geminiLure';
 import styles from './QuickLureId.module.css';
 
@@ -32,7 +32,7 @@ export default function QuickLureId({ onIdentified }) {
 
   async function identify() {
     const key = getApiKey();
-    if (!key) {
+    if (!key && !hasEnvKey()) {
       setError('No API key configured.');
       return;
     }

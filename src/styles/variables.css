@@ -1,0 +1,113 @@
+:root {
+  /* ===== Brand Greens ===== */
+  --color-green-900: #1b4332;     /* darkest green — headings, nav bg */
+  --color-green-800: #245c3e;     /* dark green accent */
+  --color-green-700: #2d6a4f;     /* PRIMARY — buttons, links, active states */
+  --color-green-600: #2e7d32;     /* success green — toasts, confirmations */
+  --color-green-500: #388e3c;     /* medium green */
+  --color-green-400: #43a047;     /* lighter green */
+  --color-green-300: #4caf50;     /* light green accent */
+  --color-green-200: #a5d6a7;     /* pale green */
+  --color-green-100: #c8e6c9;     /* very light green */
+  --color-green-50: #e8f5e9;      /* green tint bg — hover states */
+  --color-green-25: #d8f3dc;      /* subtle green bg */
+  --color-green-alt-900: #1b5e20; /* deep green alt */
+  --color-green-alt-500: #558b2f; /* olive green */
+  --color-green-bg-light: #f1f8e9;  /* lightest green bg */
+  --color-green-bg-subtle: #f9fdf9; /* near-white green */
+  --color-green-bg-wash: #f8faf9;   /* barely green */
+
+  /* ===== Reds / Errors ===== */
+  --color-red-900: #b71c1c;      /* darkest red */
+  --color-red-800: #c62828;      /* deep red — error toasts */
+  --color-red-700: #d32f2f;      /* ERROR PRIMARY — destructive actions */
+  --color-red-600: #c2185b;      /* crimson / pink-red */
+  --color-red-500: #e76f51;      /* soft red-orange */
+  --color-red-400: #d84315;      /* burnt red */
+  --color-red-50: #fdecea;       /* error bg tint */
+  --color-red-bg-light: #ffebee; /* light red bg */
+  --color-red-bg-subtle: #fce4ec; /* pink-red bg */
+  --color-red-bg-error: #fff0f0; /* very light error bg */
+  --color-red-bg-warm: #fef2f2;  /* warm error bg */
+  --color-red-bg-peach: #fbe9e7; /* peach bg */
+  --color-red-100: #ffcdd2;      /* light red */
+
+  /* ===== Oranges / Warnings ===== */
+  --color-orange-900: #e65100;   /* darkest orange — warning text */
+  --color-orange-800: #ef6c00;   /* deep orange */
+  --color-orange-700: #f57c00;   /* strong orange */
+  --color-orange-500: #ff9800;   /* WARNING PRIMARY */
+  --color-orange-100: #ffe0b2;   /* light orange */
+  --color-orange-50: #fff3e0;    /* orange tint bg */
+
+  /* ===== Yellows / Golds ===== */
+  --color-yellow-700: #f9a825;   /* amber */
+  --color-yellow-500: #ffd600;   /* bright yellow */
+  --color-yellow-100: #ffe082;   /* light yellow */
+  --color-yellow-50: #fff8e1;    /* yellow tint bg */
+  --color-yellow-25: #fffde7;    /* palest yellow */
+  --color-gold-700: #b8860b;     /* dark gold */
+  --color-gold-600: #d4a017;     /* GOLD — achievements, premium */
+  --color-gold-500: #6d4c00;     /* dark brown-gold */
+
+  /* ===== Blues ===== */
+  --color-blue-700: #1558b0;     /* dark blue */
+  --color-blue-600: #1565c0;     /* info blue — toasts */
+  --color-blue-500: #1976d2;     /* medium blue */
+  --color-blue-400: #2196f3;     /* standard blue */
+  --color-blue-200: #90caf9;     /* light blue */
+  --color-blue-100: #c5d8f8;     /* pale blue */
+  --color-blue-75: #d0e1fd;      /* lighter blue */
+  --color-blue-50: #e3f2fd;      /* blue tint bg */
+  --color-blue-bg-1: #f0f6ff;    /* light blue bg */
+  --color-blue-bg-2: #f5f8ff;    /* subtle blue bg */
+  --color-blue-bg-3: #f8fbff;    /* near-white blue */
+  --color-blue-bg-4: #f8fafd;    /* barely blue */
+  --color-blue-bg-5: #e0e7f0;    /* muted blue-gray */
+  --color-blue-bg-6: #d2e3fc;    /* medium blue bg */
+  --color-blue-bg-7: #e3edfc;    /* soft blue bg */
+
+  /* ===== Purples ===== */
+  --color-purple-700: #7b1fa2;   /* deep purple */
+  --color-purple-500: #9c27b0;   /* medium purple */
+  --color-purple-50: #f3e5f5;    /* purple tint bg */
+
+  /* ===== Teal ===== */
+  --color-teal-700: #00796b;     /* teal */
+  --color-teal-600: #0097a7;     /* cyan-teal */
+  --color-teal-50: #e0f2f1;      /* teal tint bg */
+
+  /* ===== Indigo ===== */
+  --color-indigo-100: #c5cae9;   /* light indigo */
+  --color-indigo-50: #e8eaf6;    /* indigo tint bg */
+  --color-indigo-bg: #dcedc8;    /* lime-green bg (misc) */
+
+  /* ===== Neutrals ===== */
+  --color-black: #222;           /* near-black — body text */
+  --color-gray-900: #333;        /* dark gray — secondary text */
+  --color-gray-800: #444;        /* dark gray alt */
+  --color-gray-700: #555;        /* medium-dark gray */
+  --color-gray-600: #666;        /* medium gray */
+  --color-gray-500: #757575;     /* material gray */
+  --color-gray-500-alt: #777;    /* gray alt */
+  --color-gray-400: #888;        /* MUTED TEXT — placeholders, hints */
+  --color-gray-350: #999;        /* light-muted text */
+  --color-gray-300: #aaa;        /* disabled text */
+  --color-gray-250: #bbb;        /* light gray */
+  --color-gray-200: #ccc;        /* borders */
+  --color-gray-175: #ddd;        /* light borders */
+  --color-gray-150: #e0e0e0;     /* dividers */
+  --color-gray-125: #e8e8e8;     /* subtle borders */
+  --color-gray-100: #eee;        /* light bg */
+  --color-gray-100-alt: #eeeeee; /* same as #eee (full form) */
+  --color-gray-75: #f0f0f0;      /* very light bg */
+  --color-gray-50: #f5f5f5;      /* near-white bg */
+  --color-gray-25: #f8f8f8;      /* barely gray */
+  --color-gray-10: #f9f9f9;      /* almost white */
+  --color-gray-bg-cool: #f0f4f8; /* cool gray bg — page background */
+  --color-gray-bg-warm: #f8f9fa; /* warm gray bg */
+  --color-gray-bg-neutral: #fafafa; /* neutral light bg */
+  --color-gray-bg-green: #f0f4f0; /* greenish gray bg */
+  --color-gray-500-material: #616161; /* material design gray */
+  --color-white: #fff;           /* white */
+}

@@ -68,6 +68,7 @@ const TermsPage = lazyRetry(() => import('./components/TermsPage'));
 const PrivacyPolicy = lazyRetry(() => import('./components/PrivacyPolicy'));
 const PricingPage = lazyRetry(() => import('./components/PricingPage'));
 const StockingSchedule = lazyRetry(() => import('./components/StockingSchedule'));
+const AdminModeration = lazyRetry(() => import('./components/AdminModeration'));
 
 function EditPage({ getCatch, updateCatch }) {
   const { id } = useParams();
@@ -172,6 +173,7 @@ export default function App() {
                   <Route path="/notifications" element={<Notifications />} />
                   <Route path="/import-sonar" element={<SonarImport />} />
                   <Route path="/spots" element={<SpotsList />} />
+                  <Route path="/admin/moderation" element={<AdminModeration />} />
                 </Route>
 
                 <Route path="*" element={<Navigate to="/" replace />} />

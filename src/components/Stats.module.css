@@ -5,13 +5,13 @@
 }
 
 .heading {
-  color: #1b4332;
+  color: var(--color-green-900);
   margin: 0 0 1.5rem;
 }
 
 .empty {
   text-align: center;
-  color: #888;
+  color: var(--color-gray-400);
   padding: 2rem;
 }
 
@@ -23,7 +23,7 @@
 }
 
 .statCard {
-  background: #fff;
+  background: var(--color-white);
   border-radius: 12px;
   padding: 1.5rem;
   text-align: center;
@@ -36,16 +36,16 @@
 .statValue {
   font-size: 1.6rem;
   font-weight: 700;
-  color: #2d6a4f;
+  color: var(--color-green-700);
 }
 
 .statLabel {
   font-size: 0.85rem;
-  color: #666;
+  color: var(--color-gray-600);
 }
 
 .section {
-  background: #fff;
+  background: var(--color-white);
   border-radius: 12px;
   padding: 1.25rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
@@ -54,7 +54,7 @@
 
 .section h3 {
   margin: 0 0 1rem;
-  color: #333;
+  color: var(--color-gray-900);
   font-size: 1rem;
 }
 
@@ -68,7 +68,7 @@
   display: flex;
   justify-content: space-between;
   padding: 0.5rem 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-gray-100);
   font-size: 0.9rem;
 }
 
@@ -77,8 +77,8 @@
 }
 
 .count {
-  background: #e8f5e9;
-  color: #2d6a4f;
+  background: var(--color-green-50);
+  color: var(--color-green-700);
   padding: 0.15rem 0.5rem;
   border-radius: 12px;
   font-size: 0.8rem;
@@ -106,20 +106,20 @@
 .barFill {
   width: 70%;
   max-width: 40px;
-  background: linear-gradient(to top, #2d6a4f, #4caf50);
+  background: linear-gradient(to top, var(--color-green-700), var(--color-green-300));
   border-radius: 4px 4px 0 0;
   min-height: 4px;
 }
 
 .barLabel {
   font-size: 0.7rem;
-  color: #888;
+  color: var(--color-gray-400);
   margin-top: 0.35rem;
 }
 
 .barValue {
   font-size: 0.7rem;
-  color: #2d6a4f;
+  color: var(--color-green-700);
   font-weight: 600;
   position: absolute;
   top: 0;

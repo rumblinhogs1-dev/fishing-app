@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { getApiKey, resizeImage, identifyFish } from '../utils/gemini';
+import { getApiKey, hasEnvKey, resizeImage, identifyFish } from '../utils/gemini';
 import styles from './QuickIdentify.module.css';
 
 export default function QuickIdentify() {
@@ -32,7 +32,7 @@ export default function QuickIdentify() {
 
   async function identify() {
     const key = getApiKey();
-    if (!key) {
+    if (!key && !hasEnvKey()) {
       setError('No API key configured.');
       return;
     }

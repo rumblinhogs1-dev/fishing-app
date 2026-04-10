@@ -5,12 +5,12 @@
 }
 
 .heading {
-  color: #1b4332;
+  color: var(--color-green-900);
   margin: 0 0 0.5rem;
 }
 
 .intro {
-  color: #666;
+  color: var(--color-gray-600);
   font-size: 0.9rem;
   margin: 0 0 1.25rem;
 }
@@ -19,21 +19,21 @@
 .funFactsSection {
   margin-bottom: 1.5rem;
   padding: 1rem 1.25rem;
-  background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+  background: linear-gradient(135deg, var(--color-green-50), var(--color-green-bg-light));
   border-radius: 12px;
-  border: 1px solid #c8e6c9;
+  border: 1px solid var(--color-green-100);
 }
 
 .funFactsHeading {
   margin: 0 0 0.15rem;
   font-size: 1.05rem;
-  color: #1b4332;
+  color: var(--color-green-900);
 }
 
 .funFactsSubtitle {
   margin: 0 0 0.75rem;
   font-size: 0.75rem;
-  color: #888;
+  color: var(--color-gray-400);
 }
 
 .funFactsList {
@@ -43,7 +43,7 @@
 }
 
 .funFactCard {
-  background: #fff;
+  background: var(--color-white);
   border-radius: 10px;
   padding: 0.75rem 1rem;
   box-shadow: 0 1px 4px rgba(0,0,0,0.05);
@@ -56,22 +56,22 @@
   font-size: 0.65rem;
   font-weight: 600;
   text-transform: uppercase;
-  background: #e8f5e9;
-  color: #2e7d32;
+  background: var(--color-green-50);
+  color: var(--color-green-600);
   margin-bottom: 0.35rem;
 }
 
 .funFactText {
   margin: 0;
   font-size: 0.85rem;
-  color: #444;
+  color: var(--color-gray-800);
   line-height: 1.5;
 }
 
 .search {
   width: 100%;
   padding: 0.6rem 1rem;
-  border: 1.5px solid #ccc;
+  border: 1.5px solid var(--color-gray-200);
   border-radius: 10px;
   font-size: 0.95rem;
   font-family: inherit;
@@ -81,18 +81,18 @@
 
 .search:focus {
   outline: none;
-  border-color: #2e7d32;
+  border-color: var(--color-green-600);
   box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.12);
 }
 
 .empty {
   text-align: center;
-  color: #888;
+  color: var(--color-gray-400);
   padding: 2rem;
 }
 
 .section {
-  background: #fff;
+  background: var(--color-white);
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
   margin-bottom: 0.75rem;
@@ -112,31 +112,31 @@
 }
 
 .accordion:hover {
-  background: #f8f9fa;
+  background: var(--color-gray-bg-warm);
 }
 
 .categoryTitle {
   font-size: 1rem;
   font-weight: 700;
-  color: #2e7d32;
+  color: var(--color-green-600);
   flex: 1;
   text-align: left;
 }
 
 .tipCount {
   font-size: 0.75rem;
-  color: #888;
+  color: var(--color-gray-400);
   font-weight: 500;
 }
 
 .chevron {
   transition: transform 0.2s;
-  color: #888;
+  color: var(--color-gray-400);
 }
 
 .chevronOpen {
   transition: transform 0.2s;
-  color: #888;
+  color: var(--color-gray-400);
   transform: rotate(180deg);
 }
 
@@ -148,7 +148,7 @@
 }
 
 .tipCard {
-  background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+  background: linear-gradient(135deg, var(--color-green-50), var(--color-green-bg-light));
   border-radius: 10px;
   padding: 1rem 1.25rem;
 }
@@ -156,13 +156,13 @@
 .tipTitle {
   margin: 0 0 0.4rem;
   font-size: 0.95rem;
-  color: #333;
+  color: var(--color-gray-900);
 }
 
 .tipBody {
   margin: 0;
   font-size: 0.85rem;
-  color: #555;
+  color: var(--color-gray-700);
   line-height: 1.55;
 }
 

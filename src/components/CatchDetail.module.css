@@ -7,7 +7,7 @@
 .backBtn {
   background: none;
   border: none;
-  color: #2d6a4f;
+  color: var(--color-green-700);
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
@@ -17,12 +17,12 @@
   align-items: center;
   gap: 0.25rem;
 }
-.backBtn:hover { color: #1b4332; }
+.backBtn:hover { color: var(--color-green-900); }
 
-.loading { text-align: center; padding: 3rem; color: #888; }
+.loading { text-align: center; padding: 3rem; color: var(--color-gray-400); }
 
 .card {
-  background: #fff;
+  background: var(--color-white);
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   overflow: hidden;
@@ -33,31 +33,31 @@
   align-items: center;
   gap: 0.6rem;
   padding: 1rem 1.25rem;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-gray-75);
 }
 
 .authorAvatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
-.authorInitial { width: 36px; height: 36px; border-radius: 50%; background: #2d6a4f; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
-.authorName { font-weight: 600; color: #222; text-decoration: none; font-size: 0.95rem; }
-.authorName:hover { color: #2d6a4f; }
+.authorInitial { width: 36px; height: 36px; border-radius: 50%; background: var(--color-green-700); color: var(--color-white); display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+.authorName { font-weight: 600; color: var(--color-black); text-decoration: none; font-size: 0.95rem; }
+.authorName:hover { color: var(--color-green-700); }
 
 .photo {
   width: 100%;
   max-height: 500px;
   object-fit: contain;
-  background: #f0f0f0;
+  background: var(--color-gray-75);
   display: block;
 }
 
 .body { padding: 1.25rem; }
 
-.species { margin: 0 0 0.25rem; color: #1b4332; font-size: 1.4rem; }
+.species { margin: 0 0 0.25rem; color: var(--color-green-900); font-size: 1.4rem; }
 
 .meta {
   display: flex;
   gap: 0.75rem;
   font-size: 0.85rem;
-  color: #888;
+  color: var(--color-gray-400);
   margin-bottom: 1rem;
 }
 
@@ -73,12 +73,12 @@
   flex-direction: column;
   gap: 0.15rem;
   padding: 0.6rem 0.75rem;
-  background: #f8f9fa;
+  background: var(--color-gray-bg-warm);
   border-radius: 8px;
 }
 
-.detailLabel { font-size: 0.7rem; color: #888; text-transform: uppercase; letter-spacing: 0.3px; }
-.detailValue { font-size: 0.95rem; font-weight: 600; color: #333; }
+.detailLabel { font-size: 0.7rem; color: var(--color-gray-400); text-transform: uppercase; letter-spacing: 0.3px; }
+.detailValue { font-size: 0.95rem; font-weight: 600; color: var(--color-gray-900); }
 
 .hasTooltip {
   position: relative;
@@ -93,8 +93,8 @@
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #90caf9;
-  color: #1b4332;
+  background: var(--color-blue-200);
+  color: var(--color-green-900);
   font-size: 10px;
   font-weight: 700;
   font-style: italic;
@@ -109,8 +109,8 @@
 .hasTooltip:hover::before,
 .hasTooltip.tooltipActive::before {
   opacity: 1;
-  background: #2d6a4f;
-  color: #fff;
+  background: var(--color-green-700);
+  color: var(--color-white);
 }
 
 .hasTooltip::after {
@@ -119,8 +119,8 @@
   bottom: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%);
-  background: #333;
-  color: #fff;
+  background: var(--color-gray-900);
+  color: var(--color-white);
   padding: 0.6rem 0.75rem;
   border-radius: 8px;
   font-size: 0.75rem;
@@ -156,8 +156,8 @@
     left: 5vw;
     right: 5vw;
     width: 90vw;
-    background: #333;
-    color: #fff;
+    background: var(--color-gray-900);
+    color: var(--color-white);
     padding: 0.75rem 1rem;
     border-radius: 10px;
     font-size: 0.8rem;
@@ -179,9 +179,9 @@
   gap: 0.75rem;
   margin-bottom: 1rem;
   padding: 0.75rem;
-  background: #e8f5e9;
+  background: var(--color-green-50);
   border-radius: 8px;
-  border: 1px solid #c5d8f8;
+  border: 1px solid var(--color-blue-100);
 }
 
 .lureSection {
@@ -190,7 +190,7 @@
 
 .lureSectionTitle {
   margin: 0 0 0.5rem;
-  color: #1b4332;
+  color: var(--color-green-900);
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.3px;
@@ -200,7 +200,7 @@
   width: 100%;
   max-height: 300px;
   object-fit: contain;
-  background: #f8f9fa;
+  background: var(--color-gray-bg-warm);
   border-radius: 8px;
   display: block;
 }
@@ -208,13 +208,13 @@
 .lureName {
   margin: 0.4rem 0 0;
   font-weight: 600;
-  color: #333;
+  color: var(--color-gray-900);
   font-size: 0.95rem;
 }
 
 .notes { margin-top: 1rem; }
-.notes h4 { margin: 0 0 0.3rem; color: #1b4332; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.3px; }
-.notes p { margin: 0; color: #444; font-size: 0.9rem; line-height: 1.5; }
+.notes h4 { margin: 0 0 0.3rem; color: var(--color-green-900); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.3px; }
+.notes p { margin: 0; color: var(--color-gray-800); font-size: 0.9rem; line-height: 1.5; }
 
 .saveSpotBtn {
   display: inline-flex;
@@ -222,8 +222,8 @@
   gap: 0.4rem;
   margin: 0.75rem 0;
   padding: 0.5rem 1rem;
-  background: #d4a017;
-  color: #fff;
+  background: var(--color-gold-600);
+  color: var(--color-white);
   border: none;
   border-radius: 8px;
   font-weight: 600;
@@ -233,7 +233,7 @@
 }
 
 .saveSpotBtn:hover {
-  background: #b8860b;
+  background: var(--color-gold-700);
 }
 
 .shareBtn {
@@ -242,8 +242,8 @@
   gap: 0.4rem;
   margin: 0.75rem 0 0.75rem 0.5rem;
   padding: 0.5rem 1rem;
-  background: #2d6a4f;
-  color: #fff;
+  background: var(--color-green-700);
+  color: var(--color-white);
   border: none;
   border-radius: 8px;
   font-weight: 600;
@@ -253,7 +253,7 @@
 }
 
 .shareBtn:hover {
-  background: #245c3e;
+  background: var(--color-green-800);
 }
 
 .reportBtn {
@@ -263,16 +263,16 @@
   margin: 0.75rem 0 0.75rem 0.5rem;
   padding: 0.4rem 0.75rem;
   background: none;
-  color: #999;
-  border: 1px solid #ddd;
+  color: var(--color-gray-350);
+  border: 1px solid var(--color-gray-175);
   border-radius: 8px;
   font-size: 0.78rem;
   cursor: pointer;
 }
 
 .reportBtn:hover {
-  color: #d32f2f;
-  border-color: #d32f2f;
+  color: var(--color-red-700);
+  border-color: var(--color-red-700);
 }
 
 @media (max-width: 600px) {

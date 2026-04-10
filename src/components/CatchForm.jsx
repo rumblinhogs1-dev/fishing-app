@@ -5,7 +5,7 @@ import QuickLureId from './QuickLureId';
 import RegulationBadge from './RegulationBadge';
 import SpeciesInfoCard from './SpeciesInfoCard';
 import { getGPSLocation, reverseGeocode, fetchWeather, fetchWaterData } from '../utils/weather';
-import { identifyFish, getApiKey } from '../utils/gemini';
+import { identifyFish, getApiKey, hasEnvKey } from '../utils/gemini';
 import { getRandomTip } from '../utils/conservationTips';
 import { addPendingCatch } from '../utils/offlineStorage';
 import { useToast } from '../contexts/ToastContext';
@@ -128,7 +128,7 @@ export default function CatchForm({ existing, onSubmit }) {
     }
 
     const apiKey = getApiKey();
-    if (!apiKey) return;
+    if (!apiKey && !hasEnvKey()) return;
 
     setFishIdLoading(true);
     setFishIdError('');
