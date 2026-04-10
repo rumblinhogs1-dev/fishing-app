@@ -188,7 +188,7 @@ export default function CatchDetail() {
             {entry.depth && show('depth') && (
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Depth</span>
-                <span className={styles.detailValue}>{entry.depth} ft</span>
+                <span className={styles.detailValue}>{Math.round(entry.depth)} ft</span>
               </div>
             )}
             {entry.bait && show('bait') && (

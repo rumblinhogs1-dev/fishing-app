@@ -259,7 +259,7 @@ export default function CatchForm({ existing, onSubmit }) {
       weatherCloudCover: form.weatherCloudCover !== '' ? Number(form.weatherCloudCover) : '',
       waterTemp: form.waterTemp ? Number(form.waterTemp) : '',
       flowRate: form.flowRate ? Number(form.flowRate) : '',
-      depth: form.depth ? Number(form.depth) : '',
+      depth: form.depth ? Math.round(Number(form.depth)) : '',
       aiSpecies: fishIdResult?.species || '',
       aiConfidence: fishIdResult?.confidence ?? null,
       aiEstimatedAge: fishIdResult?.estimatedAge || '',
@@ -518,7 +518,7 @@ export default function CatchForm({ existing, onSubmit }) {
 
         <label className={styles.field}>
           <span>Depth (ft)</span>
-          <input name="depth" type="number" step="0.1" min="0" value={form.depth} onChange={handleChange} placeholder="Depth at catch location" />
+          <input name="depth" type="number" step="1" min="0" value={form.depth} onChange={handleChange} placeholder="Depth at catch location" />
         </label>
       </div>
 
