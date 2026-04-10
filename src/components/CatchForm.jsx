@@ -205,7 +205,7 @@ export default function CatchForm({ existing, onSubmit }) {
       weatherCloudCover: weatherData?.cloudCover ?? prev.weatherCloudCover,
       waterTemp: waterData?.waterTemp ?? prev.waterTemp,
       flowRate: waterData?.flowRate ?? prev.flowRate,
-      depth: waterData?.gaugeHeight ?? prev.depth,
+      depth: waterData?.gaugeHeight != null ? Math.round(waterData.gaugeHeight) : prev.depth,
       waterStation: waterData?.stationName ?? prev.waterStation,
     }));
   }
