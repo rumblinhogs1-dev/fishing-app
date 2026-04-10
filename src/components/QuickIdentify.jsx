@@ -1,9 +1,10 @@
 import { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getApiKey, hasEnvKey, resizeImage, identifyFish } from '../utils/gemini';
 import styles from './QuickIdentify.module.css';
 
 export default function QuickIdentify() {
+  const navigate = useNavigate();
   const [image, setImage] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -120,6 +121,12 @@ export default function QuickIdentify() {
             {result.weather && <span className={styles.detailTag}>&#9788; {result.weather}</span>}
             {result.location && <span className={styles.detailTag}>&#9906; {result.location}</span>}
           </div>
+          <button
+            className={styles.logBtn}
+            onClick={() => navigate('/add', { state: { prefill: { species: result.species, weight: result.estimatedWeight, length: result.estimatedLength, image, fishIdResult: result } } })}
+          >
+            Log This Catch
+          </button>
         </div>
       )}
 

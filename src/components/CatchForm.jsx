@@ -94,6 +94,20 @@ export default function CatchForm({ existing, onSubmit }) {
   }, [existing]);
 
   useEffect(() => {
+    const prefill = location.state?.prefill;
+    if (prefill && !existing) {
+      setForm((prev) => ({
+        ...prev,
+        species: prefill.species || prev.species,
+        weight: parseNumber(prefill.weight) || prev.weight,
+        length: parseNumber(prefill.length) || prev.length,
+        image: prefill.image || prev.image,
+      }));
+      if (prefill.fishIdResult) setFishIdResult(prefill.fishIdResult);
+    }
+  }, [existing, location.state?.prefill]);
+
+  useEffect(() => {
     const lat = location.state?.lat;
     const lng = location.state?.lng;
     if (lat != null && lng != null) {

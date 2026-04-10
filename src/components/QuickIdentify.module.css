@@ -217,3 +217,20 @@
   font-size: 0.85rem;
   text-align: center;
 }
+
+.logBtn {
+  margin-top: 0.75rem;
+  width: 100%;
+  padding: 0.5rem;
+  background: var(--color-primary, #2d6a4f);
+  color: var(--color-white, #fff);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.logBtn:hover {
+  opacity: 0.9;
+}
