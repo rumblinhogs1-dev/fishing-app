@@ -43,7 +43,7 @@ const MAX_BODY_SIZE = 1024 * 1024; // 1MB max for Gemini requests (images)
 const MAX_TEXT_QUERY_LEN = 500;
 
 const GEMINI_MODEL = 'gemini-2.5-flash';
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1/models/${GEMINI_MODEL}:generateContent`;
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 const PLACES_URL = 'https://places.googleapis.com/v1/places:searchText';
 
 /**
