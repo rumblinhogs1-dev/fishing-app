@@ -92,7 +92,7 @@ export async function fetchWithRetry(url, options, apiKey) {
       continue;
     }
 
-    if (res.status === 429 && attempt < MAX_RETRIES) {
+    if (attempt < MAX_RETRIES && (res.status === 429 || res.status >= 500)) {
       const retryAfter = res.headers.get('Retry-After');
       const delay = retryAfter
         ? parseInt(retryAfter, 10) * 1000
