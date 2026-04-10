@@ -1,9 +1,11 @@
 import { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getApiKey, hasEnvKey, resizeImage } from '../utils/gemini';
 import { identifyLure } from '../utils/geminiLure';
 import styles from './QuickLureId.module.css';
 
 export default function QuickLureId({ onIdentified }) {
+  const navigate = useNavigate();
   const [image, setImage] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -110,6 +112,14 @@ export default function QuickLureId({ onIdentified }) {
             {result.color && <span className={styles.resultTag}>{result.color}</span>}
             {result.category && <span className={styles.resultTag}>{result.category}</span>}
           </div>
+          {!onIdentified && (
+            <button
+              className={styles.logBtn}
+              onClick={() => navigate('/add', { state: { prefill: { bait: result.name || result.type, lureType: result.type, lureName: result.name, lureCategory: result.category, lureColor: result.color, lureImage: image } } })}
+            >
+              Log This Catch
+            </button>
+          )}
         </div>
       )}
     </div>

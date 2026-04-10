@@ -102,6 +102,12 @@ export default function CatchForm({ existing, onSubmit }) {
         weight: parseNumber(prefill.weight) || prev.weight,
         length: parseNumber(prefill.length) || prev.length,
         image: prefill.image || prev.image,
+        bait: prefill.bait || prev.bait,
+        lureType: prefill.lureType || prev.lureType,
+        lureName: prefill.lureName || prev.lureName,
+        lureCategory: prefill.lureCategory || prev.lureCategory,
+        lureColor: prefill.lureColor || prev.lureColor,
+        lureImage: prefill.lureImage || prev.lureImage,
       }));
       if (prefill.fishIdResult) setFishIdResult(prefill.fishIdResult);
     }

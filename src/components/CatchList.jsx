@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import CatchCard from './CatchCard';
 import GettingStarted from './GettingStarted';
 import QuickIdentify from './QuickIdentify';
+import QuickLureId from './QuickLureId';
 import { PremiumBadge } from './UpgradePrompt';
 import styles from './CatchList.module.css';
 
@@ -191,6 +192,7 @@ export default function CatchList({ catches, onDelete }) {
     <div className={styles.container}>
       <GettingStarted catches={catches} />
       <QuickIdentify />
+      <QuickLureId />
 
       <div className={styles.toolbar}>
         <h2 className={styles.heading}>My Catches</h2>

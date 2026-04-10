@@ -87,3 +87,20 @@
 .lureName { font-weight: 700; color: var(--color-orange-900); font-size: 0.9rem; }
 .resultTags { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.3rem; }
 .resultTag { background: rgba(255, 255, 255, 0.7); color: var(--color-gray-900); padding: 0.1rem 0.4rem; border-radius: 10px; font-size: 0.7rem; font-weight: 500; }
+
+.logBtn {
+  margin-top: 0.6rem;
+  width: 100%;
+  padding: 0.45rem;
+  background: var(--color-primary, #2d6a4f);
+  color: var(--color-white, #fff);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.logBtn:hover {
+  opacity: 0.9;
+}
