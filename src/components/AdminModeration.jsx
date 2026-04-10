@@ -43,47 +43,52 @@ export default function AdminModeration() {
   const [loadingLog, setLoadingLog] = useState(true);
   const [userCache, setUserCache] = useState({});
 
-  if (!user || !isAdmin(user.uid)) {
-    return <Navigate to="/" replace />;
-  }
-
   const resolveUser = useCallback(async (uid) => {
-    if (!uid || userCache[uid]) return;
-    const u = await getUser(uid);
-    if (u) setUserCache(prev => ({ ...prev, [uid]: u }));
-  }, [userCache]);
+    if (!uid) return;
+    setUserCache(prev => {
+      if (prev[uid]) return prev; // already cached, no update needed
+      getUser(uid).then(u => {
+        if (u) setUserCache(c => ({ ...c, [uid]: u }));
+      });
+      return prev;
+    });
+  }, []);
 
   useEffect(() => {
+    if (!user || !isAdmin(user.uid)) return;
     async function load() {
       setLoadingReports(true);
       try {
         const { reports: r } = await getReports({ status: statusFilter });
         setReports(r);
-        r.forEach(rep => {
-          resolveUser(rep.reportedBy);
-        });
-      } catch (err) {
+        r.forEach(rep => resolveUser(rep.reportedBy));
+      } catch {
         addToast('Failed to load reports', 'error');
       }
       setLoadingReports(false);
     }
     load();
-  }, [statusFilter]);
+  }, [statusFilter, user, resolveUser, addToast]);
 
   useEffect(() => {
+    if (!user || !isAdmin(user.uid) || tab !== 'automod') return;
     async function load() {
       setLoadingLog(true);
       try {
         const { entries } = await getModerationLog();
         setModLog(entries);
         entries.forEach(e => resolveUser(e.userId));
-      } catch (err) {
+      } catch {
         addToast('Failed to load moderation log', 'error');
       }
       setLoadingLog(false);
     }
-    if (tab === 'automod') load();
-  }, [tab]);
+    load();
+  }, [tab, user, resolveUser, addToast]);
+
+  if (!user || !isAdmin(user.uid)) {
+    return <Navigate to="/" replace />;
+  }
 
   async function handleAction(reportId, action) {
     try {
