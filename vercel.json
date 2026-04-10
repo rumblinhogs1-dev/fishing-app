@@ -5,6 +5,7 @@
     { "source": "/", "destination": "/fishing-app/", "statusCode": 308 }
   ],
   "rewrites": [
+    { "source": "/api/gemini", "destination": "/api/gemini" },
     { "source": "/fishing-app", "destination": "/fishing-app/index.html" },
     { "source": "/fishing-app/(.*)", "destination": "/fishing-app/index.html" }
   ]
