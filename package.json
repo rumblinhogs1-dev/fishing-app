@@ -8,6 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "deploy": "vite build && cp -r dist/* firebase-dist/fishing-app/ && firebase deploy --only hosting,firestore:rules",
     "cap:sync": "vite build && cap sync",
     "cap:ios": "vite build && cap sync && cap open ios",
     "cap:android": "vite build && cap sync && cap open android"
