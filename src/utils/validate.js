@@ -8,6 +8,12 @@ export function validateCatch(data) {
     'species', 'weight', 'length', 'lure', 'notes', 'lat', 'lng',
     'imageUrl', 'lureImage', 'visibility', 'waterBody', 'waterType',
     'weather', 'temperature', 'authorDisplayName', 'authorPhotoURL',
+    // lure AI fields
+    'lureName', 'lureType', 'lureCategory', 'lureColor', 'bait',
+    // location / conditions
+    'location', 'date', 'released',
+    'weatherTemp', 'weatherWind', 'weatherPressure', 'weatherCondition', 'weatherCloudCover',
+    'waterTemp', 'flowRate', 'depth', 'waterStation',
   ];
   const clean = {};
   for (const key of allowed) {
@@ -20,6 +26,12 @@ export function validateCatch(data) {
   if (clean.waterBody) clean.waterBody = sanitizeString(clean.waterBody, 200);
   if (clean.weather) clean.weather = sanitizeString(clean.weather, 100);
   if (clean.authorDisplayName) clean.authorDisplayName = sanitizeString(clean.authorDisplayName, 100);
+  if (clean.lureName) clean.lureName = sanitizeString(clean.lureName, 200);
+  if (clean.lureType) clean.lureType = sanitizeString(clean.lureType, 100);
+  if (clean.lureCategory) clean.lureCategory = sanitizeString(clean.lureCategory, 100);
+  if (clean.lureColor) clean.lureColor = sanitizeString(clean.lureColor, 100);
+  if (clean.bait) clean.bait = sanitizeString(clean.bait, 200);
+  if (clean.location) clean.location = sanitizeString(clean.location, 300);
 
   if (clean.weight !== undefined) clean.weight = Number(clean.weight) || 0;
   if (clean.length !== undefined) clean.length = Number(clean.length) || 0;
