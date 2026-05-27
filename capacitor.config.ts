@@ -4,16 +4,17 @@ const config: CapacitorConfig = {
   appId: 'net.catchdaddy.app',
   appName: 'CatchDaddy',
   webDir: 'dist',
+  plugins: {
+    FirebaseAuthentication: {
+      skipNativeAuth: false,
+      providers: ['google.com'],
+    },
+  },
 
-  // Uncomment the block below for live-reload during development:
-  // 1. Run `npm run dev` to start the Vite dev server
-  // 2. Replace the URL with your local network IP (run `ipconfig getifaddr en0` on macOS)
-  // 3. Run `npx cap sync` then re-launch the native IDE
-  //
-  // server: {
-  //   url: 'http://192.168.1.X:5173',
-  //   cleartext: true,
-  // },
+  server: {
+    url: 'https://fishing-app-46485.web.app',
+    cleartext: false,
+  },
 };
 
 export default config;
