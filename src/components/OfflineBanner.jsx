@@ -4,6 +4,8 @@ import { syncAllPendingOps, getPendingOpsCount } from '../utils/offlineStorage';
 import { addCatch, updateCatch as fsUpdateCatch, deleteCatch as fsDeleteCatch } from '../utils/firestore';
 import { addSpot as fsAddSpot, updateSpot as fsUpdateSpot, deleteSpot as fsDeleteSpot } from '../utils/spots';
 import { uploadCatchImage } from '../utils/firebaseStorage';
+import { identifyFish, getApiKey } from '../utils/gemini';
+import { fetchWeather, fetchWaterData } from '../utils/weather';
 import { getDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import styles from './OfflineBanner.module.css';
@@ -67,7 +69,51 @@ export default function OfflineBanner() {
     setIsSyncing(true);
     try {
       const createCatch = async (userId, data) => {
-        const { image, lureImage, ...rest } = data;
+        const { image, lureImage, pendingAiEnrichment, ...rest } = data;
+
+        if (pendingAiEnrichment) {
+          // Run Gemini on the stored photo
+          if (image && image.startsWith('data:')) {
+            try {
+              const apiKey = getApiKey();
+              const aiResult = await identifyFish(image, apiKey);
+              if (aiResult) {
+                rest.aiSpecies = aiResult.species || rest.aiSpecies;
+                rest.aiConfidence = aiResult.confidence ?? rest.aiConfidence;
+                rest.aiEstimatedAge = aiResult.estimatedAge || rest.aiEstimatedAge;
+                if (aiResult.confidence >= 50) {
+                  if (!rest.species) rest.species = aiResult.species;
+                  if (!rest.weight) rest.weight = parseFloat((aiResult.estimatedWeight || '').match(/([\d.]+)/)?.[1]) || '';
+                  if (!rest.length) rest.length = parseFloat((aiResult.estimatedLength || '').match(/([\d.]+)/)?.[1]) || '';
+                }
+              }
+            } catch {}
+          }
+          // Fetch weather + water conditions using the saved coordinates
+          if (rest.lat && rest.lng) {
+            try {
+              const [weatherData, waterData] = await Promise.all([
+                fetchWeather(rest.lat, rest.lng).catch(() => null),
+                fetchWaterData(rest.lat, rest.lng).catch(() => null),
+              ]);
+              if (weatherData) {
+                rest.weather = rest.weather || weatherData.summary;
+                rest.weatherTemp = rest.weatherTemp || weatherData.temp;
+                rest.weatherWind = rest.weatherWind || weatherData.wind;
+                rest.weatherPressure = rest.weatherPressure || weatherData.pressure;
+                rest.weatherCondition = rest.weatherCondition || weatherData.condition;
+                if (rest.weatherCloudCover === '') rest.weatherCloudCover = weatherData.cloudCover ?? '';
+              }
+              if (waterData) {
+                rest.waterTemp = rest.waterTemp || waterData.waterTemp;
+                rest.flowRate = rest.flowRate || waterData.flowRate;
+                if (!rest.depth && waterData.gaugeHeight != null) rest.depth = Math.round(waterData.gaugeHeight);
+                rest.waterStation = rest.waterStation || waterData.stationName;
+              }
+            } catch {}
+          }
+        }
+
         if (image && image.startsWith('data:')) {
           rest.imageUrl = image;
         }
@@ -77,7 +123,7 @@ export default function OfflineBanner() {
         rest.authorDisplayName = user.displayName || 'Angler';
         rest.authorPhotoURL = user.photoURL || null;
         const catchId = await addCatch(userId, rest);
-        // Upload images to Storage if possible
+        // Upload image to Storage
         try {
           if (image && image.startsWith('data:')) {
             const url = await uploadCatchImage(userId, catchId, image);

@@ -101,6 +101,18 @@
   font-weight: 500;
 }
 
+.aiPendingBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  color: var(--color-orange-900);
+  background: var(--color-orange-50);
+  border-radius: 5px;
+  padding: 0.2rem 0.5rem;
+  margin: 0.5rem 0 0;
+}
+
 .notes {
   margin: 0.75rem 0 0;
   color: var(--color-gray-700);

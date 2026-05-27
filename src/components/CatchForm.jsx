@@ -53,6 +53,7 @@ export default function CatchForm({ existing, onSubmit }) {
   const [fishIdResult, setFishIdResult] = useState(null);
   const [fishIdError, setFishIdError] = useState('');
   const [fishIdConfirmed, setFishIdConfirmed] = useState(null);
+  const [pendingAiEnrichment, setPendingAiEnrichment] = useState(false);
   const [correctedSpecies, setCorrectedSpecies] = useState('');
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -144,8 +145,17 @@ export default function CatchForm({ existing, onSubmit }) {
     if (!img) {
       setFishIdResult(null);
       setFishIdError('');
+      setPendingAiEnrichment(false);
       return;
     }
+
+    if (!navigator.onLine) {
+      setFishIdResult(null);
+      setFishIdError('');
+      setPendingAiEnrichment(true);
+      return;
+    }
+    setPendingAiEnrichment(false);
 
     const apiKey = getApiKey();
     if (!apiKey && !hasEnvKey()) return;
@@ -285,6 +295,7 @@ export default function CatchForm({ existing, onSubmit }) {
       aiEstimatedAge: fishIdResult?.estimatedAge || '',
       correctedSpecies: fishIdConfirmed === false && correctedSpecies.trim() ? correctedSpecies.trim() : '',
       speciesConfirmed: fishIdConfirmed,
+      pendingAiEnrichment,
     };
 
     if (!navigator.onLine) {
@@ -338,6 +349,14 @@ export default function CatchForm({ existing, onSubmit }) {
             {fishIdLoading && (
               <div className={styles.fishIdStatus}>
                 <span className={styles.gpsSpinner} /> Identifying fish...
+              </div>
+            )}
+            {pendingAiEnrichment && !fishIdLoading && (
+              <div className={styles.fishIdQueued}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+                </svg>
+                AI analysis queued — species, size &amp; weather will fill in when back online
               </div>
             )}
             {fishIdError && (
