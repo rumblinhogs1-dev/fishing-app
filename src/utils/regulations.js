@@ -24,17 +24,15 @@ export function lookupBySpecies(stateCode, speciesName) {
 }
 
 export async function detectStateFromGPS(lat, lng) {
-  try {
-    const res = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=5`
-    );
-    if (!res.ok) return null;
-    const data = await res.json();
-    const stateName = data.address?.state;
-    if (!stateName) return null;
-    const code = STATE_NAME_TO_CODE[stateName.toLowerCase()];
-    return code || null;
-  } catch {
-    return null;
-  }
+  const res = await fetch(
+    `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`
+  );
+  if (!res.ok) throw new Error(`Reverse geocoding failed (${res.status})`);
+  const data = await res.json();
+  if (data.countryCode !== 'US') throw new Error('Location appears to be outside the United States.');
+  const stateName = data.principalSubdivision;
+  if (!stateName) throw new Error('Could not determine state from your location.');
+  const code = STATE_NAME_TO_CODE[stateName.toLowerCase()];
+  if (!code) throw new Error(`State "${stateName}" is not yet supported.`);
+  return code;
 }
