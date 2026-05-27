@@ -214,11 +214,11 @@
 }
 .receiptHint { font-size: 0.8rem; color: var(--color-gray-400); margin: 0 0 0.5rem; }
 .scanBtn {
-  margin-top: 0.5rem; padding: 0.5rem 1rem; background: #e9c46a;
+  margin-top: 0.5rem; padding: 0.5rem 1rem; background: var(--color-sand-500);
   color: var(--color-green-900); border: none; border-radius: 8px; font-weight: 700;
   font-size: 0.85rem; cursor: pointer; transition: background 0.2s;
 }
-.scanBtn:hover { background: #d4a373; }
+.scanBtn:hover { background: var(--color-sand-400); }
 .scanBtn:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .addExpenseToggle {

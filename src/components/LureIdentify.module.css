@@ -24,7 +24,7 @@
 .keyLabel { font-size: 0.85rem; font-weight: 600; color: var(--color-gray-800); }
 .keyRow { display: flex; gap: 0.5rem; }
 .keyField { flex: 1; padding: 0.5rem 0.75rem; border: 1.5px solid var(--color-gray-200); border-radius: 8px; font-size: 0.9rem; font-family: inherit; }
-.keyField:focus { outline: none; border-color: var(--color-green-700); box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12); }
+.keyField:focus { outline: none; border-color: var(--color-green-700); box-shadow: var(--shadow-focus-primary); }
 .keyDone { padding: 0.5rem 1rem; background: var(--color-green-700); color: var(--color-white); border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
 .keyDone:hover { background: var(--color-green-900); }
 .keyHelp { font-size: 0.8rem; color: var(--color-green-700); }

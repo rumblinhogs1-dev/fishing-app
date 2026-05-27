@@ -38,7 +38,7 @@
 .search:focus {
   outline: none;
   border-color: var(--color-green-700);
-  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
+  box-shadow: var(--shadow-focus-primary);
 }
 
 .sortSelect {
@@ -55,7 +55,7 @@
 .sortSelect:focus {
   outline: none;
   border-color: var(--color-green-700);
-  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
+  box-shadow: var(--shadow-focus-primary);
 }
 
 .exportBtn {
@@ -144,7 +144,7 @@
 .dateInput:focus {
   outline: none;
   border-color: var(--color-green-700);
-  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
+  box-shadow: var(--shadow-focus-primary);
 }
 
 .statsRow {

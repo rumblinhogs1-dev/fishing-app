@@ -81,8 +81,8 @@
 
 .search:focus {
   outline: none;
-  border-color: var(--color-green-600);
-  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.12);
+  border-color: var(--color-green-700);
+  box-shadow: var(--shadow-focus-primary);
 }
 
 .empty {

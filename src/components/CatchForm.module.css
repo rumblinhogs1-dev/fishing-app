@@ -152,7 +152,7 @@
 .gpsFallbackInput:focus {
   outline: none;
   border-color: var(--color-green-700);
-  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
+  box-shadow: var(--shadow-focus-primary);
 }
 
 .gpsFallbackBtn {
@@ -278,7 +278,7 @@
 .field textarea:focus {
   outline: none;
   border-color: var(--color-green-700);
-  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
+  box-shadow: var(--shadow-focus-primary);
 }
 
 .field textarea {
@@ -374,6 +374,17 @@
 .fishIdError {
   font-size: 0.8rem;
   color: var(--color-red-700);
+}
+
+.fishIdQueued {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--color-orange-900);
+  background: var(--color-orange-50);
+  border-radius: 6px;
+  padding: 0.35rem 0.6rem;
 }
 
 .fishIdInfo {
@@ -574,7 +585,7 @@
 .correctionInput:focus {
   outline: none;
   border-color: var(--color-green-700);
-  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
+  box-shadow: var(--shadow-focus-primary);
 }
 
 .correctionBtn {

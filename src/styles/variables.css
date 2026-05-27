@@ -41,6 +41,8 @@
   --color-orange-50: #fff3e0;    /* orange tint bg */
 
   /* ===== Yellows / Golds ===== */
+  --color-sand-500: #e9c46a;     /* sandy amber — scan/receipt button */
+  --color-sand-400: #d4a373;     /* warm tan — scan button hover */
   --color-yellow-700: #f9a825;   /* amber */
   --color-yellow-500: #ffd600;   /* bright yellow */
   --color-yellow-100: #ffe082;   /* light yellow */
@@ -110,4 +112,7 @@
   --color-gray-bg-green: #f0f4f0; /* greenish gray bg */
   --color-gray-500-material: #616161; /* material design gray */
   --color-white: #fff;           /* white */
+
+  /* ===== Shadow / Focus Tokens ===== */
+  --shadow-focus-primary: 0 0 0 3px rgba(45, 106, 79, 0.12); /* green-700 focus ring */
 }

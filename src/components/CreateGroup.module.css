@@ -23,7 +23,7 @@
 .field { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 1.25rem; }
 .field span { font-size: 0.85rem; font-weight: 600; color: var(--color-gray-800); }
 .field input { padding: 0.55rem 0.75rem; border: 1.5px solid var(--color-gray-200); border-radius: 8px; font-size: 0.95rem; font-family: inherit; }
-.field input:focus { outline: none; border-color: var(--color-green-700); box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12); }
+.field input:focus { outline: none; border-color: var(--color-green-700); box-shadow: var(--shadow-focus-primary); }
 
 .membersSection { margin-bottom: 1.25rem; }
 .membersLabel { display: block; font-size: 0.85rem; font-weight: 600; color: var(--color-gray-800); margin-bottom: 0.5rem; }
