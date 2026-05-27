@@ -9,9 +9,11 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "deploy": "vite build && cp -r dist/* firebase-dist/fishing-app/ && firebase deploy --only hosting,firestore:rules",
-    "cap:sync": "vite build && cap sync",
-    "cap:ios": "vite build && cap sync && cap open ios",
-    "cap:android": "vite build && cap sync && cap open android"
+    "build:mobile": "BUILD_TARGET=mobile vite build",
+    "cap:sync": "npm run build:mobile && cap sync",
+    "cap:ios": "npm run build:mobile && cap sync && cap open ios",
+    "cap:android": "npm run build:mobile && cap sync && cap open android",
+    "build:apk": "npm run build:mobile && npx cap sync android && cd android && JAVA_HOME=/usr/lib/jvm/jdk-21.0.10 ./gradlew assembleDebug"
   },
   "dependencies": {
     "@capacitor/android": "^8.1.0",

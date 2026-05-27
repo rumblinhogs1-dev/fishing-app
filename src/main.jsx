@@ -1,6 +1,7 @@
 import { StrictMode, Component } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
+import { Capacitor } from '@capacitor/core';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { ConfirmProvider } from './contexts/ConfirmContext';
@@ -52,7 +53,7 @@ createRoot(document.getElementById('root')).render(
     <ErrorBoundary>
       <ToastProvider>
         <ConfirmProvider>
-          <BrowserRouter basename="/fishing-app">
+          <BrowserRouter basename={Capacitor.isNativePlatform() ? '/' : '/fishing-app'}>
             <AuthProvider>
               <App />
             </AuthProvider>
