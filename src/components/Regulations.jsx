@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getAllStates } from '../data/stateRegulations';
 import { lookupByState, detectStateFromGPS } from '../utils/regulations';
 import { getRegulationSummary } from '../utils/geminiRegulations';
@@ -20,7 +20,7 @@ export default function Regulations() {
 
   const allStates = getAllStates();
 
-  async function handleGPSDetect() {
+  const handleGPSDetect = useCallback(async () => {
     setGpsLoading(true);
     setGpsError('');
     setGpsInfo('');
@@ -29,7 +29,11 @@ export default function Regulations() {
 
     try {
       const pos = await new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 10000 });
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          timeout: 20000,
+          maximumAge: 5 * 60 * 1000,
+          enableHighAccuracy: false,
+        });
       });
       const { latitude, longitude } = pos.coords;
       setGpsInfo(`GPS: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
@@ -43,11 +47,21 @@ export default function Regulations() {
       const data = lookupByState(code);
       setStateData(data);
     } catch (err) {
-      setGpsError(err.message || 'Failed to get GPS location.');
+      if (err.code === 1) {
+        setGpsError('Location permission denied. Enable it in your phone settings, then tap Detect again.');
+      } else if (err.code === 3) {
+        setGpsError('Location timed out. Make sure location is enabled on your device, then tap Detect again.');
+      } else {
+        setGpsError(err.message || 'Failed to get GPS location.');
+      }
     } finally {
       setGpsLoading(false);
     }
-  }
+  }, []);
+
+  useEffect(() => {
+    handleGPSDetect();
+  }, [handleGPSDetect]);
 
   function handleStateSelect(e) {
     const code = e.target.value;
