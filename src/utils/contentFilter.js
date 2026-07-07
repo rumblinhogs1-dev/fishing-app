@@ -23,17 +23,21 @@ const ALLOWED_WORDS = [
 
 // Build regex patterns that handle common evasion: l33t speak, spacing, special chars
 function buildPattern(word) {
-  const escaped = word
-    .replace(/a/g, '[a@4àáâãäå]')
-    .replace(/e/g, '[e3èéêë€]')
-    .replace(/i/g, '[i1!|ìíîï]')
-    .replace(/o/g, '[o0òóôõö]')
-    .replace(/s/g, '[s$5]')
-    .replace(/t/g, '[t7+]')
-    .replace(/l/g, '[l1|]')
-    .replace(/u/g, '[uùúûü]');
-  // Allow optional separators between chars (spaces, dots, dashes, underscores)
-  const spaced = escaped.split('').join('[\\s._-]*');
+  const charMap = {
+    a: '[a@4]',
+    e: '[e3]',
+    i: '[i1]',
+    o: '[o0]',
+    s: '[s5]',
+    t: '[t7]',
+    l: '[l1]',
+    u: '[u]',
+  };
+  // Map each character of the original word to its alternative class, then join
+  // with an optional-separator pattern between each character.
+  // Do NOT split the expanded string — that breaks the character class brackets.
+  const parts = word.split('').map((c) => charMap[c] || c.replace(/[-[\]{}()*+?.,\\^$|#]/g, '\\$&'));
+  const spaced = parts.join('[\\s._-]*');
   return new RegExp(`\\b${spaced}\\b`, 'i');
 }
 
