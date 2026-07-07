@@ -104,6 +104,8 @@ export default function App() {
   if (authLoading) {
     return (
       <div className={styles.app}>
+        <div className={styles.safeAreaTop} />
+        <div className={styles.safeAreaBottom} />
         <Navbar onSearchOpen={() => setShowSearch(true)} />
         <main className={styles.main}>
           <SkeletonList count={2} />
@@ -114,6 +116,8 @@ export default function App() {
 
   return (
     <div className={styles.app}>
+      <div className={styles.safeAreaTop} />
+      <div className={styles.safeAreaBottom} />
       <Navbar onSearchOpen={() => setShowSearch(true)} />
       <OfflineBanner />
       <ToastContainer />

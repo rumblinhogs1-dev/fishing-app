@@ -412,6 +412,18 @@ function RecenterButton({ userLocation }) {
   );
 }
 
+function AutoCenter({ userLocation }) {
+  const map = useMap();
+  const centered = useRef(false);
+  useEffect(() => {
+    if (userLocation && !centered.current) {
+      centered.current = true;
+      map.flyTo(userLocation, LOCATED_ZOOM);
+    }
+  }, [map, userLocation]);
+  return null;
+}
+
 function depthColor(depth, minD, maxD) {
   const range = maxD - minD || 1;
   const t = Math.min(1, Math.max(0, (depth - minD) / range));
@@ -829,6 +841,7 @@ export default function MapView({ catches = [] }) {
         )}
 
         <MapCenterTracker onCenterChange={setMapCenter} />
+        <AutoCenter userLocation={userLocation} />
         <RecenterButton userLocation={userLocation} />
         <MapRefSetter onMap={useCallback((m) => { mapInstanceRef.current = m; }, [])} />
       </MapContainer>

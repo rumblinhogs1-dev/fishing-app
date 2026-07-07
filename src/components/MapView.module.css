@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 52px);
+  height: calc(100vh - 52px - var(--sat, 0px));
   position: relative;
 }
 
@@ -31,8 +31,8 @@
 }
 
 .recenterBtn {
-  position: absolute;
-  bottom: 24px;
+  position: fixed;
+  bottom: calc(24px + var(--sab, 48px));
   right: 16px;
   z-index: 500;
   width: 44px;
@@ -56,8 +56,8 @@
 
 /* Floating layer button */
 .layerBtn {
-  position: absolute;
-  bottom: 24px;
+  position: fixed;
+  bottom: calc(24px + var(--sab, 48px));
   left: 16px;
   z-index: 500;
   width: 44px;
@@ -81,8 +81,8 @@
 
 /* Floating water info button */
 .waterInfoBtn {
-  position: absolute;
-  bottom: 136px;
+  position: fixed;
+  bottom: calc(136px + var(--sab, 48px));
   left: 16px;
   z-index: 500;
   width: 44px;
@@ -106,8 +106,8 @@
 
 /* Floating heat panel button */
 .heatPanelBtn {
-  position: absolute;
-  bottom: 192px;
+  position: fixed;
+  bottom: calc(192px + var(--sab, 48px));
   left: 16px;
   z-index: 500;
   width: 44px;
@@ -131,8 +131,8 @@
 
 /* Floating structure button */
 .structureBtn {
-  position: absolute;
-  bottom: 80px;
+  position: fixed;
+  bottom: calc(80px + var(--sab, 48px));
   left: 16px;
   z-index: 500;
   width: 44px;
@@ -455,27 +455,27 @@
   }
 
   .recenterBtn {
-    bottom: 16px;
+    bottom: calc(16px + var(--sab, 48px));
     right: 12px;
   }
 
   .layerBtn {
-    bottom: 16px;
+    bottom: calc(16px + var(--sab, 48px));
     left: 12px;
   }
 
   .structureBtn {
-    bottom: 68px;
+    bottom: calc(68px + var(--sab, 48px));
     left: 12px;
   }
 
   .waterInfoBtn {
-    bottom: 124px;
+    bottom: calc(124px + var(--sab, 48px));
     left: 12px;
   }
 
   .heatPanelBtn {
-    bottom: 176px;
+    bottom: calc(176px + var(--sab, 48px));
     left: 12px;
   }
 

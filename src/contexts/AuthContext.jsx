@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import {
   onAuthStateChanged,
   signInWithPopup,
+  signInWithCredential,
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -9,6 +10,7 @@ import {
   updateProfile,
   sendPasswordResetEmail,
 } from 'firebase/auth';
+import { Capacitor } from '@capacitor/core';
 import { auth, firebaseConfigured } from '../firebase';
 import { ensureUserDoc } from '../utils/friends';
 
@@ -35,6 +37,15 @@ export function AuthProvider({ children }) {
   }, []);
 
   async function signInWithGoogle() {
+    if (Capacitor.isNativePlatform()) {
+      const { FirebaseAuthentication } = await import('@capacitor-firebase/authentication');
+      const result = await FirebaseAuthentication.signInWithGoogle();
+      const credential = GoogleAuthProvider.credential(
+        result.credential?.idToken,
+        result.credential?.accessToken,
+      );
+      return signInWithCredential(auth, credential);
+    }
     const provider = new GoogleAuthProvider();
     return signInWithPopup(auth, provider);
   }

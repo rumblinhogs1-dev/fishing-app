@@ -1,6 +1,6 @@
 .container { max-width: 500px; margin: 2rem auto; padding: 0 1rem; }
 .heading { color: var(--color-green-900); margin: 0 0 1.5rem; }
-.empty { text-align: center; padding: 3rem; color: var(--color-gray-400); }
+.empty { text-align: center; padding: 3rem 1rem; color: var(--color-gray-400); font-size: 0.95rem; }
 
 .form {
   background: var(--color-white);

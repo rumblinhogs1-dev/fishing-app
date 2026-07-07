@@ -13,7 +13,36 @@ function generateBatchId() {
   return crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
+const SONAR_COMING_SOON = true;
+
 export default function SonarImport() {
+  if (SONAR_COMING_SOON) return <SonarComingSoon />;
+  return <SonarImportInner />;
+}
+
+function SonarComingSoon() {
+  return (
+    <div className={styles.page}>
+      <h2 className={styles.heading}>Sonar Import</h2>
+      <div className={styles.comingSoon}>
+        <div className={styles.comingSoonIcon}>🔊</div>
+        <h3 className={styles.comingSoonTitle}>Coming Soon</h3>
+        <p className={styles.comingSoonDesc}>
+          Upload your sonar logs and watch your fishing spots come alive with real depth data — mapped and visualized right inside CatchDaddy.
+        </p>
+        <ul className={styles.featureList}>
+          <li className={styles.featureItem}>📂 Import CSV, GPX, and XML sonar files</li>
+          <li className={styles.featureItem}>🗺️ Preview depth points on an interactive map before saving</li>
+          <li className={styles.featureItem}>📊 Auto-detect depth, GPS, and water temp columns</li>
+          <li className={styles.featureItem}>💾 Save depth data to your spots for future reference</li>
+        </ul>
+        <p className={styles.comingSoonFooter}>Stay tuned — big update incoming.</p>
+      </div>
+    </div>
+  );
+}
+
+function SonarImportInner() {
   const { user } = useAuth();
   const fileRef = useRef(null);
 

@@ -1,6 +1,7 @@
 /**
  * Custom service worker additions for background sync.
  * Imported by the Workbox-generated service worker.
+ * v3
  */
 
 // Handle background sync events

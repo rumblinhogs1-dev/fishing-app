@@ -1,6 +1,6 @@
 .footer {
   text-align: center;
-  padding: 1.5rem 1rem;
+  padding: 1.5rem 1rem calc(1.5rem + max(env(safe-area-inset-bottom, 0px), var(--sab, 0px)));
   margin-top: 2rem;
   border-top: 1px solid var(--color-gray-175);
   background: var(--color-gray-bg-warm);

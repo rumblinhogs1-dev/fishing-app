@@ -5,8 +5,31 @@
   color: var(--color-black);
 }
 
+/* Fixed bands that paint over content leaking into system UI zones */
+.safeAreaTop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: max(env(safe-area-inset-top, 0px), var(--sat, 0px));
+  background: linear-gradient(135deg, var(--color-green-900), var(--color-green-700));
+  z-index: 200;
+  pointer-events: none;
+}
+
+.safeAreaBottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: max(env(safe-area-inset-bottom, 0px), var(--sab, 0px));
+  background: var(--color-gray-bg-cool);
+  z-index: 200;
+  pointer-events: none;
+}
+
 .main {
-  padding-bottom: 2rem;
+  padding-bottom: calc(2rem + max(env(safe-area-inset-bottom, 0px), var(--sab, 0px)));
 }
 
 /* Global resets */
@@ -14,6 +37,11 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+:global(html) {
+  background: linear-gradient(135deg, var(--color-green-900), var(--color-green-700));
+  padding-top: max(env(safe-area-inset-top, 0px), var(--sat, 0px));
 }
 
 :global(body) {

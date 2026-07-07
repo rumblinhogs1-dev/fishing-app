@@ -55,7 +55,7 @@
 }
 
 .editBtn:hover {
-  background: rgba(45, 106, 79, 0.1);
+  background: var(--color-green-50);
 }
 
 .deleteBtn {
@@ -64,7 +64,7 @@
 }
 
 .deleteBtn:hover {
-  background: rgba(211, 47, 47, 0.1);
+  background: var(--color-red-bg-subtle);
 }
 
 .details {

@@ -4,6 +4,33 @@
   padding: 1.5rem 1rem 3rem;
 }
 
+.comingSoon {
+  background: var(--color-white); border-radius: 16px;
+  padding: 2.5rem 2rem; text-align: center;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  border: 1px solid var(--color-gray-75);
+}
+.comingSoonIcon { font-size: 3rem; margin-bottom: 0.75rem; }
+.comingSoonTitle {
+  margin: 0 0 0.75rem; font-size: 1.4rem; color: var(--color-green-900);
+}
+.comingSoonDesc {
+  color: var(--color-gray-700); font-size: 0.95rem; line-height: 1.5;
+  margin: 0 0 1.5rem; max-width: 420px; margin-inline: auto;
+}
+.featureList {
+  list-style: none; padding: 0; margin: 0 0 1.5rem;
+  display: flex; flex-direction: column; gap: 0.6rem;
+  text-align: left; max-width: 340px; margin-inline: auto;
+}
+.featureItem {
+  font-size: 0.9rem; color: var(--color-gray-700); line-height: 1.4;
+}
+.comingSoonFooter {
+  margin: 0; font-size: 0.85rem; color: var(--color-gray-400);
+  font-style: italic;
+}
+
 .heading {
   font-size: 1.5rem;
   font-weight: 700;

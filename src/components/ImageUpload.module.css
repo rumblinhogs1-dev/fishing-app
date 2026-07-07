@@ -18,10 +18,13 @@
 
 .cameraBtn,
 .uploadBtn {
+  flex: 1;
+  min-width: 0;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.4rem;
-  padding: 0.6rem 1rem;
+  padding: 0.6rem 0.5rem;
   border-radius: 8px;
   font-size: 0.9rem;
   font-weight: 500;

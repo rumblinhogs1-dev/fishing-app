@@ -12,7 +12,7 @@ const config: CapacitorConfig = {
   },
 
   server: {
-    url: 'https://fishing-app-46485.web.app',
+    url: 'https://fishing-app-46485.web.app/fishing-app/',
     cleartext: false,
   },
 };

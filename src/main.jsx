@@ -1,7 +1,6 @@
 import { StrictMode, Component } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import { Capacitor } from '@capacitor/core';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { ConfirmProvider } from './contexts/ConfirmContext';
@@ -35,12 +34,8 @@ class ErrorBoundary extends Component {
       return (
         <div style={{ padding: '2rem', color: 'red', fontFamily: 'monospace' }}>
           <h2>Something went wrong</h2>
-          {import.meta.env.DEV && (
-            <>
-              <pre>{this.state.error.message}</pre>
-              <pre>{this.state.error.stack}</pre>
-            </>
-          )}
+          <pre style={{fontSize:'0.7rem',whiteSpace:'pre-wrap'}}>{this.state.error.message}</pre>
+          <pre style={{fontSize:'0.6rem',whiteSpace:'pre-wrap'}}>{this.state.error.stack}</pre>
         </div>
       );
     }
@@ -48,12 +43,32 @@ class ErrorBoundary extends Component {
   }
 }
 
+// Pre-render safe area estimates for Android WebView.
+// Uses UA detection so this runs regardless of Capacitor bridge init timing.
+// MainActivity.java overrides --sat/--sab after page loads with exact values.
+(function initSafeAreaEstimate() {
+  if (!/Android/i.test(navigator.userAgent)) return;
+  const root = document.documentElement;
+  root.style.setProperty('--sat', '48px');
+  root.style.setProperty('--sab', '48px');
+})();
+
+// Force SW update check on startup + reload the page when a new SW takes control.
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    window.location.reload();
+  });
+  navigator.serviceWorker.ready.then((registration) => {
+    registration.update();
+  });
+}
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ErrorBoundary>
       <ToastProvider>
         <ConfirmProvider>
-          <BrowserRouter basename={Capacitor.isNativePlatform() ? '/' : '/fishing-app'}>
+          <BrowserRouter basename="/fishing-app">
             <AuthProvider>
               <App />
             </AuthProvider>

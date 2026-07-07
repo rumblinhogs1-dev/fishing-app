@@ -13,18 +13,17 @@ export default function Navbar({ onSearchOpen }) {
   const { user } = useAuth();
   const [aiOpen, setAiOpen] = useState(false);
   const [stockingOpen, setStockingOpen] = useState(false);
+  const [comingSoonOpen, setComingSoonOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const aiRef = useRef(null);
   const stockingRef = useRef(null);
+  const comingSoonRef = useRef(null);
 
   useEffect(() => {
     function handleClickOutside(e) {
-      if (aiRef.current && !aiRef.current.contains(e.target)) {
-        setAiOpen(false);
-      }
-      if (stockingRef.current && !stockingRef.current.contains(e.target)) {
-        setStockingOpen(false);
-      }
+      if (aiRef.current && !aiRef.current.contains(e.target)) setAiOpen(false);
+      if (stockingRef.current && !stockingRef.current.contains(e.target)) setStockingOpen(false);
+      if (comingSoonRef.current && !comingSoonRef.current.contains(e.target)) setComingSoonOpen(false);
     }
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
@@ -39,14 +38,14 @@ export default function Navbar({ onSearchOpen }) {
       </div>
 
       <div className={styles.navActions}>
+        <button className={styles.hamburger} onClick={() => setMenuOpen(!menuOpen)}>
+          <span /><span /><span />
+        </button>
+        {user && <NotificationBell />}
         <button className={styles.searchBtn} onClick={onSearchOpen} title="Search (Ctrl+K)">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
             <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
           </svg>
-        </button>
-        {user && <NotificationBell />}
-        <button className={styles.hamburger} onClick={() => setMenuOpen(!menuOpen)}>
-          <span /><span /><span />
         </button>
       </div>
 
@@ -119,14 +118,26 @@ export default function Navbar({ onSearchOpen }) {
         <NavLink to="/conservation" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
           Eco Guide
         </NavLink>
+        <div className={styles.dropdown} ref={comingSoonRef}>
+          <button className={styles.dropdownTrigger} onClick={() => setComingSoonOpen(!comingSoonOpen)}>
+            Coming Soon
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style={{ marginLeft: 4 }}>
+              <path d="M7 10l5 5 5-5z" />
+            </svg>
+          </button>
+          {comingSoonOpen && (
+            <div className={styles.dropdownMenu}>
+              <NavLink to="/trips" className={styles.dropdownItem} onClick={() => { setComingSoonOpen(false); setMenuOpen(false); }}>
+                Trip Planner
+              </NavLink>
+              <NavLink to="/import-sonar" className={styles.dropdownItem} onClick={() => { setComingSoonOpen(false); setMenuOpen(false); }}>
+                Sonar Import
+              </NavLink>
+            </div>
+          )}
+        </div>
         {user && (
           <>
-            <NavLink to="/trips" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
-              Trips
-            </NavLink>
-            <NavLink to="/import-sonar" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
-              Sonar Import
-            </NavLink>
             <NavLink to="/challenges" className={({ isActive }) => isActive ? styles.active : ''} onClick={() => setMenuOpen(false)}>
               Challenges
             </NavLink>

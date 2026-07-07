@@ -21,6 +21,8 @@ import TripCatches from './trips/TripCatches';
 import tabStyles from './trips/TripTabs.module.css';
 import styles from './TripPlanner.module.css';
 
+const TRIPS_COMING_SOON = true;
+
 const EMPTY_TRIP = { name: '', destination: '', lat: '', lng: '', date: '', endDate: '', targetSpecies: '' };
 const TABS = [
   { key: 'overview', label: 'Overview' },
@@ -31,6 +33,34 @@ const TABS = [
 ];
 
 export default function TripPlanner({ catches = [] }) {
+  if (TRIPS_COMING_SOON) return <TripComingSoon />;
+  return <TripPlannerInner catches={catches} />;
+}
+
+function TripComingSoon() {
+  return (
+    <div className={styles.container}>
+      <h2 className={styles.heading}>Trip Planner</h2>
+      <div className={styles.comingSoon}>
+        <div className={styles.comingSoonIcon}>🗺️</div>
+        <h3 className={styles.comingSoonTitle}>Coming Soon</h3>
+        <p className={styles.comingSoonDesc}>
+          Trip Planner is on its way — plan your next fishing adventure, coordinate with your crew, and track every detail in one place.
+        </p>
+        <ul className={styles.featureList}>
+          <li className={styles.featureItem}>📅 Plan trips with dates, destinations &amp; target species</li>
+          <li className={styles.featureItem}>👥 Invite fishing buddies and manage your crew</li>
+          <li className={styles.featureItem}>💰 Split expenses and settle up after the trip</li>
+          <li className={styles.featureItem}>📸 Share photos and log catches from the water</li>
+          <li className={styles.featureItem}>⛅ Get weather forecasts for your trip window</li>
+        </ul>
+        <p className={styles.comingSoonFooter}>Stay tuned — big update incoming.</p>
+      </div>
+    </div>
+  );
+}
+
+function TripPlannerInner({ catches = [] }) {
   const { user } = useAuth();
   const { friendProfiles } = useFriends();
   const { spots } = useSpots();
